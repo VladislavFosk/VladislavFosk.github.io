@@ -1209,7 +1209,7 @@
         }
 
         /* ================================================================
-           СТИЛИ ДЛЯ PROJECTS (ОБНОВЛЁННЫЕ)
+           СТИЛИ ДЛЯ PROJECTS (ОБНОВЛЁННЫЕ — БОЛЬШОЙ КВАДРАТ СЛЕВА)
            ================================================================ */
         .projects-title {
             font-size: 28px;
@@ -1219,55 +1219,70 @@
             font-family: 'Times New Roman', Times, serif;
             text-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
             letter-spacing: 1px;
+            text-align: center;
         }
 
-        /* ---- КАРТОЧКА ПРОЕКТА ---- */
-        .project-card {
+        /* ---- БОЛЬШАЯ КАРТОЧКА ПРОЕКТА (КВАДРАТ СЛЕВА) ---- */
+        .project-card-large {
             background: rgba(0, 10, 0, 0.4);
             border-radius: 20px;
-            padding: 20px;
+            padding: 24px;
             border: 1px solid rgba(0, 255, 65, 0.15);
-            text-align: left;
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 20px;
             margin-bottom: 20px;
             transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+            text-align: left;
         }
-        .project-card:hover {
+        .project-card-large:hover {
             border-color: rgba(0, 255, 65, 0.4);
             box-shadow: 0 0 30px rgba(0, 255, 65, 0.05);
             transform: translateY(-2px);
         }
-        .project-card .project-header {
+
+        /* ---- ИКОНКА (КВАДРАТНАЯ, СЛЕВА) ---- */
+        .project-icon-large {
+            flex-shrink: 0;
+            width: 100px;
+            height: 100px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 255, 65, 0.2);
+            background: rgba(0, 0, 0, 0.3);
             display: flex;
             align-items: center;
-            gap: 16px;
+            justify-content: center;
         }
-        .project-card .project-icon {
-            width: 64px;
-            height: 64px;
-            border-radius: 16px;
+        .project-icon-large img {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-            border: 1px solid rgba(0, 255, 65, 0.2);
-            flex-shrink: 0;
-            background: rgba(0, 0, 0, 0.3);
+            display: block;
         }
-        .project-card .project-name {
+
+        /* ---- ИНФОРМАЦИЯ О ПРОЕКТЕ ---- */
+        .project-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .project-info .project-name {
             font-size: 22px;
             font-weight: 700;
             color: #00ff41;
             font-family: 'Times New Roman', Times, serif;
             text-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
         }
-        .project-card .project-desc {
+        .project-info .project-desc {
             color: #88ccaa;
             font-size: 16px;
             font-family: 'Times New Roman', Times, serif;
             line-height: 1.7;
-            padding: 0 4px;
         }
-        .project-card .project-status {
+        .project-info .project-status {
             display: inline-block;
             padding: 4px 14px;
             border-radius: 20px;
@@ -1279,15 +1294,40 @@
             border: 1px solid rgba(255, 200, 0, 0.2);
             align-self: flex-start;
         }
-        .project-card .project-status.frozen {
+        .project-info .project-status.frozen {
             background: rgba(255, 50, 50, 0.15);
             color: #ff5555;
             border-color: rgba(255, 50, 50, 0.2);
         }
-        .project-card .project-status.completed {
+        .project-info .project-status.completed {
             background: rgba(0, 255, 65, 0.15);
             color: #00ff41;
             border-color: rgba(0, 255, 65, 0.2);
+        }
+
+        /* ---- АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ ---- */
+        @media (max-width: 480px) {
+            .project-card-large {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                padding: 18px;
+            }
+            .project-icon-large {
+                width: 80px;
+                height: 80px;
+            }
+            .project-info .project-name {
+                font-size: 18px;
+                text-align: center;
+            }
+            .project-info .project-desc {
+                font-size: 14px;
+                text-align: center;
+            }
+            .project-info .project-status {
+                align-self: center;
+            }
         }
 
         /* ================================================================
@@ -1637,36 +1677,40 @@
         </div>
 
         <!-- ========================================================== -->
-        <!-- PROJECTS (ОБНОВЛЁННЫЕ) -->
+        <!-- PROJECTS (ОБНОВЛЁННЫЕ — БОЛЬШОЙ КВАДРАТ СЛЕВА СВЕРХУ) -->
         <!-- ========================================================== -->
         <div class="page" id="page-projects">
 
             <div class="projects-title">📂 MY PROJECTS</div>
 
-            <!-- ---- ПРОЕКТ 1: Roza OS ---- -->
-            <div class="project-card">
-                <div class="project-header">
-                    <img class="project-icon" src="img/rozaos.png" alt="Roza OS">
-                    <span class="project-name">Roza OS</span>
+            <!-- ---- ПРОЕКТ 1: Roza OS (БОЛЬШОЙ КВАДРАТ) ---- -->
+            <div class="project-card-large">
+                <div class="project-icon-large">
+                    <img src="img/rozaos.png" alt="Roza OS">
                 </div>
-                <div class="project-desc">
-                    Debian-based Linux distribution with XFCE desktop and preinstalled essential packages (Firefox, VLC, LibreOffice, GParted, Remmina, etc.). Fast, lightweight, ready to use.
+                <div class="project-info">
+                    <div class="project-name">Roza OS</div>
+                    <div class="project-desc">
+                        Debian-based Linux distribution with XFCE desktop and preinstalled essential packages (Firefox, VLC, LibreOffice, GParted, Remmina, etc.). Fast, lightweight, ready to use.
+                    </div>
+                    <div class="project-desc" style="color: #88aa88; font-size: 15px; margin-top: 4px;">
+                        <strong style="color: #00ff41;">Status:</strong> Frozen. Progress reset to zero due to system reinstallation and data loss on the developer's PC. Restarting from scratch. Base: Debian. Package list subject to change.
+                    </div>
+                    <span class="project-status frozen">❄️ Frozen</span>
                 </div>
-                <div class="project-desc" style="color: #88aa88; font-size: 15px; margin-top: 4px;">
-                    <strong style="color: #00ff41;">Status:</strong> Frozen. Progress reset to zero due to system reinstallation and data loss on the developer's PC. Restarting from scratch. Base: Debian. Package list subject to change.
-                </div>
-                <span class="project-status frozen">❄️ Frozen</span>
             </div>
 
             <!-- ---- ДЛЯ БУДУЩИХ ПРОЕКТОВ (заглушка) ---- -->
             <!--
-            <div class="project-card">
-                <div class="project-header">
-                    <img class="project-icon" src="img/project2.png" alt="Project 2">
-                    <span class="project-name">Project Name</span>
+            <div class="project-card-large">
+                <div class="project-icon-large">
+                    <img src="img/project2.png" alt="Project 2">
                 </div>
-                <div class="project-desc">Description of the project.</div>
-                <span class="project-status completed">✅ Completed</span>
+                <div class="project-info">
+                    <div class="project-name">Project Name</div>
+                    <div class="project-desc">Description of the project.</div>
+                    <span class="project-status completed">✅ Completed</span>
+                </div>
             </div>
             -->
 
