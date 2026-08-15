@@ -11,10 +11,10 @@
             box-sizing: border-box;
         }
 
-        /* ---- ANIMATED BACKGROUND ---- */
+        /* ---- ANIMATED BACKGROUND (TOP: DARK CRIMSON, BOTTOM: DARK PURPLE) ---- */
         body {
             font-family: 'Times New Roman', Times, serif;
-            background: radial-gradient(circle at 30% 40%, #1a0a0e, #0d0610, #050208);
+            background: linear-gradient(180deg, #1a0508 0%, #0d0610 50%, #050208 100%);
             color: white;
             min-height: 100vh;
             display: flex;
@@ -23,7 +23,6 @@
             padding: 20px;
             overflow: hidden;
             position: relative;
-            transition: background 0.5s ease;
         }
 
         /* Canvas for particles */
@@ -63,69 +62,81 @@
             border-radius: 10px;
         }
 
-        /* ---- LANGUAGE TOGGLE (TOP-RIGHT) ---- */
-        #lang-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-            background: rgba(15, 8, 15, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(139, 26, 43, 0.4);
-            color: #b84a5a;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            font-size: 28px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 30px rgba(139, 26, 43, 0.2);
-            font-family: 'Times New Roman', Times, serif;
-        }
-        #lang-toggle:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 40px rgba(139, 26, 43, 0.4);
-            border-color: #b84a5a;
-        }
-
-        /* ---- MUSIC TOGGLE (BOTTOM-RIGHT) ---- */
-        #music-toggle {
+        /* ---- MUSIC CONTROLS (BOTTOM-RIGHT) ---- */
+        .music-controls {
             position: fixed;
             bottom: 20px;
             right: 20px;
             z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
             background: rgba(15, 8, 15, 0.8);
             backdrop-filter: blur(10px);
+            padding: 12px 16px 16px 16px;
+            border-radius: 20px;
             border: 1px solid rgba(139, 26, 43, 0.4);
-            color: #b84a5a;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            font-size: 24px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
             box-shadow: 0 0 30px rgba(139, 26, 43, 0.2);
+        }
+        #music-toggle {
+            background: transparent;
+            border: none;
+            color: #b84a5a;
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s ease;
             font-family: 'Times New Roman', Times, serif;
+            line-height: 1;
         }
         #music-toggle:hover {
             transform: scale(1.1);
-            box-shadow: 0 0 40px rgba(139, 26, 43, 0.4);
-            border-color: #b84a5a;
+            color: #ff6b81;
         }
         #music-toggle.muted {
             color: #6a5a6a;
-            border-color: #3a2a3a;
             opacity: 0.6;
         }
         #music-toggle.muted:hover {
             opacity: 1;
             color: #b84a5a;
+        }
+
+        /* ---- VOLUME SLIDER ---- */
+        .volume-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 80px;
+            height: 4px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, #6a2a3a, #b84a5a);
+            outline: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #b84a5a;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(184, 74, 90, 0.4);
+            border: 2px solid rgba(255,255,255,0.2);
+            transition: all 0.2s ease;
+        }
+        .volume-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+            background: #ff6b81;
+        }
+        .volume-slider::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #b84a5a;
+            cursor: pointer;
+            border: 2px solid rgba(255,255,255,0.2);
         }
 
         /* ---- AVATAR ---- */
@@ -668,19 +679,16 @@
             .about-tags {
                 font-size: 17px;
             }
-            #lang-toggle {
-                width: 40px;
-                height: 40px;
-                font-size: 22px;
-                top: 15px;
+            .music-controls {
+                padding: 10px 12px 14px 12px;
+                bottom: 15px;
                 right: 15px;
             }
             #music-toggle {
-                width: 40px;
-                height: 40px;
-                font-size: 18px;
-                bottom: 15px;
-                right: 15px;
+                font-size: 22px;
+            }
+            .volume-slider {
+                width: 60px;
             }
         }
     </style>
@@ -690,11 +698,11 @@
     <!-- ---- PARTICLES CANVAS ---- -->
     <canvas id="particles-canvas"></canvas>
 
-    <!-- ---- LANGUAGE TOGGLE (TOP-RIGHT) ---- -->
-    <button id="lang-toggle" title="Switch language / Сменить язык">🇬🇧</button>
-
-    <!-- ---- MUSIC TOGGLE (BOTTOM-RIGHT) ---- -->
-    <button id="music-toggle" title="Toggle Music">🔊</button>
+    <!-- ---- MUSIC CONTROLS (BOTTOM-RIGHT) ---- -->
+    <div class="music-controls">
+        <button id="music-toggle" title="Toggle Music">🔊</button>
+        <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
+    </div>
 
     <!-- ---- HIDDEN AUDIO PLAYER ---- -->
     <audio id="bg-music" loop preload="auto">
@@ -717,7 +725,7 @@
 
         <!-- ---- BIRTHDAY TIMER ---- -->
         <div class="birthday-timer">
-            <div class="label" data-en="🎉 Next Birthday in:" data-ru="🎉 Следующий День Рождения через:">🎉 Next Birthday in:</div>
+            <div class="label">🎉 Next Birthday in:</div>
             <div class="countdown" id="birthday-countdown">
                 <span id="bd-days">--</span>d
                 <span id="bd-hours">--</span>h
@@ -726,36 +734,32 @@
             </div>
         </div>
 
-        <!-- ---- NATIONALITY ---- -->
-        <div class="nationality" data-en="🏴 My nationality:" data-ru="🏴 Моя национальность:">🏴 My nationality: <span>Kosarh</span></div>
+        <!-- ---- NATIONALITY (KOSARH) ---- -->
+        <div class="nationality">🏴 My nationality: <span>Kosarh</span></div>
 
         <!-- ---- ARMY ---- -->
-        <div class="army" data-en="👑 Head of Special Army &quot;Black Order&quot;" data-ru="👑 Глава Особой Армии &quot;Чёрный Орден&quot;">👑 Head of Special Army "Black Order"</div>
+        <div class="army">👑 Head of Special Army "Black Order"</div>
 
         <!-- ---- EDUCATION ---- -->
         <div class="desc">
-            <strong data-en="🎓 Education:" data-ru="🎓 Образование:">🎓 Education:</strong><br>
-            <span class="edu" data-en="Secondary Specialized Education" data-ru="Среднее специальное образование">Secondary Specialized Education</span><br>
-            <span data-en="Certified technician of hardware and software" data-ru="Сертифицированный техник аппаратных и программных средств">Certified technician of hardware and software</span><br>
-            <span data-en="for infocommunication systems." data-ru="инфокоммуникационных систем.">for infocommunication systems.</span>
+            <strong>🎓 Education:</strong><br>
+            <span class="edu">Secondary Specialized Education</span><br>
+            Certified technician of hardware and software<br>
+            for infocommunication systems.
         </div>
 
         <!-- ---- LONG ABOUT TEXT ---- -->
         <div class="long-about">
-            <p data-en='<span class="highlight">Hi.</span> My craft is programming and everything connected to computers. I pour a lot of effort into it, try my hardest even when it gets tough. It\'s mine, it's native to me.'
-               data-ru='<span class="highlight">Привет.</span> Моё ремесло — программирование и всё, что связано с компьютерами. Я вкладываю в это много сил, стараюсь изо всех сил, даже когда становится трудно. Это моё, оно мне родное.'>
+            <p>
                 <span class="highlight">Hi.</span> My craft is programming and everything connected to computers. I pour a lot of effort into it, try my hardest even when it gets tough. It's mine, it's native to me.
             </p>
-            <p data-en="But I'm human, and emotions take their toll. When something doesn't work out — be it code, a task, or just some little thing — I start feeling sad. I can go quiet for a long time, retreat into myself, stop noticing what's around me. And sometimes, instead of sadness, anger comes — at myself, at the situation, at the fact that my hands aren't growing from the right place. Then I can snap, say something harsh, even though inside I'm still soft — it's just that emotions take over."
-               data-ru="Но я человек, и эмоции дают о себе знать. Когда что-то не получается — будь то код, задача или просто какая-то мелочь — я начинаю грустить. Я могу надолго замолчать, уйти в себя, перестать замечать, что происходит вокруг. А иногда вместо грусти приходит злость — на себя, на ситуацию, на то, что руки растут не из того места. Тогда я могу сорваться, сказать что-то резкое, хотя внутри я всё ещё мягкий — просто эмоции берут верх.">
+            <p>
                 But I'm human, and emotions take their toll. When something doesn't work out — be it code, a task, or just some little thing — I start feeling sad. I can go quiet for a long time, retreat into myself, stop noticing what's around me. And sometimes, instead of sadness, anger comes — at myself, at the situation, at the fact that my hands aren't growing from the right place. Then I can snap, say something harsh, even though inside I'm still soft — it's just that emotions take over.
             </p>
-            <p data-en="And my mood is like mountain weather. Some days I'm full of energy, cold and collected, telling the truth straight to people's faces and getting things done. And other days, apathy hits me, and I just drop out of reality. I want to see no one, stay silent, stare at one point, and wait until it passes. It doesn't last long. I just need to wait it out, to reboot."
-               data-ru="И моё настроение — как горная погода. В одни дни я полон энергии, холоден и собран, говорю правду в лицо и делаю дела. А в другие дни меня накрывает апатия, и я просто выпадаю из реальности. Я не хочу никого видеть, молчу, смотрю в одну точку и жду, пока это пройдёт. Это длится недолго. Мне просто нужно переждать, перезагрузиться.">
+            <p>
                 And my mood is like mountain weather. Some days I'm full of energy, cold and collected, telling the truth straight to people's faces and getting things done. And other days, apathy hits me, and I just drop out of reality. I want to see no one, stay silent, stare at one point, and wait until it passes. It doesn't last long. I just need to wait it out, to reboot.
             </p>
-            <p data-en="That's how I am. With all my ups and downs, weaknesses, and stubbornness. I don't like talking about myself, but if I'm saying this — it means I trust you and want you to understand me as I am."
-               data-ru="Вот такой я. Со всеми моими взлётами и падениями, слабостями и упрямством. Я не люблю говорить о себе, но если я это говорю — значит, я доверяю тебе и хочу, чтобы ты понял меня таким, какой я есть.">
+            <p>
                 That's how I am. With all my ups and downs, weaknesses, and stubbornness. I don't like talking about myself, but if I'm saying this — it means I trust you and want you to understand me as I am.
             </p>
             <div class="about-tags">
@@ -766,30 +770,30 @@
 
         <!-- ---- LANGUAGES ---- -->
         <div class="languages">
-            <h4 data-en="🗣️ LANGUAGES" data-ru="🗣️ ЯЗЫКИ">🗣️ LANGUAGES</h4>
-            <div class="lang-item"><span data-en="🇷🇺 Russian —" data-ru="🇷🇺 Русский —">🇷🇺 Russian —</span> <span class="rus" data-en="Native" data-ru="Родной">Native</span></div>
-            <div class="lang-item"><span data-en="🇬🇧 English —" data-ru="🇬🇧 Английский —">🇬🇧 English —</span> <span class="eng" data-en="So-so" data-ru="Так себе">So-so</span> <span class="note" data-en="(often use translator)" data-ru="(часто использую переводчик)">(often use translator)</span></div>
+            <h4>🗣️ LANGUAGES</h4>
+            <div class="lang-item">🇷🇺 Russian — <span class="rus">Native</span></div>
+            <div class="lang-item">🇬🇧 English — <span class="eng">So-so</span> <span class="note">(often use translator)</span></div>
         </div>
 
         <!-- ---- OS ---- -->
         <div class="os-block">
-            <h4 data-en="💻 OPERATING SYSTEMS" data-ru="💻 ОПЕРАЦИОННЫЕ СИСТЕМЫ">💻 OPERATING SYSTEMS</h4>
+            <h4>💻 OPERATING SYSTEMS</h4>
             <div class="os-item">🪟 <span class="win">Windows</span></div>
             <div class="os-item">🐧 <span class="linux">GNU/Linux</span></div>
         </div>
 
         <!-- ---- PROJECTS ---- -->
         <div class="projects-block">
-            <h4 data-en="📂 MY PROJECTS" data-ru="📂 МОИ ПРОЕКТЫ">📂 MY PROJECTS</h4>
+            <h4>📂 MY PROJECTS</h4>
             <div class="project-dev">
-                <span class="emoji">🚧</span> <span data-en="IN DEVELOPMENT" data-ru="В РАЗРАБОТКЕ">IN DEVELOPMENT</span>
-                <span class="sub" data-en="Coming soon..." data-ru="Скоро..." >Coming soon...</span>
+                <span class="emoji">🚧</span> IN DEVELOPMENT
+                <span class="sub">Coming soon...</span>
             </div>
         </div>
 
         <!-- ---- QUOTES ---- -->
         <div class="quotes-block">
-            <h4 data-en="📜 QUOTES" data-ru="📜 ЦИТАТЫ">📜 QUOTES</h4>
+            <h4>📜 QUOTES</h4>
             <div class="quote-item">
                 <span class="greek">Βασιλεύς Βασιλέων, Βασιλεί Βοήθει</span>
                 <span class="translation">(Vasiléfs Vasiléon, Vasilí Voíthei — "King of Kings, help the King")</span>
@@ -799,49 +803,30 @@
                 <span class="translation">— "I am part of that power which eternally wills evil and eternally works good." (Goethe, Faust)</span>
             </div>
             <div class="quote-item">
-                <span class="quote-text" data-en='"Man is a mystery. It must be solved, and if you spend your whole life solving it, don\'t say you\'ve wasted time; I occupy myself with this mystery, for I want to be a man."'
-                               data-ru='"Человек есть тайна. Её надо разгадать, и ежели будешь её разгадывать всю жизнь, то не говори, что потерял время; я занимаюсь этой тайной, ибо хочу быть человеком."'>
-                    "Man is a mystery. It must be solved, and if you spend your whole life solving it, don't say you've wasted time; I occupy myself with this mystery, for I want to be a man."
-                </span>
-                <span class="translation" data-en="— From a letter to his brother (on freedom and self-knowledge)"
-                                  data-ru="— Из письма брату (о свободе и самопознании)">— From a letter to his brother (on freedom and self-knowledge)</span>
+                <span class="quote-text">"Man is a mystery. It must be solved, and if you spend your whole life solving it, don't say you've wasted time; I occupy myself with this mystery, for I want to be a man."</span>
+                <span class="translation">— From a letter to his brother (on freedom and self-knowledge)</span>
             </div>
             <div class="quote-item">
-                <span class="quote-text" data-en='"Freedom is not in not restraining yourself, but in mastering yourself."'
-                               data-ru='"Свобода не в том, чтоб не сдерживать себя, а в том, чтоб владеть собой."'>
-                    "Freedom is not in not restraining yourself, but in mastering yourself."
-                </span>
-                <span class="translation" data-en="— From &quot;The Diary of a Writer&quot; (a direct definition of freedom)"
-                                  data-ru="— Из &quot;Дневника писателя&quot; (прямое определение свободы)">— From "The Diary of a Writer" (a direct definition of freedom)</span>
+                <span class="quote-text">"Freedom is not in not restraining yourself, but in mastering yourself."</span>
+                <span class="translation">— From "The Diary of a Writer" (a direct definition of freedom)</span>
             </div>
             <div class="quote-item">
-                <span class="quote-text" data-en='"If there is no God, everything is permitted."'
-                               data-ru='"Если Бога нет, всё позволено."'>
-                    "If there is no God, everything is permitted."
-                </span>
-                <span class="translation" data-en="— From &quot;The Brothers Karamazov&quot; (echoes Raskolnikov's question)"
-                                  data-ru="— Из &quot;Братьев Карамазовых&quot; (перекликается с вопросом Раскольникова)">— From "The Brothers Karamazov" (echoes Raskolnikov's question)</span>
+                <span class="quote-text">"If there is no God, everything is permitted."</span>
+                <span class="translation">— From "The Brothers Karamazov" (echoes Raskolnikov's question)</span>
             </div>
             <div class="quote-item">
-                <span class="quote-text" data-en='"It\'s only after you\'ve lost everything that you\'re free to do anything."'
-                               data-ru='"Только потеряв всё, ты обретаешь свободу делать что угодно."'>
-                    "It's only after you've lost everything that you're free to do anything."
-                </span>
+                <span class="quote-text">"It's only after you've lost everything that you're free to do anything."</span>
                 <span class="translation">— Fight Club</span>
             </div>
             <div class="quote-item">
-                <span class="quote-text" data-en='"Am I a trembling creature or do I have the right...?"'
-                               data-ru='"Тварь ли я дрожащая или право имеющая…"'>
-                    "Am I a trembling creature or do I have the right...?"
-                </span>
-                <span class="translation" data-en="— F.M. Dostoevsky, &quot;Crime and Punishment&quot;"
-                                  data-ru="— Ф.М. Достоевский, &quot;Преступление и наказание&quot;">— F.M. Dostoevsky, "Crime and Punishment"</span>
+                <span class="quote-text">"Am I a trembling creature or do I have the right...?"</span>
+                <span class="translation">— F.M. Dostoevsky, "Crime and Punishment"</span>
             </div>
         </div>
 
         <!-- ---- INTERESTS ---- -->
         <div class="interests-block">
-            <h4 data-en="🎮 GAMES & 🎬 CARTOONS" data-ru="🎮 ИГРЫ & 🎬 МУЛЬТФИЛЬМЫ">🎮 GAMES & 🎬 CARTOONS</h4>
+            <h4>🎮 GAMES & 🎬 CARTOONS</h4>
             <div class="interests-item">🎮 <span class="game">Hearts of Iron IV</span></div>
             <div class="interests-item">🎮 <span class="game">Garry's Mod</span></div>
             <div class="interests-item">🎮 <span class="game">Skyrim</span></div>
@@ -860,7 +845,7 @@
 
         <!-- ---- ALLIES ---- -->
         <div class="allies">
-            <h4 data-en="🤝 FRIENDS & BROTHERS" data-ru="🤝 ДРУЗЬЯ & БРАТЬЯ">🤝 FRIENDS & BROTHERS</h4>
+            <h4>🤝 FRIENDS & BROTHERS</h4>
             <div class="allies-list">
                 <span><span class="emoji">🛡️</span>Tverd</span>
                 <span><span class="emoji">⚡</span>Yonkia</span>
@@ -870,14 +855,14 @@
         </div>
 
         <!-- ---- BUTTONS ---- -->
-        <a href="https://t.me/VladislavFoskKosarh" class="btn btn-telegram" data-en="📢 My Telegram Channel" data-ru="📢 Мой Telegram Канал">📢 My Telegram Channel</a>
-        <a href="https://www.youtube.com/@VladislavFoskKosarh" class="btn btn-youtube" data-en="🎥 My YouTube Channel" data-ru="🎥 Мой YouTube Канал">🎥 My YouTube Channel</a>
-        <a href="https://github.com/VladislavFosk" class="btn btn-github" data-en="💻 GitHub" data-ru="💻 GitHub">💻 GitHub</a>
-        <a href="https://gamejolt.com/@VladislavFosk" class="btn btn-gamejolt" data-en="🎮 GameJolt" data-ru="🎮 GameJolt">🎮 GameJolt</a>
+        <a href="https://t.me/VladislavFoskKosarh" class="btn btn-telegram">📢 My Telegram Channel</a>
+        <a href="https://www.youtube.com/@VladislavFoskKosarh" class="btn btn-youtube">🎥 My YouTube Channel</a>
+        <a href="https://github.com/VladislavFosk" class="btn btn-github">💻 GitHub</a>
+        <a href="https://gamejolt.com/@VladislavFosk" class="btn btn-gamejolt">🎮 GameJolt</a>
 
         <!-- ---- ANIME ---- -->
         <div class="anime-section">
-            <h3 data-en="🎬 Anime list" data-ru="🎬 Список аниме">🎬 Anime list</h3>
+            <h3>🎬 Anime list</h3>
             <div class="anime-grid">
                 <div class="anime-item"><span class="emoji">🔪</span>Ansatsu Kyoushitsu</div>
                 <div class="anime-item"><span class="emoji">🗡️</span>Ansatsu Kyoushitsu 2nd Season</div>
@@ -1024,40 +1009,17 @@
         animateParticles();
 
         // ============================================================
-        // 3. LANGUAGE TOGGLE
-        // ============================================================
-        let lang = 'en'; // 'en' or 'ru'
-
-        function setLanguage(language) {
-            lang = language;
-            const elements = document.querySelectorAll('[data-en][data-ru]');
-            elements.forEach(el => {
-                el.textContent = el.getAttribute(`data-${lang}`);
-            });
-            // For elements with HTML content (like the long about text)
-            document.querySelectorAll('.long-about p[data-en][data-ru]').forEach(el => {
-                el.innerHTML = el.getAttribute(`data-${lang}`);
-            });
-            // Update toggle button
-            const toggleBtn = document.getElementById('lang-toggle');
-            toggleBtn.textContent = lang === 'en' ? '🇷🇺' : '🇬🇧';
-            toggleBtn.title = lang === 'en' ? 'Switch to Russian / Переключить на русский' : 'Switch to English / Переключить на английский';
-        }
-
-        document.getElementById('lang-toggle').addEventListener('click', function() {
-            const newLang = lang === 'en' ? 'ru' : 'en';
-            setLanguage(newLang);
-        });
-
-        // ============================================================
-        // 4. MUSIC TOGGLE
+        // 3. MUSIC CONTROLS
         // ============================================================
         const audio = document.getElementById('bg-music');
         const musicToggle = document.getElementById('music-toggle');
+        const volumeSlider = document.getElementById('volume-slider');
+
+        // Set initial volume
+        audio.volume = volumeSlider.value;
 
         // Try to autoplay on load
         audio.play().catch(() => {
-            // If autoplay blocked, wait for user interaction
             const playOnInteraction = () => {
                 audio.play().then(() => {
                     musicToggle.textContent = '🔊';
@@ -1070,6 +1032,7 @@
             document.addEventListener('touchstart', playOnInteraction, { once: true });
         });
 
+        // Toggle play/pause
         musicToggle.addEventListener('click', function(e) {
             e.stopPropagation();
             if (audio.paused) {
@@ -1087,6 +1050,12 @@
             }
         });
 
+        // Volume control
+        volumeSlider.addEventListener('input', function() {
+            audio.volume = this.value;
+        });
+
+        // Update button state when audio is paused/played externally
         audio.addEventListener('play', () => {
             musicToggle.textContent = '🔊';
             musicToggle.classList.remove('muted');
