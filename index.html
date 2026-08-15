@@ -20,14 +20,20 @@
             padding: 20px;
             position: relative;
             transition: background 0.6s ease;
-        }
-        body.home-bg {
-            background: linear-gradient(180deg, #1a0508 0%, #0d0610 50%, #050208 100%);
-        }
-        body.projects-bg {
-            background: linear-gradient(180deg, #0d1b2a 0%, #1b2838 50%, #0f3460 100%);
+            overflow: hidden;
         }
 
+        /* ---- HOME: КРАСНЫЙ → ЧЁРНЫЙ → ФИОЛЕТОВЫЙ ---- */
+        body.home-bg {
+            background: linear-gradient(180deg, #4a0000 0%, #0a000a 50%, #1a004a 100%);
+        }
+
+        /* ---- PROJECTS: ЧЁРНЫЙ (МАТРИЦА) ---- */
+        body.projects-bg {
+            background: #000000;
+        }
+
+        /* ---- КАНВАСЫ ---- */
         #particles-canvas {
             position: fixed;
             top: 0;
@@ -36,6 +42,18 @@
             height: 100%;
             z-index: 0;
             pointer-events: none;
+        }
+
+        /* ---- ВОЛНЫ ДЛЯ ПРОЕКТОВ ---- */
+        #waves-canvas {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.6;
         }
 
         .card {
@@ -55,8 +73,9 @@
             transition: border-color 0.5s ease, background 0.5s ease;
         }
         body.projects-bg .card {
-            background: rgba(15, 15, 30, 0.7);
-            border: 1px solid rgba(60, 80, 150, 0.3);
+            background: rgba(0, 10, 0, 0.7);
+            border: 1px solid rgba(0, 255, 65, 0.2);
+            box-shadow: 0 0 60px rgba(0, 255, 65, 0.05);
         }
         .card::-webkit-scrollbar {
             width: 4px;
@@ -69,10 +88,10 @@
             border-radius: 10px;
         }
         body.projects-bg .card::-webkit-scrollbar-thumb {
-            background: #4a6fa5;
+            background: #00ff41;
         }
 
-        /* ---- NAVIGATION (TOP-RIGHT) ---- */
+        /* ---- НАВИГАЦИЯ ---- */
         .nav {
             position: fixed;
             top: 20px;
@@ -89,9 +108,9 @@
             transition: all 0.5s ease;
         }
         body.projects-bg .nav {
-            background: rgba(15, 15, 30, 0.8);
-            border: 1px solid rgba(60, 80, 150, 0.4);
-            box-shadow: 0 0 30px rgba(60, 80, 150, 0.2);
+            background: rgba(0, 10, 0, 0.8);
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.1);
         }
         .nav a {
             color: #b84a5a;
@@ -106,26 +125,26 @@
             cursor: pointer;
         }
         body.projects-bg .nav a {
-            color: #7a9bcb;
+            color: #00ff41;
         }
         .nav a:hover {
             background: rgba(139, 26, 43, 0.3);
             color: #ff6b81;
         }
         body.projects-bg .nav a:hover {
-            background: rgba(60, 80, 150, 0.3);
-            color: #aac4e6;
+            background: rgba(0, 255, 65, 0.15);
+            color: #66ff88;
         }
         .nav a.active {
             background: rgba(139, 26, 43, 0.4);
             color: #ff6b81;
         }
         body.projects-bg .nav a.active {
-            background: rgba(60, 80, 150, 0.4);
-            color: #aac4e6;
+            background: rgba(0, 255, 65, 0.2);
+            color: #66ff88;
         }
 
-        /* ---- MUSIC CONTROLS (только на Home) ---- */
+        /* ---- МУЗЫКА ---- */
         .music-controls {
             position: fixed;
             bottom: 20px;
@@ -196,16 +215,8 @@
             transform: scale(1.15);
             background: #ff6b81;
         }
-        .volume-slider::-moz-range-thumb {
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: #b84a5a;
-            cursor: pointer;
-            border: 2px solid rgba(255,255,255,0.2);
-        }
 
-        /* ---- PAGES ---- */
+        /* ---- СТРАНИЦЫ ---- */
         .page {
             display: none;
             animation: fadeIn 0.4s ease;
@@ -219,7 +230,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ---- HOME PAGE STYLES ---- */
+        /* ---- ОСТАЛЬНЫЕ СТИЛИ (HOME) ---- */
         .avatar {
             width: 140px;
             height: 140px;
@@ -229,6 +240,10 @@
             margin-bottom: 15px;
             background: #2a0a0a;
             box-shadow: 0 0 40px rgba(139, 26, 43, 0.3);
+        }
+        body.projects-bg .avatar {
+            border-color: #00ff41;
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.15);
         }
         .name {
             font-size: 32px;
@@ -240,11 +255,19 @@
             font-family: 'Times New Roman', Times, serif;
             text-shadow: 0 0 30px rgba(184, 74, 90, 0.3);
         }
+        body.projects-bg .name {
+            background: linear-gradient(90deg, #00ff41, #0088ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
         .nick {
             font-size: 18px;
             color: #7a5a6a;
             margin-bottom: 5px;
             font-family: 'Times New Roman', Times, serif;
+        }
+        body.projects-bg .nick {
+            color: #44aa66;
         }
         .title {
             font-size: 22px;
@@ -254,6 +277,10 @@
             font-family: 'Times New Roman', Times, serif;
             text-shadow: 0 0 30px rgba(184, 74, 90, 0.4);
             letter-spacing: 1px;
+        }
+        body.projects-bg .title {
+            color: #00ff41;
+            text-shadow: 0 0 30px rgba(0, 255, 65, 0.2);
         }
         .age {
             font-size: 20px;
@@ -266,6 +293,10 @@
             font-weight: 600;
             text-shadow: 0 0 20px rgba(184, 74, 90, 0.3);
         }
+        body.projects-bg .age span {
+            color: #00ff41;
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+        }
         .nationality {
             font-size: 19px;
             color: #9a7a8a;
@@ -277,6 +308,10 @@
             font-weight: 600;
             text-shadow: 0 0 20px rgba(184, 74, 90, 0.3);
         }
+        body.projects-bg .nationality span {
+            color: #00ff41;
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+        }
         .army {
             font-size: 19px;
             color: #8b1a2b;
@@ -285,12 +320,20 @@
             font-weight: 600;
             text-shadow: 0 0 25px rgba(139, 26, 43, 0.5);
         }
+        body.projects-bg .army {
+            color: #00cc33;
+            text-shadow: 0 0 25px rgba(0, 255, 65, 0.2);
+        }
         .birthday-timer {
             margin: 5px 0 15px 0;
             padding: 10px;
             background: rgba(139, 26, 43, 0.1);
             border-radius: 15px;
             border: 1px solid rgba(139, 26, 43, 0.3);
+        }
+        body.projects-bg .birthday-timer {
+            background: rgba(0, 255, 65, 0.05);
+            border-color: rgba(0, 255, 65, 0.2);
         }
         .birthday-timer .label {
             color: #b84a5a;
@@ -299,6 +342,10 @@
             letter-spacing: 1px;
             text-shadow: 0 0 20px rgba(184, 74, 90, 0.2);
         }
+        body.projects-bg .birthday-timer .label {
+            color: #00ff41;
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+        }
         .birthday-timer .countdown {
             color: #b84a5a;
             font-size: 20px;
@@ -306,6 +353,10 @@
             font-family: 'Times New Roman', Times, serif;
             text-shadow: 0 0 30px rgba(184, 74, 90, 0.4);
             margin-top: 4px;
+        }
+        body.projects-bg .birthday-timer .countdown {
+            color: #00ff41;
+            text-shadow: 0 0 30px rgba(0, 255, 65, 0.2);
         }
         .birthday-timer .countdown span {
             display: inline-block;
@@ -319,14 +370,25 @@
             padding: 0 5px;
             font-family: 'Times New Roman', Times, serif;
         }
+        body.projects-bg .desc {
+            color: #88ccaa;
+        }
         .desc strong {
             color: #b84a5a;
             text-shadow: 0 0 20px rgba(184, 74, 90, 0.3);
+        }
+        body.projects-bg .desc strong {
+            color: #00ff41;
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
         }
         .desc .edu {
             color: #b84a5a;
             font-weight: 600;
             text-shadow: 0 0 20px rgba(184, 74, 90, 0.3);
+        }
+        body.projects-bg .desc .edu {
+            color: #00ff41;
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
         }
         .long-about {
             margin: 15px 0 20px 0;
@@ -336,6 +398,10 @@
             border: 1px solid rgba(139, 26, 43, 0.15);
             text-align: left;
         }
+        body.projects-bg .long-about {
+            background: rgba(0, 255, 65, 0.03);
+            border-color: rgba(0, 255, 65, 0.1);
+        }
         .long-about p {
             color: #c0a0b0;
             font-size: 16px;
@@ -344,12 +410,18 @@
             margin-bottom: 12px;
             text-indent: 20px;
         }
+        body.projects-bg .long-about p {
+            color: #88ccaa;
+        }
         .long-about p:last-of-type {
             margin-bottom: 0;
         }
         .long-about .highlight {
             color: #b84a5a;
             font-weight: 600;
+        }
+        body.projects-bg .long-about .highlight {
+            color: #00ff41;
         }
         .about-tags {
             margin-top: 15px;
@@ -359,16 +431,27 @@
             font-size: 19px;
             font-family: 'Times New Roman', Times, serif;
         }
+        body.projects-bg .about-tags {
+            border-top-color: rgba(0, 255, 65, 0.2);
+        }
         .about-tags .sun-child {
             color: #b84a5a;
             font-weight: 600;
             text-shadow: 0 0 25px rgba(184, 74, 90, 0.5);
             margin-right: 20px;
         }
+        body.projects-bg .about-tags .sun-child {
+            color: #00ff41;
+            text-shadow: 0 0 25px rgba(0, 255, 65, 0.2);
+        }
         .about-tags .faith {
             color: #8b1a2b;
             font-weight: 600;
             text-shadow: 0 0 25px rgba(139, 26, 43, 0.5);
+        }
+        body.projects-bg .about-tags .faith {
+            color: #00cc33;
+            text-shadow: 0 0 25px rgba(0, 255, 65, 0.2);
         }
         .languages {
             margin: 15px 0 15px 0;
@@ -376,6 +459,10 @@
             background: rgba(139, 26, 43, 0.08);
             border-radius: 15px;
             border: 1px solid rgba(139, 26, 43, 0.2);
+        }
+        body.projects-bg .languages {
+            background: rgba(0, 255, 65, 0.03);
+            border-color: rgba(0, 255, 65, 0.1);
         }
         .languages h4 {
             color: #b84a5a;
@@ -385,26 +472,44 @@
             margin-bottom: 8px;
             text-shadow: 0 0 25px rgba(184, 74, 90, 0.3);
         }
+        body.projects-bg .languages h4 {
+            color: #00ff41;
+            text-shadow: 0 0 25px rgba(0, 255, 65, 0.2);
+        }
         .lang-item {
             color: #c0a0b0;
             font-size: 17px;
             font-family: 'Times New Roman', Times, serif;
             padding: 3px 0;
         }
+        body.projects-bg .lang-item {
+            color: #88ccaa;
+        }
         .lang-item .rus {
             color: #b84a5a;
             font-weight: 600;
             text-shadow: 0 0 20px rgba(184, 74, 90, 0.3);
+        }
+        body.projects-bg .lang-item .rus {
+            color: #00ff41;
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
         }
         .lang-item .eng {
             color: #9a7a8a;
             font-weight: 600;
             text-shadow: 0 0 20px rgba(154, 122, 138, 0.3);
         }
+        body.projects-bg .lang-item .eng {
+            color: #66dd88;
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
+        }
         .lang-item .note {
             color: #6a5a6a;
             font-size: 15px;
             font-style: italic;
+        }
+        body.projects-bg .lang-item .note {
+            color: #446655;
         }
         .os-block {
             margin: 15px 0 20px 0;
@@ -412,6 +517,10 @@
             background: rgba(139, 26, 43, 0.08);
             border-radius: 15px;
             border: 1px solid rgba(139, 26, 43, 0.2);
+        }
+        body.projects-bg .os-block {
+            background: rgba(0, 255, 65, 0.03);
+            border-color: rgba(0, 255, 65, 0.1);
         }
         .os-block h4 {
             color: #b84a5a;
@@ -421,21 +530,36 @@
             margin-bottom: 8px;
             text-shadow: 0 0 25px rgba(184, 74, 90, 0.3);
         }
+        body.projects-bg .os-block h4 {
+            color: #00ff41;
+            text-shadow: 0 0 25px rgba(0, 255, 65, 0.2);
+        }
         .os-item {
             color: #c0a0b0;
             font-size: 17px;
             font-family: 'Times New Roman', Times, serif;
             padding: 3px 0;
         }
+        body.projects-bg .os-item {
+            color: #88ccaa;
+        }
         .os-item .win {
             color: #6a8aaa;
             font-weight: 600;
             text-shadow: 0 0 20px rgba(106, 138, 170, 0.4);
         }
+        body.projects-bg .os-item .win {
+            color: #4488dd;
+            text-shadow: 0 0 20px rgba(0, 100, 255, 0.2);
+        }
         .os-item .linux {
             color: #b84a5a;
             font-weight: 600;
             text-shadow: 0 0 20px rgba(184, 74, 90, 0.4);
+        }
+        body.projects-bg .os-item .linux {
+            color: #00ff41;
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
         }
         .quotes-block {
             margin: 15px 0 20px 0;
@@ -443,6 +567,10 @@
             background: rgba(139, 26, 43, 0.08);
             border-radius: 15px;
             border: 1px solid rgba(139, 26, 43, 0.2);
+        }
+        body.projects-bg .quotes-block {
+            background: rgba(0, 255, 65, 0.03);
+            border-color: rgba(0, 255, 65, 0.1);
         }
         .quotes-block h4 {
             color: #b84a5a;
@@ -452,6 +580,10 @@
             margin-bottom: 10px;
             text-shadow: 0 0 30px rgba(184, 74, 90, 0.4);
         }
+        body.projects-bg .quotes-block h4 {
+            color: #00ff41;
+            text-shadow: 0 0 30px rgba(0, 255, 65, 0.2);
+        }
         .quote-item {
             color: #c0a0b0;
             font-size: 16px;
@@ -460,20 +592,34 @@
             padding: 6px 0;
             line-height: 1.5;
         }
+        body.projects-bg .quote-item {
+            color: #88ccaa;
+        }
         .quote-item .greek {
             color: #b84a5a;
             font-style: italic;
             text-shadow: 0 0 25px rgba(184, 74, 90, 0.4);
+        }
+        body.projects-bg .quote-item .greek {
+            color: #00ff41;
+            text-shadow: 0 0 25px rgba(0, 255, 65, 0.2);
         }
         .quote-item .german {
             color: #9a7a8a;
             font-style: italic;
             text-shadow: 0 0 25px rgba(154, 122, 138, 0.3);
         }
+        body.projects-bg .quote-item .german {
+            color: #66dd88;
+            text-shadow: 0 0 25px rgba(0, 255, 65, 0.1);
+        }
         .quote-item .quote-text {
             color: #c0a0b0;
             font-style: italic;
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+        }
+        body.projects-bg .quote-item .quote-text {
+            color: #88ccaa;
         }
         .quote-item .translation {
             color: #6a5a6a;
@@ -482,12 +628,19 @@
             display: block;
             margin-top: 2px;
         }
+        body.projects-bg .quote-item .translation {
+            color: #446655;
+        }
         .interests-block {
             margin: 15px 0 20px 0;
             padding: 12px;
             background: rgba(139, 26, 43, 0.08);
             border-radius: 15px;
             border: 1px solid rgba(139, 26, 43, 0.2);
+        }
+        body.projects-bg .interests-block {
+            background: rgba(0, 255, 65, 0.03);
+            border-color: rgba(0, 255, 65, 0.1);
         }
         .interests-block h4 {
             color: #b84a5a;
@@ -497,22 +650,38 @@
             margin-bottom: 8px;
             text-shadow: 0 0 25px rgba(184, 74, 90, 0.3);
         }
+        body.projects-bg .interests-block h4 {
+            color: #00ff41;
+            text-shadow: 0 0 25px rgba(0, 255, 65, 0.2);
+        }
         .interests-item {
             color: #c0a0b0;
             font-size: 17px;
             font-family: 'Times New Roman', Times, serif;
             padding: 3px 0;
         }
+        body.projects-bg .interests-item {
+            color: #88ccaa;
+        }
         .interests-item .game {
             color: #9a7a8a;
             text-shadow: 0 0 20px rgba(154, 122, 138, 0.2);
+        }
+        body.projects-bg .interests-item .game {
+            color: #66dd88;
         }
         .interests-item .cartoon {
             color: #8a6a7a;
             text-shadow: 0 0 20px rgba(138, 106, 122, 0.2);
         }
+        body.projects-bg .interests-item .cartoon {
+            color: #55aa77;
+        }
         .interests-item .heart {
             color: #8b1a2b;
+        }
+        body.projects-bg .interests-item .heart {
+            color: #00ff41;
         }
         .allies {
             margin: 20px 0 25px 0;
@@ -521,6 +690,10 @@
             border-radius: 15px;
             border: 1px solid rgba(139, 26, 43, 0.2);
         }
+        body.projects-bg .allies {
+            background: rgba(0, 255, 65, 0.03);
+            border-color: rgba(0, 255, 65, 0.1);
+        }
         .allies h4 {
             color: #b84a5a;
             font-size: 18px;
@@ -528,6 +701,10 @@
             letter-spacing: 2px;
             margin-bottom: 10px;
             text-shadow: 0 0 25px rgba(184, 74, 90, 0.3);
+        }
+        body.projects-bg .allies h4 {
+            color: #00ff41;
+            text-shadow: 0 0 25px rgba(0, 255, 65, 0.2);
         }
         .allies-list {
             display: flex;
@@ -542,10 +719,17 @@
             transition: 0.3s;
             cursor: default;
         }
+        body.projects-bg .allies-list span {
+            color: #88ccaa;
+        }
         .allies-list span:hover {
             color: #b84a5a;
             transform: scale(1.05);
             text-shadow: 0 0 25px rgba(184, 74, 90, 0.4);
+        }
+        body.projects-bg .allies-list span:hover {
+            color: #00ff41;
+            text-shadow: 0 0 25px rgba(0, 255, 65, 0.2);
         }
         .allies-list .emoji {
             margin-right: 5px;
@@ -576,6 +760,16 @@
             box-shadow: 0 0 30px rgba(139, 26, 43, 0.5);
             transform: scale(1.03);
         }
+        body.projects-bg .btn-telegram {
+            border-color: #00ff41;
+            color: #00ff41;
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+        }
+        body.projects-bg .btn-telegram:hover {
+            background: #00ff41;
+            color: #000000;
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.3);
+        }
         .btn-youtube {
             border-color: #6a2a3a;
             color: #b84a5a;
@@ -586,6 +780,16 @@
             color: white;
             box-shadow: 0 0 30px rgba(139, 26, 43, 0.5);
             transform: scale(1.03);
+        }
+        body.projects-bg .btn-youtube {
+            border-color: #00ff41;
+            color: #00ff41;
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+        }
+        body.projects-bg .btn-youtube:hover {
+            background: #00ff41;
+            color: #000000;
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.3);
         }
         .btn-github {
             border-color: #6a2a3a;
@@ -598,6 +802,16 @@
             box-shadow: 0 0 30px rgba(139, 26, 43, 0.5);
             transform: scale(1.03);
         }
+        body.projects-bg .btn-github {
+            border-color: #00ff41;
+            color: #00ff41;
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+        }
+        body.projects-bg .btn-github:hover {
+            background: #00ff41;
+            color: #000000;
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.3);
+        }
         .btn-gamejolt {
             border-color: #6a2a3a;
             color: #b84a5a;
@@ -608,6 +822,16 @@
             color: white;
             box-shadow: 0 0 30px rgba(139, 26, 43, 0.5);
             transform: scale(1.03);
+        }
+        body.projects-bg .btn-gamejolt {
+            border-color: #00ff41;
+            color: #00ff41;
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+        }
+        body.projects-bg .btn-gamejolt:hover {
+            background: #00ff41;
+            color: #000000;
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.3);
         }
         .anime-section {
             margin-top: 25px;
@@ -624,6 +848,11 @@
             padding-bottom: 10px;
             text-shadow: 0 0 30px rgba(184, 74, 90, 0.3);
         }
+        body.projects-bg .anime-section h3 {
+            color: #00ff41;
+            border-bottom-color: rgba(0, 255, 65, 0.2);
+            text-shadow: 0 0 30px rgba(0, 255, 65, 0.2);
+        }
         .anime-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -639,9 +868,16 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        body.projects-bg .anime-item {
+            color: #66dd88;
+        }
         .anime-item:hover {
             color: #b84a5a;
             text-shadow: 0 0 20px rgba(184, 74, 90, 0.3);
+        }
+        body.projects-bg .anime-item:hover {
+            color: #00ff41;
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
         }
         .anime-item .emoji {
             margin-right: 4px;
@@ -649,22 +885,52 @@
         .anime-item .love {
             color: #8b1a2b;
         }
+        body.projects-bg .anime-item .love {
+            color: #00ff41;
+        }
 
-        /* ---- PROJECTS PAGE STYLES ---- */
+        /* ---- FOOTER ---- */
+        .footer {
+            margin-top: 25px;
+            font-size: 16px;
+            color: #5a4a5a;
+            font-family: 'Times New Roman', Times, serif;
+            letter-spacing: 1px;
+            animation: pulse 2s infinite;
+        }
+        body.projects-bg .footer {
+            color: #335544;
+        }
+        .footer span {
+            color: #b84a5a;
+            font-weight: 600;
+            text-shadow: 0 0 20px rgba(184, 74, 90, 0.3);
+        }
+        body.projects-bg .footer span {
+            color: #00ff41;
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        /* ---- ПРОЕКТЫ (MATRIX STYLE) ---- */
         .projects-title {
             font-size: 28px;
             font-weight: 700;
-            color: #7a9bcb;
+            color: #00ff41;
             margin-bottom: 20px;
             font-family: 'Times New Roman', Times, serif;
-            text-shadow: 0 0 30px rgba(60, 80, 150, 0.3);
+            text-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
             letter-spacing: 1px;
         }
         .project-block {
-            background: rgba(20, 30, 60, 0.4);
+            background: rgba(0, 10, 0, 0.5);
             border-radius: 20px;
             padding: 50px 30px;
-            border: 2px dashed rgba(60, 80, 150, 0.3);
+            border: 2px dashed rgba(0, 255, 65, 0.2);
             text-align: center;
             min-height: 250px;
             display: flex;
@@ -679,14 +945,14 @@
         .project-block .status {
             font-size: 26px;
             font-weight: 700;
-            color: #7a9bcb;
+            color: #00ff41;
             font-family: 'Times New Roman', Times, serif;
-            text-shadow: 0 0 20px rgba(60, 80, 150, 0.3);
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
             letter-spacing: 2px;
         }
         .project-block .sub {
             font-size: 18px;
-            color: #5a7a9a;
+            color: #448855;
             margin-top: 10px;
             font-family: 'Times New Roman', Times, serif;
         }
@@ -698,32 +964,6 @@
         @keyframes blink {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
-        }
-
-        .footer {
-            margin-top: 25px;
-            font-size: 16px;
-            color: #5a4a5a;
-            font-family: 'Times New Roman', Times, serif;
-            letter-spacing: 1px;
-            animation: pulse 2s infinite;
-        }
-        body.projects-bg .footer {
-            color: #3a4a6a;
-        }
-        .footer span {
-            color: #b84a5a;
-            font-weight: 600;
-            text-shadow: 0 0 20px rgba(184, 74, 90, 0.3);
-        }
-        body.projects-bg .footer span {
-            color: #7a9bcb;
-            text-shadow: 0 0 20px rgba(60, 80, 150, 0.3);
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.7; }
-            50% { opacity: 1; }
         }
 
         /* ---- RESPONSIVE ---- */
@@ -781,31 +1021,30 @@
 </head>
 <body class="home-bg">
 
-    <!-- ---- PARTICLES CANVAS ---- -->
+    <!-- ---- КАНВАСЫ ---- -->
     <canvas id="particles-canvas"></canvas>
+    <canvas id="waves-canvas"></canvas>
 
-    <!-- ---- NAVIGATION (TOP-RIGHT) ---- -->
+    <!-- ---- НАВИГАЦИЯ ---- -->
     <div class="nav">
         <a class="active" data-page="home">Home</a>
         <a data-page="projects">My Projects</a>
     </div>
 
-    <!-- ---- MUSIC CONTROLS (BOTTOM-RIGHT) ---- -->
+    <!-- ---- МУЗЫКА ---- -->
     <div class="music-controls" id="music-controls">
         <button id="music-toggle" title="Toggle Music">🔊</button>
         <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
     </div>
 
-    <!-- ---- HIDDEN AUDIO PLAYER ---- -->
     <audio id="bg-music" loop preload="auto">
         <source src="music/theme.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
     </audio>
 
     <div class="card">
 
         <!-- ========================================================== -->
-        <!-- PAGE: HOME -->
+        <!-- HOME -->
         <!-- ========================================================== -->
         <div class="page active" id="page-home">
 
@@ -838,18 +1077,10 @@
             </div>
 
             <div class="long-about">
-                <p>
-                    <span class="highlight">Hi.</span> My craft is programming and everything connected to computers. I pour a lot of effort into it, try my hardest even when it gets tough. It's mine, it's native to me.
-                </p>
-                <p>
-                    But I'm human, and emotions take their toll. When something doesn't work out — be it code, a task, or just some little thing — I start feeling sad. I can go quiet for a long time, retreat into myself, stop noticing what's around me. And sometimes, instead of sadness, anger comes — at myself, at the situation, at the fact that my hands aren't growing from the right place. Then I can snap, say something harsh, even though inside I'm still soft — it's just that emotions take over.
-                </p>
-                <p>
-                    And my mood is like mountain weather. Some days I'm full of energy, cold and collected, telling the truth straight to people's faces and getting things done. And other days, apathy hits me, and I just drop out of reality. I want to see no one, stay silent, stare at one point, and wait until it passes. It doesn't last long. I just need to wait it out, to reboot.
-                </p>
-                <p>
-                    That's how I am. With all my ups and downs, weaknesses, and stubbornness. I don't like talking about myself, but if I'm saying this — it means I trust you and want you to understand me as I am.
-                </p>
+                <p><span class="highlight">Hi.</span> My craft is programming and everything connected to computers. I pour a lot of effort into it, try my hardest even when it gets tough. It's mine, it's native to me.</p>
+                <p>But I'm human, and emotions take their toll. When something doesn't work out — be it code, a task, or just some little thing — I start feeling sad. I can go quiet for a long time, retreat into myself, stop noticing what's around me. And sometimes, instead of sadness, anger comes — at myself, at the situation, at the fact that my hands aren't growing from the right place. Then I can snap, say something harsh, even though inside I'm still soft — it's just that emotions take over.</p>
+                <p>And my mood is like mountain weather. Some days I'm full of energy, cold and collected, telling the truth straight to people's faces and getting things done. And other days, apathy hits me, and I just drop out of reality. I want to see no one, stay silent, stare at one point, and wait until it passes. It doesn't last long. I just need to wait it out, to reboot.</p>
+                <p>That's how I am. With all my ups and downs, weaknesses, and stubbornness. I don't like talking about myself, but if I'm saying this — it means I trust you and want you to understand me as I am.</p>
                 <div class="about-tags">
                     <span class="sun-child">☀️ Sun Child</span>
                     <span class="faith">✝️ Orthodox Christian</span>
@@ -870,34 +1101,13 @@
 
             <div class="quotes-block">
                 <h4>📜 QUOTES</h4>
-                <div class="quote-item">
-                    <span class="greek">Βασιλεύς Βασιλέων, Βασιλεί Βοήθει</span>
-                    <span class="translation">(Vasiléfs Vasiléon, Vasilí Voíthei — "King of Kings, help the King")</span>
-                </div>
-                <div class="quote-item">
-                    <span class="german">"Ich bin ein Teil von jener Kraft, die stets das Böse will und stets das Gute schafft."</span>
-                    <span class="translation">— "I am part of that power which eternally wills evil and eternally works good." (Goethe, Faust)</span>
-                </div>
-                <div class="quote-item">
-                    <span class="quote-text">"Man is a mystery. It must be solved, and if you spend your whole life solving it, don't say you've wasted time; I occupy myself with this mystery, for I want to be a man."</span>
-                    <span class="translation">— From a letter to his brother (on freedom and self-knowledge)</span>
-                </div>
-                <div class="quote-item">
-                    <span class="quote-text">"Freedom is not in not restraining yourself, but in mastering yourself."</span>
-                    <span class="translation">— From "The Diary of a Writer" (a direct definition of freedom)</span>
-                </div>
-                <div class="quote-item">
-                    <span class="quote-text">"If there is no God, everything is permitted."</span>
-                    <span class="translation">— From "The Brothers Karamazov" (echoes Raskolnikov's question)</span>
-                </div>
-                <div class="quote-item">
-                    <span class="quote-text">"It's only after you've lost everything that you're free to do anything."</span>
-                    <span class="translation">— Fight Club</span>
-                </div>
-                <div class="quote-item">
-                    <span class="quote-text">"Am I a trembling creature or do I have the right...?"</span>
-                    <span class="translation">— F.M. Dostoevsky, "Crime and Punishment"</span>
-                </div>
+                <div class="quote-item"><span class="greek">Βασιλεύς Βασιλέων, Βασιλεί Βοήθει</span><span class="translation">(Vasiléfs Vasiléon, Vasilí Voíthei — "King of Kings, help the King")</span></div>
+                <div class="quote-item"><span class="german">"Ich bin ein Teil von jener Kraft, die stets das Böse will und stets das Gute schafft."</span><span class="translation">— "I am part of that power which eternally wills evil and eternally works good." (Goethe, Faust)</span></div>
+                <div class="quote-item"><span class="quote-text">"Man is a mystery. It must be solved, and if you spend your whole life solving it, don't say you've wasted time; I occupy myself with this mystery, for I want to be a man."</span><span class="translation">— From a letter to his brother (on freedom and self-knowledge)</span></div>
+                <div class="quote-item"><span class="quote-text">"Freedom is not in not restraining yourself, but in mastering yourself."</span><span class="translation">— From "The Diary of a Writer" (a direct definition of freedom)</span></div>
+                <div class="quote-item"><span class="quote-text">"If there is no God, everything is permitted."</span><span class="translation">— From "The Brothers Karamazov" (echoes Raskolnikov's question)</span></div>
+                <div class="quote-item"><span class="quote-text">"It's only after you've lost everything that you're free to do anything."</span><span class="translation">— Fight Club</span></div>
+                <div class="quote-item"><span class="quote-text">"Am I a trembling creature or do I have the right...?"</span><span class="translation">— F.M. Dostoevsky, "Crime and Punishment"</span></div>
             </div>
 
             <div class="interests-block">
@@ -963,7 +1173,7 @@
         </div>
 
         <!-- ========================================================== -->
-        <!-- PAGE: MY PROJECTS -->
+        <!-- PROJECTS -->
         <!-- ========================================================== -->
         <div class="page" id="page-projects">
 
@@ -983,7 +1193,7 @@
 
     <script>
         // ============================================================
-        // 1. NAVIGATION (переключение страниц)
+        // 1. NAVIGATION
         // ============================================================
         const navLinks = document.querySelectorAll('.nav a');
         const pages = {
@@ -992,28 +1202,29 @@
         };
         const body = document.body;
         const musicControls = document.getElementById('music-controls');
+        const wavesCanvas = document.getElementById('waves-canvas');
 
         function switchPage(page) {
-            // Скрыть все страницы
             Object.values(pages).forEach(p => p.classList.remove('active'));
-            // Показать нужную
             pages[page].classList.add('active');
 
-            // Обновить активную ссылку в навигации
             navLinks.forEach(link => {
                 link.classList.toggle('active', link.dataset.page === page);
             });
 
-            // Сменить фон
             if (page === 'home') {
                 body.classList.remove('projects-bg');
                 body.classList.add('home-bg');
                 musicControls.classList.remove('hidden');
+                wavesCanvas.style.display = 'none';
+                if (audio && audio.paused) {
+                    audio.play().catch(() => {});
+                }
             } else {
                 body.classList.remove('home-bg');
                 body.classList.add('projects-bg');
                 musicControls.classList.add('hidden');
-                // Остановить музыку на странице проектов
+                wavesCanvas.style.display = 'block';
                 if (audio && !audio.paused) {
                     audio.pause();
                     musicToggle.textContent = '🔇';
@@ -1031,17 +1242,12 @@
         });
 
         // ============================================================
-        // 2. BIRTHDAY TIMER (29 December 2007)
+        // 2. BIRTHDAY TIMER
         // ============================================================
         function updateBirthday() {
             const now = new Date();
-            let birthYear = 2007;
-            let birthMonth = 11;
-            let birthDay = 29;
-            let nextBirthday = new Date(now.getFullYear(), birthMonth, birthDay);
-            if (now > nextBirthday) {
-                nextBirthday.setFullYear(now.getFullYear() + 1);
-            }
+            let nextBirthday = new Date(now.getFullYear(), 11, 29);
+            if (now > nextBirthday) nextBirthday.setFullYear(now.getFullYear() + 1);
             const diff = nextBirthday - now;
             if (diff <= 0) {
                 document.getElementById('bd-days').textContent = '🎉';
@@ -1050,26 +1256,24 @@
                 document.getElementById('bd-seconds').textContent = 'HAPPY BIRTHDAY!';
                 return;
             }
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            document.getElementById('bd-days').textContent = String(days).padStart(2, '0');
-            document.getElementById('bd-hours').textContent = String(hours).padStart(2, '0');
-            document.getElementById('bd-minutes').textContent = String(minutes).padStart(2, '0');
-            document.getElementById('bd-seconds').textContent = String(seconds).padStart(2, '0');
+            const d = Math.floor(diff / 86400000);
+            const h = Math.floor((diff % 86400000) / 3600000);
+            const m = Math.floor((diff % 3600000) / 60000);
+            const s = Math.floor((diff % 60000) / 1000);
+            document.getElementById('bd-days').textContent = String(d).padStart(2, '0');
+            document.getElementById('bd-hours').textContent = String(h).padStart(2, '0');
+            document.getElementById('bd-minutes').textContent = String(m).padStart(2, '0');
+            document.getElementById('bd-seconds').textContent = String(s).padStart(2, '0');
         }
         updateBirthday();
         setInterval(updateBirthday, 1000);
 
         // ============================================================
-        // 3. PARTICLES
+        // 3. ГАЛАКТИКА (HOME) + МАТРИЦА (PROJECTS)
         // ============================================================
         const canvas = document.getElementById('particles-canvas');
         const ctx = canvas.getContext('2d');
         let width, height;
-        let particles = [];
-        let isHome = true;
 
         function resizeCanvas() {
             width = canvas.width = window.innerWidth;
@@ -1078,86 +1282,174 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        class Particle {
-            constructor() {
-                this.reset();
-                this.x = Math.random() * width;
-                this.y = Math.random() * height - height;
-            }
-            reset() {
-                this.x = Math.random() * width;
-                this.y = -10;
-                this.size = Math.random() * 4 + 1.5;
-                this.speed = Math.random() * 1.5 + 0.5;
-                this.wind = (Math.random() - 0.5) * 0.4;
-                this.opacity = Math.random() * 0.8 + 0.2;
-                this.flicker = Math.random() * 0.05 + 0.02;
-                this.phase = Math.random() * Math.PI * 2;
-                // Для проектов — синие частицы
-                this.isBlue = Math.random() > 0.7;
-            }
-            update() {
-                this.y += this.speed;
-                this.x += this.wind + Math.sin(this.phase) * 0.2;
-                this.phase += this.flicker;
-                if (this.y > height + 20) {
-                    this.reset();
-                    this.y = -10;
-                }
-                if (this.x < -20) this.x = width + 20;
-                if (this.x > width + 20) this.x = -20;
-            }
-            draw() {
-                const alpha = this.opacity * (0.7 + 0.3 * Math.sin(this.phase));
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                let grad;
-                if (body.classList.contains('projects-bg')) {
-                    // Синие частицы для проектов
-                    grad = ctx.createRadialGradient(
-                        this.x - this.size * 0.3, this.y - this.size * 0.3, 0,
-                        this.x, this.y, this.size
-                    );
-                    grad.addColorStop(0, `rgba(120, 180, 255, ${alpha})`);
-                    grad.addColorStop(0.5, `rgba(60, 100, 200, ${alpha * 0.7})`);
-                    grad.addColorStop(1, `rgba(20, 40, 100, ${alpha * 0.3})`);
-                    ctx.shadowColor = `rgba(60, 100, 200, ${alpha * 0.3})`;
-                } else {
-                    // Красные частицы для дома
-                    grad = ctx.createRadialGradient(
-                        this.x - this.size * 0.3, this.y - this.size * 0.3, 0,
-                        this.x, this.y, this.size
-                    );
-                    grad.addColorStop(0, `rgba(200, 140, 140, ${alpha})`);
-                    grad.addColorStop(0.5, `rgba(150, 60, 70, ${alpha * 0.8})`);
-                    grad.addColorStop(1, `rgba(80, 20, 30, ${alpha * 0.3})`);
-                    ctx.shadowColor = `rgba(180, 60, 80, ${alpha * 0.4})`;
-                }
-                ctx.fillStyle = grad;
-                ctx.shadowBlur = 15;
-                ctx.fill();
-                ctx.shadowBlur = 0;
-            }
+        // --- ГАЛАКТИКА: звёзды ---
+        let stars = [];
+        for (let i = 0; i < 200; i++) {
+            stars.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                size: Math.random() * 2 + 0.5,
+                speed: Math.random() * 0.2 + 0.05,
+                phase: Math.random() * Math.PI * 2,
+                opacity: Math.random() * 0.7 + 0.3
+            });
         }
 
-        for (let i = 0; i < 120; i++) {
-            const p = new Particle();
-            p.y = Math.random() * height;
-            particles.push(p);
+        // --- МАТРИЦА: символы ---
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let matrixDrops = [];
+        for (let i = 0; i < 80; i++) {
+            matrixDrops.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                speed: Math.random() * 3 + 1,
+                char: chars[Math.floor(Math.random() * chars.length)],
+                opacity: Math.random() * 0.8 + 0.2,
+                size: 14 + Math.random() * 10
+            });
         }
 
         function animateParticles() {
             ctx.clearRect(0, 0, width, height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
+
+            if (body.classList.contains('projects-bg')) {
+                // ---- МАТРИЦА (английские буквы) ----
+                ctx.textAlign = 'center';
+                matrixDrops.forEach(d => {
+                    d.y += d.speed;
+                    if (d.y > height) {
+                        d.y = -20;
+                        d.x = Math.random() * width;
+                        d.char = chars[Math.floor(Math.random() * chars.length)];
+                        d.speed = Math.random() * 3 + 1;
+                    }
+                    const alpha = d.opacity * (0.7 + 0.3 * Math.sin(d.y * 0.02));
+                    ctx.fillStyle = `rgba(0, 255, 65, ${alpha})`;
+                    ctx.font = `${d.size}px monospace`;
+                    ctx.shadowColor = `rgba(0, 255, 65, ${alpha * 0.3})`;
+                    ctx.shadowBlur = 10;
+                    ctx.fillText(d.char, d.x, d.y);
+                    ctx.shadowBlur = 0;
+                });
+            } else {
+                // ---- ГАЛАКТИКА (красный → фиолетовый) ----
+                stars.forEach(s => {
+                    s.y += s.speed;
+                    s.phase += 0.01;
+                    if (s.y > height) {
+                        s.y = -5;
+                        s.x = Math.random() * width;
+                    }
+                    const alpha = s.opacity * (0.7 + 0.3 * Math.sin(s.phase));
+
+                    // Свечение
+                    const grad = ctx.createRadialGradient(
+                        s.x - s.size * 0.3, s.y - s.size * 0.3, 0,
+                        s.x, s.y, s.size * 3
+                    );
+                    const color1 = `rgba(255, 100, 150, ${alpha * 0.4})`;
+                    const color2 = `rgba(180, 80, 200, ${alpha * 0.2})`;
+                    const color3 = `rgba(100, 50, 180, ${alpha * 0.05})`;
+                    grad.addColorStop(0, color1);
+                    grad.addColorStop(0.5, color2);
+                    grad.addColorStop(1, color3);
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.size * 3, 0, Math.PI * 2);
+                    ctx.fillStyle = grad;
+                    ctx.shadowColor = `rgba(200, 100, 200, ${alpha * 0.2})`;
+                    ctx.shadowBlur = 20;
+                    ctx.fill();
+
+                    // Ядро звезды
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.size * 0.6, 0, Math.PI * 2);
+                    const coreColor = `rgba(255, 200, 255, ${alpha * 0.9})`;
+                    ctx.fillStyle = coreColor;
+                    ctx.shadowColor = `rgba(255, 150, 255, ${alpha * 0.5})`;
+                    ctx.shadowBlur = 15;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                });
+            }
+
             requestAnimationFrame(animateParticles);
         }
         animateParticles();
 
         // ============================================================
-        // 4. MUSIC CONTROLS
+        // 4. ВОЛНЫ (PROJECTS)
+        // ============================================================
+        const waveCanvas = document.getElementById('waves-canvas');
+        const wCtx = waveCanvas.getContext('2d');
+        let wWidth, wHeight;
+
+        function resizeWave() {
+            wWidth = waveCanvas.width = window.innerWidth;
+            wHeight = waveCanvas.height = 150;
+        }
+        window.addEventListener('resize', resizeWave);
+        resizeWave();
+
+        let wavePhase = 0;
+
+        function drawWaves() {
+            wCtx.clearRect(0, 0, wWidth, wHeight);
+            if (!body.classList.contains('projects-bg')) {
+                waveCanvas.style.display = 'none';
+                requestAnimationFrame(drawWaves);
+                return;
+            }
+            waveCanvas.style.display = 'block';
+
+            // Первая волна
+            wCtx.beginPath();
+            wCtx.moveTo(0, wHeight);
+            for (let x = 0; x <= wWidth; x += 2) {
+                const y = Math.sin(x * 0.02 + wavePhase) * 15 +
+                    Math.sin(x * 0.01 + wavePhase * 1.3) * 10 +
+                    30;
+                wCtx.lineTo(x, y);
+            }
+            wCtx.lineTo(wWidth, wHeight);
+            wCtx.closePath();
+            wCtx.fillStyle = 'rgba(0, 255, 65, 0.08)';
+            wCtx.fill();
+
+            // Вторая волна
+            wCtx.beginPath();
+            wCtx.moveTo(0, wHeight);
+            for (let x = 0; x <= wWidth; x += 2) {
+                const y = Math.sin(x * 0.025 + wavePhase * 0.7 + 1) * 12 +
+                    Math.sin(x * 0.015 + wavePhase * 1.1 + 2) * 8 +
+                    50;
+                wCtx.lineTo(x, y);
+            }
+            wCtx.lineTo(wWidth, wHeight);
+            wCtx.closePath();
+            wCtx.fillStyle = 'rgba(0, 200, 50, 0.05)';
+            wCtx.fill();
+
+            // Третья волна
+            wCtx.beginPath();
+            wCtx.moveTo(0, wHeight);
+            for (let x = 0; x <= wWidth; x += 2) {
+                const y = Math.sin(x * 0.03 + wavePhase * 0.5 + 3) * 8 +
+                    Math.sin(x * 0.02 + wavePhase * 0.9 + 1) * 6 +
+                    20;
+                wCtx.lineTo(x, y);
+            }
+            wCtx.lineTo(wWidth, wHeight);
+            wCtx.closePath();
+            wCtx.fillStyle = 'rgba(0, 255, 65, 0.04)';
+            wCtx.fill();
+
+            wavePhase += 0.02;
+            requestAnimationFrame(drawWaves);
+        }
+        drawWaves();
+
+        // ============================================================
+        // 5. МУЗЫКА
         // ============================================================
         const audio = document.getElementById('bg-music');
         const musicToggle = document.getElementById('music-toggle');
