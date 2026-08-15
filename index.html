@@ -1253,7 +1253,7 @@
         }
 
         /* ================================================================
-           СТИЛИ ДЛЯ ACHIEVEMENTS
+           СТИЛИ ДЛЯ ACHIEVEMENTS (UPDATED)
            ================================================================ */
         .achievements-title {
             font-size: 28px;
@@ -1264,40 +1264,100 @@
             text-shadow: 0 0 30px rgba(180, 160, 220, 0.3);
             letter-spacing: 1px;
         }
-        .achievement-dev-block {
-            background: rgba(20, 15, 35, 0.5);
-            border-radius: 20px;
-            padding: 50px 30px;
-            border: 2px dashed rgba(180, 160, 220, 0.2);
+
+        .achievement-category {
+            margin: 20px 0 20px 0;
+            padding: 15px;
+            background: rgba(180, 160, 220, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(180, 160, 220, 0.1);
+            text-align: left;
+        }
+        .achievement-category h4 {
+            color: #9a8aaa;
+            font-size: 17px;
+            font-family: 'Times New Roman', Times, serif;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+            text-shadow: 0 0 20px rgba(180, 160, 220, 0.2);
+            border-bottom: 1px solid rgba(180, 160, 220, 0.1);
+            padding-bottom: 8px;
             text-align: center;
-            min-height: 250px;
+        }
+
+        .achievement-item {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        .achievement-dev-block .emoji {
-            font-size: 48px;
-            margin-bottom: 15px;
-        }
-        .achievement-dev-block .status {
-            font-size: 22px;
-            font-weight: 700;
-            color: #8a7aaa;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 8px 0;
+            color: #b0a0b0;
+            font-size: 15px;
             font-family: 'Times New Roman', Times, serif;
-            text-shadow: 0 0 20px rgba(180, 160, 220, 0.3);
-            letter-spacing: 1px;
-            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(200, 180, 220, 0.04);
         }
-        .achievement-dev-block .sub {
-            font-size: 16px;
-            color: #5a4a6a;
-            margin-top: 10px;
-            font-family: 'Times New Roman', Times, serif;
+        .achievement-item:last-child {
+            border-bottom: none;
         }
-        .achievement-dev-block .sub span {
-            display: inline-block;
-            animation: blink 1.5s infinite;
+        .achievement-item:hover {
+            color: #d8c0d0;
+            transform: translateX(4px);
+        }
+        .achievement-item .ach-icon {
+            font-size: 20px;
+            width: 32px;
+            text-align: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .achievement-item .ach-text {
+            flex: 1;
+            text-align: left;
+        }
+        .achievement-item .ach-text .title {
+            font-weight: 600;
+            color: #c8a8b8;
+            font-size: 14px;
+            display: block;
+            -webkit-text-fill-color: #c8a8b8;
+            background: none;
+            text-shadow: 0 0 20px rgba(200, 180, 220, 0.1);
+            line-height: 1.3;
+        }
+        .achievement-item .ach-text .desc {
+            font-size: 13px;
+            color: #8a7a8a;
+            display: block;
+            margin-top: 2px;
+            padding: 0;
+            text-indent: 0;
+            line-height: 1.4;
+        }
+
+        body.projects-bg .achievement-category {
+            background: rgba(0, 255, 65, 0.03);
+            border-color: rgba(0, 255, 65, 0.06);
+        }
+        body.projects-bg .achievement-category h4 {
+            color: #66dd88;
+            text-shadow: 0 0 30px rgba(0, 255, 65, 0.05);
+            border-bottom-color: rgba(0, 255, 65, 0.1);
+        }
+        body.projects-bg .achievement-item {
+            color: #88aa88;
+            border-bottom-color: rgba(0, 255, 65, 0.04);
+        }
+        body.projects-bg .achievement-item:hover {
+            color: #aaddaa;
+        }
+        body.projects-bg .achievement-item .ach-text .title {
+            color: #66dd88;
+            -webkit-text-fill-color: #66dd88;
+        }
+        body.projects-bg .achievement-item .ach-text .desc {
+            color: #668866;
         }
 
         @keyframes blink {
@@ -1360,11 +1420,22 @@
             .achievements-title {
                 font-size: 22px;
             }
-            .achievement-dev-block .status {
-                font-size: 18px;
+            .achievement-item {
+                font-size: 13px;
+                gap: 8px;
             }
-            .achievement-dev-block .emoji {
-                font-size: 36px;
+            .achievement-item .ach-icon {
+                font-size: 17px;
+                width: 26px;
+            }
+            .achievement-item .ach-text .title {
+                font-size: 13px;
+            }
+            .achievement-item .ach-text .desc {
+                font-size: 12px;
+            }
+            .achievement-category h4 {
+                font-size: 15px;
             }
         }
     </style>
@@ -1541,16 +1612,39 @@
         </div>
 
         <!-- ========================================================== -->
-        <!-- ACHIEVEMENTS -->
+        <!-- ACHIEVEMENTS (UPDATED) -->
         <!-- ========================================================== -->
         <div class="page" id="page-achievements">
 
             <div class="achievements-title">🏆 ACHIEVEMENTS</div>
 
-            <div class="achievement-dev-block">
-                <div class="emoji">🛠️</div>
-                <div class="status">In development,<br>while I don't know what to write</div>
-                <div class="sub"><span>Coming soon...</span></div>
+            <!-- ---- LIFE ACHIEVEMENTS ---- -->
+            <div class="achievement-category">
+                <h4>🌟 LIFE ACHIEVEMENTS</h4>
+
+                <div class="achievement-item">
+                    <span class="ach-icon">🥇</span>
+                    <span class="ach-text">
+                        <span class="title">Winner's Diploma — "Legacy of Outstanding Entrepreneurs of Russia"</span>
+                        <span class="desc">All-Russian competition on the history of entrepreneurship. Finalist of the regional stage in Tver.</span>
+                    </span>
+                </div>
+
+                <div class="achievement-item">
+                    <span class="ach-icon">📜</span>
+                    <span class="ach-text">
+                        <span class="title">Participant Certificate — "Through the Pages of the Great Victory"</span>
+                        <span class="desc">Team intellectual game dedicated to the 80th anniversary of Victory in the Great Patriotic War 1941–1945.</span>
+                    </span>
+                </div>
+
+                <div class="achievement-item">
+                    <span class="ach-icon">🥇</span>
+                    <span class="ach-text">
+                        <span class="title">Winner's Diploma — "Scarlet Sails"</span>
+                        <span class="desc">Winner of the All-Russian distance Olympiad in Physics among students of professional educational organizations.</span>
+                    </span>
+                </div>
             </div>
 
             <div class="footer">⚔️ Made by the <span>Iron Will Coalition</span></div>
