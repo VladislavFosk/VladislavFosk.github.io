@@ -11,21 +11,23 @@
             box-sizing: border-box;
         }
 
-        /* ---- ANIMATED BACKGROUND (TOP: DARK CRIMSON, BOTTOM: DARK PURPLE) ---- */
         body {
             font-family: 'Times New Roman', Times, serif;
-            background: linear-gradient(180deg, #1a0508 0%, #0d0610 50%, #050208 100%);
-            color: white;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            overflow: hidden;
             position: relative;
+            transition: background 0.6s ease;
+        }
+        body.home-bg {
+            background: linear-gradient(180deg, #1a0508 0%, #0d0610 50%, #050208 100%);
+        }
+        body.projects-bg {
+            background: linear-gradient(180deg, #0d1b2a 0%, #1b2838 50%, #0f3460 100%);
         }
 
-        /* Canvas for particles */
         #particles-canvas {
             position: fixed;
             top: 0;
@@ -50,6 +52,11 @@
             overflow-y: auto;
             position: relative;
             z-index: 1;
+            transition: border-color 0.5s ease, background 0.5s ease;
+        }
+        body.projects-bg .card {
+            background: rgba(15, 15, 30, 0.7);
+            border: 1px solid rgba(60, 80, 150, 0.3);
         }
         .card::-webkit-scrollbar {
             width: 4px;
@@ -61,8 +68,64 @@
             background: #8b1a2b;
             border-radius: 10px;
         }
+        body.projects-bg .card::-webkit-scrollbar-thumb {
+            background: #4a6fa5;
+        }
 
-        /* ---- MUSIC CONTROLS (BOTTOM-RIGHT) ---- */
+        /* ---- NAVIGATION (TOP-RIGHT) ---- */
+        .nav {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            gap: 12px;
+            background: rgba(15, 8, 15, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 10px 18px;
+            border-radius: 30px;
+            border: 1px solid rgba(139, 26, 43, 0.4);
+            box-shadow: 0 0 30px rgba(139, 26, 43, 0.2);
+            transition: all 0.5s ease;
+        }
+        body.projects-bg .nav {
+            background: rgba(15, 15, 30, 0.8);
+            border: 1px solid rgba(60, 80, 150, 0.4);
+            box-shadow: 0 0 30px rgba(60, 80, 150, 0.2);
+        }
+        .nav a {
+            color: #b84a5a;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Times New Roman', Times, serif;
+            padding: 4px 12px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+        }
+        body.projects-bg .nav a {
+            color: #7a9bcb;
+        }
+        .nav a:hover {
+            background: rgba(139, 26, 43, 0.3);
+            color: #ff6b81;
+        }
+        body.projects-bg .nav a:hover {
+            background: rgba(60, 80, 150, 0.3);
+            color: #aac4e6;
+        }
+        .nav a.active {
+            background: rgba(139, 26, 43, 0.4);
+            color: #ff6b81;
+        }
+        body.projects-bg .nav a.active {
+            background: rgba(60, 80, 150, 0.4);
+            color: #aac4e6;
+        }
+
+        /* ---- MUSIC CONTROLS (только на Home) ---- */
         .music-controls {
             position: fixed;
             bottom: 20px;
@@ -78,6 +141,12 @@
             border-radius: 20px;
             border: 1px solid rgba(139, 26, 43, 0.4);
             box-shadow: 0 0 30px rgba(139, 26, 43, 0.2);
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        .music-controls.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
         }
         #music-toggle {
             background: transparent;
@@ -101,8 +170,6 @@
             opacity: 1;
             color: #b84a5a;
         }
-
-        /* ---- VOLUME SLIDER ---- */
         .volume-slider {
             -webkit-appearance: none;
             appearance: none;
@@ -124,7 +191,6 @@
             cursor: pointer;
             box-shadow: 0 0 15px rgba(184, 74, 90, 0.4);
             border: 2px solid rgba(255,255,255,0.2);
-            transition: all 0.2s ease;
         }
         .volume-slider::-webkit-slider-thumb:hover {
             transform: scale(1.15);
@@ -139,7 +205,21 @@
             border: 2px solid rgba(255,255,255,0.2);
         }
 
-        /* ---- AVATAR ---- */
+        /* ---- PAGES ---- */
+        .page {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ---- HOME PAGE STYLES ---- */
         .avatar {
             width: 140px;
             height: 140px;
@@ -150,8 +230,6 @@
             background: #2a0a0a;
             box-shadow: 0 0 40px rgba(139, 26, 43, 0.3);
         }
-
-        /* ---- NAME ---- */
         .name {
             font-size: 32px;
             font-weight: 700;
@@ -207,8 +285,6 @@
             font-weight: 600;
             text-shadow: 0 0 25px rgba(139, 26, 43, 0.5);
         }
-
-        /* ---- BIRTHDAY TIMER ---- */
         .birthday-timer {
             margin: 5px 0 15px 0;
             padding: 10px;
@@ -235,8 +311,6 @@
             display: inline-block;
             min-width: 30px;
         }
-
-        /* ---- EDUCATION ---- */
         .desc {
             color: #c0a0b0;
             font-size: 17px;
@@ -254,8 +328,6 @@
             font-weight: 600;
             text-shadow: 0 0 20px rgba(184, 74, 90, 0.3);
         }
-
-        /* ---- LONG ABOUT TEXT ---- */
         .long-about {
             margin: 15px 0 20px 0;
             padding: 15px;
@@ -298,8 +370,6 @@
             font-weight: 600;
             text-shadow: 0 0 25px rgba(139, 26, 43, 0.5);
         }
-
-        /* ---- LANGUAGES ---- */
         .languages {
             margin: 15px 0 15px 0;
             padding: 12px;
@@ -336,8 +406,6 @@
             font-size: 15px;
             font-style: italic;
         }
-
-        /* ---- OS ---- */
         .os-block {
             margin: 15px 0 20px 0;
             padding: 12px;
@@ -369,8 +437,6 @@
             font-weight: 600;
             text-shadow: 0 0 20px rgba(184, 74, 90, 0.4);
         }
-
-        /* ---- QUOTES ---- */
         .quotes-block {
             margin: 15px 0 20px 0;
             padding: 15px;
@@ -416,43 +482,6 @@
             display: block;
             margin-top: 2px;
         }
-
-        /* ---- PROJECTS ---- */
-        .projects-block {
-            margin: 15px 0 20px 0;
-            padding: 12px;
-            background: rgba(139, 26, 43, 0.08);
-            border-radius: 15px;
-            border: 1px solid rgba(139, 26, 43, 0.2);
-        }
-        .projects-block h4 {
-            color: #b84a5a;
-            font-size: 18px;
-            font-family: 'Times New Roman', Times, serif;
-            letter-spacing: 2px;
-            margin-bottom: 8px;
-            text-shadow: 0 0 25px rgba(184, 74, 90, 0.3);
-        }
-        .project-dev {
-            color: #6a5a6a;
-            font-size: 20px;
-            font-weight: 700;
-            font-family: 'Times New Roman', Times, serif;
-            padding: 15px 0;
-            text-shadow: 0 0 20px rgba(106, 90, 106, 0.3);
-        }
-        .project-dev .emoji {
-            margin-right: 8px;
-        }
-        .project-dev .sub {
-            display: block;
-            font-size: 16px;
-            font-weight: 400;
-            color: #5a4a5a;
-            margin-top: 5px;
-        }
-
-        /* ---- INTERESTS ---- */
         .interests-block {
             margin: 15px 0 20px 0;
             padding: 12px;
@@ -485,8 +514,6 @@
         .interests-item .heart {
             color: #8b1a2b;
         }
-
-        /* ---- ALLIES ---- */
         .allies {
             margin: 20px 0 25px 0;
             padding: 15px;
@@ -523,8 +550,6 @@
         .allies-list .emoji {
             margin-right: 5px;
         }
-
-        /* ---- BUTTONS ---- */
         .btn {
             display: block;
             background: transparent;
@@ -584,8 +609,6 @@
             box-shadow: 0 0 30px rgba(139, 26, 43, 0.5);
             transform: scale(1.03);
         }
-
-        /* ---- ANIME ---- */
         .anime-section {
             margin-top: 25px;
             text-align: left;
@@ -627,7 +650,56 @@
             color: #8b1a2b;
         }
 
-        /* ---- FOOTER ---- */
+        /* ---- PROJECTS PAGE STYLES ---- */
+        .projects-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #7a9bcb;
+            margin-bottom: 20px;
+            font-family: 'Times New Roman', Times, serif;
+            text-shadow: 0 0 30px rgba(60, 80, 150, 0.3);
+            letter-spacing: 1px;
+        }
+        .project-block {
+            background: rgba(20, 30, 60, 0.4);
+            border-radius: 20px;
+            padding: 50px 30px;
+            border: 2px dashed rgba(60, 80, 150, 0.3);
+            text-align: center;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .project-block .emoji {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        .project-block .status {
+            font-size: 26px;
+            font-weight: 700;
+            color: #7a9bcb;
+            font-family: 'Times New Roman', Times, serif;
+            text-shadow: 0 0 20px rgba(60, 80, 150, 0.3);
+            letter-spacing: 2px;
+        }
+        .project-block .sub {
+            font-size: 18px;
+            color: #5a7a9a;
+            margin-top: 10px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .project-block .sub span {
+            display: inline-block;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
         .footer {
             margin-top: 25px;
             font-size: 16px;
@@ -636,27 +708,22 @@
             letter-spacing: 1px;
             animation: pulse 2s infinite;
         }
+        body.projects-bg .footer {
+            color: #3a4a6a;
+        }
         .footer span {
             color: #b84a5a;
             font-weight: 600;
             text-shadow: 0 0 20px rgba(184, 74, 90, 0.3);
         }
+        body.projects-bg .footer span {
+            color: #7a9bcb;
+            text-shadow: 0 0 20px rgba(60, 80, 150, 0.3);
+        }
 
         @keyframes pulse {
             0%, 100% { opacity: 0.7; }
             50% { opacity: 1; }
-        }
-
-        /* ---- SCROLLBAR ---- */
-        .card::-webkit-scrollbar {
-            width: 4px;
-        }
-        .card::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .card::-webkit-scrollbar-thumb {
-            background: #8b1a2b;
-            border-radius: 10px;
         }
 
         /* ---- RESPONSIVE ---- */
@@ -690,16 +757,41 @@
             .volume-slider {
                 width: 60px;
             }
+            .nav {
+                padding: 6px 12px;
+                top: 15px;
+                right: 15px;
+                gap: 6px;
+            }
+            .nav a {
+                font-size: 13px;
+                padding: 3px 8px;
+            }
+            .projects-title {
+                font-size: 22px;
+            }
+            .project-block .status {
+                font-size: 20px;
+            }
+            .project-block .emoji {
+                font-size: 36px;
+            }
         }
     </style>
 </head>
-<body>
+<body class="home-bg">
 
     <!-- ---- PARTICLES CANVAS ---- -->
     <canvas id="particles-canvas"></canvas>
 
+    <!-- ---- NAVIGATION (TOP-RIGHT) ---- -->
+    <div class="nav">
+        <a class="active" data-page="home">Home</a>
+        <a data-page="projects">My Projects</a>
+    </div>
+
     <!-- ---- MUSIC CONTROLS (BOTTOM-RIGHT) ---- -->
-    <div class="music-controls">
+    <div class="music-controls" id="music-controls">
         <button id="music-toggle" title="Toggle Music">🔊</button>
         <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
     </div>
@@ -712,200 +804,244 @@
 
     <div class="card">
 
-        <!-- ---- AVATAR ---- -->
-        <img class="avatar" src="gim/AVATARKA.jpg" alt="Vladislav Fosk-Kosarh">
+        <!-- ========================================================== -->
+        <!-- PAGE: HOME -->
+        <!-- ========================================================== -->
+        <div class="page active" id="page-home">
 
-        <!-- ---- NAME ---- -->
-        <div class="name">Vladislav Fosk-Kosarh</div>
-        <div class="nick">@Foskarh</div>
-        <div class="title">👑 Supreme Sovereign of the Kosarh Free Land</div>
+            <img class="avatar" src="gim/AVATARKA.jpg" alt="Vladislav Fosk-Kosarh">
 
-        <!-- ---- AGE ---- -->
-        <div class="age">🎂 <span>18</span> years old</div>
+            <div class="name">Vladislav Fosk-Kosarh</div>
+            <div class="nick">@Foskarh</div>
+            <div class="title">👑 Supreme Sovereign of the Kosarh Free Land</div>
 
-        <!-- ---- BIRTHDAY TIMER ---- -->
-        <div class="birthday-timer">
-            <div class="label">🎉 Next Birthday in:</div>
-            <div class="countdown" id="birthday-countdown">
-                <span id="bd-days">--</span>d
-                <span id="bd-hours">--</span>h
-                <span id="bd-minutes">--</span>m
-                <span id="bd-seconds">--</span>s
+            <div class="age">🎂 <span>18</span> years old</div>
+
+            <div class="birthday-timer">
+                <div class="label">🎉 Next Birthday in:</div>
+                <div class="countdown" id="birthday-countdown">
+                    <span id="bd-days">--</span>d
+                    <span id="bd-hours">--</span>h
+                    <span id="bd-minutes">--</span>m
+                    <span id="bd-seconds">--</span>s
+                </div>
             </div>
+
+            <div class="nationality">🏴 My nationality: <span>Kosarh</span></div>
+            <div class="army">👑 Head of Special Army "Black Order"</div>
+
+            <div class="desc">
+                <strong>🎓 Education:</strong><br>
+                <span class="edu">Secondary Specialized Education</span><br>
+                Certified technician of hardware and software<br>
+                for infocommunication systems.
+            </div>
+
+            <div class="long-about">
+                <p>
+                    <span class="highlight">Hi.</span> My craft is programming and everything connected to computers. I pour a lot of effort into it, try my hardest even when it gets tough. It's mine, it's native to me.
+                </p>
+                <p>
+                    But I'm human, and emotions take their toll. When something doesn't work out — be it code, a task, or just some little thing — I start feeling sad. I can go quiet for a long time, retreat into myself, stop noticing what's around me. And sometimes, instead of sadness, anger comes — at myself, at the situation, at the fact that my hands aren't growing from the right place. Then I can snap, say something harsh, even though inside I'm still soft — it's just that emotions take over.
+                </p>
+                <p>
+                    And my mood is like mountain weather. Some days I'm full of energy, cold and collected, telling the truth straight to people's faces and getting things done. And other days, apathy hits me, and I just drop out of reality. I want to see no one, stay silent, stare at one point, and wait until it passes. It doesn't last long. I just need to wait it out, to reboot.
+                </p>
+                <p>
+                    That's how I am. With all my ups and downs, weaknesses, and stubbornness. I don't like talking about myself, but if I'm saying this — it means I trust you and want you to understand me as I am.
+                </p>
+                <div class="about-tags">
+                    <span class="sun-child">☀️ Sun Child</span>
+                    <span class="faith">✝️ Orthodox Christian</span>
+                </div>
+            </div>
+
+            <div class="languages">
+                <h4>🗣️ LANGUAGES</h4>
+                <div class="lang-item">🇷🇺 Russian — <span class="rus">Native</span></div>
+                <div class="lang-item">🇬🇧 English — <span class="eng">So-so</span> <span class="note">(often use translator)</span></div>
+            </div>
+
+            <div class="os-block">
+                <h4>💻 OPERATING SYSTEMS</h4>
+                <div class="os-item">🪟 <span class="win">Windows</span></div>
+                <div class="os-item">🐧 <span class="linux">GNU/Linux</span></div>
+            </div>
+
+            <div class="quotes-block">
+                <h4>📜 QUOTES</h4>
+                <div class="quote-item">
+                    <span class="greek">Βασιλεύς Βασιλέων, Βασιλεί Βοήθει</span>
+                    <span class="translation">(Vasiléfs Vasiléon, Vasilí Voíthei — "King of Kings, help the King")</span>
+                </div>
+                <div class="quote-item">
+                    <span class="german">"Ich bin ein Teil von jener Kraft, die stets das Böse will und stets das Gute schafft."</span>
+                    <span class="translation">— "I am part of that power which eternally wills evil and eternally works good." (Goethe, Faust)</span>
+                </div>
+                <div class="quote-item">
+                    <span class="quote-text">"Man is a mystery. It must be solved, and if you spend your whole life solving it, don't say you've wasted time; I occupy myself with this mystery, for I want to be a man."</span>
+                    <span class="translation">— From a letter to his brother (on freedom and self-knowledge)</span>
+                </div>
+                <div class="quote-item">
+                    <span class="quote-text">"Freedom is not in not restraining yourself, but in mastering yourself."</span>
+                    <span class="translation">— From "The Diary of a Writer" (a direct definition of freedom)</span>
+                </div>
+                <div class="quote-item">
+                    <span class="quote-text">"If there is no God, everything is permitted."</span>
+                    <span class="translation">— From "The Brothers Karamazov" (echoes Raskolnikov's question)</span>
+                </div>
+                <div class="quote-item">
+                    <span class="quote-text">"It's only after you've lost everything that you're free to do anything."</span>
+                    <span class="translation">— Fight Club</span>
+                </div>
+                <div class="quote-item">
+                    <span class="quote-text">"Am I a trembling creature or do I have the right...?"</span>
+                    <span class="translation">— F.M. Dostoevsky, "Crime and Punishment"</span>
+                </div>
+            </div>
+
+            <div class="interests-block">
+                <h4>🎮 GAMES & 🎬 CARTOONS</h4>
+                <div class="interests-item">🎮 <span class="game">Hearts of Iron IV</span></div>
+                <div class="interests-item">🎮 <span class="game">Garry's Mod</span></div>
+                <div class="interests-item">🎮 <span class="game">Skyrim</span></div>
+                <div class="interests-item">🎮 <span class="game">Dark Souls 2</span></div>
+                <div class="interests-item">🎮 <span class="game">Don't Starve Together (DST)</span></div>
+                <div class="interests-item">🎮 <span class="game">Don't Starve</span></div>
+                <div class="interests-item">🎬 <span class="cartoon">Kikoriki (Смешарики)</span> <span class="heart">❤️</span></div>
+                <div class="interests-item">🎬 <span class="cartoon">BoJack Horseman</span></div>
+                <div class="interests-item">🎬 <span class="cartoon">Rick and Morty</span></div>
+                <div class="interests-item">🎬 <span class="cartoon">Gravity Falls</span></div>
+                <div class="interests-item">🎬 <span class="cartoon">Futurama</span></div>
+                <div class="interests-item">🎬 <span class="cartoon">Family Guy</span></div>
+                <div class="interests-item">🎬 <span class="cartoon">The Simpsons</span></div>
+                <div class="interests-item">🎬 <span class="cartoon">My Little Pony</span> <span class="heart">❤️</span></div>
+            </div>
+
+            <div class="allies">
+                <h4>🤝 FRIENDS & BROTHERS</h4>
+                <div class="allies-list">
+                    <span><span class="emoji">🛡️</span>Tverd</span>
+                    <span><span class="emoji">⚡</span>Yonkia</span>
+                    <span><span class="emoji">🔥</span>Koivo</span>
+                    <span><span class="emoji">🌊</span>Femadoria</span>
+                </div>
+            </div>
+
+            <a href="https://t.me/VladislavFoskKosarh" class="btn btn-telegram">📢 My Telegram Channel</a>
+            <a href="https://www.youtube.com/@VladislavFoskKosarh" class="btn btn-youtube">🎥 My YouTube Channel</a>
+            <a href="https://github.com/VladislavFosk" class="btn btn-github">💻 GitHub</a>
+            <a href="https://gamejolt.com/@VladislavFosk" class="btn btn-gamejolt">🎮 GameJolt</a>
+
+            <div class="anime-section">
+                <h3>🎬 Anime list</h3>
+                <div class="anime-grid">
+                    <div class="anime-item"><span class="emoji">🔪</span>Ansatsu Kyoushitsu</div>
+                    <div class="anime-item"><span class="emoji">🗡️</span>Ansatsu Kyoushitsu 2nd Season</div>
+                    <div class="anime-item"><span class="emoji">💥</span>Hotaru no Haka</div>
+                    <div class="anime-item"><span class="emoji">🌟</span>JoJo Part 1 (TV)</div>
+                    <div class="anime-item"><span class="emoji">⭐</span>JoJo Part 3: Stardust Crusaders</div>
+                    <div class="anime-item"><span class="emoji">✨</span>JoJo Part 3: Egypt-hen</div>
+                    <div class="anime-item"><span class="emoji">💎</span>JoJo Part 4: Diamond wa Kudakenai</div>
+                    <div class="anime-item"><span class="emoji">🔥</span>JoJo Part 5: Ougon no Kaze</div>
+                    <div class="anime-item"><span class="emoji">🌊</span>JoJo Part 6: Stone Ocean</div>
+                    <div class="anime-item"><span class="emoji">🌊</span>JoJo Part 6: Stone Ocean Part 2</div>
+                    <div class="anime-item"><span class="emoji">🌊</span>JoJo Part 6: Stone Ocean Part 3</div>
+                    <div class="anime-item"><span class="emoji">🐾</span>Monster Musume no Iru Nichijou</div>
+                    <div class="anime-item"><span class="emoji love">❤️‍🔥</span>Monster Musume no Oishasan</div>
+                    <div class="anime-item"><span class="emoji">🤖</span>Shinseiki Evangelion</div>
+                    <div class="anime-item"><span class="emoji">⚡</span>Evangelion: Air/Magokoro</div>
+                    <div class="anime-item"><span class="emoji">🌀</span>Suzumiya Haruhi no Yuuutsu</div>
+                    <div class="anime-item"><span class="emoji">🌀</span>Haruhi (2009)</div>
+                    <div class="anime-item"><span class="emoji love">🌙</span>Tsuki ga Michibiku Isekai Douchuu</div>
+                    <div class="anime-item"><span class="emoji love">🌙</span>Tsuki ga Michibiku 2nd Season</div>
+                </div>
+            </div>
+
+            <div class="footer">⚔️ Made by the <span>Iron Will Coalition</span></div>
+
         </div>
 
-        <!-- ---- NATIONALITY (KOSARH) ---- -->
-        <div class="nationality">🏴 My nationality: <span>Kosarh</span></div>
+        <!-- ========================================================== -->
+        <!-- PAGE: MY PROJECTS -->
+        <!-- ========================================================== -->
+        <div class="page" id="page-projects">
 
-        <!-- ---- ARMY ---- -->
-        <div class="army">👑 Head of Special Army "Black Order"</div>
+            <div class="projects-title">📂 MY PROJECTS</div>
 
-        <!-- ---- EDUCATION ---- -->
-        <div class="desc">
-            <strong>🎓 Education:</strong><br>
-            <span class="edu">Secondary Specialized Education</span><br>
-            Certified technician of hardware and software<br>
-            for infocommunication systems.
+            <div class="project-block">
+                <div class="emoji">🚧</div>
+                <div class="status">IN DEVELOPMENT</div>
+                <div class="sub"><span>Coming soon...</span></div>
+            </div>
+
+            <div class="footer">⚔️ Made by the <span>Iron Will Coalition</span></div>
+
         </div>
-
-        <!-- ---- LONG ABOUT TEXT ---- -->
-        <div class="long-about">
-            <p>
-                <span class="highlight">Hi.</span> My craft is programming and everything connected to computers. I pour a lot of effort into it, try my hardest even when it gets tough. It's mine, it's native to me.
-            </p>
-            <p>
-                But I'm human, and emotions take their toll. When something doesn't work out — be it code, a task, or just some little thing — I start feeling sad. I can go quiet for a long time, retreat into myself, stop noticing what's around me. And sometimes, instead of sadness, anger comes — at myself, at the situation, at the fact that my hands aren't growing from the right place. Then I can snap, say something harsh, even though inside I'm still soft — it's just that emotions take over.
-            </p>
-            <p>
-                And my mood is like mountain weather. Some days I'm full of energy, cold and collected, telling the truth straight to people's faces and getting things done. And other days, apathy hits me, and I just drop out of reality. I want to see no one, stay silent, stare at one point, and wait until it passes. It doesn't last long. I just need to wait it out, to reboot.
-            </p>
-            <p>
-                That's how I am. With all my ups and downs, weaknesses, and stubbornness. I don't like talking about myself, but if I'm saying this — it means I trust you and want you to understand me as I am.
-            </p>
-            <div class="about-tags">
-                <span class="sun-child">☀️ Sun Child</span>
-                <span class="faith">✝️ Orthodox Christian</span>
-            </div>
-        </div>
-
-        <!-- ---- LANGUAGES ---- -->
-        <div class="languages">
-            <h4>🗣️ LANGUAGES</h4>
-            <div class="lang-item">🇷🇺 Russian — <span class="rus">Native</span></div>
-            <div class="lang-item">🇬🇧 English — <span class="eng">So-so</span> <span class="note">(often use translator)</span></div>
-        </div>
-
-        <!-- ---- OS ---- -->
-        <div class="os-block">
-            <h4>💻 OPERATING SYSTEMS</h4>
-            <div class="os-item">🪟 <span class="win">Windows</span></div>
-            <div class="os-item">🐧 <span class="linux">GNU/Linux</span></div>
-        </div>
-
-        <!-- ---- PROJECTS ---- -->
-        <div class="projects-block">
-            <h4>📂 MY PROJECTS</h4>
-            <div class="project-dev">
-                <span class="emoji">🚧</span> IN DEVELOPMENT
-                <span class="sub">Coming soon...</span>
-            </div>
-        </div>
-
-        <!-- ---- QUOTES ---- -->
-        <div class="quotes-block">
-            <h4>📜 QUOTES</h4>
-            <div class="quote-item">
-                <span class="greek">Βασιλεύς Βασιλέων, Βασιλεί Βοήθει</span>
-                <span class="translation">(Vasiléfs Vasiléon, Vasilí Voíthei — "King of Kings, help the King")</span>
-            </div>
-            <div class="quote-item">
-                <span class="german">"Ich bin ein Teil von jener Kraft, die stets das Böse will und stets das Gute schafft."</span>
-                <span class="translation">— "I am part of that power which eternally wills evil and eternally works good." (Goethe, Faust)</span>
-            </div>
-            <div class="quote-item">
-                <span class="quote-text">"Man is a mystery. It must be solved, and if you spend your whole life solving it, don't say you've wasted time; I occupy myself with this mystery, for I want to be a man."</span>
-                <span class="translation">— From a letter to his brother (on freedom and self-knowledge)</span>
-            </div>
-            <div class="quote-item">
-                <span class="quote-text">"Freedom is not in not restraining yourself, but in mastering yourself."</span>
-                <span class="translation">— From "The Diary of a Writer" (a direct definition of freedom)</span>
-            </div>
-            <div class="quote-item">
-                <span class="quote-text">"If there is no God, everything is permitted."</span>
-                <span class="translation">— From "The Brothers Karamazov" (echoes Raskolnikov's question)</span>
-            </div>
-            <div class="quote-item">
-                <span class="quote-text">"It's only after you've lost everything that you're free to do anything."</span>
-                <span class="translation">— Fight Club</span>
-            </div>
-            <div class="quote-item">
-                <span class="quote-text">"Am I a trembling creature or do I have the right...?"</span>
-                <span class="translation">— F.M. Dostoevsky, "Crime and Punishment"</span>
-            </div>
-        </div>
-
-        <!-- ---- INTERESTS ---- -->
-        <div class="interests-block">
-            <h4>🎮 GAMES & 🎬 CARTOONS</h4>
-            <div class="interests-item">🎮 <span class="game">Hearts of Iron IV</span></div>
-            <div class="interests-item">🎮 <span class="game">Garry's Mod</span></div>
-            <div class="interests-item">🎮 <span class="game">Skyrim</span></div>
-            <div class="interests-item">🎮 <span class="game">Dark Souls 2</span></div>
-            <div class="interests-item">🎮 <span class="game">Don't Starve Together (DST)</span></div>
-            <div class="interests-item">🎮 <span class="game">Don't Starve</span></div>
-            <div class="interests-item">🎬 <span class="cartoon">Kikoriki (Смешарики)</span> <span class="heart">❤️</span></div>
-            <div class="interests-item">🎬 <span class="cartoon">BoJack Horseman</span></div>
-            <div class="interests-item">🎬 <span class="cartoon">Rick and Morty</span></div>
-            <div class="interests-item">🎬 <span class="cartoon">Gravity Falls</span></div>
-            <div class="interests-item">🎬 <span class="cartoon">Futurama</span></div>
-            <div class="interests-item">🎬 <span class="cartoon">Family Guy</span></div>
-            <div class="interests-item">🎬 <span class="cartoon">The Simpsons</span></div>
-            <div class="interests-item">🎬 <span class="cartoon">My Little Pony</span> <span class="heart">❤️</span></div>
-        </div>
-
-        <!-- ---- ALLIES ---- -->
-        <div class="allies">
-            <h4>🤝 FRIENDS & BROTHERS</h4>
-            <div class="allies-list">
-                <span><span class="emoji">🛡️</span>Tverd</span>
-                <span><span class="emoji">⚡</span>Yonkia</span>
-                <span><span class="emoji">🔥</span>Koivo</span>
-                <span><span class="emoji">🌊</span>Femadoria</span>
-            </div>
-        </div>
-
-        <!-- ---- BUTTONS ---- -->
-        <a href="https://t.me/VladislavFoskKosarh" class="btn btn-telegram">📢 My Telegram Channel</a>
-        <a href="https://www.youtube.com/@VladislavFoskKosarh" class="btn btn-youtube">🎥 My YouTube Channel</a>
-        <a href="https://github.com/VladislavFosk" class="btn btn-github">💻 GitHub</a>
-        <a href="https://gamejolt.com/@VladislavFosk" class="btn btn-gamejolt">🎮 GameJolt</a>
-
-        <!-- ---- ANIME ---- -->
-        <div class="anime-section">
-            <h3>🎬 Anime list</h3>
-            <div class="anime-grid">
-                <div class="anime-item"><span class="emoji">🔪</span>Ansatsu Kyoushitsu</div>
-                <div class="anime-item"><span class="emoji">🗡️</span>Ansatsu Kyoushitsu 2nd Season</div>
-                <div class="anime-item"><span class="emoji">💥</span>Hotaru no Haka</div>
-                <div class="anime-item"><span class="emoji">🌟</span>JoJo Part 1 (TV)</div>
-                <div class="anime-item"><span class="emoji">⭐</span>JoJo Part 3: Stardust Crusaders</div>
-                <div class="anime-item"><span class="emoji">✨</span>JoJo Part 3: Egypt-hen</div>
-                <div class="anime-item"><span class="emoji">💎</span>JoJo Part 4: Diamond wa Kudakenai</div>
-                <div class="anime-item"><span class="emoji">🔥</span>JoJo Part 5: Ougon no Kaze</div>
-                <div class="anime-item"><span class="emoji">🌊</span>JoJo Part 6: Stone Ocean</div>
-                <div class="anime-item"><span class="emoji">🌊</span>JoJo Part 6: Stone Ocean Part 2</div>
-                <div class="anime-item"><span class="emoji">🌊</span>JoJo Part 6: Stone Ocean Part 3</div>
-                <div class="anime-item"><span class="emoji">🐾</span>Monster Musume no Iru Nichijou</div>
-                <div class="anime-item"><span class="emoji love">❤️‍🔥</span>Monster Musume no Oishasan</div>
-                <div class="anime-item"><span class="emoji">🤖</span>Shinseiki Evangelion</div>
-                <div class="anime-item"><span class="emoji">⚡</span>Evangelion: Air/Magokoro</div>
-                <div class="anime-item"><span class="emoji">🌀</span>Suzumiya Haruhi no Yuuutsu</div>
-                <div class="anime-item"><span class="emoji">🌀</span>Haruhi (2009)</div>
-                <div class="anime-item"><span class="emoji love">🌙</span>Tsuki ga Michibiku Isekai Douchuu</div>
-                <div class="anime-item"><span class="emoji love">🌙</span>Tsuki ga Michibiku 2nd Season</div>
-            </div>
-        </div>
-
-        <!-- ---- FOOTER ---- -->
-        <div class="footer">⚔️ Made by the <span>Iron Will Coalition</span></div>
 
     </div>
 
     <script>
         // ============================================================
-        // 1. BIRTHDAY TIMER (29 December 2007)
+        // 1. NAVIGATION (переключение страниц)
+        // ============================================================
+        const navLinks = document.querySelectorAll('.nav a');
+        const pages = {
+            home: document.getElementById('page-home'),
+            projects: document.getElementById('page-projects')
+        };
+        const body = document.body;
+        const musicControls = document.getElementById('music-controls');
+
+        function switchPage(page) {
+            // Скрыть все страницы
+            Object.values(pages).forEach(p => p.classList.remove('active'));
+            // Показать нужную
+            pages[page].classList.add('active');
+
+            // Обновить активную ссылку в навигации
+            navLinks.forEach(link => {
+                link.classList.toggle('active', link.dataset.page === page);
+            });
+
+            // Сменить фон
+            if (page === 'home') {
+                body.classList.remove('projects-bg');
+                body.classList.add('home-bg');
+                musicControls.classList.remove('hidden');
+            } else {
+                body.classList.remove('home-bg');
+                body.classList.add('projects-bg');
+                musicControls.classList.add('hidden');
+                // Остановить музыку на странице проектов
+                if (audio && !audio.paused) {
+                    audio.pause();
+                    musicToggle.textContent = '🔇';
+                    musicToggle.classList.add('muted');
+                }
+            }
+        }
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const page = this.dataset.page;
+                if (page) switchPage(page);
+            });
+        });
+
+        // ============================================================
+        // 2. BIRTHDAY TIMER (29 December 2007)
         // ============================================================
         function updateBirthday() {
             const now = new Date();
             let birthYear = 2007;
-            let birthMonth = 11; // December = 11
+            let birthMonth = 11;
             let birthDay = 29;
-
             let nextBirthday = new Date(now.getFullYear(), birthMonth, birthDay);
             if (now > nextBirthday) {
                 nextBirthday.setFullYear(now.getFullYear() + 1);
             }
-
             const diff = nextBirthday - now;
             if (diff <= 0) {
                 document.getElementById('bd-days').textContent = '🎉';
@@ -914,28 +1050,26 @@
                 document.getElementById('bd-seconds').textContent = 'HAPPY BIRTHDAY!';
                 return;
             }
-
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
             const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
             document.getElementById('bd-days').textContent = String(days).padStart(2, '0');
             document.getElementById('bd-hours').textContent = String(hours).padStart(2, '0');
             document.getElementById('bd-minutes').textContent = String(minutes).padStart(2, '0');
             document.getElementById('bd-seconds').textContent = String(seconds).padStart(2, '0');
         }
-
         updateBirthday();
         setInterval(updateBirthday, 1000);
 
         // ============================================================
-        // 2. PARTICLES
+        // 3. PARTICLES
         // ============================================================
         const canvas = document.getElementById('particles-canvas');
         const ctx = canvas.getContext('2d');
         let width, height;
         let particles = [];
+        let isHome = true;
 
         function resizeCanvas() {
             width = canvas.width = window.innerWidth;
@@ -959,12 +1093,13 @@
                 this.opacity = Math.random() * 0.8 + 0.2;
                 this.flicker = Math.random() * 0.05 + 0.02;
                 this.phase = Math.random() * Math.PI * 2;
+                // Для проектов — синие частицы
+                this.isBlue = Math.random() > 0.7;
             }
             update() {
                 this.y += this.speed;
                 this.x += this.wind + Math.sin(this.phase) * 0.2;
                 this.phase += this.flicker;
-
                 if (this.y > height + 20) {
                     this.reset();
                     this.y = -10;
@@ -976,15 +1111,29 @@
                 const alpha = this.opacity * (0.7 + 0.3 * Math.sin(this.phase));
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                const grad = ctx.createRadialGradient(
-                    this.x - this.size * 0.3, this.y - this.size * 0.3, 0,
-                    this.x, this.y, this.size
-                );
-                grad.addColorStop(0, `rgba(200, 140, 140, ${alpha})`);
-                grad.addColorStop(0.5, `rgba(150, 60, 70, ${alpha * 0.8})`);
-                grad.addColorStop(1, `rgba(80, 20, 30, ${alpha * 0.3})`);
+                let grad;
+                if (body.classList.contains('projects-bg')) {
+                    // Синие частицы для проектов
+                    grad = ctx.createRadialGradient(
+                        this.x - this.size * 0.3, this.y - this.size * 0.3, 0,
+                        this.x, this.y, this.size
+                    );
+                    grad.addColorStop(0, `rgba(120, 180, 255, ${alpha})`);
+                    grad.addColorStop(0.5, `rgba(60, 100, 200, ${alpha * 0.7})`);
+                    grad.addColorStop(1, `rgba(20, 40, 100, ${alpha * 0.3})`);
+                    ctx.shadowColor = `rgba(60, 100, 200, ${alpha * 0.3})`;
+                } else {
+                    // Красные частицы для дома
+                    grad = ctx.createRadialGradient(
+                        this.x - this.size * 0.3, this.y - this.size * 0.3, 0,
+                        this.x, this.y, this.size
+                    );
+                    grad.addColorStop(0, `rgba(200, 140, 140, ${alpha})`);
+                    grad.addColorStop(0.5, `rgba(150, 60, 70, ${alpha * 0.8})`);
+                    grad.addColorStop(1, `rgba(80, 20, 30, ${alpha * 0.3})`);
+                    ctx.shadowColor = `rgba(180, 60, 80, ${alpha * 0.4})`;
+                }
                 ctx.fillStyle = grad;
-                ctx.shadowColor = `rgba(180, 60, 80, ${alpha * 0.4})`;
                 ctx.shadowBlur = 15;
                 ctx.fill();
                 ctx.shadowBlur = 0;
@@ -1005,20 +1154,16 @@
             });
             requestAnimationFrame(animateParticles);
         }
-
         animateParticles();
 
         // ============================================================
-        // 3. MUSIC CONTROLS
+        // 4. MUSIC CONTROLS
         // ============================================================
         const audio = document.getElementById('bg-music');
         const musicToggle = document.getElementById('music-toggle');
         const volumeSlider = document.getElementById('volume-slider');
-
-        // Set initial volume
         audio.volume = volumeSlider.value;
 
-        // Try to autoplay on load
         audio.play().catch(() => {
             const playOnInteraction = () => {
                 audio.play().then(() => {
@@ -1032,7 +1177,6 @@
             document.addEventListener('touchstart', playOnInteraction, { once: true });
         });
 
-        // Toggle play/pause
         musicToggle.addEventListener('click', function(e) {
             e.stopPropagation();
             if (audio.paused) {
@@ -1050,12 +1194,10 @@
             }
         });
 
-        // Volume control
         volumeSlider.addEventListener('input', function() {
             audio.volume = this.value;
         });
 
-        // Update button state when audio is paused/played externally
         audio.addEventListener('play', () => {
             musicToggle.textContent = '🔊';
             musicToggle.classList.remove('muted');
