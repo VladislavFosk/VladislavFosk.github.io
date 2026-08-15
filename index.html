@@ -79,12 +79,12 @@
             transition: border-color 0.5s ease, background 0.5s ease;
         }
         body.projects-bg .card {
-            background: rgba(0, 10, 0, 0.7);
+            background: rgba(0, 10, 0, 0.6);
             border: 1px solid rgba(0, 255, 65, 0.2);
             box-shadow: 0 0 60px rgba(0, 255, 65, 0.05);
         }
         body.achievements-bg .card {
-            background: rgba(10, 10, 25, 0.7);
+            background: rgba(10, 10, 25, 0.6);
             border: 1px solid rgba(180, 160, 220, 0.2);
             box-shadow: 0 0 60px rgba(180, 160, 220, 0.05);
         }
@@ -177,7 +177,7 @@
             color: #b8a0d0;
         }
 
-        /* ---- МУЗЫКА ---- */
+        /* ---- МУЗЫКА (ВСЕГДА ВИДНА) ---- */
         .music-controls {
             position: fixed;
             bottom: 20px;
@@ -193,12 +193,13 @@
             border-radius: 20px;
             border: 1px solid rgba(139, 26, 43, 0.4);
             box-shadow: 0 0 30px rgba(139, 26, 43, 0.2);
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            transition: all 0.5s ease;
         }
-        .music-controls.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
+        body.projects-bg .music-controls {
+            border-color: rgba(0, 255, 65, 0.3);
+        }
+        body.achievements-bg .music-controls {
+            border-color: rgba(180, 160, 220, 0.3);
         }
         #music-toggle {
             background: transparent;
@@ -210,9 +211,21 @@
             font-family: 'Times New Roman', Times, serif;
             line-height: 1;
         }
+        body.projects-bg #music-toggle {
+            color: #00ff41;
+        }
+        body.achievements-bg #music-toggle {
+            color: #8a7aaa;
+        }
         #music-toggle:hover {
             transform: scale(1.1);
             color: #ff6b81;
+        }
+        body.projects-bg #music-toggle:hover {
+            color: #66ff88;
+        }
+        body.achievements-bg #music-toggle:hover {
+            color: #b8a0d0;
         }
         #music-toggle.muted {
             color: #6a5a6a;
@@ -220,7 +233,6 @@
         }
         #music-toggle.muted:hover {
             opacity: 1;
-            color: #b84a5a;
         }
         .volume-slider {
             -webkit-appearance: none;
@@ -233,6 +245,12 @@
             transition: all 0.2s ease;
             cursor: pointer;
         }
+        body.projects-bg .volume-slider {
+            background: linear-gradient(90deg, #003311, #00ff41);
+        }
+        body.achievements-bg .volume-slider {
+            background: linear-gradient(90deg, #2a1a3a, #8a7aaa);
+        }
         .volume-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
@@ -244,9 +262,21 @@
             box-shadow: 0 0 15px rgba(184, 74, 90, 0.4);
             border: 2px solid rgba(255,255,255,0.2);
         }
+        body.projects-bg .volume-slider::-webkit-slider-thumb {
+            background: #00ff41;
+        }
+        body.achievements-bg .volume-slider::-webkit-slider-thumb {
+            background: #8a7aaa;
+        }
         .volume-slider::-webkit-slider-thumb:hover {
             transform: scale(1.15);
             background: #ff6b81;
+        }
+        body.projects-bg .volume-slider::-webkit-slider-thumb:hover {
+            background: #66ff88;
+        }
+        body.achievements-bg .volume-slider::-webkit-slider-thumb:hover {
+            background: #b8a0d0;
         }
 
         /* ---- СТРАНИЦЫ ---- */
@@ -264,7 +294,61 @@
         }
 
         /* ================================================================
-           СТИЛИ ДЛЯ HOME
+           СТИЛИ ДЛЯ ВСЕХ БЛОКОВ (ПРЯМОУГОЛЬНЫЕ, НА ВСЮ ШИРИНУ, ПРОЗРАЧНЫЕ)
+           ================================================================ */
+        .block {
+            margin: 12px 0;
+            padding: 16px 18px;
+            background: rgba(139, 26, 43, 0.06);
+            border-radius: 16px;
+            border: 1px solid rgba(139, 26, 43, 0.10);
+            backdrop-filter: blur(4px);
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        body.projects-bg .block {
+            background: rgba(0, 255, 65, 0.03);
+            border-color: rgba(0, 255, 65, 0.06);
+        }
+        body.achievements-bg .block {
+            background: rgba(180, 160, 220, 0.04);
+            border-color: rgba(180, 160, 220, 0.06);
+        }
+
+        .block-title {
+            color: #b84a5a;
+            font-size: 18px;
+            font-family: 'Times New Roman', Times, serif;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            text-shadow: 0 0 25px rgba(184, 74, 90, 0.3);
+            text-align: center;
+        }
+        body.projects-bg .block-title {
+            color: #00ff41;
+            text-shadow: 0 0 25px rgba(0, 255, 65, 0.2);
+        }
+        body.achievements-bg .block-title {
+            color: #8a7aaa;
+            text-shadow: 0 0 25px rgba(180, 160, 220, 0.2);
+        }
+
+        .block-text {
+            color: #c0a0b0;
+            font-size: 16px;
+            font-family: 'Times New Roman', Times, serif;
+            line-height: 1.7;
+            text-align: left;
+        }
+        body.projects-bg .block-text {
+            color: #88ccaa;
+        }
+        body.achievements-bg .block-text {
+            color: #a090b0;
+        }
+
+        /* ================================================================
+           СПЕЦИАЛЬНЫЕ СТИЛИ ДЛЯ HOME
            ================================================================ */
         .avatar {
             width: 140px;
@@ -402,6 +486,7 @@
             border-radius: 15px;
             border: 1px solid rgba(139, 26, 43, 0.3);
             transition: all 0.5s ease;
+            width: 100%;
         }
         body.projects-bg .birthday-timer {
             background: rgba(0, 255, 65, 0.05);
@@ -494,6 +579,7 @@
             border-radius: 15px;
             border: 1px solid rgba(139, 26, 43, 0.15);
             text-align: left;
+            width: 100%;
         }
         body.projects-bg .long-about {
             background: rgba(0, 255, 65, 0.03);
@@ -538,6 +624,7 @@
             text-align: center;
             font-size: 19px;
             font-family: 'Times New Roman', Times, serif;
+            width: 100%;
         }
         body.projects-bg .about-tags {
             border-top-color: rgba(0, 255, 65, 0.2);
@@ -573,12 +660,14 @@
             text-shadow: 0 0 25px rgba(180, 160, 220, 0.2);
         }
 
+        /* ---- ОБЩИЕ ПРЯМОУГОЛЬНЫЕ БЛОКИ ---- */
         .languages {
             margin: 15px 0 15px 0;
             padding: 12px;
             background: rgba(139, 26, 43, 0.08);
             border-radius: 15px;
             border: 1px solid rgba(139, 26, 43, 0.2);
+            width: 100%;
         }
         body.projects-bg .languages {
             background: rgba(0, 255, 65, 0.03);
@@ -595,6 +684,7 @@
             letter-spacing: 2px;
             margin-bottom: 8px;
             text-shadow: 0 0 25px rgba(184, 74, 90, 0.3);
+            text-align: center;
         }
         body.projects-bg .languages h4 {
             color: #00ff41;
@@ -609,6 +699,7 @@
             font-size: 17px;
             font-family: 'Times New Roman', Times, serif;
             padding: 3px 0;
+            text-align: center;
         }
         body.projects-bg .lang-item {
             color: #88ccaa;
@@ -660,6 +751,7 @@
             background: rgba(139, 26, 43, 0.08);
             border-radius: 15px;
             border: 1px solid rgba(139, 26, 43, 0.2);
+            width: 100%;
         }
         body.projects-bg .os-block {
             background: rgba(0, 255, 65, 0.03);
@@ -676,6 +768,7 @@
             letter-spacing: 2px;
             margin-bottom: 8px;
             text-shadow: 0 0 25px rgba(184, 74, 90, 0.3);
+            text-align: center;
         }
         body.projects-bg .os-block h4 {
             color: #00ff41;
@@ -690,6 +783,7 @@
             font-size: 17px;
             font-family: 'Times New Roman', Times, serif;
             padding: 3px 0;
+            text-align: center;
         }
         body.projects-bg .os-item {
             color: #88ccaa;
@@ -730,6 +824,7 @@
             background: rgba(139, 26, 43, 0.08);
             border-radius: 15px;
             border: 1px solid rgba(139, 26, 43, 0.2);
+            width: 100%;
         }
         body.projects-bg .quotes-block {
             background: rgba(0, 255, 65, 0.03);
@@ -746,6 +841,7 @@
             letter-spacing: 2px;
             margin-bottom: 10px;
             text-shadow: 0 0 30px rgba(184, 74, 90, 0.4);
+            text-align: center;
         }
         body.projects-bg .quotes-block h4 {
             color: #00ff41;
@@ -822,18 +918,20 @@
 
         .interests-block {
             margin: 15px 0 20px 0;
-            padding: 12px;
+            padding: 16px 20px;
             background: rgba(139, 26, 43, 0.08);
-            border-radius: 15px;
-            border: 1px solid rgba(139, 26, 43, 0.2);
+            border-radius: 16px;
+            border: 1px solid rgba(139, 26, 43, 0.12);
+            backdrop-filter: blur(4px);
+            width: 100%;
         }
         body.projects-bg .interests-block {
-            background: rgba(0, 255, 65, 0.03);
-            border-color: rgba(0, 255, 65, 0.1);
+            background: rgba(0, 255, 65, 0.04);
+            border-color: rgba(0, 255, 65, 0.08);
         }
         body.achievements-bg .interests-block {
             background: rgba(180, 160, 220, 0.04);
-            border-color: rgba(180, 160, 220, 0.1);
+            border-color: rgba(180, 160, 220, 0.08);
         }
         .interests-block h4 {
             color: #b84a5a;
@@ -842,6 +940,7 @@
             letter-spacing: 2px;
             margin-bottom: 8px;
             text-shadow: 0 0 25px rgba(184, 74, 90, 0.3);
+            text-align: center;
         }
         body.projects-bg .interests-block h4 {
             color: #00ff41;
@@ -856,6 +955,7 @@
             font-size: 17px;
             font-family: 'Times New Roman', Times, serif;
             padding: 3px 0;
+            text-align: center;
         }
         body.projects-bg .interests-item {
             color: #88ccaa;
@@ -895,18 +995,20 @@
 
         .allies {
             margin: 20px 0 25px 0;
-            padding: 15px;
+            padding: 16px 20px;
             background: rgba(139, 26, 43, 0.08);
-            border-radius: 15px;
-            border: 1px solid rgba(139, 26, 43, 0.2);
+            border-radius: 16px;
+            border: 1px solid rgba(139, 26, 43, 0.12);
+            backdrop-filter: blur(4px);
+            width: 100%;
         }
         body.projects-bg .allies {
-            background: rgba(0, 255, 65, 0.03);
-            border-color: rgba(0, 255, 65, 0.1);
+            background: rgba(0, 255, 65, 0.04);
+            border-color: rgba(0, 255, 65, 0.08);
         }
         body.achievements-bg .allies {
             background: rgba(180, 160, 220, 0.04);
-            border-color: rgba(180, 160, 220, 0.1);
+            border-color: rgba(180, 160, 220, 0.08);
         }
         .allies h4 {
             color: #b84a5a;
@@ -915,6 +1017,7 @@
             letter-spacing: 2px;
             margin-bottom: 10px;
             text-shadow: 0 0 25px rgba(184, 74, 90, 0.3);
+            text-align: center;
         }
         body.projects-bg .allies h4 {
             color: #00ff41;
@@ -1106,6 +1209,7 @@
         .anime-section {
             margin-top: 25px;
             text-align: left;
+            width: 100%;
         }
         .anime-section h3 {
             font-size: 22px;
@@ -1209,7 +1313,7 @@
         }
 
         /* ================================================================
-           СТИЛИ ДЛЯ PROJECTS (ПРЯМОУГОЛЬНЫЙ БЛОК ПО ЦЕНТРУ)
+           СТИЛИ ДЛЯ PROJECTS (ПРЯМОУГОЛЬНЫЙ ПРОЗРАЧНЫЙ БЛОК)
            ================================================================ */
         .projects-title {
             font-size: 28px;
@@ -1222,21 +1326,20 @@
             text-align: center;
         }
 
-        /* ---- ПРЯМОУГОЛЬНАЯ КАРТОЧКА ПРОЕКТА ---- */
         .project-card-rect {
             background: rgba(0, 10, 0, 0.30);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
-            padding: 40px 35px;
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            padding: 35px 30px;
             border: 1px solid rgba(0, 255, 65, 0.10);
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
-            gap: 16px;
+            gap: 14px;
             margin-bottom: 20px;
             transition: all 0.4s ease;
-            min-height: 450px;
+            min-height: 350px;
             width: 100%;
             justify-content: center;
             max-width: 600px;
@@ -1250,12 +1353,11 @@
             background: rgba(0, 10, 0, 0.40);
         }
 
-        /* ---- ПРЯМОУГОЛЬНАЯ ИКОНКА (слева/сверху) ---- */
         .project-icon-rect {
             flex-shrink: 0;
-            width: 130px;
-            height: 130px;
-            border-radius: 20px;
+            width: 120px;
+            height: 120px;
+            border-radius: 18px;
             overflow: hidden;
             border: 1px solid rgba(0, 255, 65, 0.12);
             background: rgba(0, 0, 0, 0.3);
@@ -1271,12 +1373,11 @@
             display: block;
         }
 
-        /* ---- ИНФОРМАЦИЯ О ПРОЕКТЕ ---- */
         .project-info-rect {
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
             width: 100%;
             max-width: 500px;
         }
@@ -1296,7 +1397,7 @@
         }
         .project-info-rect .project-status {
             display: inline-block;
-            padding: 6px 22px;
+            padding: 6px 20px;
             border-radius: 30px;
             font-size: 15px;
             font-weight: 600;
@@ -1305,7 +1406,7 @@
             color: #ffcc00;
             border: 1px solid rgba(255, 200, 0, 0.12);
             align-self: center;
-            margin-top: 6px;
+            margin-top: 4px;
         }
         .project-info-rect .project-status.frozen {
             background: rgba(255, 50, 50, 0.10);
@@ -1318,30 +1419,8 @@
             border-color: rgba(0, 255, 65, 0.12);
         }
 
-        /* ---- АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ ---- */
-        @media (max-width: 480px) {
-            .project-card-rect {
-                padding: 25px 18px;
-                min-height: 320px;
-            }
-            .project-icon-rect {
-                width: 90px;
-                height: 90px;
-            }
-            .project-info-rect .project-name {
-                font-size: 22px;
-            }
-            .project-info-rect .project-desc {
-                font-size: 15px;
-            }
-            .project-info-rect .project-status {
-                font-size: 13px;
-                padding: 4px 16px;
-            }
-        }
-
         /* ================================================================
-           СТИЛИ ДЛЯ ACHIEVEMENTS
+           СТИЛИ ДЛЯ ACHIEVEMENTS (ПРЯМОУГОЛЬНЫЕ ПРОЗРАЧНЫЕ БЛОКИ)
            ================================================================ */
         .achievements-title {
             font-size: 28px;
@@ -1355,11 +1434,17 @@
 
         .achievement-category {
             margin: 20px 0 20px 0;
-            padding: 15px;
+            padding: 16px 20px;
             background: rgba(180, 160, 220, 0.05);
-            border-radius: 15px;
-            border: 1px solid rgba(180, 160, 220, 0.1);
+            border-radius: 16px;
+            border: 1px solid rgba(180, 160, 220, 0.10);
+            backdrop-filter: blur(4px);
             text-align: left;
+            width: 100%;
+        }
+        body.projects-bg .achievement-category {
+            background: rgba(0, 255, 65, 0.03);
+            border-color: rgba(0, 255, 65, 0.06);
         }
         .achievement-category h4 {
             color: #9a8aaa;
@@ -1368,9 +1453,14 @@
             letter-spacing: 1.5px;
             margin-bottom: 12px;
             text-shadow: 0 0 20px rgba(180, 160, 220, 0.2);
-            border-bottom: 1px solid rgba(180, 160, 220, 0.1);
+            border-bottom: 1px solid rgba(180, 160, 220, 0.08);
             padding-bottom: 8px;
             text-align: center;
+        }
+        body.projects-bg .achievement-category h4 {
+            color: #66dd88;
+            text-shadow: 0 0 30px rgba(0, 255, 65, 0.05);
+            border-bottom-color: rgba(0, 255, 65, 0.08);
         }
 
         .achievement-item {
@@ -1393,6 +1483,13 @@
             color: #d8c0d0;
             transform: translateX(4px);
         }
+        body.projects-bg .achievement-item {
+            color: #88aa88;
+            border-bottom-color: rgba(0, 255, 65, 0.04);
+        }
+        body.projects-bg .achievement-item:hover {
+            color: #aaddaa;
+        }
         .achievement-item .ach-icon {
             font-size: 20px;
             width: 32px;
@@ -1414,6 +1511,10 @@
             text-shadow: 0 0 20px rgba(200, 180, 220, 0.1);
             line-height: 1.3;
         }
+        body.projects-bg .achievement-item .ach-text .title {
+            color: #66dd88;
+            -webkit-text-fill-color: #66dd88;
+        }
         .achievement-item .ach-text .desc {
             font-size: 13px;
             color: #8a7a8a;
@@ -1422,27 +1523,6 @@
             padding: 0;
             text-indent: 0;
             line-height: 1.4;
-        }
-
-        body.projects-bg .achievement-category {
-            background: rgba(0, 255, 65, 0.03);
-            border-color: rgba(0, 255, 65, 0.06);
-        }
-        body.projects-bg .achievement-category h4 {
-            color: #66dd88;
-            text-shadow: 0 0 30px rgba(0, 255, 65, 0.05);
-            border-bottom-color: rgba(0, 255, 65, 0.1);
-        }
-        body.projects-bg .achievement-item {
-            color: #88aa88;
-            border-bottom-color: rgba(0, 255, 65, 0.04);
-        }
-        body.projects-bg .achievement-item:hover {
-            color: #aaddaa;
-        }
-        body.projects-bg .achievement-item .ach-text .title {
-            color: #66dd88;
-            -webkit-text-fill-color: #66dd88;
         }
         body.projects-bg .achievement-item .ach-text .desc {
             color: #668866;
@@ -1453,9 +1533,7 @@
             50% { opacity: 0.3; }
         }
 
-        /* ================================================================
-           АДАПТИВНОСТЬ
-           ================================================================ */
+        /* ---- АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ ---- */
         @media (max-width: 480px) {
             .card {
                 padding: 25px 15px;
@@ -1499,15 +1577,23 @@
             .projects-title {
                 font-size: 22px;
             }
-            .project-card .project-name {
-                font-size: 18px;
+            .project-card-rect {
+                padding: 25px 18px;
+                min-height: 300px;
             }
-            .project-card .project-icon {
-                width: 48px;
-                height: 48px;
+            .project-icon-rect {
+                width: 90px;
+                height: 90px;
             }
-            .project-card .project-desc {
-                font-size: 14px;
+            .project-info-rect .project-name {
+                font-size: 22px;
+            }
+            .project-info-rect .project-desc {
+                font-size: 15px;
+            }
+            .project-info-rect .project-status {
+                font-size: 13px;
+                padding: 4px 16px;
             }
             .achievements-title {
                 font-size: 22px;
@@ -1545,7 +1631,7 @@
         <a data-page="achievements">Achievements</a>
     </div>
 
-    <!-- ---- МУЗЫКА ---- -->
+    <!-- ---- МУЗЫКА (ВСЕГДА ВИДНА) ---- -->
     <div class="music-controls" id="music-controls">
         <button id="music-toggle" title="Toggle Music">🔊</button>
         <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
@@ -1687,13 +1773,12 @@
         </div>
 
         <!-- ========================================================== -->
-        <!-- PROJECTS (ПРЯМОУГОЛЬНЫЙ БЛОК ПО ЦЕНТРУ) -->
+        <!-- PROJECTS -->
         <!-- ========================================================== -->
         <div class="page" id="page-projects">
 
             <div class="projects-title">📂 MY PROJECTS</div>
 
-            <!-- ---- ПРОЕКТ 1: Roza OS (ПРЯМОУГОЛЬНЫЙ) ---- -->
             <div class="project-card-rect">
                 <div class="project-icon-rect">
                     <img src="gim/rozaos.png" alt="Roza OS">
@@ -1709,20 +1794,6 @@
                     <span class="project-status frozen">❄️ Frozen</span>
                 </div>
             </div>
-
-            <!-- ---- ДЛЯ БУДУЩИХ ПРОЕКТОВ (заглушка) ---- -->
-            <!--
-            <div class="project-card-rect">
-                <div class="project-icon-rect">
-                    <img src="gim/project2.png" alt="Project 2">
-                </div>
-                <div class="project-info-rect">
-                    <div class="project-name">Project Name</div>
-                    <div class="project-desc">Description of the project.</div>
-                    <span class="project-status completed">✅ Completed</span>
-                </div>
-            </div>
-            -->
 
             <div class="footer">⚔️ Made by the <span>Iron Will Coalition</span></div>
 
@@ -1780,11 +1851,10 @@
             achievements: document.getElementById('page-achievements')
         };
         const body = document.body;
-        const musicControls = document.getElementById('music-controls');
         const wavesCanvas = document.getElementById('waves-canvas');
 
         // Глобальная переменная для хранения состояния музыки (включена/выключена)
-        let musicEnabled = true; // по умолчанию включена
+        let musicEnabled = true;
 
         function switchPage(page) {
             Object.values(pages).forEach(p => p.classList.remove('active'));
@@ -1797,32 +1867,15 @@
             if (page === 'home') {
                 body.classList.remove('projects-bg', 'achievements-bg');
                 body.classList.add('home-bg');
-                musicControls.classList.remove('hidden');
                 wavesCanvas.style.display = 'none';
-                // ВКЛЮЧАЕМ МУЗЫКУ ТОЛЬКО ЕСЛИ ОНА НЕ БЫЛА ВЫКЛЮЧЕНА
-                if (audio && audio.paused && musicEnabled) {
-                    audio.play().catch(() => {});
-                }
             } else if (page === 'projects') {
                 body.classList.remove('home-bg', 'achievements-bg');
                 body.classList.add('projects-bg');
-                musicControls.classList.add('hidden');
                 wavesCanvas.style.display = 'block';
-                if (audio && !audio.paused) {
-                    audio.pause();
-                    musicToggle.textContent = '🔇';
-                    musicToggle.classList.add('muted');
-                }
             } else {
                 body.classList.remove('home-bg', 'projects-bg');
                 body.classList.add('achievements-bg');
-                musicControls.classList.add('hidden');
                 wavesCanvas.style.display = 'none';
-                if (audio && !audio.paused) {
-                    audio.pause();
-                    musicToggle.textContent = '🔇';
-                    musicToggle.classList.add('muted');
-                }
             }
         }
 
@@ -2077,7 +2130,7 @@
         drawWaves();
 
         // ============================================================
-        // 5. МУЗЫКА (С СОХРАНЕНИЕМ СОСТОЯНИЯ ВКЛЮЧЕНО/ВЫКЛЮЧЕНО)
+        // 5. МУЗЫКА (НЕ ОСТАНАВЛИВАЕТСЯ ПРИ ПЕРЕКЛЮЧЕНИИ СТРАНИЦ)
         // ============================================================
         const audio = document.getElementById('bg-music');
         const musicToggle = document.getElementById('music-toggle');
@@ -2158,15 +2211,14 @@
             }
         });
 
+        // Музыка НЕ останавливается при переключении вкладок или страниц
         document.addEventListener('visibilitychange', function() {
-            const isHomeActive = document.getElementById('page-home').classList.contains('active');
-            
             if (document.hidden) {
                 if (audio && !audio.paused) {
                     audio.pause();
                 }
             } else {
-                if (isHomeActive && musicEnabled && audio && audio.paused && !audio.muted) {
+                if (musicEnabled && audio && audio.paused && !audio.muted) {
                     audio.play().then(() => {
                         musicToggle.textContent = '🔊';
                         musicToggle.classList.remove('muted');
