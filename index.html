@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vladislav Fosk-Kosarh</title>
     <style>
+        /* ================================================================
+           БАЗОВЫЕ СТИЛИ
+           ================================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -19,18 +22,20 @@
             align-items: center;
             padding: 20px;
             position: relative;
-            transition: background 0.6s ease;
             overflow: hidden;
+            transition: background 0.6s ease;
+            background: #000000;
         }
 
-        /* ---- HOME: КРАСНЫЙ → ЧЁРНЫЙ → ФИОЛЕТОВЫЙ ---- */
+        /* ---- ФОНЫ СТРАНИЦ ---- */
         body.home-bg {
             background: linear-gradient(180deg, #1a0000 0%, #000000 50%, #0a001a 100%);
         }
-
-        /* ---- PROJECTS: ЧЁРНЫЙ (МАТРИЦА) ---- */
         body.projects-bg {
             background: #000000;
+        }
+        body.achievements-bg {
+            background: linear-gradient(180deg, #0a0a1a 0%, #0d0d0d 50%, #1a0a0a 100%);
         }
 
         /* ---- КАНВАСЫ ---- */
@@ -43,8 +48,6 @@
             z-index: 0;
             pointer-events: none;
         }
-
-        /* ---- ВОЛНЫ ДЛЯ ПРОЕКТОВ ---- */
         #waves-canvas {
             position: fixed;
             bottom: 0;
@@ -77,6 +80,11 @@
             border: 1px solid rgba(0, 255, 65, 0.2);
             box-shadow: 0 0 60px rgba(0, 255, 65, 0.05);
         }
+        body.achievements-bg .card {
+            background: rgba(10, 10, 25, 0.7);
+            border: 1px solid rgba(180, 160, 220, 0.2);
+            box-shadow: 0 0 60px rgba(180, 160, 220, 0.05);
+        }
         .card::-webkit-scrollbar {
             width: 4px;
         }
@@ -90,42 +98,56 @@
         body.projects-bg .card::-webkit-scrollbar-thumb {
             background: #00ff41;
         }
+        body.achievements-bg .card::-webkit-scrollbar-thumb {
+            background: #8a7aaa;
+        }
 
-        /* ---- НАВИГАЦИЯ ---- */
+        /* ---- НАВИГАЦИЯ (3 ВКЛАДКИ) ---- */
         .nav {
             position: fixed;
             top: 20px;
             right: 20px;
             z-index: 9999;
             display: flex;
-            gap: 12px;
+            gap: 8px;
             background: rgba(15, 8, 15, 0.8);
             backdrop-filter: blur(10px);
-            padding: 10px 18px;
+            padding: 8px 14px;
             border-radius: 30px;
             border: 1px solid rgba(139, 26, 43, 0.4);
             box-shadow: 0 0 30px rgba(139, 26, 43, 0.2);
             transition: all 0.5s ease;
+            flex-wrap: wrap;
+            justify-content: center;
         }
         body.projects-bg .nav {
             background: rgba(0, 10, 0, 0.8);
             border: 1px solid rgba(0, 255, 65, 0.3);
             box-shadow: 0 0 30px rgba(0, 255, 65, 0.1);
         }
+        body.achievements-bg .nav {
+            background: rgba(10, 10, 25, 0.8);
+            border: 1px solid rgba(180, 160, 220, 0.3);
+            box-shadow: 0 0 30px rgba(180, 160, 220, 0.1);
+        }
         .nav a {
             color: #b84a5a;
             text-decoration: none;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
             font-family: 'Times New Roman', Times, serif;
-            padding: 4px 12px;
+            padding: 4px 10px;
             border-radius: 20px;
             transition: all 0.3s ease;
             letter-spacing: 0.5px;
             cursor: pointer;
+            white-space: nowrap;
         }
         body.projects-bg .nav a {
             color: #00ff41;
+        }
+        body.achievements-bg .nav a {
+            color: #8a7aaa;
         }
         .nav a:hover {
             background: rgba(139, 26, 43, 0.3);
@@ -135,6 +157,10 @@
             background: rgba(0, 255, 65, 0.15);
             color: #66ff88;
         }
+        body.achievements-bg .nav a:hover {
+            background: rgba(180, 160, 220, 0.2);
+            color: #b8a0d0;
+        }
         .nav a.active {
             background: rgba(139, 26, 43, 0.4);
             color: #ff6b81;
@@ -142,6 +168,10 @@
         body.projects-bg .nav a.active {
             background: rgba(0, 255, 65, 0.2);
             color: #66ff88;
+        }
+        body.achievements-bg .nav a.active {
+            background: rgba(180, 160, 220, 0.25);
+            color: #b8a0d0;
         }
 
         /* ---- МУЗЫКА ---- */
@@ -230,7 +260,9 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ---- ОСТАЛЬНЫЕ СТИЛИ (HOME) ---- */
+        /* ================================================================
+           СТИЛИ ДЛЯ HOME
+           ================================================================ */
         .avatar {
             width: 140px;
             height: 140px;
@@ -240,11 +272,17 @@
             margin-bottom: 15px;
             background: #2a0a0a;
             box-shadow: 0 0 40px rgba(139, 26, 43, 0.3);
+            transition: border-color 0.5s ease, box-shadow 0.5s ease;
         }
         body.projects-bg .avatar {
             border-color: #00ff41;
             box-shadow: 0 0 40px rgba(0, 255, 65, 0.15);
         }
+        body.achievements-bg .avatar {
+            border-color: #8a7aaa;
+            box-shadow: 0 0 40px rgba(180, 160, 220, 0.15);
+        }
+
         .name {
             font-size: 32px;
             font-weight: 700;
@@ -260,6 +298,12 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+        body.achievements-bg .name {
+            background: linear-gradient(90deg, #8a7aaa, #4a3a6a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
         .nick {
             font-size: 18px;
             color: #7a5a6a;
@@ -269,6 +313,10 @@
         body.projects-bg .nick {
             color: #44aa66;
         }
+        body.achievements-bg .nick {
+            color: #6a5a7a;
+        }
+
         .title {
             font-size: 22px;
             font-weight: 700;
@@ -282,6 +330,11 @@
             color: #00ff41;
             text-shadow: 0 0 30px rgba(0, 255, 65, 0.2);
         }
+        body.achievements-bg .title {
+            color: #8a7aaa;
+            text-shadow: 0 0 30px rgba(180, 160, 220, 0.2);
+        }
+
         .age {
             font-size: 20px;
             color: #9a7a8a;
@@ -297,6 +350,11 @@
             color: #00ff41;
             text-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
         }
+        body.achievements-bg .age span {
+            color: #8a7aaa;
+            text-shadow: 0 0 20px rgba(180, 160, 220, 0.2);
+        }
+
         .nationality {
             font-size: 19px;
             color: #9a7a8a;
@@ -312,6 +370,11 @@
             color: #00ff41;
             text-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
         }
+        body.achievements-bg .nationality span {
+            color: #8a7aaa;
+            text-shadow: 0 0 20px rgba(180, 160, 220, 0.2);
+        }
+
         .army {
             font-size: 19px;
             color: #8b1a2b;
@@ -324,16 +387,26 @@
             color: #00cc33;
             text-shadow: 0 0 25px rgba(0, 255, 65, 0.2);
         }
+        body.achievements-bg .army {
+            color: #6a4a7a;
+            text-shadow: 0 0 25px rgba(180, 160, 220, 0.2);
+        }
+
         .birthday-timer {
             margin: 5px 0 15px 0;
             padding: 10px;
             background: rgba(139, 26, 43, 0.1);
             border-radius: 15px;
             border: 1px solid rgba(139, 26, 43, 0.3);
+            transition: all 0.5s ease;
         }
         body.projects-bg .birthday-timer {
             background: rgba(0, 255, 65, 0.05);
             border-color: rgba(0, 255, 65, 0.2);
+        }
+        body.achievements-bg .birthday-timer {
+            background: rgba(180, 160, 220, 0.05);
+            border-color: rgba(180, 160, 220, 0.2);
         }
         .birthday-timer .label {
             color: #b84a5a;
@@ -345,6 +418,10 @@
         body.projects-bg .birthday-timer .label {
             color: #00ff41;
             text-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+        }
+        body.achievements-bg .birthday-timer .label {
+            color: #8a7aaa;
+            text-shadow: 0 0 20px rgba(180, 160, 220, 0.2);
         }
         .birthday-timer .countdown {
             color: #b84a5a;
@@ -358,10 +435,15 @@
             color: #00ff41;
             text-shadow: 0 0 30px rgba(0, 255, 65, 0.2);
         }
+        body.achievements-bg .birthday-timer .countdown {
+            color: #8a7aaa;
+            text-shadow: 0 0 30px rgba(180, 160, 220, 0.2);
+        }
         .birthday-timer .countdown span {
             display: inline-block;
             min-width: 30px;
         }
+
         .desc {
             color: #c0a0b0;
             font-size: 17px;
@@ -373,6 +455,9 @@
         body.projects-bg .desc {
             color: #88ccaa;
         }
+        body.achievements-bg .desc {
+            color: #a090b0;
+        }
         .desc strong {
             color: #b84a5a;
             text-shadow: 0 0 20px rgba(184, 74, 90, 0.3);
@@ -380,6 +465,10 @@
         body.projects-bg .desc strong {
             color: #00ff41;
             text-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+        }
+        body.achievements-bg .desc strong {
+            color: #8a7aaa;
+            text-shadow: 0 0 20px rgba(180, 160, 220, 0.2);
         }
         .desc .edu {
             color: #b84a5a;
@@ -390,6 +479,11 @@
             color: #00ff41;
             text-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
         }
+        body.achievements-bg .desc .edu {
+            color: #8a7aaa;
+            text-shadow: 0 0 20px rgba(180, 160, 220, 0.2);
+        }
+
         .long-about {
             margin: 15px 0 20px 0;
             padding: 15px;
@@ -402,6 +496,10 @@
             background: rgba(0, 255, 65, 0.03);
             border-color: rgba(0, 255, 65, 0.1);
         }
+        body.achievements-bg .long-about {
+            background: rgba(180, 160, 220, 0.04);
+            border-color: rgba(180, 160, 220, 0.1);
+        }
         .long-about p {
             color: #c0a0b0;
             font-size: 16px;
@@ -413,6 +511,9 @@
         body.projects-bg .long-about p {
             color: #88ccaa;
         }
+        body.achievements-bg .long-about p {
+            color: #a090b0;
+        }
         .long-about p:last-of-type {
             margin-bottom: 0;
         }
@@ -423,6 +524,10 @@
         body.projects-bg .long-about .highlight {
             color: #00ff41;
         }
+        body.achievements-bg .long-about .highlight {
+            color: #8a7aaa;
+        }
+
         .about-tags {
             margin-top: 15px;
             padding-top: 12px;
@@ -434,6 +539,9 @@
         body.projects-bg .about-tags {
             border-top-color: rgba(0, 255, 65, 0.2);
         }
+        body.achievements-bg .about-tags {
+            border-top-color: rgba(180, 160, 220, 0.2);
+        }
         .about-tags .sun-child {
             color: #b84a5a;
             font-weight: 600;
@@ -444,6 +552,10 @@
             color: #00ff41;
             text-shadow: 0 0 25px rgba(0, 255, 65, 0.2);
         }
+        body.achievements-bg .about-tags .sun-child {
+            color: #8a7aaa;
+            text-shadow: 0 0 25px rgba(180, 160, 220, 0.2);
+        }
         .about-tags .faith {
             color: #8b1a2b;
             font-weight: 600;
@@ -453,6 +565,11 @@
             color: #00cc33;
             text-shadow: 0 0 25px rgba(0, 255, 65, 0.2);
         }
+        body.achievements-bg .about-tags .faith {
+            color: #6a4a7a;
+            text-shadow: 0 0 25px rgba(180, 160, 220, 0.2);
+        }
+
         .languages {
             margin: 15px 0 15px 0;
             padding: 12px;
@@ -463,6 +580,10 @@
         body.projects-bg .languages {
             background: rgba(0, 255, 65, 0.03);
             border-color: rgba(0, 255, 65, 0.1);
+        }
+        body.achievements-bg .languages {
+            background: rgba(180, 160, 220, 0.04);
+            border-color: rgba(180, 160, 220, 0.1);
         }
         .languages h4 {
             color: #b84a5a;
@@ -476,6 +597,10 @@
             color: #00ff41;
             text-shadow: 0 0 25px rgba(0, 255, 65, 0.2);
         }
+        body.achievements-bg .languages h4 {
+            color: #8a7aaa;
+            text-shadow: 0 0 25px rgba(180, 160, 220, 0.2);
+        }
         .lang-item {
             color: #c0a0b0;
             font-size: 17px;
@@ -484,6 +609,9 @@
         }
         body.projects-bg .lang-item {
             color: #88ccaa;
+        }
+        body.achievements-bg .lang-item {
+            color: #a090b0;
         }
         .lang-item .rus {
             color: #b84a5a;
@@ -494,6 +622,10 @@
             color: #00ff41;
             text-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
         }
+        body.achievements-bg .lang-item .rus {
+            color: #8a7aaa;
+            text-shadow: 0 0 20px rgba(180, 160, 220, 0.2);
+        }
         .lang-item .eng {
             color: #9a7a8a;
             font-weight: 600;
@@ -503,6 +635,10 @@
             color: #66dd88;
             text-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
         }
+        body.achievements-bg .lang-item .eng {
+            color: #7a6a8a;
+            text-shadow: 0 0 20px rgba(180, 160, 220, 0.1);
+        }
         .lang-item .note {
             color: #6a5a6a;
             font-size: 15px;
@@ -511,6 +647,10 @@
         body.projects-bg .lang-item .note {
             color: #446655;
         }
+        body.achievements-bg .lang-item .note {
+            color: #5a4a6a;
+        }
+
         .os-block {
             margin: 15px 0 20px 0;
             padding: 12px;
@@ -521,6 +661,10 @@
         body.projects-bg .os-block {
             background: rgba(0, 255, 65, 0.03);
             border-color: rgba(0, 255, 65, 0.1);
+        }
+        body.achievements-bg .os-block {
+            background: rgba(180, 160, 220, 0.04);
+            border-color: rgba(180, 160, 220, 0.1);
         }
         .os-block h4 {
             color: #b84a5a;
@@ -534,6 +678,10 @@
             color: #00ff41;
             text-shadow: 0 0 25px rgba(0, 255, 65, 0.2);
         }
+        body.achievements-bg .os-block h4 {
+            color: #8a7aaa;
+            text-shadow: 0 0 25px rgba(180, 160, 220, 0.2);
+        }
         .os-item {
             color: #c0a0b0;
             font-size: 17px;
@@ -542,6 +690,9 @@
         }
         body.projects-bg .os-item {
             color: #88ccaa;
+        }
+        body.achievements-bg .os-item {
+            color: #a090b0;
         }
         .os-item .win {
             color: #6a8aaa;
@@ -552,6 +703,10 @@
             color: #4488dd;
             text-shadow: 0 0 20px rgba(0, 100, 255, 0.2);
         }
+        body.achievements-bg .os-item .win {
+            color: #5a7a9a;
+            text-shadow: 0 0 20px rgba(100, 130, 180, 0.2);
+        }
         .os-item .linux {
             color: #b84a5a;
             font-weight: 600;
@@ -561,6 +716,11 @@
             color: #00ff41;
             text-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
         }
+        body.achievements-bg .os-item .linux {
+            color: #8a7aaa;
+            text-shadow: 0 0 20px rgba(180, 160, 220, 0.2);
+        }
+
         .quotes-block {
             margin: 15px 0 20px 0;
             padding: 15px;
@@ -571,6 +731,10 @@
         body.projects-bg .quotes-block {
             background: rgba(0, 255, 65, 0.03);
             border-color: rgba(0, 255, 65, 0.1);
+        }
+        body.achievements-bg .quotes-block {
+            background: rgba(180, 160, 220, 0.04);
+            border-color: rgba(180, 160, 220, 0.1);
         }
         .quotes-block h4 {
             color: #b84a5a;
@@ -584,6 +748,10 @@
             color: #00ff41;
             text-shadow: 0 0 30px rgba(0, 255, 65, 0.2);
         }
+        body.achievements-bg .quotes-block h4 {
+            color: #8a7aaa;
+            text-shadow: 0 0 30px rgba(180, 160, 220, 0.2);
+        }
         .quote-item {
             color: #c0a0b0;
             font-size: 16px;
@@ -595,6 +763,9 @@
         body.projects-bg .quote-item {
             color: #88ccaa;
         }
+        body.achievements-bg .quote-item {
+            color: #a090b0;
+        }
         .quote-item .greek {
             color: #b84a5a;
             font-style: italic;
@@ -603,6 +774,10 @@
         body.projects-bg .quote-item .greek {
             color: #00ff41;
             text-shadow: 0 0 25px rgba(0, 255, 65, 0.2);
+        }
+        body.achievements-bg .quote-item .greek {
+            color: #8a7aaa;
+            text-shadow: 0 0 25px rgba(180, 160, 220, 0.2);
         }
         .quote-item .german {
             color: #9a7a8a;
@@ -613,6 +788,10 @@
             color: #66dd88;
             text-shadow: 0 0 25px rgba(0, 255, 65, 0.1);
         }
+        body.achievements-bg .quote-item .german {
+            color: #7a6a8a;
+            text-shadow: 0 0 25px rgba(180, 160, 220, 0.1);
+        }
         .quote-item .quote-text {
             color: #c0a0b0;
             font-style: italic;
@@ -620,6 +799,9 @@
         }
         body.projects-bg .quote-item .quote-text {
             color: #88ccaa;
+        }
+        body.achievements-bg .quote-item .quote-text {
+            color: #a090b0;
         }
         .quote-item .translation {
             color: #6a5a6a;
@@ -631,6 +813,10 @@
         body.projects-bg .quote-item .translation {
             color: #446655;
         }
+        body.achievements-bg .quote-item .translation {
+            color: #5a4a6a;
+        }
+
         .interests-block {
             margin: 15px 0 20px 0;
             padding: 12px;
@@ -641,6 +827,10 @@
         body.projects-bg .interests-block {
             background: rgba(0, 255, 65, 0.03);
             border-color: rgba(0, 255, 65, 0.1);
+        }
+        body.achievements-bg .interests-block {
+            background: rgba(180, 160, 220, 0.04);
+            border-color: rgba(180, 160, 220, 0.1);
         }
         .interests-block h4 {
             color: #b84a5a;
@@ -654,6 +844,10 @@
             color: #00ff41;
             text-shadow: 0 0 25px rgba(0, 255, 65, 0.2);
         }
+        body.achievements-bg .interests-block h4 {
+            color: #8a7aaa;
+            text-shadow: 0 0 25px rgba(180, 160, 220, 0.2);
+        }
         .interests-item {
             color: #c0a0b0;
             font-size: 17px;
@@ -663,12 +857,18 @@
         body.projects-bg .interests-item {
             color: #88ccaa;
         }
+        body.achievements-bg .interests-item {
+            color: #a090b0;
+        }
         .interests-item .game {
             color: #9a7a8a;
             text-shadow: 0 0 20px rgba(154, 122, 138, 0.2);
         }
         body.projects-bg .interests-item .game {
             color: #66dd88;
+        }
+        body.achievements-bg .interests-item .game {
+            color: #7a6a8a;
         }
         .interests-item .cartoon {
             color: #8a6a7a;
@@ -677,12 +877,19 @@
         body.projects-bg .interests-item .cartoon {
             color: #55aa77;
         }
+        body.achievements-bg .interests-item .cartoon {
+            color: #6a5a7a;
+        }
         .interests-item .heart {
             color: #8b1a2b;
         }
         body.projects-bg .interests-item .heart {
             color: #00ff41;
         }
+        body.achievements-bg .interests-item .heart {
+            color: #8a7aaa;
+        }
+
         .allies {
             margin: 20px 0 25px 0;
             padding: 15px;
@@ -693,6 +900,10 @@
         body.projects-bg .allies {
             background: rgba(0, 255, 65, 0.03);
             border-color: rgba(0, 255, 65, 0.1);
+        }
+        body.achievements-bg .allies {
+            background: rgba(180, 160, 220, 0.04);
+            border-color: rgba(180, 160, 220, 0.1);
         }
         .allies h4 {
             color: #b84a5a;
@@ -705,6 +916,10 @@
         body.projects-bg .allies h4 {
             color: #00ff41;
             text-shadow: 0 0 25px rgba(0, 255, 65, 0.2);
+        }
+        body.achievements-bg .allies h4 {
+            color: #8a7aaa;
+            text-shadow: 0 0 25px rgba(180, 160, 220, 0.2);
         }
         .allies-list {
             display: flex;
@@ -722,6 +937,9 @@
         body.projects-bg .allies-list span {
             color: #88ccaa;
         }
+        body.achievements-bg .allies-list span {
+            color: #a090b0;
+        }
         .allies-list span:hover {
             color: #b84a5a;
             transform: scale(1.05);
@@ -731,9 +949,14 @@
             color: #00ff41;
             text-shadow: 0 0 25px rgba(0, 255, 65, 0.2);
         }
+        body.achievements-bg .allies-list span:hover {
+            color: #8a7aaa;
+            text-shadow: 0 0 25px rgba(180, 160, 220, 0.2);
+        }
         .allies-list .emoji {
             margin-right: 5px;
         }
+
         .btn {
             display: block;
             background: transparent;
@@ -770,6 +993,17 @@
             color: #000000;
             box-shadow: 0 0 40px rgba(0, 255, 65, 0.3);
         }
+        body.achievements-bg .btn-telegram {
+            border-color: #6a4a7a;
+            color: #8a7aaa;
+            text-shadow: 0 0 20px rgba(180, 160, 220, 0.2);
+        }
+        body.achievements-bg .btn-telegram:hover {
+            background: #6a4a7a;
+            color: white;
+            box-shadow: 0 0 40px rgba(180, 160, 220, 0.2);
+        }
+
         .btn-youtube {
             border-color: #6a2a3a;
             color: #b84a5a;
@@ -791,6 +1025,17 @@
             color: #000000;
             box-shadow: 0 0 40px rgba(0, 255, 65, 0.3);
         }
+        body.achievements-bg .btn-youtube {
+            border-color: #6a4a7a;
+            color: #8a7aaa;
+            text-shadow: 0 0 20px rgba(180, 160, 220, 0.2);
+        }
+        body.achievements-bg .btn-youtube:hover {
+            background: #6a4a7a;
+            color: white;
+            box-shadow: 0 0 40px rgba(180, 160, 220, 0.2);
+        }
+
         .btn-github {
             border-color: #6a2a3a;
             color: #b84a5a;
@@ -812,6 +1057,17 @@
             color: #000000;
             box-shadow: 0 0 40px rgba(0, 255, 65, 0.3);
         }
+        body.achievements-bg .btn-github {
+            border-color: #6a4a7a;
+            color: #8a7aaa;
+            text-shadow: 0 0 20px rgba(180, 160, 220, 0.2);
+        }
+        body.achievements-bg .btn-github:hover {
+            background: #6a4a7a;
+            color: white;
+            box-shadow: 0 0 40px rgba(180, 160, 220, 0.2);
+        }
+
         .btn-gamejolt {
             border-color: #6a2a3a;
             color: #b84a5a;
@@ -833,6 +1089,17 @@
             color: #000000;
             box-shadow: 0 0 40px rgba(0, 255, 65, 0.3);
         }
+        body.achievements-bg .btn-gamejolt {
+            border-color: #6a4a7a;
+            color: #8a7aaa;
+            text-shadow: 0 0 20px rgba(180, 160, 220, 0.2);
+        }
+        body.achievements-bg .btn-gamejolt:hover {
+            background: #6a4a7a;
+            color: white;
+            box-shadow: 0 0 40px rgba(180, 160, 220, 0.2);
+        }
+
         .anime-section {
             margin-top: 25px;
             text-align: left;
@@ -853,6 +1120,11 @@
             border-bottom-color: rgba(0, 255, 65, 0.2);
             text-shadow: 0 0 30px rgba(0, 255, 65, 0.2);
         }
+        body.achievements-bg .anime-section h3 {
+            color: #8a7aaa;
+            border-bottom-color: rgba(180, 160, 220, 0.2);
+            text-shadow: 0 0 30px rgba(180, 160, 220, 0.2);
+        }
         .anime-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -871,6 +1143,9 @@
         body.projects-bg .anime-item {
             color: #66dd88;
         }
+        body.achievements-bg .anime-item {
+            color: #7a6a8a;
+        }
         .anime-item:hover {
             color: #b84a5a;
             text-shadow: 0 0 20px rgba(184, 74, 90, 0.3);
@@ -878,6 +1153,10 @@
         body.projects-bg .anime-item:hover {
             color: #00ff41;
             text-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+        }
+        body.achievements-bg .anime-item:hover {
+            color: #8a7aaa;
+            text-shadow: 0 0 20px rgba(180, 160, 220, 0.2);
         }
         .anime-item .emoji {
             margin-right: 4px;
@@ -887,6 +1166,9 @@
         }
         body.projects-bg .anime-item .love {
             color: #00ff41;
+        }
+        body.achievements-bg .anime-item .love {
+            color: #8a7aaa;
         }
 
         /* ---- FOOTER ---- */
@@ -901,6 +1183,9 @@
         body.projects-bg .footer {
             color: #335544;
         }
+        body.achievements-bg .footer {
+            color: #4a3a5a;
+        }
         .footer span {
             color: #b84a5a;
             font-weight: 600;
@@ -910,13 +1195,19 @@
             color: #00ff41;
             text-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
         }
+        body.achievements-bg .footer span {
+            color: #8a7aaa;
+            text-shadow: 0 0 20px rgba(180, 160, 220, 0.2);
+        }
 
         @keyframes pulse {
             0%, 100% { opacity: 0.7; }
             50% { opacity: 1; }
         }
 
-        /* ---- ПРОЕКТЫ (MATRIX STYLE) ---- */
+        /* ================================================================
+           СТИЛИ ДЛЯ PROJECTS
+           ================================================================ */
         .projects-title {
             font-size: 28px;
             font-weight: 700;
@@ -961,12 +1252,62 @@
             animation: blink 1.5s infinite;
         }
 
+        /* ================================================================
+           СТИЛИ ДЛЯ ACHIEVEMENTS
+           ================================================================ */
+        .achievements-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #8a7aaa;
+            margin-bottom: 20px;
+            font-family: 'Times New Roman', Times, serif;
+            text-shadow: 0 0 30px rgba(180, 160, 220, 0.3);
+            letter-spacing: 1px;
+        }
+        .achievement-dev-block {
+            background: rgba(20, 15, 35, 0.5);
+            border-radius: 20px;
+            padding: 50px 30px;
+            border: 2px dashed rgba(180, 160, 220, 0.2);
+            text-align: center;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .achievement-dev-block .emoji {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        .achievement-dev-block .status {
+            font-size: 22px;
+            font-weight: 700;
+            color: #8a7aaa;
+            font-family: 'Times New Roman', Times, serif;
+            text-shadow: 0 0 20px rgba(180, 160, 220, 0.3);
+            letter-spacing: 1px;
+            line-height: 1.6;
+        }
+        .achievement-dev-block .sub {
+            font-size: 16px;
+            color: #5a4a6a;
+            margin-top: 10px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .achievement-dev-block .sub span {
+            display: inline-block;
+            animation: blink 1.5s infinite;
+        }
+
         @keyframes blink {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
         }
 
-        /* ---- RESPONSIVE ---- */
+        /* ================================================================
+           АДАПТИВНОСТЬ
+           ================================================================ */
         @media (max-width: 480px) {
             .card {
                 padding: 25px 15px;
@@ -998,14 +1339,14 @@
                 width: 60px;
             }
             .nav {
-                padding: 6px 12px;
+                padding: 6px 10px;
                 top: 15px;
                 right: 15px;
-                gap: 6px;
+                gap: 4px;
             }
             .nav a {
-                font-size: 13px;
-                padding: 3px 8px;
+                font-size: 11px;
+                padding: 3px 6px;
             }
             .projects-title {
                 font-size: 22px;
@@ -1014,6 +1355,15 @@
                 font-size: 20px;
             }
             .project-block .emoji {
+                font-size: 36px;
+            }
+            .achievements-title {
+                font-size: 22px;
+            }
+            .achievement-dev-block .status {
+                font-size: 18px;
+            }
+            .achievement-dev-block .emoji {
                 font-size: 36px;
             }
         }
@@ -1025,10 +1375,11 @@
     <canvas id="particles-canvas"></canvas>
     <canvas id="waves-canvas"></canvas>
 
-    <!-- ---- НАВИГАЦИЯ ---- -->
+    <!-- ---- НАВИГАЦИЯ (3 ВКЛАДКИ) ---- -->
     <div class="nav">
         <a class="active" data-page="home">Home</a>
         <a data-page="projects">My Projects</a>
+        <a data-page="achievements">Achievements</a>
     </div>
 
     <!-- ---- МУЗЫКА ---- -->
@@ -1189,69 +1540,76 @@
 
         </div>
 
+        <!-- ========================================================== -->
+        <!-- ACHIEVEMENTS -->
+        <!-- ========================================================== -->
+        <div class="page" id="page-achievements">
+
+            <div class="achievements-title">🏆 ACHIEVEMENTS</div>
+
+            <div class="achievement-dev-block">
+                <div class="emoji">🛠️</div>
+                <div class="status">In development,<br>while I don't know what to write</div>
+                <div class="sub"><span>Coming soon...</span></div>
+            </div>
+
+            <div class="footer">⚔️ Made by the <span>Iron Will Coalition</span></div>
+
+        </div>
+
     </div>
 
-<script>
+    <script>
         // ============================================================
-        // 1. NAVIGATION (ПЛАВНЫЙ ПЕРЕХОД С ЧЁРНЫМ ЗАТЕМНЕНИЕМ)
+        // 1. NAVIGATION (3 вкладки)
         // ============================================================
         const navLinks = document.querySelectorAll('.nav a');
         const pages = {
             home: document.getElementById('page-home'),
-            projects: document.getElementById('page-projects')
+            projects: document.getElementById('page-projects'),
+            achievements: document.getElementById('page-achievements')
         };
         const body = document.body;
         const musicControls = document.getElementById('music-controls');
         const wavesCanvas = document.getElementById('waves-canvas');
-        let isTransitioning = false;
 
         function switchPage(page) {
-            if (isTransitioning) return;
-            isTransitioning = true;
+            Object.values(pages).forEach(p => p.classList.remove('active'));
+            pages[page].classList.add('active');
 
-            // 1. Сразу затемняем фон через чёрный
-            body.style.transition = 'background 0.25s ease';
-            body.style.background = '#000000';
+            navLinks.forEach(link => {
+                link.classList.toggle('active', link.dataset.page === page);
+            });
 
-            // 2. Убираем оба класса, чтобы фон точно стал чёрным
-            body.classList.remove('home-bg', 'projects-bg');
-
-            setTimeout(() => {
-                // 3. Переключаем страницы
-                Object.values(pages).forEach(p => p.classList.remove('active'));
-                pages[page].classList.add('active');
-
-                // 4. Обновляем навигацию
-                navLinks.forEach(link => {
-                    link.classList.toggle('active', link.dataset.page === page);
-                });
-
-                // 5. Применяем нужный фон и настройки
-                if (page === 'home') {
-                    body.classList.add('home-bg');
-                    musicControls.classList.remove('hidden');
-                    wavesCanvas.style.display = 'none';
-                    if (audio && audio.paused) {
-                        audio.play().catch(() => {});
-                    }
-                } else {
-                    body.classList.add('projects-bg');
-                    musicControls.classList.add('hidden');
-                    wavesCanvas.style.display = 'block';
-                    if (audio && !audio.paused) {
-                        audio.pause();
-                        musicToggle.textContent = '🔇';
-                        musicToggle.classList.add('muted');
-                    }
+            if (page === 'home') {
+                body.classList.remove('projects-bg', 'achievements-bg');
+                body.classList.add('home-bg');
+                musicControls.classList.remove('hidden');
+                wavesCanvas.style.display = 'none';
+                if (audio && audio.paused) {
+                    audio.play().catch(() => {});
                 }
-
-                // 6. Возвращаем плавный переход для фона
-                setTimeout(() => {
-                    body.style.transition = 'background 0.8s ease';
-                    isTransitioning = false;
-                }, 50);
-
-            }, 300);
+            } else if (page === 'projects') {
+                body.classList.remove('home-bg', 'achievements-bg');
+                body.classList.add('projects-bg');
+                musicControls.classList.add('hidden');
+                wavesCanvas.style.display = 'block';
+                if (audio && !audio.paused) {
+                    audio.pause();
+                    musicToggle.textContent = '🔇';
+                    musicToggle.classList.add('muted');
+                }
+            } else {
+                body.classList.remove('home-bg', 'projects-bg');
+                body.classList.add('achievements-bg');
+                musicControls.classList.add('hidden');
+                wavesCanvas.style.display = 'none';
+                if (audio && !audio.paused) {
+                    audio.pause();
+                    musicToggle.textContent = '🔇';
+                    musicToggle.classList.add('muted');
+                }
+            }
         }
 
         navLinks.forEach(link => {
@@ -1263,7 +1621,7 @@
         });
 
         // ============================================================
-        // 2. BIRTHDAY TIMER (29 декабря 2007)
+        // 2. BIRTHDAY TIMER
         // ============================================================
         function updateBirthday() {
             const now = new Date();
@@ -1290,7 +1648,7 @@
         setInterval(updateBirthday, 1000);
 
         // ============================================================
-        // 3. ГАЛАКТИКА (HOME) + МАТРИЦА (PROJECTS)
+        // 3. ГАЛАКТИКА (HOME) + МАТРИЦА (PROJECTS) + ТУМАН (ACHIEVEMENTS)
         // ============================================================
         const canvas = document.getElementById('particles-canvas');
         const ctx = canvas.getContext('2d');
@@ -1303,7 +1661,6 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        // --- ГАЛАКТИКА: звёзды ---
         let stars = [];
         for (let i = 0; i < 200; i++) {
             stars.push({
@@ -1316,7 +1673,6 @@
             });
         }
 
-        // --- МАТРИЦА: символы ---
         const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         let matrixDrops = [];
         for (let i = 0; i < 80; i++) {
@@ -1330,11 +1686,24 @@
             });
         }
 
+        // Для Achievements — туманные частицы
+        let fogParticles = [];
+        for (let i = 0; i < 60; i++) {
+            fogParticles.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                size: Math.random() * 40 + 20,
+                speedX: (Math.random() - 0.5) * 0.3,
+                speedY: (Math.random() - 0.5) * 0.15,
+                opacity: Math.random() * 0.04 + 0.01
+            });
+        }
+
         function animateParticles() {
             ctx.clearRect(0, 0, width, height);
 
             if (body.classList.contains('projects-bg')) {
-                // ---- МАТРИЦА (английские буквы) ----
+                // МАТРИЦА
                 ctx.textAlign = 'center';
                 matrixDrops.forEach(d => {
                     d.y += d.speed;
@@ -1352,8 +1721,42 @@
                     ctx.fillText(d.char, d.x, d.y);
                     ctx.shadowBlur = 0;
                 });
+            } else if (body.classList.contains('achievements-bg')) {
+                // ТУМАН (для Achievements)
+                fogParticles.forEach(f => {
+                    f.x += f.speedX;
+                    f.y += f.speedY;
+                    if (f.x > width + 50) f.x = -50;
+                    if (f.x < -50) f.x = width + 50;
+                    if (f.y > height + 50) f.y = -50;
+                    if (f.y < -50) f.y = height + 50;
+                    const grad = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.size);
+                    grad.addColorStop(0, `rgba(180, 160, 220, ${f.opacity * 0.5})`);
+                    grad.addColorStop(1, `rgba(180, 160, 220, 0)`);
+                    ctx.fillStyle = grad;
+                    ctx.beginPath();
+                    ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                // Добавляем немного звёзд
+                stars.forEach(s => {
+                    s.y += s.speed * 0.3;
+                    s.phase += 0.005;
+                    if (s.y > height) {
+                        s.y = -5;
+                        s.x = Math.random() * width;
+                    }
+                    const alpha = s.opacity * (0.5 + 0.3 * Math.sin(s.phase));
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.size * 0.5, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(200, 190, 220, ${alpha * 0.4})`;
+                    ctx.shadowColor = `rgba(200, 190, 220, ${alpha * 0.1})`;
+                    ctx.shadowBlur = 8;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                });
             } else {
-                // ---- ГАЛАКТИКА (красный → фиолетовый) ----
+                // ГАЛАКТИКА (Home)
                 stars.forEach(s => {
                     s.y += s.speed;
                     s.phase += 0.01;
@@ -1363,7 +1766,6 @@
                     }
                     const alpha = s.opacity * (0.7 + 0.3 * Math.sin(s.phase));
 
-                    // Свечение
                     const grad = ctx.createRadialGradient(
                         s.x - s.size * 0.3, s.y - s.size * 0.3, 0,
                         s.x, s.y, s.size * 3
@@ -1381,7 +1783,6 @@
                     ctx.shadowBlur = 20;
                     ctx.fill();
 
-                    // Ядро звезды
                     ctx.beginPath();
                     ctx.arc(s.x, s.y, s.size * 0.6, 0, Math.PI * 2);
                     const coreColor = `rgba(255, 200, 255, ${alpha * 0.9})`;
@@ -1422,7 +1823,6 @@
             }
             waveCanvas.style.display = 'block';
 
-            // Первая волна
             wCtx.beginPath();
             wCtx.moveTo(0, wHeight);
             for (let x = 0; x <= wWidth; x += 2) {
@@ -1436,7 +1836,6 @@
             wCtx.fillStyle = 'rgba(0, 255, 65, 0.08)';
             wCtx.fill();
 
-            // Вторая волна
             wCtx.beginPath();
             wCtx.moveTo(0, wHeight);
             for (let x = 0; x <= wWidth; x += 2) {
@@ -1450,7 +1849,6 @@
             wCtx.fillStyle = 'rgba(0, 200, 50, 0.05)';
             wCtx.fill();
 
-            // Третья волна
             wCtx.beginPath();
             wCtx.moveTo(0, wHeight);
             for (let x = 0; x <= wWidth; x += 2) {
