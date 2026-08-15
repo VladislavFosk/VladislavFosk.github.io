@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vladislav Foskarh — Iron Will Coalition</title>
-	<!-- Favicon -->
-<link rel="icon" href="gim/logo.png" type="image/png">
-<link rel="shortcut icon" href="gim/logo.png" type="image/png">
-
+    <!-- Favicon -->
+    <link rel="icon" href="gim/logo.png" type="image/png">
+    <link rel="shortcut icon" href="gim/logo.png" type="image/png">
     <style>
         /* ================================================================
            БАЗОВЫЕ СТИЛИ
@@ -1210,7 +1209,7 @@
         }
 
         /* ================================================================
-           СТИЛИ ДЛЯ PROJECTS
+           СТИЛИ ДЛЯ PROJECTS (ОБНОВЛЁННЫЕ)
            ================================================================ */
         .projects-title {
             font-size: 28px;
@@ -1221,43 +1220,78 @@
             text-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
             letter-spacing: 1px;
         }
-        .project-block {
-            background: rgba(0, 10, 0, 0.5);
+
+        /* ---- КАРТОЧКА ПРОЕКТА ---- */
+        .project-card {
+            background: rgba(0, 10, 0, 0.4);
             border-radius: 20px;
-            padding: 50px 30px;
-            border: 2px dashed rgba(0, 255, 65, 0.2);
-            text-align: center;
-            min-height: 250px;
+            padding: 20px;
+            border: 1px solid rgba(0, 255, 65, 0.15);
+            text-align: left;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            gap: 12px;
+        }
+        .project-card:hover {
+            border-color: rgba(0, 255, 65, 0.4);
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.05);
+            transform: translateY(-2px);
+        }
+        .project-card .project-header {
+            display: flex;
             align-items: center;
+            gap: 16px;
         }
-        .project-block .emoji {
-            font-size: 48px;
-            margin-bottom: 15px;
+        .project-card .project-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            object-fit: cover;
+            border: 1px solid rgba(0, 255, 65, 0.2);
+            flex-shrink: 0;
+            background: rgba(0, 0, 0, 0.3);
         }
-        .project-block .status {
-            font-size: 26px;
+        .project-card .project-name {
+            font-size: 22px;
             font-weight: 700;
             color: #00ff41;
             font-family: 'Times New Roman', Times, serif;
-            text-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
-            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
         }
-        .project-block .sub {
-            font-size: 18px;
-            color: #448855;
-            margin-top: 10px;
+        .project-card .project-desc {
+            color: #88ccaa;
+            font-size: 16px;
             font-family: 'Times New Roman', Times, serif;
+            line-height: 1.7;
+            padding: 0 4px;
         }
-        .project-block .sub span {
+        .project-card .project-status {
             display: inline-block;
-            animation: blink 1.5s infinite;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Times New Roman', Times, serif;
+            background: rgba(255, 200, 0, 0.15);
+            color: #ffcc00;
+            border: 1px solid rgba(255, 200, 0, 0.2);
+            align-self: flex-start;
+        }
+        .project-card .project-status.frozen {
+            background: rgba(255, 50, 50, 0.15);
+            color: #ff5555;
+            border-color: rgba(255, 50, 50, 0.2);
+        }
+        .project-card .project-status.completed {
+            background: rgba(0, 255, 65, 0.15);
+            color: #00ff41;
+            border-color: rgba(0, 255, 65, 0.2);
         }
 
         /* ================================================================
-           СТИЛИ ДЛЯ ACHIEVEMENTS (UPDATED)
+           СТИЛИ ДЛЯ ACHIEVEMENTS
            ================================================================ */
         .achievements-title {
             font-size: 28px;
@@ -1415,11 +1449,15 @@
             .projects-title {
                 font-size: 22px;
             }
-            .project-block .status {
-                font-size: 20px;
+            .project-card .project-name {
+                font-size: 18px;
             }
-            .project-block .emoji {
-                font-size: 36px;
+            .project-card .project-icon {
+                width: 48px;
+                height: 48px;
+            }
+            .project-card .project-desc {
+                font-size: 14px;
             }
             .achievements-title {
                 font-size: 22px;
@@ -1599,30 +1637,50 @@
         </div>
 
         <!-- ========================================================== -->
-        <!-- PROJECTS -->
+        <!-- PROJECTS (ОБНОВЛЁННЫЕ) -->
         <!-- ========================================================== -->
         <div class="page" id="page-projects">
 
             <div class="projects-title">📂 MY PROJECTS</div>
 
-            <div class="project-block">
-                <div class="emoji">🚧</div>
-                <div class="status">IN DEVELOPMENT</div>
-                <div class="sub"><span>Coming soon...</span></div>
+            <!-- ---- ПРОЕКТ 1: Roza OS ---- -->
+            <div class="project-card">
+                <div class="project-header">
+                    <img class="project-icon" src="img/rozaos.png" alt="Roza OS">
+                    <span class="project-name">Roza OS</span>
+                </div>
+                <div class="project-desc">
+                    Debian-based Linux distribution with XFCE desktop and preinstalled essential packages (Firefox, VLC, LibreOffice, GParted, Remmina, etc.). Fast, lightweight, ready to use.
+                </div>
+                <div class="project-desc" style="color: #88aa88; font-size: 15px; margin-top: 4px;">
+                    <strong style="color: #00ff41;">Status:</strong> Frozen. Progress reset to zero due to system reinstallation and data loss on the developer's PC. Restarting from scratch. Base: Debian. Package list subject to change.
+                </div>
+                <span class="project-status frozen">❄️ Frozen</span>
             </div>
+
+            <!-- ---- ДЛЯ БУДУЩИХ ПРОЕКТОВ (заглушка) ---- -->
+            <!--
+            <div class="project-card">
+                <div class="project-header">
+                    <img class="project-icon" src="img/project2.png" alt="Project 2">
+                    <span class="project-name">Project Name</span>
+                </div>
+                <div class="project-desc">Description of the project.</div>
+                <span class="project-status completed">✅ Completed</span>
+            </div>
+            -->
 
             <div class="footer">⚔️ Made by the <span>Iron Will Coalition</span></div>
 
         </div>
 
         <!-- ========================================================== -->
-        <!-- ACHIEVEMENTS (UPDATED) -->
+        <!-- ACHIEVEMENTS -->
         <!-- ========================================================== -->
         <div class="page" id="page-achievements">
 
             <div class="achievements-title">🏆 ACHIEVEMENTS</div>
 
-            <!-- ---- LIFE ACHIEVEMENTS ---- -->
             <div class="achievement-category">
                 <h4>🌟 LIFE ACHIEVEMENTS</h4>
 
@@ -1657,7 +1715,7 @@
 
     </div>
 
-<script>
+    <script>
         // ============================================================
         // 1. NAVIGATION (3 вкладки)
         // ============================================================
@@ -1987,11 +2045,9 @@
             audio.muted = false;
             musicToggle.textContent = '🔊';
             musicToggle.classList.remove('muted');
-            // Пытаемся запустить музыку
             audio.play().catch(() => {});
         }
 
-        // Пытаемся запустить музыку автоматически (если включена)
         if (musicEnabled) {
             audio.play().catch(() => {
                 const playOnInteraction = () => {
@@ -2009,12 +2065,9 @@
             });
         }
 
-        // Кнопка включения/выключения
         musicToggle.addEventListener('click', function(e) {
             e.stopPropagation();
             musicEnabled = !musicEnabled;
-            
-            // Сохраняем состояние в localStorage
             localStorage.setItem('musicEnabled', String(musicEnabled));
 
             if (musicEnabled) {
@@ -2051,23 +2104,14 @@
             }
         });
 
-        // ============================================================
-        // 6. ПАУЗА/ВОЗОБНОВЛЕНИЕ ПРИ ПЕРЕКЛЮЧЕНИИ ВКЛАДОК
-        //     (НО НЕ ВКЛЮЧАЕТ, ЕСЛИ ПОЛЬЗОВАТЕЛЬ ВЫКЛЮЧИЛ)
-        // ============================================================
         document.addEventListener('visibilitychange', function() {
             const isHomeActive = document.getElementById('page-home').classList.contains('active');
             
             if (document.hidden) {
-                // Вкладка неактивна — ставим на паузу (без сохранения)
                 if (audio && !audio.paused) {
                     audio.pause();
                 }
             } else {
-                // Вкладка снова активна — включаем, если:
-                // 1. Мы на Home
-                // 2. Музыка включена (musicEnabled === true)
-                // 3. Музыка на паузе (не по вине пользователя)
                 if (isHomeActive && musicEnabled && audio && audio.paused && !audio.muted) {
                     audio.play().then(() => {
                         musicToggle.textContent = '🔊';
