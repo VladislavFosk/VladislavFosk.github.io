@@ -1209,7 +1209,7 @@
         }
 
         /* ================================================================
-           СТИЛИ ДЛЯ PROJECTS (ОГРОМНЫЙ БЛОК ПО ЦЕНТРУ)
+           СТИЛИ ДЛЯ PROJECTS (ПРЯМОУГОЛЬНЫЙ БЛОК ПО ЦЕНТРУ)
            ================================================================ */
         .projects-title {
             font-size: 28px;
@@ -1222,46 +1222,49 @@
             text-align: center;
         }
 
-        /* ---- ОГРОМНАЯ КАРТОЧКА ПРОЕКТА (ПОЧТИ НА ВЕСЬ ЭКРАН) ---- */
-        .project-card-huge {
-            background: rgba(0, 10, 0, 0.35);
-            backdrop-filter: blur(8px);
+        /* ---- ПРЯМОУГОЛЬНАЯ КАРТОЧКА ПРОЕКТА ---- */
+        .project-card-rect {
+            background: rgba(0, 10, 0, 0.30);
+            backdrop-filter: blur(10px);
             border-radius: 24px;
-            padding: 35px 30px;
-            border: 1px solid rgba(0, 255, 65, 0.12);
+            padding: 40px 35px;
+            border: 1px solid rgba(0, 255, 65, 0.10);
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
-            gap: 18px;
+            gap: 16px;
             margin-bottom: 20px;
             transition: all 0.4s ease;
-            min-height: 400px;
+            min-height: 450px;
             width: 100%;
             justify-content: center;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
-        .project-card-huge:hover {
-            border-color: rgba(0, 255, 65, 0.3);
-            box-shadow: 0 0 50px rgba(0, 255, 65, 0.06);
+        .project-card-rect:hover {
+            border-color: rgba(0, 255, 65, 0.25);
+            box-shadow: 0 0 60px rgba(0, 255, 65, 0.05);
             transform: translateY(-3px);
-            background: rgba(0, 10, 0, 0.45);
+            background: rgba(0, 10, 0, 0.40);
         }
 
-        /* ---- ОГРОМНАЯ ИКОНКА ---- */
-        .project-icon-huge {
+        /* ---- ПРЯМОУГОЛЬНАЯ ИКОНКА (слева/сверху) ---- */
+        .project-icon-rect {
             flex-shrink: 0;
-            width: 120px;
-            height: 120px;
+            width: 130px;
+            height: 130px;
             border-radius: 20px;
             overflow: hidden;
-            border: 1px solid rgba(0, 255, 65, 0.15);
+            border: 1px solid rgba(0, 255, 65, 0.12);
             background: rgba(0, 0, 0, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 40px rgba(0, 255, 65, 0.05);
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.04);
         }
-        .project-icon-huge img {
+        .project-icon-rect img {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -1269,70 +1272,69 @@
         }
 
         /* ---- ИНФОРМАЦИЯ О ПРОЕКТЕ ---- */
-        .project-info-huge {
+        .project-info-rect {
             flex: 1;
             display: flex;
             flex-direction: column;
             gap: 10px;
             width: 100%;
-            max-width: 600px;
+            max-width: 500px;
         }
-        .project-info-huge .project-name {
-            font-size: 28px;
+        .project-info-rect .project-name {
+            font-size: 26px;
             font-weight: 700;
             color: #00ff41;
             font-family: 'Times New Roman', Times, serif;
-            text-shadow: 0 0 30px rgba(0, 255, 65, 0.25);
+            text-shadow: 0 0 30px rgba(0, 255, 65, 0.2);
             letter-spacing: 1px;
         }
-        .project-info-huge .project-desc {
+        .project-info-rect .project-desc {
             color: #88ccaa;
             font-size: 17px;
             font-family: 'Times New Roman', Times, serif;
             line-height: 1.8;
         }
-        .project-info-huge .project-status {
+        .project-info-rect .project-status {
             display: inline-block;
-            padding: 6px 20px;
+            padding: 6px 22px;
             border-radius: 30px;
             font-size: 15px;
             font-weight: 600;
             font-family: 'Times New Roman', Times, serif;
-            background: rgba(255, 200, 0, 0.12);
+            background: rgba(255, 200, 0, 0.10);
             color: #ffcc00;
-            border: 1px solid rgba(255, 200, 0, 0.15);
+            border: 1px solid rgba(255, 200, 0, 0.12);
             align-self: center;
             margin-top: 6px;
         }
-        .project-info-huge .project-status.frozen {
-            background: rgba(255, 50, 50, 0.12);
+        .project-info-rect .project-status.frozen {
+            background: rgba(255, 50, 50, 0.10);
             color: #ff5555;
-            border-color: rgba(255, 50, 50, 0.15);
+            border-color: rgba(255, 50, 50, 0.12);
         }
-        .project-info-huge .project-status.completed {
-            background: rgba(0, 255, 65, 0.12);
+        .project-info-rect .project-status.completed {
+            background: rgba(0, 255, 65, 0.10);
             color: #00ff41;
-            border-color: rgba(0, 255, 65, 0.15);
+            border-color: rgba(0, 255, 65, 0.12);
         }
 
         /* ---- АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ ---- */
         @media (max-width: 480px) {
-            .project-card-huge {
+            .project-card-rect {
                 padding: 25px 18px;
-                min-height: 300px;
-                gap: 14px;
+                min-height: 320px;
             }
-            .project-icon-huge {
+            .project-icon-rect {
                 width: 90px;
                 height: 90px;
             }
-            .project-info-huge .project-name {
+            .project-info-rect .project-name {
                 font-size: 22px;
             }
-            .project-info-huge .project-desc {
+            .project-info-rect .project-desc {
                 font-size: 15px;
             }
-            .project-info-huge .project-status {
+            .project-info-rect .project-status {
                 font-size: 13px;
                 padding: 4px 16px;
             }
@@ -1685,18 +1687,18 @@
         </div>
 
         <!-- ========================================================== -->
-        <!-- PROJECTS (ОГРОМНЫЙ БЛОК ПО ЦЕНТРУ) -->
+        <!-- PROJECTS (ПРЯМОУГОЛЬНЫЙ БЛОК ПО ЦЕНТРУ) -->
         <!-- ========================================================== -->
         <div class="page" id="page-projects">
 
             <div class="projects-title">📂 MY PROJECTS</div>
 
-            <!-- ---- ПРОЕКТ 1: Roza OS (ОГРОМНЫЙ, ПО ЦЕНТРУ) ---- -->
-            <div class="project-card-huge">
-                <div class="project-icon-huge">
+            <!-- ---- ПРОЕКТ 1: Roza OS (ПРЯМОУГОЛЬНЫЙ) ---- -->
+            <div class="project-card-rect">
+                <div class="project-icon-rect">
                     <img src="gim/rozaos.png" alt="Roza OS">
                 </div>
-                <div class="project-info-huge">
+                <div class="project-info-rect">
                     <div class="project-name">Roza OS</div>
                     <div class="project-desc">
                         Debian-based Linux distribution with XFCE desktop and preinstalled essential packages (Firefox, VLC, LibreOffice, GParted, Remmina, etc.). Fast, lightweight, ready to use.
@@ -1710,11 +1712,11 @@
 
             <!-- ---- ДЛЯ БУДУЩИХ ПРОЕКТОВ (заглушка) ---- -->
             <!--
-            <div class="project-card-huge">
-                <div class="project-icon-huge">
+            <div class="project-card-rect">
+                <div class="project-icon-rect">
                     <img src="gim/project2.png" alt="Project 2">
                 </div>
-                <div class="project-info-huge">
+                <div class="project-info-rect">
                     <div class="project-name">Project Name</div>
                     <div class="project-desc">Description of the project.</div>
                     <span class="project-status completed">✅ Completed</span>
