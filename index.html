@@ -1671,6 +1671,9 @@
         const musicControls = document.getElementById('music-controls');
         const wavesCanvas = document.getElementById('waves-canvas');
 
+        // Глобальная переменная для хранения состояния музыки (включена/выключена)
+        let musicEnabled = true; // по умолчанию включена
+
         function switchPage(page) {
             Object.values(pages).forEach(p => p.classList.remove('active'));
             pages[page].classList.add('active');
@@ -1684,8 +1687,8 @@
                 body.classList.add('home-bg');
                 musicControls.classList.remove('hidden');
                 wavesCanvas.style.display = 'none';
-                // ВКЛЮЧАЕМ МУЗЫКУ ПРИ ВОЗВРАТЕ НА HOME
-                if (audio && audio.paused) {
+                // ВКЛЮЧАЕМ МУЗЫКУ ТОЛЬКО ЕСЛИ ОНА НЕ БЫЛА ВЫКЛЮЧЕНА
+                if (audio && audio.paused && musicEnabled) {
                     audio.play().catch(() => {});
                 }
             } else if (page === 'projects') {
@@ -1693,7 +1696,6 @@
                 body.classList.add('projects-bg');
                 musicControls.classList.add('hidden');
                 wavesCanvas.style.display = 'block';
-                // ВЫКЛЮЧАЕМ МУЗЫКУ НА PROJECTS
                 if (audio && !audio.paused) {
                     audio.pause();
                     musicToggle.textContent = '🔇';
@@ -1704,7 +1706,6 @@
                 body.classList.add('achievements-bg');
                 musicControls.classList.add('hidden');
                 wavesCanvas.style.display = 'none';
-                // ВЫКЛЮЧАЕМ МУЗЫКУ НА ACHIEVEMENTS
                 if (audio && !audio.paused) {
                     audio.pause();
                     musicToggle.textContent = '🔇';
@@ -1787,7 +1788,6 @@
             });
         }
 
-        // Для Achievements — туманные частицы
         let fogParticles = [];
         for (let i = 0; i < 60; i++) {
             fogParticles.push({
@@ -1804,7 +1804,6 @@
             ctx.clearRect(0, 0, width, height);
 
             if (body.classList.contains('projects-bg')) {
-                // МАТРИЦА
                 ctx.textAlign = 'center';
                 matrixDrops.forEach(d => {
                     d.y += d.speed;
@@ -1823,7 +1822,6 @@
                     ctx.shadowBlur = 0;
                 });
             } else if (body.classList.contains('achievements-bg')) {
-                // ТУМАН (для Achievements)
                 fogParticles.forEach(f => {
                     f.x += f.speedX;
                     f.y += f.speedY;
@@ -1839,7 +1837,6 @@
                     ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2);
                     ctx.fill();
                 });
-                // Добавляем немного звёзд
                 stars.forEach(s => {
                     s.y += s.speed * 0.3;
                     s.phase += 0.005;
@@ -1857,7 +1854,6 @@
                     ctx.shadowBlur = 0;
                 });
             } else {
-                // ГАЛАКТИКА (Home)
                 stars.forEach(s => {
                     s.y += s.speed;
                     s.phase += 0.01;
@@ -1969,32 +1965,60 @@
         drawWaves();
 
         // ============================================================
-        // 5. МУЗЫКА (АВТОВОСПРОИЗВЕДЕНИЕ + ПАУЗА ПРИ ПЕРЕКЛЮЧЕНИИ ВКЛАДОК)
+        // 5. МУЗЫКА (С СОХРАНЕНИЕМ СОСТОЯНИЯ ВКЛЮЧЕНО/ВЫКЛЮЧЕНО)
         // ============================================================
         const audio = document.getElementById('bg-music');
         const musicToggle = document.getElementById('music-toggle');
         const volumeSlider = document.getElementById('volume-slider');
         audio.volume = volumeSlider.value;
 
-        // Пытаемся запустить музыку автоматически
-        audio.play().catch(() => {
-            // Если браузер заблокировал автовоспроизведение — ждём клика
-            const playOnInteraction = () => {
-                audio.play().then(() => {
-                    musicToggle.textContent = '🔊';
-                    musicToggle.classList.remove('muted');
-                }).catch(() => {});
-                document.removeEventListener('click', playOnInteraction);
-                document.removeEventListener('touchstart', playOnInteraction);
-            };
-            document.addEventListener('click', playOnInteraction, { once: true });
-            document.addEventListener('touchstart', playOnInteraction, { once: true });
-        });
+        // Загружаем сохранённое состояние из localStorage
+        const savedMusicState = localStorage.getItem('musicEnabled');
+        if (savedMusicState !== null) {
+            musicEnabled = savedMusicState === 'true';
+        }
+
+        // Применяем сохранённое состояние при загрузке
+        if (!musicEnabled) {
+            audio.muted = true;
+            musicToggle.textContent = '🔇';
+            musicToggle.classList.add('muted');
+        } else {
+            audio.muted = false;
+            musicToggle.textContent = '🔊';
+            musicToggle.classList.remove('muted');
+            // Пытаемся запустить музыку
+            audio.play().catch(() => {});
+        }
+
+        // Пытаемся запустить музыку автоматически (если включена)
+        if (musicEnabled) {
+            audio.play().catch(() => {
+                const playOnInteraction = () => {
+                    if (musicEnabled) {
+                        audio.play().then(() => {
+                            musicToggle.textContent = '🔊';
+                            musicToggle.classList.remove('muted');
+                        }).catch(() => {});
+                    }
+                    document.removeEventListener('click', playOnInteraction);
+                    document.removeEventListener('touchstart', playOnInteraction);
+                };
+                document.addEventListener('click', playOnInteraction, { once: true });
+                document.addEventListener('touchstart', playOnInteraction, { once: true });
+            });
+        }
 
         // Кнопка включения/выключения
         musicToggle.addEventListener('click', function(e) {
             e.stopPropagation();
-            if (audio.paused) {
+            musicEnabled = !musicEnabled;
+            
+            // Сохраняем состояние в localStorage
+            localStorage.setItem('musicEnabled', String(musicEnabled));
+
+            if (musicEnabled) {
+                audio.muted = false;
                 audio.play().then(() => {
                     musicToggle.textContent = '🔊';
                     musicToggle.classList.remove('muted');
@@ -2004,6 +2028,7 @@
                 });
             } else {
                 audio.pause();
+                audio.muted = true;
                 musicToggle.textContent = '🔇';
                 musicToggle.classList.add('muted');
             }
@@ -2014,31 +2039,36 @@
         });
 
         audio.addEventListener('play', () => {
-            musicToggle.textContent = '🔊';
-            musicToggle.classList.remove('muted');
+            if (musicEnabled) {
+                musicToggle.textContent = '🔊';
+                musicToggle.classList.remove('muted');
+            }
         });
         audio.addEventListener('pause', () => {
-            musicToggle.textContent = '🔇';
-            musicToggle.classList.add('muted');
+            if (musicEnabled) {
+                musicToggle.textContent = '🔇';
+                musicToggle.classList.add('muted');
+            }
         });
 
         // ============================================================
-        // 6. ПАУЗА/ВОЗОБНОВЛЕНИЕ ПРИ ПЕРЕКЛЮЧЕНИИ ВКЛАДОК БРАУЗЕРА
+        // 6. ПАУЗА/ВОЗОБНОВЛЕНИЕ ПРИ ПЕРЕКЛЮЧЕНИИ ВКЛАДОК
+        //     (НО НЕ ВКЛЮЧАЕТ, ЕСЛИ ПОЛЬЗОВАТЕЛЬ ВЫКЛЮЧИЛ)
         // ============================================================
         document.addEventListener('visibilitychange', function() {
-            // Проверяем, активна ли вкладка и находимся ли мы на Home
             const isHomeActive = document.getElementById('page-home').classList.contains('active');
             
             if (document.hidden) {
-                // Вкладка неактивна — ставим на паузу
+                // Вкладка неактивна — ставим на паузу (без сохранения)
                 if (audio && !audio.paused) {
                     audio.pause();
-                    musicToggle.textContent = '🔇';
-                    musicToggle.classList.add('muted');
                 }
             } else {
-                // Вкладка снова активна — включаем, если мы на Home
-                if (isHomeActive && audio && audio.paused) {
+                // Вкладка снова активна — включаем, если:
+                // 1. Мы на Home
+                // 2. Музыка включена (musicEnabled === true)
+                // 3. Музыка на паузе (не по вине пользователя)
+                if (isHomeActive && musicEnabled && audio && audio.paused && !audio.muted) {
                     audio.play().then(() => {
                         musicToggle.textContent = '🔊';
                         musicToggle.classList.remove('muted');
