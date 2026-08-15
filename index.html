@@ -1191,9 +1191,9 @@
 
     </div>
 
-    <script>
+<script>
         // ============================================================
-        // 1. NAVIGATION
+        // 1. NAVIGATION (ПЛАВНЫЙ ПЕРЕХОД С ЧЁРНЫМ ЗАТЕМНЕНИЕМ)
         // ============================================================
         const navLinks = document.querySelectorAll('.nav a');
         const pages = {
@@ -1203,34 +1203,55 @@
         const body = document.body;
         const musicControls = document.getElementById('music-controls');
         const wavesCanvas = document.getElementById('waves-canvas');
+        let isTransitioning = false;
 
         function switchPage(page) {
-            Object.values(pages).forEach(p => p.classList.remove('active'));
-            pages[page].classList.add('active');
+            if (isTransitioning) return;
+            isTransitioning = true;
 
-            navLinks.forEach(link => {
-                link.classList.toggle('active', link.dataset.page === page);
-            });
+            // 1. Сразу затемняем фон через чёрный
+            body.style.transition = 'background 0.25s ease';
+            body.style.background = '#000000';
 
-            if (page === 'home') {
-                body.classList.remove('projects-bg');
-                body.classList.add('home-bg');
-                musicControls.classList.remove('hidden');
-                wavesCanvas.style.display = 'none';
-                if (audio && audio.paused) {
-                    audio.play().catch(() => {});
+            // 2. Убираем оба класса, чтобы фон точно стал чёрным
+            body.classList.remove('home-bg', 'projects-bg');
+
+            setTimeout(() => {
+                // 3. Переключаем страницы
+                Object.values(pages).forEach(p => p.classList.remove('active'));
+                pages[page].classList.add('active');
+
+                // 4. Обновляем навигацию
+                navLinks.forEach(link => {
+                    link.classList.toggle('active', link.dataset.page === page);
+                });
+
+                // 5. Применяем нужный фон и настройки
+                if (page === 'home') {
+                    body.classList.add('home-bg');
+                    musicControls.classList.remove('hidden');
+                    wavesCanvas.style.display = 'none';
+                    if (audio && audio.paused) {
+                        audio.play().catch(() => {});
+                    }
+                } else {
+                    body.classList.add('projects-bg');
+                    musicControls.classList.add('hidden');
+                    wavesCanvas.style.display = 'block';
+                    if (audio && !audio.paused) {
+                        audio.pause();
+                        musicToggle.textContent = '🔇';
+                        musicToggle.classList.add('muted');
+                    }
                 }
-            } else {
-                body.classList.remove('home-bg');
-                body.classList.add('projects-bg');
-                musicControls.classList.add('hidden');
-                wavesCanvas.style.display = 'block';
-                if (audio && !audio.paused) {
-                    audio.pause();
-                    musicToggle.textContent = '🔇';
-                    musicToggle.classList.add('muted');
-                }
-            }
+
+                // 6. Возвращаем плавный переход для фона
+                setTimeout(() => {
+                    body.style.transition = 'background 0.8s ease';
+                    isTransitioning = false;
+                }, 50);
+
+            }, 300);
         }
 
         navLinks.forEach(link => {
@@ -1242,7 +1263,7 @@
         });
 
         // ============================================================
-        // 2. BIRTHDAY TIMER
+        // 2. BIRTHDAY TIMER (29 декабря 2007)
         // ============================================================
         function updateBirthday() {
             const now = new Date();
