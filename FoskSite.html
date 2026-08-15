@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vladislav Fosk-Kosarh</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ---- ANIMATED BACKGROUND (DARK CRIMSON + DARK PURPLE) ---- */
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background: radial-gradient(circle at 30% 40%, #1a0a0e, #0d0610, #050208);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Canvas for particles */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .card {
+            background: rgba(15, 8, 15, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 40px 30px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.8);
+            border: 1px solid rgba(120, 30, 50, 0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            z-index: 1;
+        }
+        .card::-webkit-scrollbar {
+            width: 4px;
+        }
+        .card::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .card::-webkit-scrollbar-thumb {
+            background: #8b1a2b;
+            border-radius: 10px;
+        }
+
+        /* ---- AVATAR ---- */
+        .avatar {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #8b1a2b;
+            margin-bottom: 15px;
+            background: #2a0a0a;
+            box-shadow: 0 0 40px rgba(139, 26, 43, 0.3);
+        }
+
+        /* ---- NAME ---- */
+        .name {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 2px;
+            background: linear-gradient(90deg, #b84a5a, #6b2a3a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'Times New Roman', Times, serif;
+            text-shadow: 0 0 30px rgba(184, 74, 90, 0.3);
+        }
+        .nick {
+            font-size: 18px;
+            color: #7a5a6a;
+            margin-bottom: 5px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #b84a5a;
+            margin-bottom: 10px;
+            font-family: 'Times New Roman', Times, serif;
+            text-shadow: 0 0 30px rgba(184, 74, 90, 0.4);
+            letter-spacing: 1px;
+        }
+        .age {
+            font-size: 20px;
+            color: #9a7a8a;
+            margin-bottom: 5px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .age span {
+            color: #b84a5a;
+            font-weight: 600;
+            text-shadow: 0 0 20px rgba(184, 74, 90, 0.3);
+        }
+        .nationality {
+            font-size: 19px;
+            color: #9a7a8a;
+            margin-bottom: 5px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .nationality span {
+            color: #b84a5a;
+            font-weight: 600;
+            text-shadow: 0 0 20px rgba(184, 74, 90, 0.3);
+        }
+        .army {
+            font-size: 19px;
+            color: #8b1a2b;
+            margin-bottom: 20px;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: 600;
+            text-shadow: 0 0 25px rgba(139, 26, 43, 0.5);
+        }
+
+        /* ---- BIRTHDAY TIMER ---- */
+        .birthday-timer {
+            margin: 5px 0 15px 0;
+            padding: 10px;
+            background: rgba(139, 26, 43, 0.1);
+            border-radius: 15px;
+            border: 1px solid rgba(139, 26, 43, 0.3);
+        }
+        .birthday-timer .label {
+            color: #b84a5a;
+            font-size: 16px;
+            font-family: 'Times New Roman', Times, serif;
+            letter-spacing: 1px;
+            text-shadow: 0 0 20px rgba(184, 74, 90, 0.2);
+        }
+        .birthday-timer .countdown {
+            color: #b84a5a;
+            font-size: 20px;
+            font-weight: 700;
+            font-family: 'Times New Roman', Times, serif;
+            text-shadow: 0 0 30px rgba(184, 74, 90, 0.4);
+            margin-top: 4px;
+        }
+        .birthday-timer .countdown span {
+            display: inline-block;
+            min-width: 30px;
+        }
+
+        /* ---- EDUCATION ---- */
+        .desc {
+            color: #c0a0b0;
+            font-size: 17px;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            padding: 0 5px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .desc strong {
+            color: #b84a5a;
+            text-shadow: 0 0 20px rgba(184, 74, 90, 0.3);
+        }
+        .desc .edu {
+            color: #b84a5a;
+            font-weight: 600;
+            text-shadow: 0 0 20px rgba(184, 74, 90, 0.3);
+        }
+
+        /* ---- LONG ABOUT TEXT (WITH Sun Child & Orthodox Christian INSIDE) ---- */
+        .long-about {
+            margin: 15px 0 20px 0;
+            padding: 15px;
+            background: rgba(139, 26, 43, 0.06);
+            border-radius: 15px;
+            border: 1px solid rgba(139, 26, 43, 0.15);
+            text-align: left;
+        }
+        .long-about p {
+            color: #c0a0b0;
+            font-size: 16px;
+            font-family: 'Times New Roman', Times, serif;
+            line-height: 1.8;
+            margin-bottom: 12px;
+            text-indent: 20px;
+        }
+        .long-about p:last-of-type {
+            margin-bottom: 0;
+        }
+        .long-about .highlight {
+            color: #b84a5a;
+            font-weight: 600;
+        }
+        .about-tags {
+            margin-top: 15px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(139, 26, 43, 0.3);
+            text-align: center;
+            font-size: 19px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        .about-tags .sun-child {
+            color: #b84a5a;
+            font-weight: 600;
+            text-shadow: 0 0 25px rgba(184, 74, 90, 0.5);
+            margin-right: 20px;
+        }
+        .about-tags .faith {
+            color: #8b1a2b;
+            font-weight: 600;
+            text-shadow: 0 0 25px rgba(139, 26, 43, 0.5);
+        }
+
+        /* ---- LANGUAGES ---- */
+        .languages {
+            margin: 15px 0 15px 0;
+            padding: 12px;
+            background: rgba(139, 26, 43, 0.08);
+            border-radius: 15px;
+            border: 1px solid rgba(139, 26, 43, 0.2);
+        }
+        .languages h4 {
+            color: #b84a5a;
+            font-size: 18px;
+            font-family: 'Times New Roman', Times, serif;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            text-shadow: 0 0 25px rgba(184, 74, 90, 0.3);
+        }
+        .lang-item {
+            color: #c0a0b0;
+            font-size: 17px;
+            font-family: 'Times New Roman', Times, serif;
+            padding: 3px 0;
+        }
+        .lang-item .rus {
+            color: #b84a5a;
+            font-weight: 600;
+            text-shadow: 0 0 20px rgba(184, 74, 90, 0.3);
+        }
+        .lang-item .eng {
+            color: #9a7a8a;
+            font-weight: 600;
+            text-shadow: 0 0 20px rgba(154, 122, 138, 0.3);
+        }
+        .lang-item .note {
+            color: #6a5a6a;
+            font-size: 15px;
+            font-style: italic;
+        }
+
+        /* ---- OS ---- */
+        .os-block {
+            margin: 15px 0 20px 0;
+            padding: 12px;
+            background: rgba(139, 26, 43, 0.08);
+            border-radius: 15px;
+            border: 1px solid rgba(139, 26, 43, 0.2);
+        }
+        .os-block h4 {
+            color: #b84a5a;
+            font-size: 18px;
+            font-family: 'Times New Roman', Times, serif;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            text-shadow: 0 0 25px rgba(184, 74, 90, 0.3);
+        }
+        .os-item {
+            color: #c0a0b0;
+            font-size: 17px;
+            font-family: 'Times New Roman', Times, serif;
+            padding: 3px 0;
+        }
+        .os-item .win {
+            color: #6a8aaa;
+            font-weight: 600;
+            text-shadow: 0 0 20px rgba(106, 138, 170, 0.4);
+        }
+        .os-item .linux {
+            color: #b84a5a;
+            font-weight: 600;
+            text-shadow: 0 0 20px rgba(184, 74, 90, 0.4);
+        }
+
+        /* ---- QUOTES ---- */
+        .quotes-block {
+            margin: 15px 0 20px 0;
+            padding: 15px;
+            background: rgba(139, 26, 43, 0.08);
+            border-radius: 15px;
+            border: 1px solid rgba(139, 26, 43, 0.2);
+        }
+        .quotes-block h4 {
+            color: #b84a5a;
+            font-size: 18px;
+            font-family: 'Times New Roman', Times, serif;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(184, 74, 90, 0.4);
+        }
+        .quote-item {
+            color: #c0a0b0;
+            font-size: 16px;
+            font-family: 'Times New Roman', Times, serif;
+            font-style: italic;
+            padding: 6px 0;
+            line-height: 1.5;
+        }
+        .quote-item .greek {
+            color: #b84a5a;
+            font-style: italic;
+            text-shadow: 0 0 25px rgba(184, 74, 90, 0.4);
+        }
+        .quote-item .german {
+            color: #9a7a8a;
+            font-style: italic;
+            text-shadow: 0 0 25px rgba(154, 122, 138, 0.3);
+        }
+        .quote-item .quote-text {
+            color: #c0a0b0;
+            font-style: italic;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+        }
+        .quote-item .translation {
+            color: #6a5a6a;
+            font-size: 14px;
+            font-style: normal;
+            display: block;
+            margin-top: 2px;
+        }
+
+        /* ---- PROJECTS (IN DEVELOPMENT) ---- */
+        .projects-block {
+            margin: 15px 0 20px 0;
+            padding: 12px;
+            background: rgba(139, 26, 43, 0.08);
+            border-radius: 15px;
+            border: 1px solid rgba(139, 26, 43, 0.2);
+        }
+        .projects-block h4 {
+            color: #b84a5a;
+            font-size: 18px;
+            font-family: 'Times New Roman', Times, serif;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            text-shadow: 0 0 25px rgba(184, 74, 90, 0.3);
+        }
+        .project-dev {
+            color: #6a5a6a;
+            font-size: 20px;
+            font-weight: 700;
+            font-family: 'Times New Roman', Times, serif;
+            padding: 15px 0;
+            text-shadow: 0 0 20px rgba(106, 90, 106, 0.3);
+        }
+        .project-dev .emoji {
+            margin-right: 8px;
+        }
+        .project-dev .sub {
+            display: block;
+            font-size: 16px;
+            font-weight: 400;
+            color: #5a4a5a;
+            margin-top: 5px;
+        }
+
+        /* ---- INTERESTS ---- */
+        .interests-block {
+            margin: 15px 0 20px 0;
+            padding: 12px;
+            background: rgba(139, 26, 43, 0.08);
+            border-radius: 15px;
+            border: 1px solid rgba(139, 26, 43, 0.2);
+        }
+        .interests-block h4 {
+            color: #b84a5a;
+            font-size: 18px;
+            font-family: 'Times New Roman', Times, serif;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            text-shadow: 0 0 25px rgba(184, 74, 90, 0.3);
+        }
+        .interests-item {
+            color: #c0a0b0;
+            font-size: 17px;
+            font-family: 'Times New Roman', Times, serif;
+            padding: 3px 0;
+        }
+        .interests-item .game {
+            color: #9a7a8a;
+            text-shadow: 0 0 20px rgba(154, 122, 138, 0.2);
+        }
+        .interests-item .cartoon {
+            color: #8a6a7a;
+            text-shadow: 0 0 20px rgba(138, 106, 122, 0.2);
+        }
+        .interests-item .heart {
+            color: #8b1a2b;
+        }
+
+        /* ---- ALLIES ---- */
+        .allies {
+            margin: 20px 0 25px 0;
+            padding: 15px;
+            background: rgba(139, 26, 43, 0.08);
+            border-radius: 15px;
+            border: 1px solid rgba(139, 26, 43, 0.2);
+        }
+        .allies h4 {
+            color: #b84a5a;
+            font-size: 18px;
+            font-family: 'Times New Roman', Times, serif;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 25px rgba(184, 74, 90, 0.3);
+        }
+        .allies-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px 20px;
+        }
+        .allies-list span {
+            color: #c0a0b0;
+            font-size: 17px;
+            font-family: 'Times New Roman', Times, serif;
+            transition: 0.3s;
+            cursor: default;
+        }
+        .allies-list span:hover {
+            color: #b84a5a;
+            transform: scale(1.05);
+            text-shadow: 0 0 25px rgba(184, 74, 90, 0.4);
+        }
+        .allies-list .emoji {
+            margin-right: 5px;
+        }
+
+        /* ---- BUTTONS ---- */
+        .btn {
+            display: block;
+            background: transparent;
+            color: white;
+            padding: 14px;
+            margin: 10px 0;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255,255,255,0.05);
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .btn-telegram {
+            border-color: #6a2a3a;
+            color: #b84a5a;
+            text-shadow: 0 0 20px rgba(184, 74, 90, 0.3);
+        }
+        .btn-telegram:hover {
+            background: #6a2a3a;
+            color: white;
+            box-shadow: 0 0 30px rgba(139, 26, 43, 0.5);
+            transform: scale(1.03);
+        }
+        .btn-youtube {
+            border-color: #6a2a3a;
+            color: #b84a5a;
+            text-shadow: 0 0 20px rgba(184, 74, 90, 0.3);
+        }
+        .btn-youtube:hover {
+            background: #6a2a3a;
+            color: white;
+            box-shadow: 0 0 30px rgba(139, 26, 43, 0.5);
+            transform: scale(1.03);
+        }
+        .btn-github {
+            border-color: #6a2a3a;
+            color: #b84a5a;
+            text-shadow: 0 0 20px rgba(184, 74, 90, 0.3);
+        }
+        .btn-github:hover {
+            background: #6a2a3a;
+            color: white;
+            box-shadow: 0 0 30px rgba(139, 26, 43, 0.5);
+            transform: scale(1.03);
+        }
+        .btn-gamejolt {
+            border-color: #6a2a3a;
+            color: #b84a5a;
+            text-shadow: 0 0 20px rgba(184, 74, 90, 0.3);
+        }
+        .btn-gamejolt:hover {
+            background: #6a2a3a;
+            color: white;
+            box-shadow: 0 0 30px rgba(139, 26, 43, 0.5);
+            transform: scale(1.03);
+        }
+
+        /* ---- ANIME ---- */
+        .anime-section {
+            margin-top: 25px;
+            text-align: left;
+        }
+        .anime-section h3 {
+            font-size: 22px;
+            color: #b84a5a;
+            margin-bottom: 15px;
+            text-align: center;
+            font-family: 'Times New Roman', Times, serif;
+            letter-spacing: 2px;
+            border-bottom: 1px solid rgba(139, 26, 43, 0.2);
+            padding-bottom: 10px;
+            text-shadow: 0 0 30px rgba(184, 74, 90, 0.3);
+        }
+        .anime-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 15px;
+        }
+        .anime-item {
+            color: #9a7a8a;
+            font-size: 15px;
+            font-family: 'Times New Roman', Times, serif;
+            padding: 3px 0;
+            transition: 0.3s;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .anime-item:hover {
+            color: #b84a5a;
+            text-shadow: 0 0 20px rgba(184, 74, 90, 0.3);
+        }
+        .anime-item .emoji {
+            margin-right: 4px;
+        }
+        .anime-item .love {
+            color: #8b1a2b;
+        }
+
+        /* ---- FOOTER ---- */
+        .footer {
+            margin-top: 25px;
+            font-size: 16px;
+            color: #5a4a5a;
+            font-family: 'Times New Roman', Times, serif;
+            letter-spacing: 1px;
+            animation: pulse 2s infinite;
+        }
+        .footer span {
+            color: #b84a5a;
+            font-weight: 600;
+            text-shadow: 0 0 20px rgba(184, 74, 90, 0.3);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        /* ---- SCROLLBAR ---- */
+        .card::-webkit-scrollbar {
+            width: 4px;
+        }
+        .card::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .card::-webkit-scrollbar-thumb {
+            background: #8b1a2b;
+            border-radius: 10px;
+        }
+
+        /* ---- RESPONSIVE ---- */
+        @media (max-width: 480px) {
+            .card {
+                padding: 25px 15px;
+            }
+            .name {
+                font-size: 26px;
+            }
+            .title {
+                font-size: 19px;
+            }
+            .birthday-timer .countdown {
+                font-size: 17px;
+            }
+            .long-about p {
+                font-size: 15px;
+            }
+            .about-tags {
+                font-size: 17px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ---- PARTICLES CANVAS ---- -->
+    <canvas id="particles-canvas"></canvas>
+
+    <div class="card">
+
+        <!-- ---- AVATAR ---- -->
+        <img class="avatar" src="https://via.placeholder.com/140" alt="Vladislav Fosk-Kosarh">
+
+        <!-- ---- NAME ---- -->
+        <div class="name">Vladislav Fosk-Kosarh</div>
+        <div class="nick">@Foskarh</div>
+        <div class="title">👑 Supreme Sovereign of the Kosarh Free Land</div>
+
+        <!-- ---- AGE ---- -->
+        <div class="age">🎂 <span>18</span> years old</div>
+
+        <!-- ---- BIRTHDAY TIMER ---- -->
+        <div class="birthday-timer">
+            <div class="label">🎉 Next Birthday in:</div>
+            <div class="countdown" id="birthday-countdown">
+                <span id="bd-days">--</span>d
+                <span id="bd-hours">--</span>h
+                <span id="bd-minutes">--</span>m
+                <span id="bd-seconds">--</span>s
+            </div>
+        </div>
+
+        <!-- ---- NATIONALITY ---- -->
+        <div class="nationality">🏴 My nationality: <span>Kosarh</span></div>
+
+        <!-- ---- ARMY ---- -->
+        <div class="army">👑 Head of Special Army "Black Order"</div>
+
+        <!-- ---- EDUCATION ---- -->
+        <div class="desc">
+            <strong>🎓 Education:</strong><br>
+            <span class="edu">Secondary Specialized Education</span><br>
+            Certified technician of hardware and software<br>
+            for infocommunication systems.
+        </div>
+
+        <!-- ---- LONG ABOUT TEXT (WITH Sun Child & Orthodox Christian INSIDE) ---- -->
+        <div class="long-about">
+            <p>
+                <span class="highlight">Hi.</span> My craft is programming and everything connected to computers. I pour a lot of effort into it, try my hardest even when it gets tough. It's mine, it's native to me.
+            </p>
+            <p>
+                But I'm human, and emotions take their toll. When something doesn't work out — be it code, a task, or just some little thing — I start feeling sad. I can go quiet for a long time, retreat into myself, stop noticing what's around me. And sometimes, instead of sadness, anger comes — at myself, at the situation, at the fact that my hands aren't growing from the right place. Then I can snap, say something harsh, even though inside I'm still soft — it's just that emotions take over.
+            </p>
+            <p>
+                And my mood is like mountain weather. Some days I'm full of energy, cold and collected, telling the truth straight to people's faces and getting things done. And other days, apathy hits me, and I just drop out of reality. I want to see no one, stay silent, stare at one point, and wait until it passes. It doesn't last long. I just need to wait it out, to reboot.
+            </p>
+            <p>
+                That's how I am. With all my ups and downs, weaknesses, and stubbornness. I don't like talking about myself, but if I'm saying this — it means I trust you and want you to understand me as I am.
+            </p>
+            <!-- ---- TAGS INSIDE THE SAME BLOCK ---- -->
+            <div class="about-tags">
+                <span class="sun-child">☀️ Sun Child</span>
+                <span class="faith">✝️ Orthodox Christian</span>
+            </div>
+        </div>
+
+        <!-- ---- LANGUAGES ---- -->
+        <div class="languages">
+            <h4>🗣️ LANGUAGES</h4>
+            <div class="lang-item">🇷🇺 Russian — <span class="rus">Native</span></div>
+            <div class="lang-item">🇬🇧 English — <span class="eng">So-so</span> <span class="note">(often use translator)</span></div>
+        </div>
+
+        <!-- ---- OS ---- -->
+        <div class="os-block">
+            <h4>💻 OPERATING SYSTEMS</h4>
+            <div class="os-item">🪟 <span class="win">Windows</span></div>
+            <div class="os-item">🐧 <span class="linux">GNU/Linux</span></div>
+        </div>
+
+        <!-- ---- PROJECTS (IN DEVELOPMENT) ---- -->
+        <div class="projects-block">
+            <h4>📂 MY PROJECTS</h4>
+            <div class="project-dev">
+                <span class="emoji">🚧</span> IN DEVELOPMENT
+                <span class="sub">Coming soon...</span>
+            </div>
+        </div>
+
+        <!-- ---- QUOTES ---- -->
+        <div class="quotes-block">
+            <h4>📜 QUOTES</h4>
+            <div class="quote-item">
+                <span class="greek">Βασιλεύς Βασιλέων, Βασιλεί Βοήθει</span>
+                <span class="translation">(Vasiléfs Vasiléon, Vasilí Voíthei — "King of Kings, help the King")</span>
+            </div>
+            <div class="quote-item">
+                <span class="german">"Ich bin ein Teil von jener Kraft, die stets das Böse will und stets das Gute schafft."</span>
+                <span class="translation">— "I am part of that power which eternally wills evil and eternally works good." (Goethe, Faust)</span>
+            </div>
+            <div class="quote-item">
+                <span class="quote-text">"Man is a mystery. It must be solved, and if you spend your whole life solving it, don't say you've wasted time; I occupy myself with this mystery, for I want to be a man."</span>
+                <span class="translation">— From a letter to his brother (on freedom and self-knowledge)</span>
+            </div>
+            <div class="quote-item">
+                <span class="quote-text">"Freedom is not in not restraining yourself, but in mastering yourself."</span>
+                <span class="translation">— From "The Diary of a Writer" (a direct definition of freedom)</span>
+            </div>
+            <div class="quote-item">
+                <span class="quote-text">"If there is no God, everything is permitted."</span>
+                <span class="translation">— From "The Brothers Karamazov" (echoes Raskolnikov's question)</span>
+            </div>
+            <div class="quote-item">
+                <span class="quote-text">"It's only after you've lost everything that you're free to do anything."</span>
+                <span class="translation">— Fight Club</span>
+            </div>
+            <div class="quote-item">
+                <span class="quote-text">"Am I a trembling creature or do I have the right...?"</span>
+                <span class="translation">— F.M. Dostoevsky, "Crime and Punishment"</span>
+            </div>
+        </div>
+
+        <!-- ---- INTERESTS ---- -->
+        <div class="interests-block">
+            <h4>🎮 GAMES & 🎬 CARTOONS</h4>
+            <div class="interests-item">🎮 <span class="game">Hearts of Iron IV</span></div>
+            <div class="interests-item">🎮 <span class="game">Garry's Mod</span></div>
+            <div class="interests-item">🎮 <span class="game">Skyrim</span></div>
+            <div class="interests-item">🎮 <span class="game">Dark Souls 2</span></div>
+            <div class="interests-item">🎮 <span class="game">Don't Starve Together (DST)</span></div>
+            <div class="interests-item">🎮 <span class="game">Don't Starve</span></div>
+            <div class="interests-item">🎬 <span class="cartoon">Kikoriki (Смешарики)</span> <span class="heart">❤️</span></div>
+            <div class="interests-item">🎬 <span class="cartoon">BoJack Horseman</span></div>
+            <div class="interests-item">🎬 <span class="cartoon">Rick and Morty</span></div>
+            <div class="interests-item">🎬 <span class="cartoon">Gravity Falls</span></div>
+            <div class="interests-item">🎬 <span class="cartoon">Futurama</span></div>
+            <div class="interests-item">🎬 <span class="cartoon">Family Guy</span></div>
+            <div class="interests-item">🎬 <span class="cartoon">The Simpsons</span></div>
+            <div class="interests-item">🎬 <span class="cartoon">My Little Pony</span> <span class="heart">❤️</span></div>
+        </div>
+
+        <!-- ---- ALLIES ---- -->
+        <div class="allies">
+            <h4>🤝 FRIENDS & BROTHERS</h4>
+            <div class="allies-list">
+                <span><span class="emoji">🛡️</span>Tverd</span>
+                <span><span class="emoji">⚡</span>Yonkia</span>
+                <span><span class="emoji">🔥</span>Koivo</span>
+                <span><span class="emoji">🌊</span>Femadoria</span>
+            </div>
+        </div>
+
+        <!-- ---- BUTTONS ---- -->
+        <a href="https://t.me/VladislavFoskKosarh" class="btn btn-telegram">📢 My Telegram Channel</a>
+        <a href="https://www.youtube.com/@VladislavFoskKosarh" class="btn btn-youtube">🎥 My YouTube Channel</a>
+        <a href="https://github.com/VladislavFosk" class="btn btn-github">💻 GitHub</a>
+        <a href="https://gamejolt.com/@VladislavFosk" class="btn btn-gamejolt">🎮 GameJolt</a>
+
+        <!-- ---- ANIME ---- -->
+        <div class="anime-section">
+            <h3>🎬 Anime list</h3>
+            <div class="anime-grid">
+                <div class="anime-item"><span class="emoji">🔪</span>Ansatsu Kyoushitsu</div>
+                <div class="anime-item"><span class="emoji">🗡️</span>Ansatsu Kyoushitsu 2nd Season</div>
+                <div class="anime-item"><span class="emoji">💥</span>Hotaru no Haka</div>
+                <div class="anime-item"><span class="emoji">🌟</span>JoJo Part 1 (TV)</div>
+                <div class="anime-item"><span class="emoji">⭐</span>JoJo Part 3: Stardust Crusaders</div>
+                <div class="anime-item"><span class="emoji">✨</span>JoJo Part 3: Egypt-hen</div>
+                <div class="anime-item"><span class="emoji">💎</span>JoJo Part 4: Diamond wa Kudakenai</div>
+                <div class="anime-item"><span class="emoji">🔥</span>JoJo Part 5: Ougon no Kaze</div>
+                <div class="anime-item"><span class="emoji">🌊</span>JoJo Part 6: Stone Ocean</div>
+                <div class="anime-item"><span class="emoji">🌊</span>JoJo Part 6: Stone Ocean Part 2</div>
+                <div class="anime-item"><span class="emoji">🌊</span>JoJo Part 6: Stone Ocean Part 3</div>
+                <div class="anime-item"><span class="emoji">🐾</span>Monster Musume no Iru Nichijou</div>
+                <div class="anime-item"><span class="emoji love">❤️‍🔥</span>Monster Musume no Oishasan</div>
+                <div class="anime-item"><span class="emoji">🤖</span>Shinseiki Evangelion</div>
+                <div class="anime-item"><span class="emoji">⚡</span>Evangelion: Air/Magokoro</div>
+                <div class="anime-item"><span class="emoji">🌀</span>Suzumiya Haruhi no Yuuutsu</div>
+                <div class="anime-item"><span class="emoji">🌀</span>Haruhi (2009)</div>
+                <div class="anime-item"><span class="emoji love">🌙</span>Tsuki ga Michibiku Isekai Douchuu</div>
+                <div class="anime-item"><span class="emoji love">🌙</span>Tsuki ga Michibiku 2nd Season</div>
+            </div>
+        </div>
+
+        <!-- ---- FOOTER ---- -->
+        <div class="footer">⚔️ Made by the <span>Iron Will Coalition</span></div>
+
+    </div>
+
+    <script>
+        // ============================================================
+        // 1. BIRTHDAY TIMER (29 December 2007)
+        // ============================================================
+        function updateBirthday() {
+            const now = new Date();
+            let birthYear = 2007;
+            let birthMonth = 11; // December = 11
+            let birthDay = 29;
+
+            let nextBirthday = new Date(now.getFullYear(), birthMonth, birthDay);
+            if (now > nextBirthday) {
+                nextBirthday.setFullYear(now.getFullYear() + 1);
+            }
+
+            const diff = nextBirthday - now;
+            if (diff <= 0) {
+                document.getElementById('bd-days').textContent = '🎉';
+                document.getElementById('bd-hours').textContent = '';
+                document.getElementById('bd-minutes').textContent = '';
+                document.getElementById('bd-seconds').textContent = 'HAPPY BIRTHDAY!';
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('bd-days').textContent = String(days).padStart(2, '0');
+            document.getElementById('bd-hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('bd-minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('bd-seconds').textContent = String(seconds).padStart(2, '0');
+        }
+
+        updateBirthday();
+        setInterval(updateBirthday, 1000);
+
+        // ============================================================
+        // 2. PARTICLES (FALLING CRIMSON SPARKS)
+        // ============================================================
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+
+        function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.reset();
+                this.x = Math.random() * width;
+                this.y = Math.random() * height - height;
+            }
+            reset() {
+                this.x = Math.random() * width;
+                this.y = -10;
+                this.size = Math.random() * 4 + 1.5;
+                this.speed = Math.random() * 1.5 + 0.5;
+                this.wind = (Math.random() - 0.5) * 0.4;
+                this.opacity = Math.random() * 0.8 + 0.2;
+                this.flicker = Math.random() * 0.05 + 0.02;
+                this.phase = Math.random() * Math.PI * 2;
+            }
+            update() {
+                this.y += this.speed;
+                this.x += this.wind + Math.sin(this.phase) * 0.2;
+                this.phase += this.flicker;
+
+                if (this.y > height + 20) {
+                    this.reset();
+                    this.y = -10;
+                }
+                if (this.x < -20) this.x = width + 20;
+                if (this.x > width + 20) this.x = -20;
+            }
+            draw() {
+                const alpha = this.opacity * (0.7 + 0.3 * Math.sin(this.phase));
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                const grad = ctx.createRadialGradient(
+                    this.x - this.size * 0.3, this.y - this.size * 0.3, 0,
+                    this.x, this.y, this.size
+                );
+                grad.addColorStop(0, `rgba(200, 140, 140, ${alpha})`);
+                grad.addColorStop(0.5, `rgba(150, 60, 70, ${alpha * 0.8})`);
+                grad.addColorStop(1, `rgba(80, 20, 30, ${alpha * 0.3})`);
+                ctx.fillStyle = grad;
+                ctx.shadowColor = `rgba(180, 60, 80, ${alpha * 0.4})`;
+                ctx.shadowBlur = 15;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        for (let i = 0; i < 120; i++) {
+            const p = new Particle();
+            p.y = Math.random() * height;
+            particles.push(p);
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        animateParticles();
+    </script>
+
+</body>
+</html>
