@@ -1657,7 +1657,7 @@
 
     </div>
 
-    <script>
+<script>
         // ============================================================
         // 1. NAVIGATION (3 вкладки)
         // ============================================================
@@ -1684,6 +1684,7 @@
                 body.classList.add('home-bg');
                 musicControls.classList.remove('hidden');
                 wavesCanvas.style.display = 'none';
+                // ВКЛЮЧАЕМ МУЗЫКУ ПРИ ВОЗВРАТЕ НА HOME
                 if (audio && audio.paused) {
                     audio.play().catch(() => {});
                 }
@@ -1692,6 +1693,7 @@
                 body.classList.add('projects-bg');
                 musicControls.classList.add('hidden');
                 wavesCanvas.style.display = 'block';
+                // ВЫКЛЮЧАЕМ МУЗЫКУ НА PROJECTS
                 if (audio && !audio.paused) {
                     audio.pause();
                     musicToggle.textContent = '🔇';
@@ -1702,6 +1704,7 @@
                 body.classList.add('achievements-bg');
                 musicControls.classList.add('hidden');
                 wavesCanvas.style.display = 'none';
+                // ВЫКЛЮЧАЕМ МУЗЫКУ НА ACHIEVEMENTS
                 if (audio && !audio.paused) {
                     audio.pause();
                     musicToggle.textContent = '🔇';
@@ -1966,14 +1969,16 @@
         drawWaves();
 
         // ============================================================
-        // 5. МУЗЫКА
+        // 5. МУЗЫКА (АВТОВОСПРОИЗВЕДЕНИЕ + ПАУЗА ПРИ ПЕРЕКЛЮЧЕНИИ ВКЛАДОК)
         // ============================================================
         const audio = document.getElementById('bg-music');
         const musicToggle = document.getElementById('music-toggle');
         const volumeSlider = document.getElementById('volume-slider');
         audio.volume = volumeSlider.value;
 
+        // Пытаемся запустить музыку автоматически
         audio.play().catch(() => {
+            // Если браузер заблокировал автовоспроизведение — ждём клика
             const playOnInteraction = () => {
                 audio.play().then(() => {
                     musicToggle.textContent = '🔊';
@@ -1986,6 +1991,7 @@
             document.addEventListener('touchstart', playOnInteraction, { once: true });
         });
 
+        // Кнопка включения/выключения
         musicToggle.addEventListener('click', function(e) {
             e.stopPropagation();
             if (audio.paused) {
@@ -2014,6 +2020,31 @@
         audio.addEventListener('pause', () => {
             musicToggle.textContent = '🔇';
             musicToggle.classList.add('muted');
+        });
+
+        // ============================================================
+        // 6. ПАУЗА/ВОЗОБНОВЛЕНИЕ ПРИ ПЕРЕКЛЮЧЕНИИ ВКЛАДОК БРАУЗЕРА
+        // ============================================================
+        document.addEventListener('visibilitychange', function() {
+            // Проверяем, активна ли вкладка и находимся ли мы на Home
+            const isHomeActive = document.getElementById('page-home').classList.contains('active');
+            
+            if (document.hidden) {
+                // Вкладка неактивна — ставим на паузу
+                if (audio && !audio.paused) {
+                    audio.pause();
+                    musicToggle.textContent = '🔇';
+                    musicToggle.classList.add('muted');
+                }
+            } else {
+                // Вкладка снова активна — включаем, если мы на Home
+                if (isHomeActive && audio && audio.paused) {
+                    audio.play().then(() => {
+                        musicToggle.textContent = '🔊';
+                        musicToggle.classList.remove('muted');
+                    }).catch(() => {});
+                }
+            }
         });
     </script>
 
