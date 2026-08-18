@@ -1627,6 +1627,240 @@
                 font-size: 15px;
             }
         }
+
+        /* ================================================================
+           MODERN PROFILE HERO
+           ================================================================ */
+        .profile-hero {
+            display: grid;
+            grid-template-columns: 170px 1fr;
+            gap: 24px;
+            align-items: center;
+            padding: 24px;
+            margin-bottom: 18px;
+            text-align: left;
+            background: linear-gradient(135deg, rgba(139,26,43,.12), rgba(15,8,15,.22));
+            border: 1px solid rgba(184,74,90,.18);
+            border-radius: 24px;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
+        }
+        .profile-avatar-wrap {
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+        .profile-avatar-wrap .avatar { margin: 0; }
+        .profile-online {
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            padding: 5px 9px;
+            border-radius: 999px;
+            background: rgba(8,12,10,.92);
+            border: 1px solid rgba(80,220,120,.25);
+            color: #8ee8a8;
+            font: 600 11px/1 system-ui, sans-serif;
+        }
+        .profile-online i {
+            display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+            background: #57e887; margin-right: 5px; box-shadow: 0 0 8px #57e887;
+        }
+        .profile-main .name { margin-bottom: 0; }
+        .profile-main .title { margin: 6px 0 12px; }
+        .profile-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+        .profile-tags span {
+            padding: 6px 10px; border-radius: 999px;
+            background: rgba(139,26,43,.12); border: 1px solid rgba(139,26,43,.18);
+            color: #d29aa6; font: 600 12px/1 system-ui, sans-serif;
+        }
+        .quick-info {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 0 0 20px;
+        }
+        .quick-item {
+            display: flex; align-items: center; gap: 9px; text-align: left; padding: 12px;
+            background: rgba(255,255,255,.025); border: 1px solid rgba(255,255,255,.06);
+            border-radius: 15px; transition: transform .25s ease, border-color .25s ease;
+        }
+        .quick-item:hover { transform: translateY(-2px); border-color: rgba(184,74,90,.25); }
+        .quick-icon { font-size: 18px; }
+        .quick-item small, .quick-item strong { display: block; font-family: system-ui, sans-serif; }
+        .quick-item small { color: #8d7780; font-size: 10px; text-transform: uppercase; letter-spacing: .7px; }
+        .quick-item strong { color: #d5c0c8; font-size: 12px; margin-top: 2px; }
+        .legacy-age { display: none; }
+
+        /* ================================================================
+           SKILLS
+           ================================================================ */
+        .skills-block {
+            margin: 20px 0; padding: 18px; border-radius: 18px; text-align: left;
+            background: rgba(139,26,43,.035); border: 1px solid rgba(139,26,43,.08);
+        }
+        .section-heading { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+        .section-heading > span { font-size: 23px; }
+        .section-heading h4 { margin: 0; color: #c77b88; font: 700 16px/1.1 system-ui, sans-serif; letter-spacing: 1.4px; }
+        .section-heading small { color: #816b73; font: 12px/1.3 system-ui, sans-serif; }
+        .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .skill-card { padding: 13px; border-radius: 14px; background: rgba(0,0,0,.16); border: 1px solid rgba(255,255,255,.045); }
+        .skill-top { display: flex; justify-content: space-between; gap: 10px; color: #d6c2c9; font: 600 13px/1.2 system-ui, sans-serif; }
+        .skill-top b { color: #8f6b75; font-size: 10px; text-transform: uppercase; letter-spacing: .6px; }
+        .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
+        .skill-tags span { padding: 4px 7px; border-radius: 7px; background: rgba(139,26,43,.1); color: #a98c95; font: 11px/1.2 system-ui, sans-serif; }
+
+        /* ================================================================
+           PROJECT STATUS SYSTEM
+           ================================================================ */
+        .project-meta { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 7px; margin-top: 5px; }
+        .project-status.active { background: rgba(60,220,100,.1); color: #5eea82; border-color: rgba(60,220,100,.2); }
+        .project-status.in-development { background: rgba(255,210,60,.1); color: #ffd35a; border-color: rgba(255,210,60,.2); }
+        .project-status.planned { background: rgba(70,150,255,.1); color: #6faaff; border-color: rgba(70,150,255,.2); }
+        .project-status.on-hold { background: rgba(255,150,50,.1); color: #ffae5c; border-color: rgba(255,150,50,.2); }
+        .project-status.cancelled { background: rgba(255,70,70,.1); color: #ff7070; border-color: rgba(255,70,70,.2); }
+        .project-status.archived { background: rgba(170,170,170,.1); color: #bdbdbd; border-color: rgba(170,170,170,.2); }
+        .project-tech { padding: 5px 9px; border-radius: 999px; background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.06); color: #75967e; font: 600 10px/1 system-ui, sans-serif; }
+        .project-note { color: #88aa88 !important; font-size: 14px !important; line-height: 1.6 !important; }
+
+        /* ================================================================
+           PROFESSIONAL MUSIC PLAYER
+           ================================================================ */
+        .music-controls { width: 280px; align-items: stretch; gap: 10px; padding: 13px; border-radius: 17px; }
+        .music-topline { display: flex; align-items: center; gap: 10px; }
+        .music-icon { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: rgba(139,26,43,.15); color: #e07b8b; font-size: 19px; }
+        .music-track strong, .music-track span { display: block; font-family: system-ui, sans-serif; }
+        .music-track strong { color: #d9c5cc; font-size: 12px; }
+        .music-track span { color: #786871; font-size: 10px; margin-top: 2px; }
+        .music-row, .volume-row { display: flex; align-items: center; gap: 8px; }
+        #music-toggle { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 9px; background: rgba(139,26,43,.12); font-size: 14px; }
+        .progress-slider { flex: 1; min-width: 0; }
+        .music-time { color: #88747c; font: 10px/1 system-ui, sans-serif; min-width: 34px; text-align: right; }
+        .volume-row > span { font-size: 12px; }
+        .volume-slider { flex: 1; width: auto; }
+        .progress-slider, .volume-slider { accent-color: #b84a5a; cursor: pointer; }
+
+        /* ================================================================
+           BUTTON NAVIGATION
+           ================================================================ */
+        .nav-btn {
+            appearance: none; border: 0; background: transparent; color: #b84a5a; cursor: pointer;
+            padding: 8px 12px; border-radius: 12px; font: 600 12px/1 system-ui, sans-serif;
+            transition: all .25s ease; white-space: nowrap;
+        }
+        .nav-btn:hover { background: rgba(139,26,43,.18); color: #ff8a9b; transform: translateY(-1px); }
+        .nav-btn.active { background: rgba(139,26,43,.28); color: #ff8a9b; box-shadow: inset 0 0 0 1px rgba(184,74,90,.12); }
+
+        /* ================================================================
+           CONTACT PAGE
+           ================================================================ */
+        body.contact-bg {
+            background:
+                radial-gradient(circle at 20% 20%, rgba(139,26,43,.16), transparent 35%),
+                radial-gradient(circle at 80% 80%, rgba(90,40,70,.14), transparent 35%),
+                #050505;
+        }
+        body.contact-bg .card {
+            border-color: rgba(184,74,90,.22);
+            box-shadow: 0 0 70px rgba(139,26,43,.06);
+        }
+        .contact-title {
+            color: #d36a7a;
+            font: 700 28px/1.2 system-ui, sans-serif;
+            letter-spacing: 3px;
+            margin: 4px 0 8px;
+            text-shadow: 0 0 22px rgba(211,106,122,.22);
+        }
+        .contact-subtitle {
+            color: #9d858d;
+            font: 14px/1.6 system-ui, sans-serif;
+            margin-bottom: 22px;
+        }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 18px;
+        }
+        .contact-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-height: 82px;
+            padding: 15px 16px;
+            text-decoration: none;
+            color: inherit;
+            text-align: left;
+            background: rgba(255,255,255,.025);
+            border: 1px solid rgba(184,74,90,.12);
+            border-radius: 16px;
+            transition: transform .25s ease, border-color .25s ease, background .25s ease, box-shadow .25s ease;
+        }
+        .contact-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(211,106,122,.42);
+            background: rgba(139,26,43,.08);
+            box-shadow: 0 10px 30px rgba(0,0,0,.25);
+        }
+        .contact-icon {
+            width: 42px;
+            height: 42px;
+            flex: 0 0 42px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: rgba(184,74,90,.12);
+            border: 1px solid rgba(184,74,90,.16);
+            font-size: 20px;
+        }
+        .contact-info { min-width: 0; }
+        .contact-name {
+            display: block;
+            color: #e8dce0;
+            font: 700 14px/1.2 system-ui, sans-serif;
+            margin-bottom: 5px;
+        }
+        .contact-handle {
+            display: block;
+            color: #9f8b92;
+            font: 12px/1.4 system-ui, sans-serif;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .contact-arrow {
+            margin-left: auto;
+            color: #b84a5a;
+            font-size: 16px;
+        }
+        .contact-email {
+            grid-column: 1 / -1;
+        }
+        .contact-note {
+            margin-top: 20px;
+            padding: 13px 15px;
+            border-left: 2px solid #b84a5a;
+            background: rgba(139,26,43,.05);
+            color: #9d858d;
+            text-align: left;
+            font: 12px/1.6 system-ui, sans-serif;
+            border-radius: 0 10px 10px 0;
+        }
+
+        @media (max-width: 720px) {
+            .profile-hero { grid-template-columns: 1fr; text-align: center; justify-items: center; }
+            .profile-main .title { font-size: 18px; }
+            .profile-tags { justify-content: center; }
+            .quick-info { grid-template-columns: repeat(2, 1fr); }
+            .skills-grid { grid-template-columns: 1fr; }
+            .music-controls { width: 245px; }
+            .contact-grid { grid-template-columns: 1fr; }
+            .contact-email { grid-column: auto; }
+        }
+        @media (max-width: 480px) {
+            .quick-info { grid-template-columns: 1fr; }
+            .nav { left: 10px; right: 10px; top: 10px; }
+            .nav-btn { flex: 1; padding: 8px 5px; font-size: 10px; }
+            .nav-btn span { display: block; margin-top: 3px; }
+            .music-controls { left: 10px; right: 10px; bottom: 10px; width: auto; }
+            .profile-hero { padding: 18px 12px; }
+        }
     </style>
 </head>
 <body class="home-bg">
@@ -1636,16 +1870,31 @@
     <canvas id="waves-canvas"></canvas>
 
     <!-- ---- НАВИГАЦИЯ (3 ВКЛАДКИ) ---- -->
-    <div class="nav">
-        <a class="active" data-page="home">Home</a>
-        <a data-page="projects">My Projects</a>
-        <a data-page="achievements">Achievements</a>
-    </div>
+    <nav class="nav" aria-label="Main navigation">
+        <button type="button" class="nav-btn active" data-page="home">🏠 <span>Home</span></button>
+        <button type="button" class="nav-btn" data-page="projects">📂 <span>My Projects</span></button>
+        <button type="button" class="nav-btn" data-page="achievements">🏆 <span>Achievements</span></button>
+        <button type="button" class="nav-btn" data-page="contact">✉️ <span>Contact</span></button>
+    </nav>
 
     <!-- ---- МУЗЫКА (ВСЕГДА ВИДНА) ---- -->
-    <div class="music-controls" id="music-controls">
-        <button id="music-toggle" title="Toggle Music">🔊</button>
-        <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
+    <div class="music-controls" id="music-controls" aria-label="Music player">
+        <div class="music-topline">
+            <span class="music-icon">♪</span>
+            <div class="music-track">
+                <strong>Iron Will Theme</strong>
+                <span>Background Music</span>
+            </div>
+        </div>
+        <div class="music-row">
+            <button id="music-toggle" title="Play / Pause Music" aria-label="Play or pause music">▶</button>
+            <input type="range" class="progress-slider" id="progress-slider" min="0" max="100" step="0.1" value="0" aria-label="Music progress">
+            <span class="music-time" id="music-time">00:00</span>
+        </div>
+        <div class="volume-row">
+            <span>🔊</span>
+            <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.01" value="0.5" aria-label="Volume">
+        </div>
     </div>
 
     <audio id="bg-music" loop preload="auto">
@@ -1659,13 +1908,31 @@
         <!-- ========================================================== -->
         <div class="page active" id="page-home">
 
-            <img class="avatar" src="gim/AVATARKA.jpg" alt="Vladislav Fosk-Kosarh">
+            <section class="profile-hero">
+                <div class="profile-avatar-wrap">
+                    <img class="avatar" src="gim/AVATARKA.jpg" alt="Vladislav Fosk-Kosarh">
+                    <span class="profile-online"><i></i> Online</span>
+                </div>
+                <div class="profile-main">
+                    <div class="name">Vladislav Fosk-Kosarh</div>
+                    <div class="nick">@Foskarh</div>
+                    <div class="title">👑 Supreme Sovereign of the Kosarh Free Land</div>
+                    <div class="profile-tags">
+                        <span>💻 Developer</span>
+                        <span>🐧 Linux</span>
+                        <span>🛠️ Creator</span>
+                    </div>
+                </div>
+            </section>
 
-            <div class="name">Vladislav Fosk-Kosarh</div>
-            <div class="nick">@Foskarh</div>
-            <div class="title">👑 Supreme Sovereign of the Kosarh Free Land</div>
+            <div class="quick-info">
+                <div class="quick-item"><span class="quick-icon">🎂</span><div><small>Age</small><strong>18 years old</strong></div></div>
+                <div class="quick-item"><span class="quick-icon">🏴</span><div><small>Nationality</small><strong>Kosarh</strong></div></div>
+                <div class="quick-item"><span class="quick-icon">🎓</span><div><small>Education</small><strong>Technician</strong></div></div>
+                <div class="quick-item"><span class="quick-icon">⚔️</span><div><small>Organization</small><strong>Iron Will Coalition</strong></div></div>
+            </div>
 
-            <div class="age">🎂 <span>18</span> years old</div>
+            <div class="age legacy-age">🎂 <span>18</span> years old</div>
 
             <div class="birthday-timer">
                 <div class="label">🎉 Next Birthday in:</div>
@@ -1709,6 +1976,19 @@
                 <div class="os-item">🪟 <span class="win">Windows</span></div>
                 <div class="os-item">🐧 <span class="linux">GNU/Linux</span></div>
             </div>
+
+            <section class="skills-block">
+                <div class="section-heading">
+                    <span>🧠</span>
+                    <div><h4>SKILLS</h4><small>Things I like to build and work with</small></div>
+                </div>
+                <div class="skills-grid">
+                    <div class="skill-card"><div class="skill-top"><span>💻 Programming</span><b>Core</b></div><div class="skill-tags"><span>HTML</span><span>CSS</span><span>JavaScript</span></div></div>
+                    <div class="skill-card"><div class="skill-top"><span>🐧 Linux</span><b>Core</b></div><div class="skill-tags"><span>Debian</span><span>XFCE</span><span>System setup</span></div></div>
+                    <div class="skill-card"><div class="skill-top"><span>🔧 Hardware</span><b>Practical</b></div><div class="skill-tags"><span>PC</span><span>Troubleshooting</span><span>Maintenance</span></div></div>
+                    <div class="skill-card"><div class="skill-top"><span>🎮 Modding</span><b>Creative</b></div><div class="skill-tags"><span>HOI4</span><span>Game projects</span><span>Worldbuilding</span></div></div>
+                </div>
+            </section>
 
             <div class="quotes-block">
                 <h4>📜 QUOTES</h4>
@@ -1799,10 +2079,15 @@
                     <div class="project-desc">
                         Debian-based Linux distribution with XFCE desktop and preinstalled essential packages (Firefox, VLC, LibreOffice, GParted, Remmina, etc.). Fast, lightweight, ready to use.
                     </div>
-                    <div class="project-desc" style="color: #88aa88; font-size: 15px; margin-top: 4px;">
-                        <strong style="color: #00ff41;">Status:</strong> Frozen. Progress reset to zero due to system reinstallation and data loss on the developer's PC. Restarting from scratch. Base: Debian. Package list subject to change.
+                    <div class="project-desc project-note">
+                        <strong>Status note:</strong> Development is paused after a system reinstallation and data loss. The project can be restarted from scratch. Base: Debian. Package list may change.
                     </div>
-                    <span class="project-status frozen">❄️ Frozen</span>
+                    <div class="project-meta">
+                        <span class="project-status on-hold">🟠 On Hold</span>
+                        <span class="project-tech">Debian</span>
+                        <span class="project-tech">XFCE</span>
+                        <span class="project-tech">Linux</span>
+                    </div>
                 </div>
             </div>
 
@@ -1849,23 +2134,84 @@
 
         </div>
 
+        <!-- ========================================================== -->
+        <!-- CONTACT -->
+        <!-- ========================================================== -->
+        <div class="page" id="page-contact">
+            <div class="contact-title">✉️ CONTACT</div>
+            <div class="contact-subtitle">
+                Find me on these platforms or send me an email.
+            </div>
+
+            <div class="contact-grid">
+                <a class="contact-card" href="https://t.me/YOUR_TELEGRAM" target="_blank" rel="noopener noreferrer">
+                    <span class="contact-icon">✈️</span>
+                    <span class="contact-info">
+                        <span class="contact-name">Telegram</span>
+                        <span class="contact-handle">@YOUR_TELEGRAM</span>
+                    </span>
+                    <span class="contact-arrow">↗</span>
+                </a>
+
+                <a class="contact-card" href="https://www.youtube.com/@YOUR_CHANNEL" target="_blank" rel="noopener noreferrer">
+                    <span class="contact-icon">▶</span>
+                    <span class="contact-info">
+                        <span class="contact-name">YouTube</span>
+                        <span class="contact-handle">@YOUR_CHANNEL</span>
+                    </span>
+                    <span class="contact-arrow">↗</span>
+                </a>
+
+                <a class="contact-card" href="https://github.com/YOUR_GITHUB" target="_blank" rel="noopener noreferrer">
+                    <span class="contact-icon">◉</span>
+                    <span class="contact-info">
+                        <span class="contact-name">GitHub</span>
+                        <span class="contact-handle">github.com/YOUR_GITHUB</span>
+                    </span>
+                    <span class="contact-arrow">↗</span>
+                </a>
+
+                <a class="contact-card" href="https://gamejolt.com/@YOUR_GAMEJOLT" target="_blank" rel="noopener noreferrer">
+                    <span class="contact-icon">🎮</span>
+                    <span class="contact-info">
+                        <span class="contact-name">GameJolt</span>
+                        <span class="contact-handle">@YOUR_GAMEJOLT</span>
+                    </span>
+                    <span class="contact-arrow">↗</span>
+                </a>
+
+                <a class="contact-card contact-email" href="mailto:YOUR_EMAIL@example.com">
+                    <span class="contact-icon">✉</span>
+                    <span class="contact-info">
+                        <span class="contact-name">Email</span>
+                        <span class="contact-handle">YOUR_EMAIL@example.com</span>
+                    </span>
+                    <span class="contact-arrow">↗</span>
+                </a>
+            </div>
+
+            <div class="contact-note">
+                💡 Replace the placeholder usernames and email address above with your real contacts.
+            </div>
+
+            <div class="footer">⚔️ Made by the <span>Iron Will Coalition</span></div>
+        </div>
+
     </div>
 
     <script>
         // ============================================================
-        // 1. NAVIGATION (3 вкладки)
+        // 1. NAVIGATION (4 вкладки)
         // ============================================================
-        const navLinks = document.querySelectorAll('.nav a');
+        const navLinks = document.querySelectorAll('.nav-btn');
         const pages = {
             home: document.getElementById('page-home'),
             projects: document.getElementById('page-projects'),
-            achievements: document.getElementById('page-achievements')
+            achievements: document.getElementById('page-achievements'),
+            contact: document.getElementById('page-contact')
         };
         const body = document.body;
         const wavesCanvas = document.getElementById('waves-canvas');
-
-        // Глобальная переменная для хранения состояния музыки (включена/выключена)
-        let musicEnabled = true;
 
         function switchPage(page) {
             Object.values(pages).forEach(p => p.classList.remove('active'));
@@ -1873,26 +2219,28 @@
 
             navLinks.forEach(link => {
                 link.classList.toggle('active', link.dataset.page === page);
+                link.setAttribute('aria-current', link.dataset.page === page ? 'page' : 'false');
             });
 
+            body.classList.remove('home-bg', 'projects-bg', 'achievements-bg', 'contact-bg');
+
             if (page === 'home') {
-                body.classList.remove('projects-bg', 'achievements-bg');
                 body.classList.add('home-bg');
                 wavesCanvas.style.display = 'none';
             } else if (page === 'projects') {
-                body.classList.remove('home-bg', 'achievements-bg');
                 body.classList.add('projects-bg');
                 wavesCanvas.style.display = 'block';
-            } else {
-                body.classList.remove('home-bg', 'projects-bg');
+            } else if (page === 'achievements') {
                 body.classList.add('achievements-bg');
+                wavesCanvas.style.display = 'none';
+            } else if (page === 'contact') {
+                body.classList.add('contact-bg');
                 wavesCanvas.style.display = 'none';
             }
         }
 
         navLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
+            link.addEventListener('click', function() {
                 const page = this.dataset.page;
                 if (page) switchPage(page);
             });
@@ -2141,102 +2489,7 @@
         drawWaves();
 
         // ============================================================
-        // 5. МУЗЫКА (НЕ ОСТАНАВЛИВАЕТСЯ ПРИ ПЕРЕКЛЮЧЕНИИ СТРАНИЦ)
-        // ============================================================
-        const audio = document.getElementById('bg-music');
-        const musicToggle = document.getElementById('music-toggle');
-        const volumeSlider = document.getElementById('volume-slider');
-        audio.volume = volumeSlider.value;
-
-        // Загружаем сохранённое состояние из localStorage
-        const savedMusicState = localStorage.getItem('musicEnabled');
-        if (savedMusicState !== null) {
-            musicEnabled = savedMusicState === 'true';
-        }
-
-        // Применяем сохранённое состояние при загрузке
-        if (!musicEnabled) {
-            audio.muted = true;
-            musicToggle.textContent = '🔇';
-            musicToggle.classList.add('muted');
-        } else {
-            audio.muted = false;
-            musicToggle.textContent = '🔊';
-            musicToggle.classList.remove('muted');
-            audio.play().catch(() => {});
-        }
-
-        if (musicEnabled) {
-            audio.play().catch(() => {
-                const playOnInteraction = () => {
-                    if (musicEnabled) {
-                        audio.play().then(() => {
-                            musicToggle.textContent = '🔊';
-                            musicToggle.classList.remove('muted');
-                        }).catch(() => {});
-                    }
-                    document.removeEventListener('click', playOnInteraction);
-                    document.removeEventListener('touchstart', playOnInteraction);
-                };
-                document.addEventListener('click', playOnInteraction, { once: true });
-                document.addEventListener('touchstart', playOnInteraction, { once: true });
-            });
-        }
-
-        musicToggle.addEventListener('click', function(e) {
-            e.stopPropagation();
-            musicEnabled = !musicEnabled;
-            localStorage.setItem('musicEnabled', String(musicEnabled));
-
-            if (musicEnabled) {
-                audio.muted = false;
-                audio.play().then(() => {
-                    musicToggle.textContent = '🔊';
-                    musicToggle.classList.remove('muted');
-                }).catch(() => {
-                    musicToggle.textContent = '🔇';
-                    musicToggle.classList.add('muted');
-                });
-            } else {
-                audio.pause();
-                audio.muted = true;
-                musicToggle.textContent = '🔇';
-                musicToggle.classList.add('muted');
-            }
-        });
-
-        volumeSlider.addEventListener('input', function() {
-            audio.volume = this.value;
-        });
-
-        audio.addEventListener('play', () => {
-            if (musicEnabled) {
-                musicToggle.textContent = '🔊';
-                musicToggle.classList.remove('muted');
-            }
-        });
-        audio.addEventListener('pause', () => {
-            if (musicEnabled) {
-                musicToggle.textContent = '🔇';
-                musicToggle.classList.add('muted');
-            }
-        });
-
-        // Музыка НЕ останавливается при переключении вкладок или страниц
-        document.addEventListener('visibilitychange', function() {
-            if (document.hidden) {
-                if (audio && !audio.paused) {
-                    audio.pause();
-                }
-            } else {
-                if (musicEnabled && audio && audio.paused && !audio.muted) {
-                    audio.play().then(() => {
-                        musicToggle.textContent = '🔊';
-                        musicToggle.classList.remove('muted');
-                    }).catch(() => {});
-                }
-            }
-        });
+        // 5. МУЗЫКА — ПРОФЕССИОНАЛЬНЫЙ ПЛЕЕР
     </script>
 
 </body>
