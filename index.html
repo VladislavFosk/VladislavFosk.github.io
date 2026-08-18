@@ -2471,7 +2471,74 @@
         drawWaves();
 
         // ============================================================
-        // 5. МУЗЫКА — ПРОФЕССИОНАЛЬНЫЙ ПЛЕЕР
+// 5. МУЗЫКА — ПОЛНОСТЬЮ РАБОЧИЙ ПЛЕЕР
+// ============================================================
+const audio = document.getElementById('bg-music');
+const musicToggle = document.getElementById('music-toggle');
+const volumeSlider = document.getElementById('volume-slider');
+const progressSlider = document.getElementById('progress-slider');
+const musicTime = document.getElementById('music-time');
+let isPlaying = false;
+
+// --- Функция форматирования времени ---
+function formatTime(seconds) {
+    if (isNaN(seconds)) return '00:00';
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+}
+
+// --- Воспроизведение / Пауза ---
+musicToggle.addEventListener('click', function() {
+    if (audio.paused) {
+        audio.play().catch(() => {});
+        this.textContent = '⏸';
+        isPlaying = true;
+    } else {
+        audio.pause();
+        this.textContent = '▶';
+        isPlaying = false;
+    }
+});
+
+// --- Обновление ползунка прогресса и времени ---
+audio.addEventListener('timeupdate', function() {
+    if (!isNaN(this.duration)) {
+        progressSlider.value = (this.currentTime / this.duration) * 100;
+        musicTime.textContent = formatTime(this.currentTime);
+    }
+});
+
+// --- Клик по ползунку прогресса ---
+progressSlider.addEventListener('input', function() {
+    if (!isNaN(audio.duration)) {
+        audio.currentTime = (this.value / 100) * audio.duration;
+    }
+});
+
+// --- Громкость ---
+volumeSlider.addEventListener('input', function() {
+    audio.volume = this.value;
+});
+
+// --- Автозапуск (если браузер позволяет) ---
+document.addEventListener('click', function tryAutoplay() {
+    if (!isPlaying && audio.readyState >= 2) {
+        audio.play().then(() => {
+            musicToggle.textContent = '⏸';
+            isPlaying = true;
+        }).catch(() => {});
+    }
+}, { once: true });
+
+// --- Сохраняем состояние при загрузке новой страницы ---
+audio.addEventListener('ended', function() {
+    this.currentTime = 0;
+    progressSlider.value = 0;
+    musicTime.textContent = '00:00';
+    musicToggle.textContent = '▶';
+    isPlaying = false;
+});
     </script>
 
 </body>
