@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Solarium Umbris — Encyclopedia of Worlds</title>
+    <!-- Favicon -->
+    <link rel="icon" href="gim/logo.png" type="image/png">
+    <link rel="shortcut icon" href="gim/logo.png" type="image/png">
     <style>
         /* ================================================================
            БАЗА
@@ -512,6 +515,13 @@
             border-radius: var(--radius);
             border: 1px solid var(--border);
             flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .wiki-entry .icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         .wiki-entry .name {
@@ -624,6 +634,13 @@
             border-radius: var(--radius);
             border: 1px solid var(--border);
             flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .page-detail .icon-big img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         .page-detail .name-big {
@@ -1062,7 +1079,7 @@
 
             <!-- ПРОФИЛЬ -->
             <div class="profile-hero">
-                <img class="avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect width='120' height='120' fill='%2312121c'/%3E%3Ctext x='60' y='72' font-size='52' text-anchor='middle'%3E🌹%3C/text%3E%3C/svg%3E" alt="Vladislav Fosk-Kosarh" />
+                <img class="avatar" src="gim/AVATARKA.jpg" alt="Vladislav Fosk-Kosarh" />
                 <div class="profile-main">
                     <div class="name">Vladislav Fosk-Kosarh</div>
                     <div class="nick">@Foskarh</div>
@@ -1209,7 +1226,7 @@
             <!-- Roza OS -->
             <div class="wiki-entry" onclick="switchTab('project-roza')">
                 <div class="top-row">
-                    <div class="icon">🌹</div>
+                    <div class="icon"><img src="gim/rozaos.png" alt="Roza OS" /></div>
                     <div>
                         <div class="name">Roza OS</div>
                         <div class="sub">Debian-based Linux distribution</div>
@@ -1290,7 +1307,7 @@
         <div class="tab page-detail" id="tab-project-roza">
             <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki" data-ru="Назад к вики">Back to wiki</span></a>
             <div class="header-info">
-                <div class="icon-big">🌹</div>
+                <div class="icon-big"><img src="gim/rozaos.png" alt="Roza OS" /></div>
                 <div>
                     <div class="name-big">Roza OS <span class="sub">Debian-based Linux distribution</span></div>
                     <span class="status-big frozen">❄️ <span class="i18n" data-en="Frozen" data-ru="Заморожен">Frozen</span></span>
@@ -1588,7 +1605,6 @@
             document.querySelectorAll('.i18n').forEach(el => {
                 const text = el.getAttribute('data-' + currentLang);
                 if (text) {
-                    // Сохраняем HTML-структуру
                     if (text.includes('<')) {
                         el.innerHTML = text;
                     } else {
@@ -1597,7 +1613,6 @@
                 }
             });
 
-            // Обновляем subtitle в шапке
             const subtitle = document.querySelector('.header .logo .subtitle');
             if (currentLang === 'en') {
                 subtitle.textContent = '✦ Encyclopedia of Worlds ✦';
@@ -1605,22 +1620,18 @@
                 subtitle.textContent = '✦ Энциклопедия миров ✦';
             }
 
-            // Обновляем placeholder для поиска (если есть)
-            // Сохраняем язык в localStorage
             try {
                 localStorage.setItem('solarium-lang', currentLang);
             } catch (e) {}
         }
 
-        // Восстановление языка из localStorage
         try {
             const savedLang = localStorage.getItem('solarium-lang');
             if (savedLang && (savedLang === 'en' || savedLang === 'ru')) {
                 currentLang = savedLang;
                 langToggle.textContent = currentLang === 'en' ? 'РУС' : 'ENG';
-                // Применяем язык после загрузки DOM
                 document.addEventListener('DOMContentLoaded', function() {
-                    toggleLang(); // применяем сохранённый язык
+                    toggleLang();
                 });
             }
         } catch (e) {}
@@ -1634,7 +1645,6 @@
         const musicStatus = document.getElementById('music-status');
         let isPlaying = false;
 
-        // Устанавливаем громкость по умолчанию
         audio.volume = 0.5;
         volumeSlider.value = 0.5;
 
@@ -1664,7 +1674,6 @@
             isPlaying = false;
         });
 
-        // Автозапуск при клике
         document.addEventListener('click', function tryAutoplay() {
             if (!isPlaying && audio.readyState >= 2) {
                 audio.play().then(() => {
@@ -1707,9 +1716,7 @@
         }
         checkHash();
 
-        // Применяем язык после полной загрузки
         document.addEventListener('DOMContentLoaded', function() {
-            // Если язык был сохранён, применяем его
             const savedLang = localStorage.getItem('solarium-lang');
             if (savedLang && savedLang !== currentLang) {
                 currentLang = savedLang;
