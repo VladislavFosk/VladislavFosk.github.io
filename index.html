@@ -1540,7 +1540,7 @@
     <div class="music-controls" id="music-controls">
         <button id="music-toggle" title="Play / Pause">▶</button>
         <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.01" value="0.5" aria-label="Volume" />
-        <span class="music-label" id="music-status">🔊</span>
+        <span class="music-label" id="music-status">🔇</span>
     </div>
 
     <audio id="bg-music" loop preload="auto">
@@ -1637,7 +1637,7 @@
         } catch (e) {}
 
         // ============================================================
-        // 3. МУЗЫКА
+        // 3. МУЗЫКА — НЕ ИГРАЕТ СРАЗУ, СОХРАНЯЕТ СОСТОЯНИЕ
         // ============================================================
         const audio = document.getElementById('bg-music');
         const musicToggle = document.getElementById('music-toggle');
@@ -1645,44 +1645,76 @@
         const musicStatus = document.getElementById('music-status');
         let isPlaying = false;
 
-        audio.volume = 0.5;
-        volumeSlider.value = 0.5;
+        // Загружаем состояние из localStorage
+        const savedState = localStorage.getItem('solarium-music-state');
+        const savedVolume = localStorage.getItem('solarium-music-volume');
 
+        // Устанавливаем громкость
+        if (savedVolume !== null) {
+            audio.volume = parseFloat(savedVolume);
+            volumeSlider.value = savedVolume;
+        } else {
+            audio.volume = 0.5;
+            volumeSlider.value = 0.5;
+        }
+
+        // Восстанавливаем состояние
+        if (savedState === 'playing') {
+            // Если было "playing" — пробуем включить, но с задержкой
+            setTimeout(() => {
+                audio.play().then(() => {
+                    musicToggle.textContent = '⏸';
+                    musicStatus.textContent = '🔊';
+                    isPlaying = true;
+                }).catch(() => {
+                    // Если не получилось — оставляем выключенным
+                    musicToggle.textContent = '▶';
+                    musicStatus.textContent = '🔇';
+                    isPlaying = false;
+                    localStorage.setItem('solarium-music-state', 'paused');
+                });
+            }, 500);
+        } else {
+            // По умолчанию — выключено
+            musicToggle.textContent = '▶';
+            musicStatus.textContent = '🔇';
+            isPlaying = false;
+            localStorage.setItem('solarium-music-state', 'paused');
+        }
+
+        // Кнопка Play/Pause
         musicToggle.addEventListener('click', function() {
             if (audio.paused) {
-                audio.play().catch(() => {});
-                this.textContent = '⏸';
-                musicStatus.textContent = '🔊';
-                isPlaying = true;
+                audio.play().then(() => {
+                    this.textContent = '⏸';
+                    musicStatus.textContent = '🔊';
+                    isPlaying = true;
+                    localStorage.setItem('solarium-music-state', 'playing');
+                }).catch(() => {});
             } else {
                 audio.pause();
                 this.textContent = '▶';
                 musicStatus.textContent = '🔇';
                 isPlaying = false;
+                localStorage.setItem('solarium-music-state', 'paused');
             }
         });
 
+        // Громкость
         volumeSlider.addEventListener('input', function() {
             audio.volume = this.value;
+            localStorage.setItem('solarium-music-volume', this.value);
             musicStatus.textContent = audio.volume > 0.01 ? '🔊' : '🔇';
         });
 
+        // Когда музыка закончилась
         audio.addEventListener('ended', function() {
             this.currentTime = 0;
             musicToggle.textContent = '▶';
             musicStatus.textContent = '🔇';
             isPlaying = false;
+            localStorage.setItem('solarium-music-state', 'paused');
         });
-
-        document.addEventListener('click', function tryAutoplay() {
-            if (!isPlaying && audio.readyState >= 2) {
-                audio.play().then(() => {
-                    musicToggle.textContent = '⏸';
-                    musicStatus.textContent = '🔊';
-                    isPlaying = true;
-                }).catch(() => {});
-            }
-        }, { once: true });
 
         // ============================================================
         // 4. ЗВЁЗДЫ
