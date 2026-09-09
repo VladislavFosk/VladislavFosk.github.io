@@ -1977,7 +1977,7 @@
 
         // Название трека берётся автоматически из имени файла.
         // Например: music/55 Days at Peking.mp3 → 55 Days at Peking
-        const playlist = [{ src: 'music/55-days-at-peking.mp3' }];
+        const playlist = [{ src: 'music/peking.mp3' }];
         let currentTrack = 0;
 
         function formatTime(seconds) {
@@ -1988,7 +1988,7 @@
         }
 
         // Единственный трек. Запуск производится только по кнопке, чтобы браузер не блокировал звук.
-        audio.src = 'music/55-days-at-peking.mp3';
+        audio.src = 'music/peking.mp3';
         audio.preload = 'metadata';
         musicTitle.textContent = '55 Days at Peking';
         audio.volume = 0.5;
@@ -2045,7 +2045,7 @@
         audio.addEventListener('pause', updatePlayButton);
         audio.addEventListener('ended', () => { audio.currentTime = 0; updatePlayButton(); });
         audio.addEventListener('error', () => {
-            console.error('Не удалось загрузить music/55-days-at-peking.mp3', audio.error);
+            console.error('Не удалось загрузить music/peking.mp3', audio.error);
             musicTitle.textContent = '55 Days at Peking — ошибка загрузки файла';
             updatePlayButton();
         });
