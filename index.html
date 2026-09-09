@@ -1976,7 +1976,7 @@
         const musicDuration = document.getElementById('music-duration');
 
         // Название трека берётся автоматически из имени файла.
-        // Например: music/55-days-at-peking.mp3 → 55 Days at Peking
+        // Например: music/55 Days at Peking.mp3 → 55 Days at Peking
         const playlist = [
             { src: 'music/55-days-at-peking.mp3' },
             { src: 'music/nebo.mp3' }
@@ -2007,7 +2007,11 @@
             // Название берём прямо из имени файла, без расширения .mp3.
             const fileName = decodeURIComponent(track.src.split('/').pop());
             const trackName = fileName.replace(/\.[^/.]+$/, '');
-            musicTitle.textContent = trackName;
+            const displayNames = {
+                '55-days-at-peking': '55 Days at Peking',
+                'nebo': 'Небо над водою, над рікою білий дим'
+            };
+            musicTitle.textContent = displayNames[trackName] || trackName;
             musicProgress.value = 0;
             musicCurrent.textContent = '0:00';
             musicDuration.textContent = '0:00';
@@ -2087,6 +2091,7 @@
 
         audio.addEventListener('error', () => {
             console.error('Не удалось загрузить музыку:', playlist[currentTrack]?.src, audio.error);
+            musicDuration.textContent = 'Ошибка загрузки';
             updatePlayState();
         });
 
