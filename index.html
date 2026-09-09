@@ -2055,7 +2055,7 @@ body::before {
     } catch (e) {}
 
     // ============================================================
-    // 3. МУЗЫКА — НАДЁЖНЫЙ ЛОКАЛЬНЫЙ ПЛЕЕР
+    // 3. МУЗЫКА — GITHUB PAGES SAFE PLAYER
     // ============================================================
     const audio = document.getElementById('bg-music');
     const musicToggle = document.getElementById('music-toggle');
@@ -2068,10 +2068,13 @@ body::before {
     const musicTitle = document.getElementById('music-track-title');
     const musicControls = document.getElementById('music-controls');
 
-    // Файл должен находиться рядом с index.html в папке music.
-    const MUSIC_SRC = './music/theme.mp3';
+    // IMPORTANT:
+    // Resolve the music URL relative to the current GitHub Pages URL.
+    // This works both for username.github.io and username.github.io/repository/.
+    const MUSIC_SRC = new URL('music/theme.mp3', document.baseURI).href;
+
     audio.src = MUSIC_SRC;
-    audio.preload = 'auto';
+    audio.preload = 'metadata';
     audio.volume = 0.5;
 
     function formatTime(seconds) {
@@ -2081,17 +2084,17 @@ body::before {
         return mins + ':' + secs;
     }
 
-    function musicErrorMessage() {
+    function showMusicError() {
         const code = audio.error ? audio.error.code : 0;
         const messages = {
-            1: 'Загрузка музыки отменена',
-            2: 'Ошибка сети при загрузке музыки',
-            3: 'Файл повреждён или не поддерживается',
-            4: 'Формат MP3 не поддерживается браузером'
+            1: 'Загрузка отменена',
+            2: 'Ошибка сети',
+            3: 'Файл повреждён',
+            4: 'Формат не поддерживается'
         };
-        musicTitle.textContent = '⚠️ ' + (messages[code] || 'Не найден ./music/theme.mp3');
+        musicTitle.textContent = '⚠️ ' + (messages[code] || 'Не удалось загрузить theme.mp3');
         musicTitle.style.color = '#f87171';
-        musicToggle.disabled = false;
+        console.error('Music error:', code, MUSIC_SRC, audio.error);
     }
 
     function resetMusicTitle() {
@@ -2105,11 +2108,11 @@ body::before {
         resetMusicTitle();
     });
 
-    audio.addEventListener('canplay', resetMusicTitle);
-
     audio.addEventListener('timeupdate', () => {
         musicCurrent.textContent = formatTime(audio.currentTime);
-        if (!musicProgress.matches(':active')) musicProgress.value = audio.currentTime;
+        if (!musicProgress.matches(':active')) {
+            musicProgress.value = audio.currentTime;
+        }
     });
 
     audio.addEventListener('play', () => {
@@ -2128,23 +2131,21 @@ body::before {
         audio.currentTime = 0;
         musicProgress.value = 0;
         musicCurrent.textContent = '0:00';
-        musicToggle.textContent = '▶';
-        musicControls.classList.remove('is-playing');
     });
 
-    audio.addEventListener('error', musicErrorMessage);
+    audio.addEventListener('error', showMusicError);
 
     musicToggle.addEventListener('click', async () => {
-        try {
-            if (audio.paused) {
+        if (audio.paused) {
+            try {
                 resetMusicTitle();
                 await audio.play();
-            } else {
-                audio.pause();
+            } catch (error) {
+                console.error('Audio playback failed:', error);
+                showMusicError();
             }
-        } catch (error) {
-            console.error('Audio playback error:', error);
-            musicErrorMessage();
+        } else {
+            audio.pause();
         }
     });
 
@@ -2162,15 +2163,22 @@ body::before {
     });
 
     musicProgress.addEventListener('input', () => {
-        if (Number.isFinite(audio.duration)) audio.currentTime = Number(musicProgress.value);
+        if (Number.isFinite(audio.duration)) {
+            audio.currentTime = Number(musicProgress.value);
+        }
     });
 
     musicNext.addEventListener('click', async () => {
         audio.currentTime = 0;
-        try { await audio.play(); } catch (e) { musicErrorMessage(); }
+        try {
+            await audio.play();
+        } catch (error) {
+            console.error('Audio playback failed:', error);
+            showMusicError();
+        }
     });
 
-    // Не запускаем автоматически — браузеры блокируют autoplay со звуком.
+    // Do not autoplay: browsers block autoplay with sound.
     audio.load();
 
     // 4. ЗВЁЗДЫ
