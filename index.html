@@ -1968,104 +1968,47 @@
         // ============================================================
         // 3. МУЗЫКА — ПЛЕЕР С ПРОГРЕССОМ, MUTE И NEXT
         // ============================================================
-        const audio = document.getElementById('bg-music');
-        const musicToggle = document.getElementById('music-toggle');
-        const musicNext = document.getElementById('music-next');
-        const musicMute = document.getElementById('music-mute');
-        const volumeSlider = document.getElementById('volume-slider');
-        const musicProgress = document.getElementById('music-progress');
-        const musicTitle = document.getElementById('music-track-title');
-        const musicCurrent = document.getElementById('music-current');
-        const musicDuration = document.getElementById('music-duration');
+const audio = document.getElementById('bg-music');
+const musicToggle = document.getElementById('music-toggle');
+const musicTitle = document.getElementById('music-track-title');
 
-        // Устанавливаем начальные значения
-        audio.volume = 0.5;
-        volumeSlider.value = 0.5;
-        musicTitle.textContent = '55 Days at Peking';
-
-        function formatTime(seconds) {
-            if (!Number.isFinite(seconds) || isNaN(seconds) || seconds < 0) return '0:00';
-            const mins = Math.floor(seconds / 60);
-            const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
-            return mins + ':' + secs;
+// Проверяем, существует ли файл
+fetch('music/peking.mp3', { method: 'HEAD' })
+    .then(response => {
+        if (!response.ok) {
+            musicTitle.textContent = '⚠️ Файл не найден: music/peking.mp3';
+            musicTitle.style.color = '#f87171';
+        } else {
+            musicTitle.textContent = '55 Days at Peking';
+            musicTitle.style.color = '';
+            audio.src = 'music/peking.mp3';
         }
+    })
+    .catch(() => {
+        musicTitle.textContent = '❌ Ошибка загрузки музыки';
+        musicTitle.style.color = '#f87171';
+    });
 
-        function updatePlayButton() {
-            musicToggle.textContent = audio.paused ? '▶' : '⏸';
-        }
-
-        function updateMuteButton() {
-            musicMute.textContent = (audio.muted || audio.volume === 0) ? '🔇' : '🔊';
-        }
-
-        // Воспроизведение/пауза
-        musicToggle.addEventListener('click', async () => {
-            if (audio.paused) {
-                try {
-                    await audio.play();
-                } catch (e) {
-                    console.error('Ошибка воспроизведения:', e);
-                    musicTitle.textContent = 'Ошибка загрузки аудио';
-                }
-            } else {
-                audio.pause();
-            }
-            updatePlayButton();
-        });
-
-        // Mute
-        musicMute.addEventListener('click', () => {
-            audio.muted = !audio.muted;
-            updateMuteButton();
-        });
-
-        // Громкость
-        volumeSlider.addEventListener('input', () => {
-            audio.volume = Number(volumeSlider.value);
-            audio.muted = false;
-            updateMuteButton();
-        });
-
-        // Следующий трек — перезапускаем текущий
-        musicNext.addEventListener('click', () => {
-            audio.currentTime = 0;
-            if (audio.paused) {
-                audio.play().catch(() => {});
-            }
-            updatePlayButton();
-        });
-
-        // Обновление длительности и прогресса
-        audio.addEventListener('loadedmetadata', () => {
-            musicProgress.max = audio.duration || 0;
-            musicDuration.textContent = formatTime(audio.duration);
-        });
-
-        audio.addEventListener('timeupdate', () => {
-            musicProgress.value = audio.currentTime;
-            musicCurrent.textContent = formatTime(audio.currentTime);
-            musicDuration.textContent = formatTime(audio.duration);
-        });
-
-        // Перемотка
-        musicProgress.addEventListener('input', () => {
-            audio.currentTime = Number(musicProgress.value);
-        });
-
-        // Обновление кнопки при смене состояния
-        audio.addEventListener('play', updatePlayButton);
-        audio.addEventListener('pause', updatePlayButton);
-        audio.addEventListener('ended', () => {
-            audio.currentTime = 0;
-            updatePlayButton();
-        });
-
-        // Обработка ошибок
-        audio.addEventListener('error', (e) => {
-            console.error('Ошибка аудио:', e);
-            musicTitle.textContent = 'Не удалось загрузить музыку';
-            updatePlayButton();
-        });
+musicToggle.addEventListener('click', async () => {
+    if (audio.src && !audio.paused) {
+        audio.pause();
+        musicToggle.textContent = '▶';
+        return;
+    }
+    
+    if (!audio.src || audio.src === '') {
+        musicTitle.textContent = '❌ Файл не найден';
+        return;
+    }
+    
+    try {
+        await audio.play();
+        musicToggle.textContent = '⏸';
+    } catch (e) {
+        console.error(e);
+        musicTitle.textContent = '❌ Ошибка воспроизведения';
+    }
+});
 
         // ============================================================
         // 4. ЗВЁЗДЫ
