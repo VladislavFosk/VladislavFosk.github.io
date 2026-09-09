@@ -550,6 +550,12 @@
             border: 1px solid rgba(239, 68, 68, 0.25);
         }
 
+        .wiki-entry .status-badge.planned {
+            background: rgba(108, 140, 255, 0.15);
+            color: #93c5fd;
+            border: 1px solid rgba(108, 140, 255, 0.25);
+        }
+
         .wiki-entry .status-badge.active {
             background: rgba(52, 211, 153, 0.15);
             color: #6ee7b7;
@@ -669,6 +675,12 @@
             background: rgba(239, 68, 68, 0.15);
             color: #f87171;
             border: 1px solid rgba(239, 68, 68, 0.25);
+        }
+
+        .page-detail .status-big.planned {
+            background: rgba(108, 140, 255, 0.15);
+            color: #93c5fd;
+            border: 1px solid rgba(108, 140, 255, 0.25);
         }
 
         .page-detail .status-big.active {
@@ -901,6 +913,86 @@
             border: 2px solid var(--bg);
         }
 
+        .music-action {
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 16px;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+
+        .music-action:hover {
+            color: var(--accent-1);
+            background: rgba(108, 140, 255, 0.08);
+        }
+
+        .music-track {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            width: 210px;
+            min-width: 120px;
+        }
+
+        .music-track-title {
+            color: var(--text-secondary);
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .music-progress-row {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .music-time {
+            color: var(--text-muted);
+            font-size: 9px;
+            min-width: 28px;
+        }
+
+        .music-time:last-child {
+            text-align: right;
+        }
+
+        .music-progress {
+            -webkit-appearance: none;
+            appearance: none;
+            flex: 1;
+            min-width: 60px;
+            height: 3px;
+            border-radius: 2px;
+            background: var(--border);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .music-progress::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent-1);
+            cursor: pointer;
+        }
+
+        .music-progress::-moz-range-thumb {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent-1);
+            cursor: pointer;
+            border: none;
+        }
+
         .music-label {
             font-size: 10px;
             color: var(--text-muted);
@@ -947,39 +1039,106 @@
         }
 
         /* ====== АДАПТИВ ====== */
+        /* ====== МОБИЛЬНАЯ НАВИГАЦИЯ ====== */
+        .mobile-nav {
+            display: none;
+        }
+
         @media (max-width: 640px) {
+            body {
+                padding-bottom: 78px;
+            }
+
             .header {
-                flex-direction: column;
-                gap: 10px;
-                align-items: stretch;
-                padding: 12px 16px;
+                flex-direction: row;
+                gap: 8px;
+                align-items: center;
+                padding: 10px 14px;
             }
 
             .header .logo {
-                justify-content: center;
+                min-width: 0;
+                gap: 8px;
+            }
+
+            .header .logo .icon {
+                font-size: 22px;
+            }
+
+            .header .logo h1 {
+                font-size: 16px;
+                letter-spacing: 1px;
+            }
+
+            .header .logo .subtitle {
+                font-size: 8px;
+                letter-spacing: 1.5px;
             }
 
             .header .right-group {
-                justify-content: center;
+                margin-left: auto;
+                gap: 6px;
             }
 
             .header .nav-buttons {
-                justify-content: center;
+                display: none;
             }
 
-            .header .nav-buttons button {
-                font-size: 11px;
-                padding: 4px 12px;
+            .lang-toggle {
+                padding: 5px 9px;
+                font-size: 10px;
+            }
+
+            .main-container {
+                padding: 18px 12px 32px;
+            }
+
+            .hero {
+                padding: 8px 0 14px;
+                margin-bottom: 18px;
             }
 
             .hero h2 {
-                font-size: 24px;
+                font-size: 23px;
+                line-height: 1.3;
+            }
+
+            .hero p {
+                font-size: 13px;
+            }
+
+            .stats-bar {
+                gap: 10px 18px;
+            }
+
+            .stats-bar .stat strong {
+                font-size: 16px;
             }
 
             .profile-hero {
                 flex-direction: column;
                 text-align: center;
-                padding: 18px 16px;
+                padding: 18px 14px;
+                gap: 12px;
+            }
+
+            .profile-hero .avatar {
+                width: 92px;
+                height: 92px;
+            }
+
+            .profile-hero .profile-main .name {
+                font-size: 23px;
+                line-height: 1.3;
+            }
+
+            .profile-hero .profile-main .nick {
+                font-size: 13px;
+            }
+
+            .profile-hero .profile-main .title {
+                font-size: 14px;
+                line-height: 1.4;
             }
 
             .profile-hero .profile-tags {
@@ -988,44 +1147,195 @@
 
             .quick-info {
                 grid-template-columns: 1fr 1fr;
-            }
-
-            .music-controls {
-                bottom: 16px;
-                right: 16px;
-                padding: 10px 14px;
                 gap: 8px;
             }
 
-            .music-controls .volume-slider {
-                width: 40px;
+            .quick-item {
+                min-width: 0;
+                padding: 10px;
             }
 
-            #music-toggle {
-                font-size: 18px;
-                width: 30px;
-                height: 30px;
+            .quick-item strong {
+                font-size: 12px;
+                overflow-wrap: anywhere;
+            }
+
+            .block {
+                padding: 14px;
+                margin: 10px 0;
+            }
+
+            .block-title {
+                font-size: 15px;
+            }
+
+            .block-text {
+                font-size: 13px;
+                overflow-wrap: anywhere;
+            }
+
+            .block-text[style*="grid-template-columns"] {
+                grid-template-columns: 1fr !important;
+                gap: 4px !important;
+            }
+
+            .wiki-entry {
+                padding: 14px;
+                margin-bottom: 10px;
+            }
+
+            .wiki-entry .top-row {
+                align-items: flex-start;
+            }
+
+            .wiki-entry .icon {
+                width: 44px;
+                height: 44px;
+                font-size: 28px;
+            }
+
+            .wiki-entry .name {
+                font-size: 16px;
+                line-height: 1.35;
+            }
+
+            .wiki-entry .sub {
+                font-size: 11px;
+            }
+
+            .wiki-entry .status-badge {
+                margin-left: auto;
+                padding: 3px 8px;
+                font-size: 10px;
+            }
+
+            .wiki-entry .desc {
+                font-size: 12px;
+            }
+
+            .page-detail .header-info {
+                flex-direction: column;
+                text-align: center;
+                gap: 12px;
+            }
+
+            .page-detail .icon-big {
+                width: 64px;
+                height: 64px;
+                font-size: 40px;
+            }
+
+            .page-detail .name-big {
+                font-size: 21px;
+                line-height: 1.35;
+            }
+
+            .page-detail .name-big .sub {
+                font-size: 12px;
+                margin-top: 3px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .info-box .body {
+                font-size: 12px;
+                overflow-wrap: anywhere;
             }
 
             .contact-grid {
                 grid-template-columns: 1fr;
             }
 
-            .page-detail .header-info {
-                flex-direction: column;
-                text-align: center;
+            /* Плеер на мобильном: не перекрывает контент */
+            .music-controls {
+                left: 10px;
+                right: 10px;
+                bottom: 68px;
+                width: auto;
+                padding: 8px 10px;
+                gap: 7px;
+                border-radius: 14px;
             }
 
-            .wiki-entry .top-row {
-                flex-wrap: wrap;
+            .music-track {
+                min-width: 0;
+                flex: 1;
             }
 
-            .wiki-entry .status-badge {
-                margin-left: 0;
+            .music-track-title {
+                max-width: 100%;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+
+            .music-progress {
+                min-width: 0;
+                flex: 1;
+            }
+
+            .volume-slider {
+                width: 52px !important;
+            }
+
+            .footer {
+                padding: 14px 12px 92px;
+                font-size: 11px;
+            }
+
+            .mobile-nav {
+                position: fixed;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                left: 8px;
+                right: 8px;
+                bottom: 8px;
+                z-index: 1000;
+                padding: 6px;
+                background: rgba(18, 18, 28, 0.96);
+                backdrop-filter: blur(18px);
+                border: 1px solid var(--border);
+                border-radius: 16px;
+                box-shadow: 0 8px 30px rgba(0,0,0,.55);
+            }
+
+            .mobile-nav button {
+                border: 0;
+                background: transparent;
+                color: var(--text-muted);
+                border-radius: 11px;
+                padding: 7px 4px;
+                font: inherit;
+                font-size: 11px;
+                cursor: pointer;
+            }
+
+            .mobile-nav button.active {
+                color: #fff;
+                background: rgba(108, 140, 255, 0.16);
+            }
+
+            .mobile-nav .mobile-icon {
+                display: block;
+                font-size: 17px;
+                line-height: 1.1;
+                margin-bottom: 2px;
             }
         }
 
         @media (max-width: 400px) {
+            .music-track {
+                width: auto;
+                flex: 1;
+            }
+
+            .music-controls .volume-slider {
+                display: none;
+            }
+
             .quick-info {
                 grid-template-columns: 1fr;
             }
@@ -1117,11 +1427,13 @@
             <div class="block">
                 <div class="block-title">📜 <span class="i18n" data-en="About Me" data-ru="О себе">About Me</span></div>
                 <div class="block-text">
-                    <p class="i18n" data-en="<strong>Hi.</strong> My craft is programming and everything connected to computers. I pour a lot of effort into it, try my hardest even when it gets tough. It's mine, it's native to me." data-ru="<strong>Привет.</strong> Моё ремесло — программирование и всё, что связано с компьютерами. Я вкладываю много сил в это, стараюсь изо всех сил, даже когда становится трудно. Это моё, родное для меня."><strong>Hi.</strong> My craft is programming and everything connected to computers. I pour a lot of effort into it, try my hardest even when it gets tough. It's mine, it's native to me.</p>
+                    <p class="i18n" data-en="<strong>Hi.</strong> My main job is as a maintenance technician — I work with equipment and hardware. Programming is my new hobby; I'm just starting to get into it, learning little by little. I want to create something of my own, even if it's small, but made with my own hands." data-ru="<strong>Привет.</strong> Моя основная работа — наладчик, я имею дело с оборудованием и железом. А программирование — это моё новое увлечение, я только начинаю в него погружаться, изучаю понемногу. Хочется сделать что-то своё, пусть даже небольшое, но своими руками."><strong>Hi.</strong> My main job is as a maintenance technician — I work with equipment and hardware. Programming is my new hobby; I'm just starting to get into it, learning little by little. I want to create something of my own, even if it's small, but made with my own hands.</p>
                     <br />
-                    <p class="i18n" data-en="But I'm human, and emotions take their toll. When something doesn't work out — be it code, a task, or just some little thing — I start feeling sad. I can go quiet for a long time, retreat into myself, stop noticing what's around me." data-ru="Но я человек, и эмоции дают о себе знать. Когда что-то не получается — будь то код, задача или какая-то мелочь — я начинаю грустить. Могу надолго замолчать, уйти в себя, перестать замечать, что вокруг.">But I'm human, and emotions take their toll. When something doesn't work out — be it code, a task, or just some little thing — I start feeling sad. I can go quiet for a long time, retreat into myself, stop noticing what's around me.</p>
+                    <p class="i18n" data-en="I put effort into it, trying to figure things out even when something doesn't work. It's my escape." data-ru="Я вкладываю в это старание, даже когда что-то не получается, пытаюсь разобраться. Это моя отдушина.">I put effort into it, trying to figure things out even when something doesn't work. It's my escape.</p>
                     <br />
-                    <p class="i18n" data-en="That's how I am. With all my ups and downs, weaknesses, and stubbornness." data-ru="Таким я и являюсь. Со всеми взлётами и падениями, слабостями и упрямством.">That's how I am. With all my ups and downs, weaknesses, and stubbornness.</p>
+                    <p class="i18n" data-en="But I'm human, and emotions take their toll. When something goes wrong — code gets stuck, a project won't compile, or just some little thing throws me off — I get upset. I can withdraw into myself, go quiet, stop noticing what's going on around me." data-ru="Но я человек, и эмоции берут своё. Когда что-то идёт не так — завис код, не собирается проект или просто какая-то мелочь выбивает из колеи — я расстраиваюсь. Могу замкнуться в себе, замолчать, перестать замечать, что творится вокруг.">But I'm human, and emotions take their toll. When something goes wrong — code gets stuck, a project won't compile, or just some little thing throws me off — I get upset. I can withdraw into myself, go quiet, stop noticing what's going on around me.</p>
+                    <br />
+                    <p class="i18n" data-en="That's how I am. With all my ups and downs, weaknesses, and stubbornness." data-ru="Такой я есть. Со всеми своими взлётами, падениями, слабостями и упрямством.">That's how I am. With all my ups and downs, weaknesses, and stubbornness.</p>
                     <div class="block-tags">
                         <span class="tag gold">☀️ <span class="i18n" data-en="Sun Child" data-ru="Солнечный ребёнок">Sun Child</span></span>
                         <span class="tag pink">✝️ <span class="i18n" data-en="Orthodox Christian" data-ru="Православный христианин">Orthodox Christian</span></span>
@@ -1231,7 +1543,7 @@
                         <div class="name">Roza OS</div>
                         <div class="sub">Debian-based Linux distribution</div>
                     </div>
-                    <span class="status-badge frozen">❄️ <span class="i18n" data-en="Frozen" data-ru="Заморожен">Frozen</span></span>
+                    <span class="status-badge planned">🔵 <span class="i18n" data-en="Planned" data-ru="Запланирован">Planned</span></span>
                 </div>
                 <div class="desc i18n" data-en="Linux distribution based on Debian with XFCE desktop and preinstalled packages." data-ru="Linux-дистрибутив на базе Debian с окружением XFCE и предустановленными пакетами.">Linux distribution based on Debian with XFCE desktop and preinstalled packages.</div>
                 <div class="tags">
@@ -1310,7 +1622,7 @@
                 <div class="icon-big"><img src="gim/rozaos.png" alt="Roza OS" /></div>
                 <div>
                     <div class="name-big">Roza OS <span class="sub">Debian-based Linux distribution</span></div>
-                    <span class="status-big frozen">❄️ <span class="i18n" data-en="Frozen" data-ru="Заморожен">Frozen</span></span>
+                    <span class="status-big planned">🔵 <span class="i18n" data-en="Planned" data-ru="Запланирован">Planned</span></span>
                     <div class="tags-big">
                         <span class="tag">Debian</span>
                         <span class="tag">XFCE</span>
@@ -1323,7 +1635,7 @@
                 <div class="info-box">
                     <div class="title">📋 <span class="i18n" data-en="Information" data-ru="Информация">Information</span></div>
                     <div class="body">
-                        <div><span class="label"><span class="i18n" data-en="Status" data-ru="Статус">Status</span>:</span> <span class="value">❄️ <span class="i18n" data-en="Frozen" data-ru="Заморожен">Frozen</span></span></div>
+                        <div><span class="label"><span class="i18n" data-en="Status" data-ru="Статус">Status</span>:</span> <span class="value">🔵 <span class="i18n" data-en="Planned" data-ru="Запланирован">Planned</span></span></div>
                         <div><span class="label"><span class="i18n" data-en="Base" data-ru="Основа">Base</span>:</span> <span class="value">Debian</span></div>
                         <div><span class="label"><span class="i18n" data-en="Environment" data-ru="Окружение">Environment</span>:</span> <span class="value">XFCE</span></div>
                         <div><span class="label"><span class="i18n" data-en="License" data-ru="Лицензия">License</span>:</span> <span class="value">GPL</span></div>
@@ -1342,7 +1654,7 @@
                             <li>📦 <strong><span class="i18n" data-en="Packages" data-ru="Пакеты">Packages</span>:</strong> Firefox, VLC, LibreOffice, GParted, Remmina</li>
                         </ul>
                         <br />
-                        <p><strong><span class="i18n" data-en="Status" data-ru="Статус">Status</span>:</strong> ❄️ <span class="i18n" data-en="Frozen. Development is paused." data-ru="Заморожен. Разработка приостановлена.">Frozen. Development is paused.</span></p>
+                        <p><strong><span class="i18n" data-en="Status" data-ru="Статус">Status</span>:</strong> 🔵 <span class="i18n" data-en="Planned. Development has not started yet." data-ru="Запланирован. Разработка ещё не началась.">Planned. Development has not started yet.</span></p>
                     </div>
                 </div>
             </div>
@@ -1537,15 +1849,29 @@
     </div>
 
     <!-- ====== МУЗЫКА ====== -->
-    <div class="music-controls" id="music-controls">
-        <button id="music-toggle" title="Play / Pause">▶</button>
+    <div class="music-controls" id="music-controls" aria-label="Music player">
+        <button id="music-toggle" title="Play / Pause" aria-label="Play / Pause">▶</button>
+        <button id="music-next" class="music-action" title="Next track" aria-label="Next track">⏭</button>
+        <div class="music-track">
+            <span class="music-track-title" id="music-track-title">Solarium Theme</span>
+            <div class="music-progress-row">
+                <span class="music-time" id="music-current">0:00</span>
+                <input type="range" class="music-progress" id="music-progress" min="0" max="100" step="0.1" value="0" aria-label="Track progress" />
+                <span class="music-time" id="music-duration">0:00</span>
+            </div>
+        </div>
+        <button id="music-mute" class="music-action" title="Mute" aria-label="Mute">🔊</button>
         <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.01" value="0.5" aria-label="Volume" />
-        <span class="music-label" id="music-status">🔇</span>
     </div>
 
-    <audio id="bg-music" loop preload="auto">
-        <source src="music/theme.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="bg-music" preload="auto"></audio>
+
+    <!-- ====== НИЖНЯЯ НАВИГАЦИЯ ДЛЯ ТЕЛЕФОНА ====== -->
+    <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
+        <button class="active" data-tab="home"><span class="mobile-icon">🏠</span><span class="i18n" data-en="Home" data-ru="Главная">Home</span></button>
+        <button data-tab="wiki"><span class="mobile-icon">📚</span><span class="i18n" data-en="Wiki" data-ru="Вики">Wiki</span></button>
+        <button data-tab="contact"><span class="mobile-icon">✉️</span><span class="i18n" data-en="Contact" data-ru="Контакты">Contact</span></button>
+    </nav>
 
     <!-- ====== ПОДВАЛ ====== -->
     <footer class="footer">
@@ -1570,7 +1896,7 @@
             const target = document.getElementById('tab-' + tabId);
             if (target) target.classList.add('active');
 
-            document.querySelectorAll('.nav-buttons button').forEach(btn => {
+            document.querySelectorAll('.nav-buttons button, .mobile-nav button').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.tab === tabId);
             });
 
@@ -1580,7 +1906,7 @@
             }
         }
 
-        document.querySelectorAll('.nav-buttons button').forEach(btn => {
+        document.querySelectorAll('.nav-buttons button, .mobile-nav button').forEach(btn => {
             btn.addEventListener('click', function() {
                 switchTab(this.dataset.tab);
             });
@@ -1637,83 +1963,142 @@
         } catch (e) {}
 
         // ============================================================
-        // 3. МУЗЫКА — НЕ ИГРАЕТ СРАЗУ, СОХРАНЯЕТ СОСТОЯНИЕ
+        // 3. МУЗЫКА — ПЛЕЕР С ПРОГРЕССОМ, MUTE И NEXT
         // ============================================================
         const audio = document.getElementById('bg-music');
         const musicToggle = document.getElementById('music-toggle');
+        const musicNext = document.getElementById('music-next');
+        const musicMute = document.getElementById('music-mute');
         const volumeSlider = document.getElementById('volume-slider');
-        const musicStatus = document.getElementById('music-status');
-        let isPlaying = false;
+        const musicProgress = document.getElementById('music-progress');
+        const musicTitle = document.getElementById('music-track-title');
+        const musicCurrent = document.getElementById('music-current');
+        const musicDuration = document.getElementById('music-duration');
 
-        // Загружаем состояние из localStorage
-        const savedState = localStorage.getItem('solarium-music-state');
+        // Название трека берётся автоматически из имени файла.
+        // Например: music/55 Days at Peking.mp3 → 55 Days at Peking
+        const playlist = [
+            { src: 'music/55 Days at Peking.mp3' },
+            { src: 'music/Небо над водою, над рікою білий дим.mp3' }
+        ];
+
+        let currentTrack = 0;
+        let wasPlayingBeforeChange = false;
+
+        function formatTime(seconds) {
+            if (!Number.isFinite(seconds)) return '0:00';
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
+            return mins + ':' + secs;
+        }
+
+        function loadTrack(index, autoplay = false) {
+            if (!playlist.length) return;
+            currentTrack = (index + playlist.length) % playlist.length;
+            const track = playlist[currentTrack];
+            audio.src = track.src;
+
+            // Берём отображаемое название непосредственно из имени файла.
+            const fileName = decodeURIComponent(track.src.split('/').pop());
+            const trackName = fileName.replace(/\.[^/.]+$/, '');
+            musicTitle.textContent = trackName;
+            musicProgress.value = 0;
+            musicCurrent.textContent = '0:00';
+            musicDuration.textContent = '0:00';
+
+            if (autoplay) {
+                audio.play().then(updatePlayState).catch(() => updatePlayState());
+            } else {
+                updatePlayState();
+            }
+        }
+
+        function updatePlayState() {
+            musicToggle.textContent = audio.paused ? '▶' : '⏸';
+            musicToggle.setAttribute('aria-label', audio.paused ? 'Play' : 'Pause');
+        }
+
+        function updateMuteState() {
+            musicMute.textContent = audio.muted || audio.volume <= 0.01 ? '🔇' : '🔊';
+            musicMute.title = audio.muted ? 'Unmute' : 'Mute';
+        }
+
+        function saveMusicState() {
+            try {
+                localStorage.setItem('solarium-music-state', audio.paused ? 'paused' : 'playing');
+                localStorage.setItem('solarium-music-volume', audio.volume);
+                localStorage.setItem('solarium-music-track', currentTrack);
+            } catch (e) {}
+        }
+
         const savedVolume = localStorage.getItem('solarium-music-volume');
+        const savedTrack = parseInt(localStorage.getItem('solarium-music-track') || '0', 10);
+        const savedState = localStorage.getItem('solarium-music-state');
 
-        // Устанавливаем громкость
-        if (savedVolume !== null) {
-            audio.volume = parseFloat(savedVolume);
-            volumeSlider.value = savedVolume;
-        } else {
-            audio.volume = 0.5;
-            volumeSlider.value = 0.5;
-        }
+        audio.volume = savedVolume !== null ? Math.min(1, Math.max(0, parseFloat(savedVolume) || 0.5)) : 0.5;
+        volumeSlider.value = audio.volume;
+        loadTrack(Number.isFinite(savedTrack) ? savedTrack : 0, false);
+        updateMuteState();
 
-        // Восстанавливаем состояние
         if (savedState === 'playing') {
-            // Если было "playing" — пробуем включить, но с задержкой
             setTimeout(() => {
-                audio.play().then(() => {
-                    musicToggle.textContent = '⏸';
-                    musicStatus.textContent = '🔊';
-                    isPlaying = true;
-                }).catch(() => {
-                    // Если не получилось — оставляем выключенным
-                    musicToggle.textContent = '▶';
-                    musicStatus.textContent = '🔇';
-                    isPlaying = false;
-                    localStorage.setItem('solarium-music-state', 'paused');
-                });
+                audio.play().then(updatePlayState).catch(updatePlayState);
             }, 500);
-        } else {
-            // По умолчанию — выключено
-            musicToggle.textContent = '▶';
-            musicStatus.textContent = '🔇';
-            isPlaying = false;
-            localStorage.setItem('solarium-music-state', 'paused');
         }
 
-        // Кнопка Play/Pause
-        musicToggle.addEventListener('click', function() {
+        musicToggle.addEventListener('click', () => {
             if (audio.paused) {
-                audio.play().then(() => {
-                    this.textContent = '⏸';
-                    musicStatus.textContent = '🔊';
-                    isPlaying = true;
-                    localStorage.setItem('solarium-music-state', 'playing');
-                }).catch(() => {});
+                audio.play().then(updatePlayState).catch(updatePlayState);
             } else {
                 audio.pause();
-                this.textContent = '▶';
-                musicStatus.textContent = '🔇';
-                isPlaying = false;
-                localStorage.setItem('solarium-music-state', 'paused');
+                updatePlayState();
+            }
+            saveMusicState();
+        });
+
+        musicNext.addEventListener('click', () => {
+            wasPlayingBeforeChange = !audio.paused;
+            loadTrack(currentTrack + 1, wasPlayingBeforeChange);
+            saveMusicState();
+        });
+
+        musicMute.addEventListener('click', () => {
+            audio.muted = !audio.muted;
+            updateMuteState();
+        });
+
+        volumeSlider.addEventListener('input', () => {
+            audio.volume = parseFloat(volumeSlider.value);
+            if (audio.volume > 0) audio.muted = false;
+            updateMuteState();
+            saveMusicState();
+        });
+
+        audio.addEventListener('loadedmetadata', () => {
+            musicProgress.max = audio.duration || 100;
+            musicDuration.textContent = formatTime(audio.duration);
+        });
+
+        audio.addEventListener('timeupdate', () => {
+            if (Number.isFinite(audio.duration)) {
+                musicProgress.max = audio.duration;
+                musicProgress.value = audio.currentTime;
+                musicCurrent.textContent = formatTime(audio.currentTime);
+                musicDuration.textContent = formatTime(audio.duration);
             }
         });
 
-        // Громкость
-        volumeSlider.addEventListener('input', function() {
-            audio.volume = this.value;
-            localStorage.setItem('solarium-music-volume', this.value);
-            musicStatus.textContent = audio.volume > 0.01 ? '🔊' : '🔇';
+        musicProgress.addEventListener('input', () => {
+            audio.currentTime = parseFloat(musicProgress.value);
         });
 
-        // Когда музыка закончилась
-        audio.addEventListener('ended', function() {
-            this.currentTime = 0;
-            musicToggle.textContent = '▶';
-            musicStatus.textContent = '🔇';
-            isPlaying = false;
-            localStorage.setItem('solarium-music-state', 'paused');
+        audio.addEventListener('play', updatePlayState);
+        audio.addEventListener('pause', () => { updatePlayState(); saveMusicState(); });
+
+        audio.addEventListener('ended', () => {
+            // Автоматически переходим к следующему треку.
+            loadTrack(currentTrack + 1, true);
+            saveMusicState();
         });
 
         // ============================================================
