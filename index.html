@@ -1388,6 +1388,49 @@ box-sizing: border-box;
         *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
     }
 
+
+/* ====== MODERN UI ENHANCEMENTS ====== */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: radial-gradient(circle at 50% -10%, rgba(108,140,255,.12), transparent 38%), radial-gradient(circle at 10% 90%, rgba(167,139,250,.08), transparent 30%);
+}
+.header { box-shadow: 0 10px 40px rgba(0,0,0,.35); }
+.header .logo { cursor: pointer; }
+.header .logo .icon { width: 42px; height: 42px; display:grid; place-items:center; border:1px solid var(--border); border-radius:12px; background:linear-gradient(145deg,#151523,#0d0d15); box-shadow: inset 0 0 18px rgba(108,140,255,.08); }
+.main-container { max-width: 1100px; }
+.hero, .block, .quick-item, .profile-hero, .contact-card, .wiki-entry, .info-box { box-shadow: 0 14px 40px rgba(0,0,0,.18); }
+.hero, .block, .quick-item, .contact-card, .wiki-entry, .info-box { transition: transform .35s ease, border-color .35s ease, background .35s ease, box-shadow .35s ease; }
+.hero:hover, .block:hover, .quick-item:hover, .contact-card:hover, .wiki-entry:hover, .info-box:hover { transform: translateY(-3px); box-shadow: 0 18px 48px rgba(0,0,0,.28); }
+.tab.active { animation: tabIn .45s ease both; }
+@keyframes tabIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity .65s ease, transform .65s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+.star { box-shadow: 0 0 6px rgba(255,255,255,.35); }
+.music-controls { max-width: min(760px, calc(100% - 24px)); left:50%; right:auto; transform:translateX(-50%); width:calc(100% - 24px); justify-content:center; }
+.music-controls.is-playing { border-color: rgba(108,140,255,.55); box-shadow: 0 12px 45px rgba(0,0,0,.55), 0 0 24px rgba(108,140,255,.10); }
+.music-track-title { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.mobile-nav { display:none; }
+@media (max-width: 760px) {
+    .header { padding:10px 14px; position:sticky; }
+    .header .logo h1 { font-size:16px; }
+    .header .logo .subtitle { font-size:8px; letter-spacing:2px; }
+    .header .logo .icon { width:36px; height:36px; font-size:22px; }
+    .header .right-group { width:100%; justify-content:space-between; }
+    .header .nav-buttons { display:none; }
+    .main-container { padding:20px 14px 130px; }
+    .music-controls { bottom:64px; padding:9px 10px; gap:6px; }
+    .music-track { width:auto; flex:1; min-width:0; }
+    .music-controls .volume-slider { width:48px; }
+    .mobile-nav { position:fixed; display:flex; left:8px; right:8px; bottom:8px; z-index:110; background:rgba(12,12,19,.94); backdrop-filter:blur(18px); border:1px solid var(--border); border-radius:16px; padding:6px; box-shadow:0 12px 40px rgba(0,0,0,.5); }
+    .mobile-nav button { flex:1; border:0; background:transparent; color:var(--text-secondary); padding:7px 4px; border-radius:11px; font:inherit; font-size:11px; cursor:pointer; }
+    .mobile-nav button.active { background:var(--accent-1); color:#fff; }
+    .mobile-icon { display:block; font-size:17px; margin-bottom:2px; }
+}
+
 </style>
 
 </head>
@@ -1423,7 +1466,7 @@ box-sizing: border-box;
     <!-- HOME -->
     <!-- ========================================================== -->
     <div class="tab active" id="tab-home">
-        <div class="hero">
+        <div class="hero reveal">
             <h2>✧ Welcome to <span>Solarium Umbris</span></h2>
             <p class="i18n" data-en="Encyclopedia of worlds, projects and ideas" data-ru="Энциклопедия миров, проектов и идей">Encyclopedia of worlds, projects and ideas</p>
             <div class="stats-bar">
@@ -1434,7 +1477,7 @@ box-sizing: border-box;
         </div>
 
         <!-- ПРОФИЛЬ -->
-        <div class="profile-hero">
+        <div class="profile-hero reveal">
             <img class="avatar" src="gim/AVATARKA.jpg" alt="Vladislav Fosk-Kosarh" />
             <div class="profile-main">
                 <div class="name">Vladislav Fosk-Kosarh</div>
@@ -1450,7 +1493,7 @@ box-sizing: border-box;
         </div>
 
         <!-- БЫСТРАЯ ИНФОРМАЦИЯ -->
-        <div class="quick-info">
+        <div class="quick-info reveal">
             <div class="quick-item">
                 <span class="quick-icon">🎂</span>
                 <div><small class="i18n" data-en="Age" data-ru="Возраст">Age</small><strong>18 <span class="i18n" data-en="years" data-ru="лет">years</span></strong></div>
@@ -1470,7 +1513,7 @@ box-sizing: border-box;
         </div>
 
         <!-- О СЕБЕ -->
-        <div class="block">
+        <div class="block reveal">
             <div class="block-title">📜 <span class="i18n" data-en="About Me" data-ru="О себе">About Me</span></div>
             <div class="block-text">
                 <p class="i18n" data-en="<strong>Hi.</strong> My main job is as a maintenance technician — I work with equipment and hardware. Programming is my new hobby; I'm just starting to get into it, learning little by little. I want to create something of my own, even if it's small, but made with my own hands." data-ru="<strong>Привет.</strong> Моя основная работа — наладчик, я имею дело с оборудованием и железом. А программирование — это моё новое увлечение, я только начинаю в него погружаться, изучаю понемногу. Хочется сделать что-то своё, пусть даже небольшое, но своими руками."><strong>Hi.</strong> My main job is as a maintenance technician — I work with equipment and hardware. Programming is my new hobby; I'm just starting to get into it, learning little by little. I want to create something of my own, even if it's small, but made with my own hands.</p>
@@ -1582,7 +1625,7 @@ box-sizing: border-box;
         </div>
 
         <!-- Roza OS -->
-        <div class="wiki-entry" onclick="switchTab('project-roza')">
+        <div class="wiki-entry reveal" onclick="switchTab('project-roza')">
             <div class="top-row">
                 <div class="icon"><img src="gim/rozaos.png" alt="Roza OS" /></div>
                 <div>
@@ -1678,7 +1721,7 @@ box-sizing: border-box;
             </div>
         </div>
         <div class="info-grid">
-            <div class="info-box">
+            <div class="info-box reveal">
                 <div class="title">📋 <span class="i18n" data-en="Information" data-ru="Информация">Information</span></div>
                 <div class="body">
                     <div><span class="label"><span class="i18n" data-en="Status" data-ru="Статус">Status</span>:</span> <span class="value">🔵 <span class="i18n" data-en="Planned" data-ru="Запланирован">Planned</span></span></div>
@@ -1852,7 +1895,7 @@ box-sizing: border-box;
         </div>
 
         <div class="contact-grid">
-            <a class="contact-card" href="[https://t.me/VladislavFoskKosarh](https://t.me/VladislavFoskKosarh)" target="\_blank" rel="noopener">
+            <a class="contact-card reveal" href="[https://t.me/VladislavFoskKosarh](https://t.me/VladislavFoskKosarh)" target="\_blank" rel="noopener">
                 <span class="contact-icon">✈️</span>
                 <span class="contact-info">
                     <span class="contact-name">Telegram</span>
@@ -1899,7 +1942,7 @@ box-sizing: border-box;
     <button id="music-toggle" title="Play / Pause" aria-label="Play / Pause">▶</button>
     <button id="music-next" class="music-action" title="Next track" aria-label="Next track">⏭</button>
     <div class="music-track">
-        <span class="music-track-title" id="music-track-title">55 Days at Peking</span>
+        <span class="music-track-title" id="music-track-title">Theme</span>
         <div class="music-progress-row">
             <span class="music-time" id="music-current">0:00</span>
             <input type="range" class="music-progress" id="music-progress" min="0" max="100" step="0.1" value="0" aria-label="Track progress" />
@@ -1910,8 +1953,8 @@ box-sizing: border-box;
     <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.01" value="0.5" aria-label="Volume" />
 </div>
 
-<audio id="bg-music" preload="metadata">
-    <source src="music/peking.mp3" type="audio/mpeg">
+<audio id="bg-music" preload="auto" playsinline>
+    <source src="music/theme.mp3" type="audio/mpeg">
     Ваш браузер не поддерживает аудио.
 </audio>
 
@@ -2012,7 +2055,6 @@ box-sizing: border-box;
     } catch (e) {}
 
     // ============================================================
-    // ============================================================
     // 3. МУЗЫКА — НАДЁЖНЫЙ ЛОКАЛЬНЫЙ ПЛЕЕР
     // ============================================================
     const audio = document.getElementById('bg-music');
@@ -2024,11 +2066,12 @@ box-sizing: border-box;
     const musicDuration = document.getElementById('music-duration');
     const volumeSlider = document.getElementById('volume-slider');
     const musicTitle = document.getElementById('music-track-title');
+    const musicControls = document.getElementById('music-controls');
 
-    // Важно: путь должен быть относительно HTML-файла.
-    const MUSIC_SRC = 'music/peking.mp3';
+    // Файл должен находиться рядом с index.html в папке music.
+    const MUSIC_SRC = './music/theme.mp3';
     audio.src = MUSIC_SRC;
-    audio.preload = 'metadata';
+    audio.preload = 'auto';
     audio.volume = 0.5;
 
     function formatTime(seconds) {
@@ -2038,32 +2081,47 @@ box-sizing: border-box;
         return mins + ':' + secs;
     }
 
-    function setMusicStatus(text, error = false) {
-        musicTitle.textContent = text;
-        musicTitle.style.color = error ? '#f87171' : '';
+    function musicErrorMessage() {
+        const code = audio.error ? audio.error.code : 0;
+        const messages = {
+            1: 'Загрузка музыки отменена',
+            2: 'Ошибка сети при загрузке музыки',
+            3: 'Файл повреждён или не поддерживается',
+            4: 'Формат MP3 не поддерживается браузером'
+        };
+        musicTitle.textContent = '⚠️ ' + (messages[code] || 'Не найден ./music/theme.mp3');
+        musicTitle.style.color = '#f87171';
+        musicToggle.disabled = false;
+    }
+
+    function resetMusicTitle() {
+        musicTitle.textContent = 'Theme';
+        musicTitle.style.color = '';
     }
 
     audio.addEventListener('loadedmetadata', () => {
         musicDuration.textContent = formatTime(audio.duration);
-        musicProgress.max = audio.duration || 100;
-        setMusicStatus('55 Days at Peking');
+        musicProgress.max = Number.isFinite(audio.duration) ? audio.duration : 100;
+        resetMusicTitle();
     });
+
+    audio.addEventListener('canplay', resetMusicTitle);
 
     audio.addEventListener('timeupdate', () => {
         musicCurrent.textContent = formatTime(audio.currentTime);
-        if (!musicProgress.matches(':active')) {
-            musicProgress.value = audio.currentTime;
-        }
+        if (!musicProgress.matches(':active')) musicProgress.value = audio.currentTime;
     });
 
     audio.addEventListener('play', () => {
         musicToggle.textContent = '⏸';
         musicToggle.setAttribute('aria-label', 'Pause');
+        musicControls.classList.add('is-playing');
     });
 
     audio.addEventListener('pause', () => {
         musicToggle.textContent = '▶';
         musicToggle.setAttribute('aria-label', 'Play');
+        musicControls.classList.remove('is-playing');
     });
 
     audio.addEventListener('ended', () => {
@@ -2071,24 +2129,22 @@ box-sizing: border-box;
         musicProgress.value = 0;
         musicCurrent.textContent = '0:00';
         musicToggle.textContent = '▶';
+        musicControls.classList.remove('is-playing');
     });
 
-    audio.addEventListener('error', () => {
-        setMusicStatus('⚠️ Не удалось загрузить music/peking.mp3', true);
-        musicToggle.disabled = true;
-        musicToggle.style.opacity = '0.45';
-    });
+    audio.addEventListener('error', musicErrorMessage);
 
     musicToggle.addEventListener('click', async () => {
-        if (audio.paused) {
-            try {
+        try {
+            if (audio.paused) {
+                resetMusicTitle();
                 await audio.play();
-            } catch (error) {
-                console.error('Audio playback error:', error);
-                setMusicStatus('⚠️ Нажмите Play ещё раз или проверьте music/peking.mp3', true);
+            } else {
+                audio.pause();
             }
-        } else {
-            audio.pause();
+        } catch (error) {
+            console.error('Audio playback error:', error);
+            musicErrorMessage();
         }
     });
 
@@ -2096,7 +2152,6 @@ box-sizing: border-box;
         audio.muted = !audio.muted;
         musicMute.textContent = audio.muted ? '🔇' : '🔊';
         musicMute.classList.toggle('muted', audio.muted);
-        musicMute.setAttribute('aria-label', audio.muted ? 'Unmute' : 'Mute');
     });
 
     volumeSlider.addEventListener('input', () => {
@@ -2107,21 +2162,15 @@ box-sizing: border-box;
     });
 
     musicProgress.addEventListener('input', () => {
-        if (Number.isFinite(audio.duration)) {
-            audio.currentTime = Number(musicProgress.value);
-        }
+        if (Number.isFinite(audio.duration)) audio.currentTime = Number(musicProgress.value);
     });
 
-    // Пока доступен только один трек — кнопка Next возвращает его в начало.
-    musicNext.addEventListener('click', () => {
+    musicNext.addEventListener('click', async () => {
         audio.currentTime = 0;
-        musicProgress.value = 0;
-        musicCurrent.textContent = '0:00';
-        audio.play().catch(() => {});
+        try { await audio.play(); } catch (e) { musicErrorMessage(); }
     });
 
-    // Загружаем метаданные сразу. Автозапуска нет: современные браузеры
-    // блокируют звук без действия пользователя.
+    // Не запускаем автоматически — браузеры блокируют autoplay со звуком.
     audio.load();
 
     // 4. ЗВЁЗДЫ
@@ -2143,6 +2192,17 @@ box-sizing: border-box;
         }
     }
     createStars();
+
+    // Плавное появление элементов при прокрутке.
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
     // ============================================================
     // 5. ЗАПУСК
