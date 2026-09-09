@@ -1996,9 +1996,15 @@
             if (!playlist.length) return;
             currentTrack = (index + playlist.length) % playlist.length;
             const track = playlist[currentTrack];
-            audio.src = track.src;
 
-            // Берём отображаемое название непосредственно из имени файла.
+            // Корректно обрабатываем пробелы, кириллицу и другие символы в имени файла.
+            try {
+                audio.src = new URL(track.src, document.baseURI).href;
+            } catch (e) {
+                audio.src = encodeURI(track.src);
+            }
+
+            // Название берём прямо из имени файла, без расширения .mp3.
             const fileName = decodeURIComponent(track.src.split('/').pop());
             const trackName = fileName.replace(/\.[^/.]+$/, '');
             musicTitle.textContent = trackName;
@@ -2077,6 +2083,11 @@
         audio.addEventListener('loadedmetadata', () => {
             musicProgress.max = audio.duration || 100;
             musicDuration.textContent = formatTime(audio.duration);
+        });
+
+        audio.addEventListener('error', () => {
+            console.error('Не удалось загрузить музыку:', playlist[currentTrack]?.src, audio.error);
+            updatePlayState();
         });
 
         audio.addEventListener('timeupdate', () => {
