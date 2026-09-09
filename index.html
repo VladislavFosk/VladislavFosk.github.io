@@ -1853,7 +1853,7 @@
         <button id="music-toggle" title="Play / Pause" aria-label="Play / Pause">▶</button>
         <button id="music-next" class="music-action" title="Next track" aria-label="Next track">⏭</button>
         <div class="music-track">
-            <span class="music-track-title" id="music-track-title">Solarium Theme</span>
+            <span class="music-track-title" id="music-track-title">55 Days at Peking</span>
             <div class="music-progress-row">
                 <span class="music-time" id="music-current">0:00</span>
                 <input type="range" class="music-progress" id="music-progress" min="0" max="100" step="0.1" value="0" aria-label="Track progress" />
@@ -1864,7 +1864,10 @@
         <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.01" value="0.5" aria-label="Volume" />
     </div>
 
-    <audio id="bg-music" preload="auto"></audio>
+    <audio id="bg-music" preload="metadata">
+        <source src="music/peking.mp3" type="audio/mpeg">
+        Ваш браузер не поддерживает аудио.
+    </audio>
 
     <!-- ====== НИЖНЯЯ НАВИГАЦИЯ ДЛЯ ТЕЛЕФОНА ====== -->
     <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
@@ -1975,82 +1978,96 @@
         const musicCurrent = document.getElementById('music-current');
         const musicDuration = document.getElementById('music-duration');
 
-        // Название трека берётся автоматически из имени файла.
-        // Например: music/55 Days at Peking.mp3 → 55 Days at Peking
-        const playlist = [{ src: 'music/peking.mp3' }];
-        let currentTrack = 0;
+        // Устанавливаем начальные значения
+        audio.volume = 0.5;
+        volumeSlider.value = 0.5;
+        musicTitle.textContent = '55 Days at Peking';
 
         function formatTime(seconds) {
-            if (!Number.isFinite(seconds)) return '0:00';
+            if (!Number.isFinite(seconds) || isNaN(seconds) || seconds < 0) return '0:00';
             const mins = Math.floor(seconds / 60);
             const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
             return mins + ':' + secs;
         }
 
-        // Единственный трек. Запуск производится только по кнопке, чтобы браузер не блокировал звук.
-        audio.src = 'music/peking.mp3';
-        audio.preload = 'metadata';
-        musicTitle.textContent = '55 Days at Peking';
-        audio.volume = 0.5;
-        volumeSlider.value = 0.5;
-
         function updatePlayButton() {
             musicToggle.textContent = audio.paused ? '▶' : '⏸';
         }
+
         function updateMuteButton() {
             musicMute.textContent = (audio.muted || audio.volume === 0) ? '🔇' : '🔊';
         }
 
+        // Воспроизведение/пауза
         musicToggle.addEventListener('click', async () => {
             if (audio.paused) {
-                try { await audio.play(); }
-                catch (e) {
-                    console.error(e);
-                    musicTitle.textContent = '55 Days at Peking — файл не найден';
+                try {
+                    await audio.play();
+                } catch (e) {
+                    console.error('Ошибка воспроизведения:', e);
+                    musicTitle.textContent = 'Ошибка загрузки аудио';
                 }
-            } else audio.pause();
+            } else {
+                audio.pause();
+            }
             updatePlayButton();
         });
 
+        // Mute
         musicMute.addEventListener('click', () => {
             audio.muted = !audio.muted;
             updateMuteButton();
         });
 
+        // Громкость
         volumeSlider.addEventListener('input', () => {
             audio.volume = Number(volumeSlider.value);
             audio.muted = false;
             updateMuteButton();
         });
 
+        // Следующий трек — перезапускаем текущий
         musicNext.addEventListener('click', () => {
             audio.currentTime = 0;
-            audio.pause();
+            if (audio.paused) {
+                audio.play().catch(() => {});
+            }
             updatePlayButton();
         });
 
+        // Обновление длительности и прогресса
         audio.addEventListener('loadedmetadata', () => {
             musicProgress.max = audio.duration || 0;
             musicDuration.textContent = formatTime(audio.duration);
         });
+
         audio.addEventListener('timeupdate', () => {
             musicProgress.value = audio.currentTime;
             musicCurrent.textContent = formatTime(audio.currentTime);
             musicDuration.textContent = formatTime(audio.duration);
         });
+
+        // Перемотка
         musicProgress.addEventListener('input', () => {
             audio.currentTime = Number(musicProgress.value);
         });
+
+        // Обновление кнопки при смене состояния
         audio.addEventListener('play', updatePlayButton);
         audio.addEventListener('pause', updatePlayButton);
-        audio.addEventListener('ended', () => { audio.currentTime = 0; updatePlayButton(); });
-        audio.addEventListener('error', () => {
-            console.error('Не удалось загрузить music/peking.mp3', audio.error);
-            musicTitle.textContent = '55 Days at Peking — ошибка загрузки файла';
+        audio.addEventListener('ended', () => {
+            audio.currentTime = 0;
             updatePlayButton();
         });
 
-// ============================================================
+        // Обработка ошибок
+        audio.addEventListener('error', (e) => {
+            console.error('Ошибка аудио:', e);
+            musicTitle.textContent = 'Не удалось загрузить музыку';
+            updatePlayButton();
+        });
+
+        // ============================================================
         // 4. ЗВЁЗДЫ
         // ============================================================
         function createStars() {
