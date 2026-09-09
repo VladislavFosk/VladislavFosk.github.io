@@ -1,1608 +1,1810 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Solarium Umbris — Encyclopedia of Worlds</title>
-    <!-- Favicon -->
-    <link rel="icon" href="gim/logo.png" type="image/png">
-    <link rel="shortcut icon" href="gim/logo.png" type="image/png">
-    <style>
-        /* ================================================================
-           БАЗА
-           ================================================================ */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Solarium Umbris — Encyclopedia of Worlds</title>
+<!-- Favicon -->
+<link rel="icon" href="gim/logo.png" type="image/png">
+<link rel="shortcut icon" href="gim/logo.png" type="image/png">
+<style>
+/* ================================================================
+БАЗА
+================================================================ */
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
 
-        :root {
-            --bg: #0a0a0f;
-            --bg-card: #12121c;
-            --bg-card-hover: #1a1a2a;
-            --border: #252538;
-            --text: #e0e0ec;
-            --text-secondary: #9898b0;
-            --text-muted: #5a5a72;
-            --accent-1: #6c8cff;
-            --accent-2: #a78bfa;
-            --accent-3: #f472b6;
-            --accent-gold: #fbbf24;
-            --accent-green: #34d399;
-            --glow: rgba(108, 140, 255, 0.08);
-            --radius: 14px;
-            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
 
-        html {
-            scroll-behavior: smooth;
-        }
+    :root {
+        --bg: #0a0a0f;
+        --bg-card: #12121c;
+        --bg-card-hover: #1a1a2a;
+        --border: #252538;
+        --text: #e0e0ec;
+        --text-secondary: #9898b0;
+        --text-muted: #5a5a72;
+        --accent-1: #6c8cff;
+        --accent-2: #a78bfa;
+        --accent-3: #f472b6;
+        --accent-gold: #fbbf24;
+        --accent-green: #34d399;
+        --glow: rgba(108, 140, 255, 0.08);
+        --radius: 14px;
+        --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        line-height: 1.6;
+        background-image:
+            radial-gradient(ellipse at 20% 50%, rgba(108, 140, 255, 0.04) 0%, transparent 60%),
+            radial-gradient(ellipse at 80% 80%, rgba(167, 139, 250, 0.03) 0%, transparent 50%);
+        overflow-x: hidden;
+    }
+
+    /* ====== ЗВЁЗДЫ ====== */
+    .stars {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+    }
+
+    .star {
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        background: white;
+        border-radius: 50%;
+        animation: twinkle var(--duration) ease-in-out infinite alternate;
+        opacity: 0.3;
+    }
+
+    @keyframes twinkle {
+        0% {
+            opacity: 0.15;
+            transform: scale(0.8);
+        }
+        100% {
+            opacity: 0.9;
+            transform: scale(1.2);
+        }
+    }
+
+    /* ====== ШАПКА ====== */
+    .header {
+        background: rgba(10, 10, 15, 0.92);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid var(--border);
+        padding: 12px 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .header .logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .header .logo .icon {
+        font-size: 28px;
+    }
+
+    .header .logo h1 {
+        font-size: 20px;
+        font-weight: 300;
+        letter-spacing: 2px;
+        color: var(--text);
+    }
+
+    .header .logo h1 span {
+        background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 600;
+    }
+
+    .header .logo .subtitle {
+        font-size: 10px;
+        background: linear-gradient(135deg, var(--accent-1), var(--accent-2), var(--accent-3));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        display: block;
+        font-weight: 600;
+    }
+
+    .header .right-group {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .header .nav-buttons {
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+    }
+
+    .header .nav-buttons button {
+        padding: 6px 16px;
+        border: 1px solid transparent;
+        background: transparent;
+        color: var(--text-secondary);
+        border-radius: 20px;
+        font-size: 13px;
+        font-family: inherit;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .header .nav-buttons button:hover {
+        color: var(--text);
+        background: var(--bg-card);
+        border-color: var(--border);
+    }
+
+    .header .nav-buttons button.active {
+        color: #fff;
+        background: var(--accent-1);
+        border-color: var(--accent-1);
+    }
+
+    /* ====== КНОПКА ЯЗЫКА ====== */
+    .lang-toggle {
+        padding: 4px 12px;
+        border: 1px solid var(--border);
+        background: var(--bg-card);
+        color: var(--text-secondary);
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        font-family: inherit;
+        letter-spacing: 0.5px;
+    }
+
+    .lang-toggle:hover {
+        border-color: var(--accent-1);
+        color: var(--text);
+        background: var(--bg-card-hover);
+    }
+
+    /* ====== ОСНОВНАЯ ЧАСТЬ ====== */
+    .main-container {
+        flex: 1;
+        max-width: 1000px;
+        margin: 0 auto;
+        width: 100%;
+        padding: 30px 24px 50px;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* ====== ВКЛАДКИ ====== */
+    .tab {
+        display: none;
+        animation: fadeIn 0.4s ease;
+    }
+
+    .tab.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ====== ГЕРОЙ ====== */
+    .hero {
+        padding: 20px 0 10px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 28px;
+    }
+
+    .hero h2 {
+        font-size: 32px;
+        font-weight: 300;
+        letter-spacing: 2px;
+        color: var(--text);
+    }
+
+    .hero h2 span {
+        background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .hero p {
+        color: var(--text-secondary);
+        font-size: 15px;
+        margin-top: 4px;
+    }
+
+    .stats-bar {
+        display: flex;
+        gap: 30px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+        font-size: 13px;
+        color: var(--text-muted);
+    }
+
+    .stats-bar .stat {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--text-secondary);
+    }
+
+    .stats-bar .stat strong {
+        color: var(--text);
+        font-size: 18px;
+    }
+
+    /* ====== ПРОФИЛЬ ====== */
+    .profile-hero {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        padding: 20px 24px;
+        margin-bottom: 18px;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        flex-wrap: wrap;
+    }
+
+    .profile-hero .avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--border);
+        flex-shrink: 0;
+        background: var(--bg);
+    }
+
+    .profile-hero .profile-main .name {
+        font-size: 28px;
+        font-weight: 600;
+        background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .profile-hero .profile-main .nick {
+        color: var(--text-muted);
+        font-size: 15px;
+    }
+
+    .profile-hero .profile-main .title {
+        font-size: 18px;
+        color: var(--text-secondary);
+        margin: 2px 0 8px;
+    }
+
+    .profile-hero .profile-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .profile-hero .profile-tags span {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        color: var(--text-secondary);
+    }
+
+    .quick-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 10px;
+        margin: 0 0 20px;
+    }
+
+    .quick-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        transition: var(--transition);
+    }
+
+    .quick-item:hover {
+        border-color: var(--accent-1);
+    }
+
+    .quick-item .quick-icon {
+        font-size: 18px;
+    }
+
+    .quick-item small {
+        display: block;
+        color: var(--text-muted);
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .quick-item strong {
+        display: block;
+        color: var(--text);
+        font-size: 13px;
+    }
+
+    /* ====== БЛОКИ ====== */
+    .block {
+        margin: 14px 0;
+        padding: 16px 20px;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        transition: var(--transition);
+    }
+
+    .block:hover {
+        border-color: var(--border);
+    }
+
+    .block-title {
+        color: var(--text-secondary);
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .block-text {
+        color: var(--text-secondary);
+        font-size: 14px;
+        line-height: 1.8;
+    }
+
+    .block-text strong {
+        color: var(--text);
+    }
+
+    .block-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 10px;
+    }
+
+    .block-tags .tag {
+        padding: 2px 12px;
+        border-radius: 12px;
+        font-size: 11px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+    }
+
+    .block-tags .tag.accent {
+        border-color: var(--accent-1);
+        color: var(--accent-1);
+    }
+
+    .block-tags .tag.gold {
+        border-color: var(--accent-gold);
+        color: var(--accent-gold);
+    }
+
+    .block-tags .tag.pink {
+        border-color: var(--accent-3);
+        color: var(--accent-3);
+    }
+
+    .block-tags .tag.green {
+        border-color: var(--accent-green);
+        color: var(--accent-green);
+    }
+
+    /* ====== ДОСТИЖЕНИЯ ====== */
+    .achievement-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .achievement-item:last-child {
+        border-bottom: none;
+    }
+
+    .achievement-item .ach-icon {
+        font-size: 24px;
+        width: 36px;
+        flex-shrink: 0;
+        text-align: center;
+        margin-top: 2px;
+    }
+
+    .achievement-item .ach-text .title {
+        color: var(--text);
+        font-weight: 600;
+        font-size: 14px;
+        display: block;
+    }
+
+    .achievement-item .ach-text .desc {
+        color: var(--text-secondary);
+        font-size: 13px;
+        display: block;
+        margin-top: 2px;
+    }
+
+    /* ====== ПРОЕКТ В ВИКИ ====== */
+    .wiki-entry {
+        cursor: pointer;
+        transition: var(--transition);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 16px 20px;
+        background: var(--bg-card);
+        margin-bottom: 14px;
+    }
+
+    .wiki-entry:hover {
+        border-color: var(--accent-1);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 24px var(--glow);
+        background: var(--bg-card-hover);
+    }
+
+    .wiki-entry .top-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .wiki-entry .icon {
+        font-size: 32px;
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        flex-shrink: 0;
+        overflow: hidden;
+    }
+
+    .wiki-entry .icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .wiki-entry .name {
+        font-weight: 600;
+        font-size: 18px;
+        color: var(--text);
+    }
+
+    .wiki-entry .sub {
+        color: var(--text-muted);
+        font-size: 13px;
+        display: block;
+    }
+
+    .wiki-entry .status-badge {
+        margin-left: auto;
+        padding: 2px 12px;
+        border-radius: 12px;
+        font-size: 11px;
+        flex-shrink: 0;
+    }
+
+    .wiki-entry .status-badge.frozen {
+        background: rgba(239, 68, 68, 0.15);
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+
+    .wiki-entry .status-badge.planned {
+        background: rgba(108, 140, 255, 0.15);
+        color: #93c5fd;
+        border: 1px solid rgba(108, 140, 255, 0.25);
+    }
+
+    .wiki-entry .status-badge.active {
+        background: rgba(52, 211, 153, 0.15);
+        color: #6ee7b7;
+        border: 1px solid rgba(52, 211, 153, 0.2);
+    }
+
+    .wiki-entry .desc {
+        margin-top: 8px;
+        color: var(--text-secondary);
+        font-size: 13px;
+    }
+
+    .wiki-entry .tags {
+        margin-top: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .wiki-entry .tags .tag {
+        padding: 2px 10px;
+        border-radius: 12px;
+        font-size: 10px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+    }
+
+    .wiki-entry .tags .tag.accent {
+        border-color: var(--accent-1);
+        color: var(--accent-1);
+    }
+
+    .wiki-entry .tags .tag.pink {
+        border-color: var(--accent-3);
+        color: var(--accent-3);
+    }
+
+    .wiki-entry .tags .tag.gold {
+        border-color: var(--accent-gold);
+        color: var(--accent-gold);
+    }
+
+    .wiki-entry .tags .tag.green {
+        border-color: var(--accent-green);
+        color: var(--accent-green);
+    }
+
+    /* ====== ДЕТАЛЬНАЯ СТРАНИЦА ПРОЕКТА ====== */
+    .page-detail .back {
+        display: inline-block;
+        color: var(--accent-1);
+        text-decoration: none;
+        font-size: 13px;
+        cursor: pointer;
+        margin-bottom: 16px;
+        transition: var(--transition);
+    }
+
+    .page-detail .back:hover {
+        color: var(--accent-2);
+        text-decoration: underline;
+    }
+
+    .page-detail .header-info {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 16px;
+        margin-bottom: 20px;
+    }
+
+    .page-detail .icon-big {
+        font-size: 44px;
+        width: 68px;
+        height: 68px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        flex-shrink: 0;
+        overflow: hidden;
+    }
+
+    .page-detail .icon-big img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .page-detail .name-big {
+        font-size: 26px;
+        font-weight: 400;
+        color: var(--text);
+    }
+
+    .page-detail .name-big .sub {
+        font-size: 14px;
+        color: var(--text-muted);
+        font-weight: 300;
+        display: block;
+    }
+
+    .page-detail .status-big {
+        display: inline-block;
+        padding: 3px 14px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 500;
+        margin-top: 4px;
+    }
+
+    .page-detail .status-big.frozen {
+        background: rgba(239, 68, 68, 0.15);
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+
+    .page-detail .status-big.planned {
+        background: rgba(108, 140, 255, 0.15);
+        color: #93c5fd;
+        border: 1px solid rgba(108, 140, 255, 0.25);
+    }
+
+    .page-detail .status-big.active {
+        background: rgba(52, 211, 153, 0.15);
+        color: #6ee7b7;
+        border: 1px solid rgba(52, 211, 153, 0.2);
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 16px;
+    }
+
+    @media (max-width: 720px) {
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .info-box {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+    }
+
+    .info-box .title {
+        background: var(--bg-card);
+        padding: 8px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        border-bottom: 1px solid var(--border);
+    }
+
+    .info-box .body {
+        padding: 14px 16px;
+        color: var(--text-secondary);
+        font-size: 13px;
+        line-height: 1.8;
+    }
+
+    .info-box .body ul {
+        padding-left: 20px;
+    }
+
+    .info-box .body ul li {
+        margin-bottom: 4px;
+    }
+
+    .info-box .body .label {
+        color: var(--text-muted);
+    }
+
+    .info-box .body .value {
+        color: var(--text);
+    }
+
+    .page-detail .tags-big {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin: 4px 0 0;
+    }
+
+    .page-detail .tags-big .tag {
+        padding: 2px 12px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 500;
+        background: var(--bg);
+        color: var(--text-muted);
+        border: 1px solid var(--border);
+    }
+
+    .page-detail .tags-big .tag.accent {
+        border-color: var(--accent-1);
+        color: var(--accent-1);
+    }
+
+    .page-detail .tags-big .tag.pink {
+        border-color: var(--accent-3);
+        color: var(--accent-3);
+    }
+
+    .page-detail .tags-big .tag.gold {
+        border-color: var(--accent-gold);
+        color: var(--accent-gold);
+    }
+
+    .page-detail .tags-big .tag.green {
+        border-color: var(--accent-green);
+        color: var(--accent-green);
+    }
+
+    /* ====== КОНТАКТЫ ====== */
+    .contact-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 12px;
+        margin-top: 16px;
+    }
+
+    .contact-card {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        text-decoration: none;
+        color: inherit;
+        transition: var(--transition);
+    }
+
+    .contact-card:hover {
+        border-color: var(--accent-1);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 20px var(--glow);
+    }
+
+    .contact-card .contact-icon {
+        font-size: 24px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        flex-shrink: 0;
+    }
+
+    .contact-card .contact-info .contact-name {
+        display: block;
+        color: var(--text);
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .contact-card .contact-info .contact-handle {
+        display: block;
+        color: var(--text-muted);
+        font-size: 12px;
+    }
+
+    /* ====== МУЗЫКА ====== */
+    .music-controls {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 999;
+        background: rgba(18, 18, 28, 0.92);
+        backdrop-filter: blur(16px);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 12px 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+        transition: var(--transition);
+    }
+
+    .music-controls:hover {
+        border-color: var(--accent-1);
+    }
+
+    #music-toggle {
+        background: transparent;
+        border: none;
+        color: var(--accent-1);
+        font-size: 22px;
+        cursor: pointer;
+        transition: var(--transition);
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: rgba(108, 140, 255, 0.08);
+    }
+
+    #music-toggle:hover {
+        background: rgba(108, 140, 255, 0.2);
+        color: var(--accent-2);
+        transform: scale(1.05);
+    }
+
+    #music-toggle.muted {
+        color: var(--text-muted);
+        opacity: 0.5;
+    }
+
+    .music-controls .volume-slider {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 60px;
+        height: 3px;
+        border-radius: 2px;
+        background: var(--border);
+        outline: none;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .music-controls .volume-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--accent-1);
+        cursor: pointer;
+        border: 2px solid var(--bg);
+        box-shadow: 0 0 12px rgba(108, 140, 255, 0.3);
+    }
+
+    .music-controls .volume-slider::-moz-range-thumb {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--accent-1);
+        cursor: pointer;
+        border: 2px solid var(--bg);
+    }
+
+    .music-action {
+        border: none;
+        background: transparent;
+        color: var(--text-secondary);
+        font-size: 16px;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+    }
+
+    .music-action:hover {
+        color: var(--accent-1);
+        background: rgba(108, 140, 255, 0.08);
+    }
+
+    .music-track {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        width: 210px;
+        min-width: 120px;
+    }
+
+    .music-track-title {
+        color: var(--text-secondary);
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .music-progress-row {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .music-time {
+        color: var(--text-muted);
+        font-size: 9px;
+        min-width: 28px;
+    }
+
+    .music-time:last-child {
+        text-align: right;
+    }
+
+    .music-progress {
+        -webkit-appearance: none;
+        appearance: none;
+        flex: 1;
+        min-width: 60px;
+        height: 3px;
+        border-radius: 2px;
+        background: var(--border);
+        outline: none;
+        cursor: pointer;
+    }
+
+    .music-progress::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--accent-1);
+        cursor: pointer;
+    }
+
+    .music-progress::-moz-range-thumb {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--accent-1);
+        cursor: pointer;
+        border: none;
+    }
+
+    .music-label {
+        font-size: 10px;
+        color: var(--text-muted);
+        letter-spacing: 0.5px;
+        font-weight: 500;
+    }
+
+    /* ====== ПОДВАЛ ====== */
+    .footer {
+        border-top: 1px solid var(--border);
+        padding: 16px 30px;
+        text-align: center;
+        font-size: 12px;
+        color: var(--text-muted);
+        background: rgba(10, 10, 15, 0.8);
+        margin-top: auto;
+        position: relative;
+        z-index: 1;
+    }
+
+    .footer a {
+        color: var(--accent-1);
+        text-decoration: none;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .footer a:hover {
+        color: var(--accent-2);
+        text-decoration: underline;
+    }
+
+    .footer .divider {
+        color: var(--border);
+        margin: 0 6px;
+    }
+
+    .footer .highlight {
+        background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 600;
+    }
+
+    /* ====== АДАПТИВ ====== */
+    /* ====== МОБИЛЬНАЯ НАВИГАЦИЯ ====== */
+    .mobile-nav {
+        display: none;
+    }
+
+    @media (max-width: 640px) {
         body {
-            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            line-height: 1.6;
-            background-image:
-                radial-gradient(ellipse at 20% 50%, rgba(108, 140, 255, 0.04) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 80%, rgba(167, 139, 250, 0.03) 0%, transparent 50%);
-            overflow-x: hidden;
+            padding-bottom: 78px;
         }
 
-        /* ====== ЗВЁЗДЫ ====== */
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .star {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle var(--duration) ease-in-out infinite alternate;
-            opacity: 0.3;
-        }
-
-        @keyframes twinkle {
-            0% {
-                opacity: 0.15;
-                transform: scale(0.8);
-            }
-            100% {
-                opacity: 0.9;
-                transform: scale(1.2);
-            }
-        }
-
-        /* ====== ШАПКА ====== */
         .header {
-            background: rgba(10, 10, 15, 0.92);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--border);
-            padding: 12px 30px;
-            display: flex;
+            flex-direction: row;
+            gap: 8px;
             align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 12px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            padding: 10px 14px;
         }
 
         .header .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .header .logo .icon {
-            font-size: 28px;
-        }
-
-        .header .logo h1 {
-            font-size: 20px;
-            font-weight: 300;
-            letter-spacing: 2px;
-            color: var(--text);
-        }
-
-        .header .logo h1 span {
-            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-weight: 600;
-        }
-
-        .header .logo .subtitle {
-            font-size: 10px;
-            background: linear-gradient(135deg, var(--accent-1), var(--accent-2), var(--accent-3));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            display: block;
-            font-weight: 600;
-        }
-
-        .header .right-group {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .header .nav-buttons {
-            display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
-        }
-
-        .header .nav-buttons button {
-            padding: 6px 16px;
-            border: 1px solid transparent;
-            background: transparent;
-            color: var(--text-secondary);
-            border-radius: 20px;
-            font-size: 13px;
-            font-family: inherit;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .header .nav-buttons button:hover {
-            color: var(--text);
-            background: var(--bg-card);
-            border-color: var(--border);
-        }
-
-        .header .nav-buttons button.active {
-            color: #fff;
-            background: var(--accent-1);
-            border-color: var(--accent-1);
-        }
-
-        /* ====== КНОПКА ЯЗЫКА ====== */
-        .lang-toggle {
-            padding: 4px 12px;
-            border: 1px solid var(--border);
-            background: var(--bg-card);
-            color: var(--text-secondary);
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: inherit;
-            letter-spacing: 0.5px;
-        }
-
-        .lang-toggle:hover {
-            border-color: var(--accent-1);
-            color: var(--text);
-            background: var(--bg-card-hover);
-        }
-
-        /* ====== ОСНОВНАЯ ЧАСТЬ ====== */
-        .main-container {
-            flex: 1;
-            max-width: 1000px;
-            margin: 0 auto;
-            width: 100%;
-            padding: 30px 24px 50px;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* ====== ВКЛАДКИ ====== */
-        .tab {
-            display: none;
-            animation: fadeIn 0.4s ease;
-        }
-
-        .tab.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(12px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* ====== ГЕРОЙ ====== */
-        .hero {
-            padding: 20px 0 10px;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 28px;
-        }
-
-        .hero h2 {
-            font-size: 32px;
-            font-weight: 300;
-            letter-spacing: 2px;
-            color: var(--text);
-        }
-
-        .hero h2 span {
-            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero p {
-            color: var(--text-secondary);
-            font-size: 15px;
-            margin-top: 4px;
-        }
-
-        .stats-bar {
-            display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
-            margin-top: 12px;
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        .stats-bar .stat {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--text-secondary);
-        }
-
-        .stats-bar .stat strong {
-            color: var(--text);
-            font-size: 18px;
-        }
-
-        /* ====== ПРОФИЛЬ ====== */
-        .profile-hero {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            padding: 20px 24px;
-            margin-bottom: 18px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            flex-wrap: wrap;
-        }
-
-        .profile-hero .avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--border);
-            flex-shrink: 0;
-            background: var(--bg);
-        }
-
-        .profile-hero .profile-main .name {
-            font-size: 28px;
-            font-weight: 600;
-            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .profile-hero .profile-main .nick {
-            color: var(--text-muted);
-            font-size: 15px;
-        }
-
-        .profile-hero .profile-main .title {
-            font-size: 18px;
-            color: var(--text-secondary);
-            margin: 2px 0 8px;
-        }
-
-        .profile-hero .profile-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
-        .profile-hero .profile-tags span {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-        }
-
-        .quick-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 10px;
-            margin: 0 0 20px;
-        }
-
-        .quick-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 16px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            transition: var(--transition);
-        }
-
-        .quick-item:hover {
-            border-color: var(--accent-1);
-        }
-
-        .quick-item .quick-icon {
-            font-size: 18px;
-        }
-
-        .quick-item small {
-            display: block;
-            color: var(--text-muted);
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .quick-item strong {
-            display: block;
-            color: var(--text);
-            font-size: 13px;
-        }
-
-        /* ====== БЛОКИ ====== */
-        .block {
-            margin: 14px 0;
-            padding: 16px 20px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            transition: var(--transition);
-        }
-
-        .block:hover {
-            border-color: var(--border);
-        }
-
-        .block-title {
-            color: var(--text-secondary);
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
+            min-width: 0;
             gap: 8px;
         }
 
-        .block-text {
-            color: var(--text-secondary);
-            font-size: 14px;
-            line-height: 1.8;
+        .header .logo .icon {
+            font-size: 22px;
         }
 
-        .block-text strong {
-            color: var(--text);
+        .header .logo h1 {
+            font-size: 16px;
+            letter-spacing: 1px;
         }
 
-        .block-tags {
-            display: flex;
-            flex-wrap: wrap;
+        .header .logo .subtitle {
+            font-size: 8px;
+            letter-spacing: 1.5px;
+        }
+
+        .header .right-group {
+            margin-left: auto;
             gap: 6px;
-            margin-top: 10px;
         }
 
-        .block-tags .tag {
-            padding: 2px 12px;
-            border-radius: 12px;
-            font-size: 11px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            color: var(--text-muted);
+        .header .nav-buttons {
+            display: none;
         }
 
-        .block-tags .tag.accent {
-            border-color: var(--accent-1);
-            color: var(--accent-1);
+        .lang-toggle {
+            padding: 5px 9px;
+            font-size: 10px;
         }
 
-        .block-tags .tag.gold {
-            border-color: var(--accent-gold);
-            color: var(--accent-gold);
+        .main-container {
+            padding: 18px 12px 32px;
         }
 
-        .block-tags .tag.pink {
-            border-color: var(--accent-3);
-            color: var(--accent-3);
+        .hero {
+            padding: 8px 0 14px;
+            margin-bottom: 18px;
         }
 
-        .block-tags .tag.green {
-            border-color: var(--accent-green);
-            color: var(--accent-green);
+        .hero h2 {
+            font-size: 23px;
+            line-height: 1.3;
         }
 
-        /* ====== ДОСТИЖЕНИЯ ====== */
-        .achievement-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 14px;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-        }
-
-        .achievement-item:last-child {
-            border-bottom: none;
-        }
-
-        .achievement-item .ach-icon {
-            font-size: 24px;
-            width: 36px;
-            flex-shrink: 0;
-            text-align: center;
-            margin-top: 2px;
-        }
-
-        .achievement-item .ach-text .title {
-            color: var(--text);
-            font-weight: 600;
-            font-size: 14px;
-            display: block;
-        }
-
-        .achievement-item .ach-text .desc {
-            color: var(--text-secondary);
+        .hero p {
             font-size: 13px;
-            display: block;
-            margin-top: 2px;
         }
 
-        /* ====== ПРОЕКТ В ВИКИ ====== */
+        .stats-bar {
+            gap: 10px 18px;
+        }
+
+        .stats-bar .stat strong {
+            font-size: 16px;
+        }
+
+        .profile-hero {
+            flex-direction: column;
+            text-align: center;
+            padding: 18px 14px;
+            gap: 12px;
+        }
+
+        .profile-hero .avatar {
+            width: 92px;
+            height: 92px;
+        }
+
+        .profile-hero .profile-main .name {
+            font-size: 23px;
+            line-height: 1.3;
+        }
+
+        .profile-hero .profile-main .nick {
+            font-size: 13px;
+        }
+
+        .profile-hero .profile-main .title {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .profile-hero .profile-tags {
+            justify-content: center;
+        }
+
+        .quick-info {
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .quick-item {
+            min-width: 0;
+            padding: 10px;
+        }
+
+        .quick-item strong {
+            font-size: 12px;
+            overflow-wrap: anywhere;
+        }
+
+        .block {
+            padding: 14px;
+            margin: 10px 0;
+        }
+
+        .block-title {
+            font-size: 15px;
+        }
+
+        .block-text {
+            font-size: 13px;
+            overflow-wrap: anywhere;
+        }
+
+        .block-text[style*="grid-template-columns"] {
+            grid-template-columns: 1fr !important;
+            gap: 4px !important;
+        }
+
         .wiki-entry {
-            cursor: pointer;
-            transition: var(--transition);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 16px 20px;
-            background: var(--bg-card);
-            margin-bottom: 14px;
-        }
-
-        .wiki-entry:hover {
-            border-color: var(--accent-1);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 24px var(--glow);
-            background: var(--bg-card-hover);
+            padding: 14px;
+            margin-bottom: 10px;
         }
 
         .wiki-entry .top-row {
-            display: flex;
-            align-items: center;
-            gap: 14px;
+            align-items: flex-start;
         }
 
         .wiki-entry .icon {
-            font-size: 32px;
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--bg);
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-            flex-shrink: 0;
-            overflow: hidden;
-        }
-
-        .wiki-entry .icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
+            width: 44px;
+            height: 44px;
+            font-size: 28px;
         }
 
         .wiki-entry .name {
-            font-weight: 600;
-            font-size: 18px;
-            color: var(--text);
+            font-size: 16px;
+            line-height: 1.35;
         }
 
         .wiki-entry .sub {
-            color: var(--text-muted);
-            font-size: 13px;
-            display: block;
+            font-size: 11px;
         }
 
         .wiki-entry .status-badge {
             margin-left: auto;
-            padding: 2px 12px;
-            border-radius: 12px;
-            font-size: 11px;
-            flex-shrink: 0;
-        }
-
-        .wiki-entry .status-badge.frozen {
-            background: rgba(239, 68, 68, 0.15);
-            color: #f87171;
-            border: 1px solid rgba(239, 68, 68, 0.25);
-        }
-
-        .wiki-entry .status-badge.planned {
-            background: rgba(108, 140, 255, 0.15);
-            color: #93c5fd;
-            border: 1px solid rgba(108, 140, 255, 0.25);
-        }
-
-        .wiki-entry .status-badge.active {
-            background: rgba(52, 211, 153, 0.15);
-            color: #6ee7b7;
-            border: 1px solid rgba(52, 211, 153, 0.2);
+            padding: 3px 8px;
+            font-size: 10px;
         }
 
         .wiki-entry .desc {
-            margin-top: 8px;
-            color: var(--text-secondary);
-            font-size: 13px;
-        }
-
-        .wiki-entry .tags {
-            margin-top: 8px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
-        .wiki-entry .tags .tag {
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 10px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-        }
-
-        .wiki-entry .tags .tag.accent {
-            border-color: var(--accent-1);
-            color: var(--accent-1);
-        }
-
-        .wiki-entry .tags .tag.pink {
-            border-color: var(--accent-3);
-            color: var(--accent-3);
-        }
-
-        .wiki-entry .tags .tag.gold {
-            border-color: var(--accent-gold);
-            color: var(--accent-gold);
-        }
-
-        .wiki-entry .tags .tag.green {
-            border-color: var(--accent-green);
-            color: var(--accent-green);
-        }
-
-        /* ====== ДЕТАЛЬНАЯ СТРАНИЦА ПРОЕКТА ====== */
-        .page-detail .back {
-            display: inline-block;
-            color: var(--accent-1);
-            text-decoration: none;
-            font-size: 13px;
-            cursor: pointer;
-            margin-bottom: 16px;
-            transition: var(--transition);
-        }
-
-        .page-detail .back:hover {
-            color: var(--accent-2);
-            text-decoration: underline;
+            font-size: 12px;
         }
 
         .page-detail .header-info {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 16px;
-            margin-bottom: 20px;
+            flex-direction: column;
+            text-align: center;
+            gap: 12px;
         }
 
         .page-detail .icon-big {
-            font-size: 44px;
-            width: 68px;
-            height: 68px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--bg);
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-            flex-shrink: 0;
-            overflow: hidden;
-        }
-
-        .page-detail .icon-big img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
+            width: 64px;
+            height: 64px;
+            font-size: 40px;
         }
 
         .page-detail .name-big {
-            font-size: 26px;
-            font-weight: 400;
-            color: var(--text);
+            font-size: 21px;
+            line-height: 1.35;
         }
 
         .page-detail .name-big .sub {
-            font-size: 14px;
-            color: var(--text-muted);
-            font-weight: 300;
-            display: block;
-        }
-
-        .page-detail .status-big {
-            display: inline-block;
-            padding: 3px 14px;
-            border-radius: 12px;
             font-size: 12px;
-            font-weight: 500;
-            margin-top: 4px;
-        }
-
-        .page-detail .status-big.frozen {
-            background: rgba(239, 68, 68, 0.15);
-            color: #f87171;
-            border: 1px solid rgba(239, 68, 68, 0.25);
-        }
-
-        .page-detail .status-big.planned {
-            background: rgba(108, 140, 255, 0.15);
-            color: #93c5fd;
-            border: 1px solid rgba(108, 140, 255, 0.25);
-        }
-
-        .page-detail .status-big.active {
-            background: rgba(52, 211, 153, 0.15);
-            color: #6ee7b7;
-            border: 1px solid rgba(52, 211, 153, 0.2);
+            margin-top: 3px;
         }
 
         .info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 16px;
-        }
-
-        @media (max-width: 720px) {
-            .info-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .info-box {
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            overflow: hidden;
-        }
-
-        .info-box .title {
-            background: var(--bg-card);
-            padding: 8px 14px;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            border-bottom: 1px solid var(--border);
+            grid-template-columns: 1fr;
+            gap: 10px;
         }
 
         .info-box .body {
-            padding: 14px 16px;
-            color: var(--text-secondary);
-            font-size: 13px;
-            line-height: 1.8;
-        }
-
-        .info-box .body ul {
-            padding-left: 20px;
-        }
-
-        .info-box .body ul li {
-            margin-bottom: 4px;
-        }
-
-        .info-box .body .label {
-            color: var(--text-muted);
-        }
-
-        .info-box .body .value {
-            color: var(--text);
-        }
-
-        .page-detail .tags-big {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin: 4px 0 0;
-        }
-
-        .page-detail .tags-big .tag {
-            padding: 2px 12px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 500;
-            background: var(--bg);
-            color: var(--text-muted);
-            border: 1px solid var(--border);
-        }
-
-        .page-detail .tags-big .tag.accent {
-            border-color: var(--accent-1);
-            color: var(--accent-1);
-        }
-
-        .page-detail .tags-big .tag.pink {
-            border-color: var(--accent-3);
-            color: var(--accent-3);
-        }
-
-        .page-detail .tags-big .tag.gold {
-            border-color: var(--accent-gold);
-            color: var(--accent-gold);
-        }
-
-        .page-detail .tags-big .tag.green {
-            border-color: var(--accent-green);
-            color: var(--accent-green);
-        }
-
-        /* ====== КОНТАКТЫ ====== */
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 12px;
-            margin-top: 16px;
-        }
-
-        .contact-card {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 16px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            text-decoration: none;
-            color: inherit;
-            transition: var(--transition);
-        }
-
-        .contact-card:hover {
-            border-color: var(--accent-1);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px var(--glow);
-        }
-
-        .contact-card .contact-icon {
-            font-size: 24px;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--bg);
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-            flex-shrink: 0;
-        }
-
-        .contact-card .contact-info .contact-name {
-            display: block;
-            color: var(--text);
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .contact-card .contact-info .contact-handle {
-            display: block;
-            color: var(--text-muted);
             font-size: 12px;
+            overflow-wrap: anywhere;
         }
 
-        /* ====== МУЗЫКА ====== */
+        .contact-grid {
+            grid-template-columns: 1fr;
+        }
+
+        /* Плеер на мобильном: не перекрывает контент */
         .music-controls {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            z-index: 999;
-            background: rgba(18, 18, 28, 0.92);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
-            transition: var(--transition);
-        }
-
-        .music-controls:hover {
-            border-color: var(--accent-1);
-        }
-
-        #music-toggle {
-            background: transparent;
-            border: none;
-            color: var(--accent-1);
-            font-size: 22px;
-            cursor: pointer;
-            transition: var(--transition);
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background: rgba(108, 140, 255, 0.08);
-        }
-
-        #music-toggle:hover {
-            background: rgba(108, 140, 255, 0.2);
-            color: var(--accent-2);
-            transform: scale(1.05);
-        }
-
-        #music-toggle.muted {
-            color: var(--text-muted);
-            opacity: 0.5;
-        }
-
-        .music-controls .volume-slider {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 60px;
-            height: 3px;
-            border-radius: 2px;
-            background: var(--border);
-            outline: none;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .music-controls .volume-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: var(--accent-1);
-            cursor: pointer;
-            border: 2px solid var(--bg);
-            box-shadow: 0 0 12px rgba(108, 140, 255, 0.3);
-        }
-
-        .music-controls .volume-slider::-moz-range-thumb {
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: var(--accent-1);
-            cursor: pointer;
-            border: 2px solid var(--bg);
-        }
-
-        .music-action {
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
-            font-size: 16px;
-            cursor: pointer;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-        }
-
-        .music-action:hover {
-            color: var(--accent-1);
-            background: rgba(108, 140, 255, 0.08);
+            left: 10px;
+            right: 10px;
+            bottom: 68px;
+            width: auto;
+            padding: 8px 10px;
+            gap: 7px;
+            border-radius: 14px;
         }
 
         .music-track {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-            width: 210px;
-            min-width: 120px;
+            min-width: 0;
+            flex: 1;
         }
 
         .music-track-title {
-            color: var(--text-secondary);
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        .music-progress-row {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .music-time {
-            color: var(--text-muted);
-            font-size: 9px;
-            min-width: 28px;
-        }
-
-        .music-time:last-child {
-            text-align: right;
+            max-width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
 
         .music-progress {
-            -webkit-appearance: none;
-            appearance: none;
+            min-width: 0;
             flex: 1;
-            min-width: 60px;
-            height: 3px;
-            border-radius: 2px;
-            background: var(--border);
-            outline: none;
-            cursor: pointer;
         }
 
-        .music-progress::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--accent-1);
-            cursor: pointer;
+        .volume-slider {
+            width: 52px !important;
         }
 
-        .music-progress::-moz-range-thumb {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--accent-1);
-            cursor: pointer;
-            border: none;
-        }
-
-        .music-label {
-            font-size: 10px;
-            color: var(--text-muted);
-            letter-spacing: 0.5px;
-            font-weight: 500;
-        }
-
-        /* ====== ПОДВАЛ ====== */
         .footer {
-            border-top: 1px solid var(--border);
-            padding: 16px 30px;
-            text-align: center;
-            font-size: 12px;
-            color: var(--text-muted);
-            background: rgba(10, 10, 15, 0.8);
-            margin-top: auto;
-            position: relative;
-            z-index: 1;
+            padding: 14px 12px 92px;
+            font-size: 11px;
         }
 
-        .footer a {
-            color: var(--accent-1);
-            text-decoration: none;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .footer a:hover {
-            color: var(--accent-2);
-            text-decoration: underline;
-        }
-
-        .footer .divider {
-            color: var(--border);
-            margin: 0 6px;
-        }
-
-        .footer .highlight {
-            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-weight: 600;
-        }
-
-        /* ====== АДАПТИВ ====== */
-        /* ====== МОБИЛЬНАЯ НАВИГАЦИЯ ====== */
         .mobile-nav {
+            position: fixed;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            z-index: 1000;
+            padding: 6px;
+            background: rgba(18, 18, 28, 0.96);
+            backdrop-filter: blur(18px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,.55);
+        }
+
+        .mobile-nav button {
+            border: 0;
+            background: transparent;
+            color: var(--text-muted);
+            border-radius: 11px;
+            padding: 7px 4px;
+            font: inherit;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .mobile-nav button.active {
+            color: #fff;
+            background: rgba(108, 140, 255, 0.16);
+        }
+
+        .mobile-nav .mobile-icon {
+            display: block;
+            font-size: 17px;
+            line-height: 1.1;
+            margin-bottom: 2px;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .music-track {
+            width: auto;
+            flex: 1;
+        }
+
+        .music-controls .volume-slider {
             display: none;
         }
 
-        @media (max-width: 640px) {
-            body {
-                padding-bottom: 78px;
-            }
-
-            .header {
-                flex-direction: row;
-                gap: 8px;
-                align-items: center;
-                padding: 10px 14px;
-            }
-
-            .header .logo {
-                min-width: 0;
-                gap: 8px;
-            }
-
-            .header .logo .icon {
-                font-size: 22px;
-            }
-
-            .header .logo h1 {
-                font-size: 16px;
-                letter-spacing: 1px;
-            }
-
-            .header .logo .subtitle {
-                font-size: 8px;
-                letter-spacing: 1.5px;
-            }
-
-            .header .right-group {
-                margin-left: auto;
-                gap: 6px;
-            }
-
-            .header .nav-buttons {
-                display: none;
-            }
-
-            .lang-toggle {
-                padding: 5px 9px;
-                font-size: 10px;
-            }
-
-            .main-container {
-                padding: 18px 12px 32px;
-            }
-
-            .hero {
-                padding: 8px 0 14px;
-                margin-bottom: 18px;
-            }
-
-            .hero h2 {
-                font-size: 23px;
-                line-height: 1.3;
-            }
-
-            .hero p {
-                font-size: 13px;
-            }
-
-            .stats-bar {
-                gap: 10px 18px;
-            }
-
-            .stats-bar .stat strong {
-                font-size: 16px;
-            }
-
-            .profile-hero {
-                flex-direction: column;
-                text-align: center;
-                padding: 18px 14px;
-                gap: 12px;
-            }
-
-            .profile-hero .avatar {
-                width: 92px;
-                height: 92px;
-            }
-
-            .profile-hero .profile-main .name {
-                font-size: 23px;
-                line-height: 1.3;
-            }
-
-            .profile-hero .profile-main .nick {
-                font-size: 13px;
-            }
-
-            .profile-hero .profile-main .title {
-                font-size: 14px;
-                line-height: 1.4;
-            }
-
-            .profile-hero .profile-tags {
-                justify-content: center;
-            }
-
-            .quick-info {
-                grid-template-columns: 1fr 1fr;
-                gap: 8px;
-            }
-
-            .quick-item {
-                min-width: 0;
-                padding: 10px;
-            }
-
-            .quick-item strong {
-                font-size: 12px;
-                overflow-wrap: anywhere;
-            }
-
-            .block {
-                padding: 14px;
-                margin: 10px 0;
-            }
-
-            .block-title {
-                font-size: 15px;
-            }
-
-            .block-text {
-                font-size: 13px;
-                overflow-wrap: anywhere;
-            }
-
-            .block-text[style*="grid-template-columns"] {
-                grid-template-columns: 1fr !important;
-                gap: 4px !important;
-            }
-
-            .wiki-entry {
-                padding: 14px;
-                margin-bottom: 10px;
-            }
-
-            .wiki-entry .top-row {
-                align-items: flex-start;
-            }
-
-            .wiki-entry .icon {
-                width: 44px;
-                height: 44px;
-                font-size: 28px;
-            }
-
-            .wiki-entry .name {
-                font-size: 16px;
-                line-height: 1.35;
-            }
-
-            .wiki-entry .sub {
-                font-size: 11px;
-            }
-
-            .wiki-entry .status-badge {
-                margin-left: auto;
-                padding: 3px 8px;
-                font-size: 10px;
-            }
-
-            .wiki-entry .desc {
-                font-size: 12px;
-            }
-
-            .page-detail .header-info {
-                flex-direction: column;
-                text-align: center;
-                gap: 12px;
-            }
-
-            .page-detail .icon-big {
-                width: 64px;
-                height: 64px;
-                font-size: 40px;
-            }
-
-            .page-detail .name-big {
-                font-size: 21px;
-                line-height: 1.35;
-            }
-
-            .page-detail .name-big .sub {
-                font-size: 12px;
-                margin-top: 3px;
-            }
-
-            .info-grid {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-
-            .info-box .body {
-                font-size: 12px;
-                overflow-wrap: anywhere;
-            }
-
-            .contact-grid {
-                grid-template-columns: 1fr;
-            }
-
-            /* Плеер на мобильном: не перекрывает контент */
-            .music-controls {
-                left: 10px;
-                right: 10px;
-                bottom: 68px;
-                width: auto;
-                padding: 8px 10px;
-                gap: 7px;
-                border-radius: 14px;
-            }
-
-            .music-track {
-                min-width: 0;
-                flex: 1;
-            }
-
-            .music-track-title {
-                max-width: 100%;
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-            }
-
-            .music-progress {
-                min-width: 0;
-                flex: 1;
-            }
-
-            .volume-slider {
-                width: 52px !important;
-            }
-
-            .footer {
-                padding: 14px 12px 92px;
-                font-size: 11px;
-            }
-
-            .mobile-nav {
-                position: fixed;
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                left: 8px;
-                right: 8px;
-                bottom: 8px;
-                z-index: 1000;
-                padding: 6px;
-                background: rgba(18, 18, 28, 0.96);
-                backdrop-filter: blur(18px);
-                border: 1px solid var(--border);
-                border-radius: 16px;
-                box-shadow: 0 8px 30px rgba(0,0,0,.55);
-            }
-
-            .mobile-nav button {
-                border: 0;
-                background: transparent;
-                color: var(--text-muted);
-                border-radius: 11px;
-                padding: 7px 4px;
-                font: inherit;
-                font-size: 11px;
-                cursor: pointer;
-            }
-
-            .mobile-nav button.active {
-                color: #fff;
-                background: rgba(108, 140, 255, 0.16);
-            }
-
-            .mobile-nav .mobile-icon {
-                display: block;
-                font-size: 17px;
-                line-height: 1.1;
-                margin-bottom: 2px;
-            }
+        .quick-info {
+            grid-template-columns: 1fr;
         }
 
-        @media (max-width: 400px) {
-            .music-track {
-                width: auto;
-                flex: 1;
-            }
-
-            .music-controls .volume-slider {
-                display: none;
-            }
-
-            .quick-info {
-                grid-template-columns: 1fr;
-            }
-
-            .music-controls .volume-slider {
-                display: none;
-            }
+        .music-controls .volume-slider {
+            display: none;
         }
-    </style>
+    }
+
+
+    /* ====== ДОПОЛНИТЕЛЬНЫЕ УЛУЧШЕНИЯ ====== */
+    ::selection { background: rgba(108, 140, 255, .28); color: #fff; }
+    button, a, input { -webkit-tap-highlight-color: transparent; }
+    button:focus-visible, a:focus-visible, input:focus-visible {
+        outline: 2px solid var(--accent-1);
+        outline-offset: 3px;
+    }
+    .header { box-shadow: 0 8px 30px rgba(0,0,0,.18); }
+    .main-container { max-width: 1100px; }
+    .hero { position: relative; overflow: hidden; }
+    .hero::after {
+        content: '';
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        right: -80px;
+        top: -90px;
+        border-radius: 50%;
+        background: rgba(108,140,255,.08);
+        pointer-events: none;
+    }
+    .profile-hero { box-shadow: 0 12px 40px rgba(0,0,0,.18); }
+    .block, .wiki-entry, .quick-item, .info-box, .contact-card { box-shadow: 0 8px 24px rgba(0,0,0,.10); }
+    .wiki-entry { position: relative; overflow: hidden; }
+    .wiki-entry::before {
+        content: '';
+        position: absolute;
+        left: 0; top: 0; bottom: 0; width: 2px;
+        background: transparent;
+        transition: var(--transition);
+    }
+    .wiki-entry:hover::before { background: var(--accent-1); }
+    .music-controls { max-width: calc(100vw - 48px); }
+    .music-controls button:disabled { cursor: not-allowed; }
+    @media (max-width: 640px) {
+        .music-controls { max-width: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+
+</style>
+
 </head>
 <body>
 
-    <!-- ====== ЗВЁЗДЫ ====== -->
-    <div class="stars" id="stars"></div>
 
-    <!-- ====== ШАПКА ====== -->
-    <header class="header">
-        <div class="logo">
-            <span class="icon">☽</span>
+<!-- ====== ЗВЁЗДЫ ====== -->
+<div class="stars" id="stars"></div>
+
+<!-- ====== ШАПКА ====== -->
+<header class="header">
+    <div class="logo">
+        <span class="icon">☽</span>
+        <div>
+            <h1>Solarium <span>Umbris</span></h1>
+            <span class="subtitle">✦ Encyclopedia of Worlds ✦</span>
+        </div>
+    </div>
+    <div class="right-group">
+        <div class="nav-buttons" id="tabNav">
+            <button class="active" data-tab="home">🏠 Home</button>
+            <button data-tab="wiki">📚 My Wiki</button>
+            <button data-tab="contact">✉️ Contact</button>
+        </div>
+        <button class="lang-toggle" id="langToggle" onclick="toggleLang()">РУС</button>
+    </div>
+</header>
+
+<!-- ====== ОСНОВНАЯ ЧАСТЬ ====== -->
+<div class="main-container">
+
+    <!-- ========================================================== -->
+    <!-- HOME -->
+    <!-- ========================================================== -->
+    <div class="tab active" id="tab-home">
+        <div class="hero">
+            <h2>✧ Welcome to <span>Solarium Umbris</span></h2>
+            <p class="i18n" data-en="Encyclopedia of worlds, projects and ideas" data-ru="Энциклопедия миров, проектов и идей">Encyclopedia of worlds, projects and ideas</p>
+            <div class="stats-bar">
+                <span class="stat">📦 <strong>3</strong> <span class="i18n" data-en="projects" data-ru="проекта">projects</span></span>
+                <span class="stat">🏆 <strong>3</strong> <span class="i18n" data-en="achievements" data-ru="достижения">achievements</span></span>
+                <span class="stat">👤 <strong>18</strong> <span class="i18n" data-en="years old" data-ru="лет">years old</span></span>
+            </div>
+        </div>
+
+        <!-- ПРОФИЛЬ -->
+        <div class="profile-hero">
+            <img class="avatar" src="gim/AVATARKA.jpg" alt="Vladislav Fosk-Kosarh" />
+            <div class="profile-main">
+                <div class="name">Vladislav Fosk-Kosarh</div>
+                <div class="nick">@Foskarh</div>
+                <div class="title">👑 Supreme Sovereign of the Kosarh Free Land</div>
+                <div class="profile-tags">
+                    <span>💻 Developer</span>
+                    <span>🐧 Linux</span>
+                    <span>🛠️ Creator</span>
+                    <span>⚔️ Coalition Iron Will</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- БЫСТРАЯ ИНФОРМАЦИЯ -->
+        <div class="quick-info">
+            <div class="quick-item">
+                <span class="quick-icon">🎂</span>
+                <div><small class="i18n" data-en="Age" data-ru="Возраст">Age</small><strong>18 <span class="i18n" data-en="years" data-ru="лет">years</span></strong></div>
+            </div>
+            <div class="quick-item">
+                <span class="quick-icon">🏴</span>
+                <div><small class="i18n" data-en="Nationality" data-ru="Национальность">Nationality</small><strong>Kosarh</strong></div>
+            </div>
+            <div class="quick-item">
+                <span class="quick-icon">🎓</span>
+                <div><small class="i18n" data-en="Education" data-ru="Образование">Education</small><strong class="i18n" data-en="Technician" data-ru="Техник">Technician</strong></div>
+            </div>
+            <div class="quick-item">
+                <span class="quick-icon">⚔️</span>
+                <div><small class="i18n" data-en="Organization" data-ru="Организация">Organization</small><strong>Coalition Iron Will</strong></div>
+            </div>
+        </div>
+
+        <!-- О СЕБЕ -->
+        <div class="block">
+            <div class="block-title">📜 <span class="i18n" data-en="About Me" data-ru="О себе">About Me</span></div>
+            <div class="block-text">
+                <p class="i18n" data-en="<strong>Hi.</strong> My main job is as a maintenance technician — I work with equipment and hardware. Programming is my new hobby; I'm just starting to get into it, learning little by little. I want to create something of my own, even if it's small, but made with my own hands." data-ru="<strong>Привет.</strong> Моя основная работа — наладчик, я имею дело с оборудованием и железом. А программирование — это моё новое увлечение, я только начинаю в него погружаться, изучаю понемногу. Хочется сделать что-то своё, пусть даже небольшое, но своими руками."><strong>Hi.</strong> My main job is as a maintenance technician — I work with equipment and hardware. Programming is my new hobby; I'm just starting to get into it, learning little by little. I want to create something of my own, even if it's small, but made with my own hands.</p>
+                <br />
+                <p class="i18n" data-en="I put effort into it, trying to figure things out even when something doesn't work. It's my escape." data-ru="Я вкладываю в это старание, даже когда что-то не получается, пытаюсь разобраться. Это моя отдушина.">I put effort into it, trying to figure things out even when something doesn't work. It's my escape.</p>
+                <br />
+                <p class="i18n" data-en="But I'm human, and emotions take their toll. When something goes wrong — code gets stuck, a project won't compile, or just some little thing throws me off — I get upset. I can withdraw into myself, go quiet, stop noticing what's going on around me." data-ru="Но я человек, и эмоции берут своё. Когда что-то идёт не так — завис код, не собирается проект или просто какая-то мелочь выбивает из колеи — я расстраиваюсь. Могу замкнуться в себе, замолчать, перестать замечать, что творится вокруг.">But I'm human, and emotions take their toll. When something goes wrong — code gets stuck, a project won't compile, or just some little thing throws me off — I get upset. I can withdraw into myself, go quiet, stop noticing what's going on around me.</p>
+                <br />
+                <p class="i18n" data-en="That's how I am. With all my ups and downs, weaknesses, and stubbornness." data-ru="Такой я есть. Со всеми своими взлётами, падениями, слабостями и упрямством.">That's how I am. With all my ups and downs, weaknesses, and stubbornness.</p>
+                <div class="block-tags">
+                    <span class="tag gold">☀️ <span class="i18n" data-en="Sun Child" data-ru="Солнечный ребёнок">Sun Child</span></span>
+                    <span class="tag pink">✝️ <span class="i18n" data-en="Orthodox Christian" data-ru="Православный христианин">Orthodox Christian</span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЯЗЫКИ -->
+        <div class="block">
+            <div class="block-title">🗣️ <span class="i18n" data-en="Languages" data-ru="Языки">Languages</span></div>
+            <div class="block-text">
+                🇷🇺 Russian — <strong class="i18n" data-en="Native" data-ru="Родной">Native</strong><br />
+                🇬🇧 English — <strong class="i18n" data-en="So-so" data-ru="Так себе">So-so</strong> <span style="color:var(--text-muted);">(often use translator)</span>
+            </div>
+        </div>
+
+        <!-- ОС -->
+        <div class="block">
+            <div class="block-title">💻 <span class="i18n" data-en="Operating Systems" data-ru="Операционные системы">Operating Systems</span></div>
+            <div class="block-text">
+                🪟 Windows<br />
+                🐧 GNU/Linux (Debian, XFCE)
+            </div>
+        </div>
+
+        <!-- НАВЫКИ -->
+        <div class="block">
+            <div class="block-title">🧠 <span class="i18n" data-en="Skills" data-ru="Навыки">Skills</span></div>
+            <div class="block-text">
+                <strong>💻 Programming:</strong> HTML, CSS, JavaScript<br />
+                <strong>🐧 Linux:</strong> Debian, XFCE, System setup<br />
+                <strong>🔧 Hardware:</strong> PC, Troubleshooting, Maintenance<br />
+                <strong>🎮 Modding:</strong> HOI4, Game projects, Worldbuilding
+            </div>
+        </div>
+
+        <!-- ДРУЗЬЯ -->
+        <div class="block">
+            <div class="block-title">🤝 <span class="i18n" data-en="Friends &amp; Brothers" data-ru="Друзья и братья">Friends &amp; Brothers</span></div>
+            <div class="block-text" style="font-size:24px; display:flex; gap:20px; flex-wrap:wrap;">
+                <span>🛡️ Tverd</span>
+                <span>⚡ Yonkia</span>
+                <span>🔥 Koivo</span>
+                <span>🌊 Femadoria</span>
+            </div>
+        </div>
+
+        <!-- ИГРЫ И МУЛЬТЫ -->
+        <div class="block">
+            <div class="block-title">🎮 <span class="i18n" data-en="Games &amp; Cartoons" data-ru="Игры и мультфильмы">Games &amp; Cartoons</span></div>
+            <div class="block-text" style="display:grid; grid-template-columns:1fr 1fr; gap:2px 20px;">
+                <span>🎮 Hearts of Iron IV</span>
+                <span>🎮 Garry's Mod</span>
+                <span>🎮 Skyrim</span>
+                <span>🎮 Dark Souls 2</span>
+                <span>🎮 Don't Starve Together</span>
+                <span>🎬 Kikoriki ❤️</span>
+                <span>🎬 BoJack Horseman</span>
+                <span>🎬 Rick and Morty</span>
+                <span>🎬 Gravity Falls</span>
+                <span>🎬 Futurama</span>
+                <span>🎬 My Little Pony ❤️</span>
+            </div>
+        </div>
+
+        <!-- ДОСТИЖЕНИЯ -->
+        <div class="block">
+            <div class="block-title">🏆 <span class="i18n" data-en="Achievements" data-ru="Достижения">Achievements</span></div>
+            <div class="achievement-item">
+                <span class="ach-icon">🥇</span>
+                <span class="ach-text">
+                    <span class="title i18n" data-en="Winner's Diploma — &quot;Legacy of Outstanding Entrepreneurs of Russia&quot;" data-ru="Диплом победителя — &quot;Наследие выдающихся предпринимателей России&quot;">Winner's Diploma — "Legacy of Outstanding Entrepreneurs of Russia"</span>
+                    <span class="desc i18n" data-en="All-Russian competition on the history of entrepreneurship. Finalist of the regional stage in Tver." data-ru="Всероссийский конкурс по истории предпринимательства. Финалист регионального этапа в Твери.">All-Russian competition on the history of entrepreneurship. Finalist of the regional stage in Tver.</span>
+                </span>
+            </div>
+            <div class="achievement-item">
+                <span class="ach-icon">📜</span>
+                <span class="ach-text">
+                    <span class="title i18n" data-en="Participant Certificate — &quot;Through the Pages of the Great Victory&quot;" data-ru="Сертификат участника — &quot;По страницам Великой Победы&quot;">Participant Certificate — "Through the Pages of the Great Victory"</span>
+                    <span class="desc i18n" data-en="Team intellectual game dedicated to the 80th anniversary of Victory in the Great Patriotic War 1941–1945." data-ru="Командная интеллектуальная игра к 80-летию Победы в Великой Отечественной войне 1941–1945.">Team intellectual game dedicated to the 80th anniversary of Victory in the Great Patriotic War 1941–1945.</span>
+                </span>
+            </div>
+            <div class="achievement-item">
+                <span class="ach-icon">🥇</span>
+                <span class="ach-text">
+                    <span class="title i18n" data-en="Winner's Diploma — &quot;Scarlet Sails&quot;" data-ru="Диплом победителя — &quot;Алые паруса&quot;">Winner's Diploma — "Scarlet Sails"</span>
+                    <span class="desc i18n" data-en="Winner of the All-Russian distance Olympiad in Physics among students of professional educational organizations." data-ru="Победитель Всероссийской дистанционной олимпиады по физике среди студентов профессиональных образовательных организаций.">Winner of the All-Russian distance Olympiad in Physics among students of professional educational organizations.</span>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- MY WIKI -->
+    <!-- ========================================================== -->
+    <div class="tab" id="tab-wiki">
+        <div class="hero">
+            <h2>📚 My <span>Wiki</span></h2>
+            <p class="i18n" data-en="All projects, ideas and developments" data-ru="Все проекты, идеи и разработки">All projects, ideas and developments</p>
+        </div>
+
+        <!-- Roza OS -->
+        <div class="wiki-entry" onclick="switchTab('project-roza')">
+            <div class="top-row">
+                <div class="icon"><img src="gim/rozaos.png" alt="Roza OS" /></div>
+                <div>
+                    <div class="name">Roza OS</div>
+                    <div class="sub">Debian-based Linux distribution</div>
+                </div>
+                <span class="status-badge planned">🔵 <span class="i18n" data-en="Planned" data-ru="Запланирован">Planned</span></span>
+            </div>
+            <div class="desc i18n" data-en="Linux distribution based on Debian with XFCE desktop and preinstalled packages." data-ru="Linux-дистрибутив на базе Debian с окружением XFCE и предустановленными пакетами.">Linux distribution based on Debian with XFCE desktop and preinstalled packages.</div>
+            <div class="tags">
+                <span class="tag">Debian</span>
+                <span class="tag">XFCE</span>
+                <span class="tag">Linux</span>
+                <span class="tag pink">Coalition Iron Will</span>
+            </div>
+        </div>
+
+        <!-- Solarium Umbris -->
+        <div class="wiki-entry" onclick="switchTab('project-solarium')">
+            <div class="top-row">
+                <div class="icon">☽</div>
+                <div>
+                    <div class="name">Solarium Umbris</div>
+                    <div class="sub">Mod for Hearts of Iron IV</div>
+                </div>
+                <span class="status-badge frozen">❄️ <span class="i18n" data-en="Frozen" data-ru="Заморожен">Frozen</span></span>
+            </div>
+            <div class="desc i18n" data-en="Mod for Hearts of Iron IV with unique states and alternative history." data-ru="Мод для Hearts of Iron IV с уникальными государствами и альтернативной историей.">Mod for Hearts of Iron IV with unique states and alternative history.</div>
+            <div class="tags">
+                <span class="tag">HOI4</span>
+                <span class="tag">Mod</span>
+                <span class="tag">Alternative history</span>
+                <span class="tag pink">Coalition Iron Will</span>
+            </div>
+        </div>
+
+        <!-- Black Order -->
+        <div class="wiki-entry" onclick="switchTab('project-blackorder')">
+            <div class="top-row">
+                <div class="icon">🖤</div>
+                <div>
+                    <div class="name">Special Army "Black Order"</div>
+                    <div class="sub">RP Faction in BRM 5</div>
+                </div>
+                <span class="status-badge frozen">❄️ <span class="i18n" data-en="Frozen" data-ru="Заморожен">Frozen</span></span>
+            </div>
+            <div class="desc i18n" data-en="Elite military unit in BRM 5 — a faction for experienced players." data-ru="Элитное военное подразделение в BRM 5 — фракция для опытных игроков.">Elite military unit in BRM 5 — a faction for experienced players.</div>
+            <div class="tags">
+                <span class="tag">BRM 5</span>
+                <span class="tag">RP Faction</span>
+                <span class="tag pink">Coalition Iron Will</span>
+            </div>
+        </div>
+
+        <!-- Coalition Iron Will -->
+        <div class="wiki-entry" onclick="switchTab('project-coalition')" style="border-color:var(--accent-green);">
+            <div class="top-row">
+                <div class="icon">⚔️</div>
+                <div>
+                    <div class="name">Coalition Iron Will</div>
+                    <div class="sub">Alliance of close friends and companions</div>
+                </div>
+                <span class="status-badge active">🟢 <span class="i18n" data-en="Active" data-ru="Активен">Active</span></span>
+            </div>
+            <div class="desc i18n" data-en="Brotherhood of like-minded people united by common goals and values." data-ru="Братство единомышленников, объединённых общими целями и ценностями.">Brotherhood of like-minded people united by common goals and values.</div>
+            <div class="tags">
+                <span class="tag gold">Alliance</span>
+                <span class="tag pink">Friends</span>
+                <span class="tag pink">Companions</span>
+                <span class="tag green">Coalition Iron Will</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- ДЕТАЛЬНЫЕ СТРАНИЦЫ ПРОЕКТОВ -->
+    <!-- ========================================================== -->
+
+    <!-- Roza OS (детально) -->
+    <div class="tab page-detail" id="tab-project-roza">
+        <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki" data-ru="Назад к вики">Back to wiki</span></a>
+        <div class="header-info">
+            <div class="icon-big"><img src="gim/rozaos.png" alt="Roza OS" /></div>
             <div>
-                <h1>Solarium <span>Umbris</span></h1>
-                <span class="subtitle">✦ Encyclopedia of Worlds ✦</span>
-            </div>
-        </div>
-        <div class="right-group">
-            <div class="nav-buttons" id="tabNav">
-                <button class="active" data-tab="home">🏠 Home</button>
-                <button data-tab="wiki">📚 My Wiki</button>
-                <button data-tab="contact">✉️ Contact</button>
-            </div>
-            <button class="lang-toggle" id="langToggle" onclick="toggleLang()">РУС</button>
-        </div>
-    </header>
-
-    <!-- ====== ОСНОВНАЯ ЧАСТЬ ====== -->
-    <div class="main-container">
-
-        <!-- ========================================================== -->
-        <!-- HOME -->
-        <!-- ========================================================== -->
-        <div class="tab active" id="tab-home">
-            <div class="hero">
-                <h2>✧ Welcome to <span>Solarium Umbris</span></h2>
-                <p class="i18n" data-en="Encyclopedia of worlds, projects and ideas" data-ru="Энциклопедия миров, проектов и идей">Encyclopedia of worlds, projects and ideas</p>
-                <div class="stats-bar">
-                    <span class="stat">📦 <strong>3</strong> <span class="i18n" data-en="projects" data-ru="проекта">projects</span></span>
-                    <span class="stat">🏆 <strong>3</strong> <span class="i18n" data-en="achievements" data-ru="достижения">achievements</span></span>
-                    <span class="stat">👤 <strong>18</strong> <span class="i18n" data-en="years old" data-ru="лет">years old</span></span>
-                </div>
-            </div>
-
-            <!-- ПРОФИЛЬ -->
-            <div class="profile-hero">
-                <img class="avatar" src="gim/AVATARKA.jpg" alt="Vladislav Fosk-Kosarh" />
-                <div class="profile-main">
-                    <div class="name">Vladislav Fosk-Kosarh</div>
-                    <div class="nick">@Foskarh</div>
-                    <div class="title">👑 Supreme Sovereign of the Kosarh Free Land</div>
-                    <div class="profile-tags">
-                        <span>💻 Developer</span>
-                        <span>🐧 Linux</span>
-                        <span>🛠️ Creator</span>
-                        <span>⚔️ Coalition Iron Will</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- БЫСТРАЯ ИНФОРМАЦИЯ -->
-            <div class="quick-info">
-                <div class="quick-item">
-                    <span class="quick-icon">🎂</span>
-                    <div><small class="i18n" data-en="Age" data-ru="Возраст">Age</small><strong>18 <span class="i18n" data-en="years" data-ru="лет">years</span></strong></div>
-                </div>
-                <div class="quick-item">
-                    <span class="quick-icon">🏴</span>
-                    <div><small class="i18n" data-en="Nationality" data-ru="Национальность">Nationality</small><strong>Kosarh</strong></div>
-                </div>
-                <div class="quick-item">
-                    <span class="quick-icon">🎓</span>
-                    <div><small class="i18n" data-en="Education" data-ru="Образование">Education</small><strong class="i18n" data-en="Technician" data-ru="Техник">Technician</strong></div>
-                </div>
-                <div class="quick-item">
-                    <span class="quick-icon">⚔️</span>
-                    <div><small class="i18n" data-en="Organization" data-ru="Организация">Organization</small><strong>Coalition Iron Will</strong></div>
-                </div>
-            </div>
-
-            <!-- О СЕБЕ -->
-            <div class="block">
-                <div class="block-title">📜 <span class="i18n" data-en="About Me" data-ru="О себе">About Me</span></div>
-                <div class="block-text">
-                    <p class="i18n" data-en="<strong>Hi.</strong> My main job is as a maintenance technician — I work with equipment and hardware. Programming is my new hobby; I'm just starting to get into it, learning little by little. I want to create something of my own, even if it's small, but made with my own hands." data-ru="<strong>Привет.</strong> Моя основная работа — наладчик, я имею дело с оборудованием и железом. А программирование — это моё новое увлечение, я только начинаю в него погружаться, изучаю понемногу. Хочется сделать что-то своё, пусть даже небольшое, но своими руками."><strong>Hi.</strong> My main job is as a maintenance technician — I work with equipment and hardware. Programming is my new hobby; I'm just starting to get into it, learning little by little. I want to create something of my own, even if it's small, but made with my own hands.</p>
-                    <br />
-                    <p class="i18n" data-en="I put effort into it, trying to figure things out even when something doesn't work. It's my escape." data-ru="Я вкладываю в это старание, даже когда что-то не получается, пытаюсь разобраться. Это моя отдушина.">I put effort into it, trying to figure things out even when something doesn't work. It's my escape.</p>
-                    <br />
-                    <p class="i18n" data-en="But I'm human, and emotions take their toll. When something goes wrong — code gets stuck, a project won't compile, or just some little thing throws me off — I get upset. I can withdraw into myself, go quiet, stop noticing what's going on around me." data-ru="Но я человек, и эмоции берут своё. Когда что-то идёт не так — завис код, не собирается проект или просто какая-то мелочь выбивает из колеи — я расстраиваюсь. Могу замкнуться в себе, замолчать, перестать замечать, что творится вокруг.">But I'm human, and emotions take their toll. When something goes wrong — code gets stuck, a project won't compile, or just some little thing throws me off — I get upset. I can withdraw into myself, go quiet, stop noticing what's going on around me.</p>
-                    <br />
-                    <p class="i18n" data-en="That's how I am. With all my ups and downs, weaknesses, and stubbornness." data-ru="Такой я есть. Со всеми своими взлётами, падениями, слабостями и упрямством.">That's how I am. With all my ups and downs, weaknesses, and stubbornness.</p>
-                    <div class="block-tags">
-                        <span class="tag gold">☀️ <span class="i18n" data-en="Sun Child" data-ru="Солнечный ребёнок">Sun Child</span></span>
-                        <span class="tag pink">✝️ <span class="i18n" data-en="Orthodox Christian" data-ru="Православный христианин">Orthodox Christian</span></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ЯЗЫКИ -->
-            <div class="block">
-                <div class="block-title">🗣️ <span class="i18n" data-en="Languages" data-ru="Языки">Languages</span></div>
-                <div class="block-text">
-                    🇷🇺 Russian — <strong class="i18n" data-en="Native" data-ru="Родной">Native</strong><br />
-                    🇬🇧 English — <strong class="i18n" data-en="So-so" data-ru="Так себе">So-so</strong> <span style="color:var(--text-muted);">(often use translator)</span>
-                </div>
-            </div>
-
-            <!-- ОС -->
-            <div class="block">
-                <div class="block-title">💻 <span class="i18n" data-en="Operating Systems" data-ru="Операционные системы">Operating Systems</span></div>
-                <div class="block-text">
-                    🪟 Windows<br />
-                    🐧 GNU/Linux (Debian, XFCE)
-                </div>
-            </div>
-
-            <!-- НАВЫКИ -->
-            <div class="block">
-                <div class="block-title">🧠 <span class="i18n" data-en="Skills" data-ru="Навыки">Skills</span></div>
-                <div class="block-text">
-                    <strong>💻 Programming:</strong> HTML, CSS, JavaScript<br />
-                    <strong>🐧 Linux:</strong> Debian, XFCE, System setup<br />
-                    <strong>🔧 Hardware:</strong> PC, Troubleshooting, Maintenance<br />
-                    <strong>🎮 Modding:</strong> HOI4, Game projects, Worldbuilding
-                </div>
-            </div>
-
-            <!-- ДРУЗЬЯ -->
-            <div class="block">
-                <div class="block-title">🤝 <span class="i18n" data-en="Friends &amp; Brothers" data-ru="Друзья и братья">Friends &amp; Brothers</span></div>
-                <div class="block-text" style="font-size:24px; display:flex; gap:20px; flex-wrap:wrap;">
-                    <span>🛡️ Tverd</span>
-                    <span>⚡ Yonkia</span>
-                    <span>🔥 Koivo</span>
-                    <span>🌊 Femadoria</span>
-                </div>
-            </div>
-
-            <!-- ИГРЫ И МУЛЬТЫ -->
-            <div class="block">
-                <div class="block-title">🎮 <span class="i18n" data-en="Games &amp; Cartoons" data-ru="Игры и мультфильмы">Games &amp; Cartoons</span></div>
-                <div class="block-text" style="display:grid; grid-template-columns:1fr 1fr; gap:2px 20px;">
-                    <span>🎮 Hearts of Iron IV</span>
-                    <span>🎮 Garry's Mod</span>
-                    <span>🎮 Skyrim</span>
-                    <span>🎮 Dark Souls 2</span>
-                    <span>🎮 Don't Starve Together</span>
-                    <span>🎬 Kikoriki ❤️</span>
-                    <span>🎬 BoJack Horseman</span>
-                    <span>🎬 Rick and Morty</span>
-                    <span>🎬 Gravity Falls</span>
-                    <span>🎬 Futurama</span>
-                    <span>🎬 My Little Pony ❤️</span>
-                </div>
-            </div>
-
-            <!-- ДОСТИЖЕНИЯ -->
-            <div class="block">
-                <div class="block-title">🏆 <span class="i18n" data-en="Achievements" data-ru="Достижения">Achievements</span></div>
-                <div class="achievement-item">
-                    <span class="ach-icon">🥇</span>
-                    <span class="ach-text">
-                        <span class="title i18n" data-en="Winner's Diploma — &quot;Legacy of Outstanding Entrepreneurs of Russia&quot;" data-ru="Диплом победителя — &quot;Наследие выдающихся предпринимателей России&quot;">Winner's Diploma — "Legacy of Outstanding Entrepreneurs of Russia"</span>
-                        <span class="desc i18n" data-en="All-Russian competition on the history of entrepreneurship. Finalist of the regional stage in Tver." data-ru="Всероссийский конкурс по истории предпринимательства. Финалист регионального этапа в Твери.">All-Russian competition on the history of entrepreneurship. Finalist of the regional stage in Tver.</span>
-                    </span>
-                </div>
-                <div class="achievement-item">
-                    <span class="ach-icon">📜</span>
-                    <span class="ach-text">
-                        <span class="title i18n" data-en="Participant Certificate — &quot;Through the Pages of the Great Victory&quot;" data-ru="Сертификат участника — &quot;По страницам Великой Победы&quot;">Participant Certificate — "Through the Pages of the Great Victory"</span>
-                        <span class="desc i18n" data-en="Team intellectual game dedicated to the 80th anniversary of Victory in the Great Patriotic War 1941–1945." data-ru="Командная интеллектуальная игра к 80-летию Победы в Великой Отечественной войне 1941–1945.">Team intellectual game dedicated to the 80th anniversary of Victory in the Great Patriotic War 1941–1945.</span>
-                    </span>
-                </div>
-                <div class="achievement-item">
-                    <span class="ach-icon">🥇</span>
-                    <span class="ach-text">
-                        <span class="title i18n" data-en="Winner's Diploma — &quot;Scarlet Sails&quot;" data-ru="Диплом победителя — &quot;Алые паруса&quot;">Winner's Diploma — "Scarlet Sails"</span>
-                        <span class="desc i18n" data-en="Winner of the All-Russian distance Olympiad in Physics among students of professional educational organizations." data-ru="Победитель Всероссийской дистанционной олимпиады по физике среди студентов профессиональных образовательных организаций.">Winner of the All-Russian distance Olympiad in Physics among students of professional educational organizations.</span>
-                    </span>
-                </div>
-            </div>
-        </div>
-
-        <!-- ========================================================== -->
-        <!-- MY WIKI -->
-        <!-- ========================================================== -->
-        <div class="tab" id="tab-wiki">
-            <div class="hero">
-                <h2>📚 My <span>Wiki</span></h2>
-                <p class="i18n" data-en="All projects, ideas and developments" data-ru="Все проекты, идеи и разработки">All projects, ideas and developments</p>
-            </div>
-
-            <!-- Roza OS -->
-            <div class="wiki-entry" onclick="switchTab('project-roza')">
-                <div class="top-row">
-                    <div class="icon"><img src="gim/rozaos.png" alt="Roza OS" /></div>
-                    <div>
-                        <div class="name">Roza OS</div>
-                        <div class="sub">Debian-based Linux distribution</div>
-                    </div>
-                    <span class="status-badge planned">🔵 <span class="i18n" data-en="Planned" data-ru="Запланирован">Planned</span></span>
-                </div>
-                <div class="desc i18n" data-en="Linux distribution based on Debian with XFCE desktop and preinstalled packages." data-ru="Linux-дистрибутив на базе Debian с окружением XFCE и предустановленными пакетами.">Linux distribution based on Debian with XFCE desktop and preinstalled packages.</div>
-                <div class="tags">
+                <div class="name-big">Roza OS <span class="sub">Debian-based Linux distribution</span></div>
+                <span class="status-big planned">🔵 <span class="i18n" data-en="Planned" data-ru="Запланирован">Planned</span></span>
+                <div class="tags-big">
                     <span class="tag">Debian</span>
                     <span class="tag">XFCE</span>
                     <span class="tag">Linux</span>
                     <span class="tag pink">Coalition Iron Will</span>
                 </div>
             </div>
-
-            <!-- Solarium Umbris -->
-            <div class="wiki-entry" onclick="switchTab('project-solarium')">
-                <div class="top-row">
-                    <div class="icon">☽</div>
-                    <div>
-                        <div class="name">Solarium Umbris</div>
-                        <div class="sub">Mod for Hearts of Iron IV</div>
-                    </div>
-                    <span class="status-badge frozen">❄️ <span class="i18n" data-en="Frozen" data-ru="Заморожен">Frozen</span></span>
+        </div>
+        <div class="info-grid">
+            <div class="info-box">
+                <div class="title">📋 <span class="i18n" data-en="Information" data-ru="Информация">Information</span></div>
+                <div class="body">
+                    <div><span class="label"><span class="i18n" data-en="Status" data-ru="Статус">Status</span>:</span> <span class="value">🔵 <span class="i18n" data-en="Planned" data-ru="Запланирован">Planned</span></span></div>
+                    <div><span class="label"><span class="i18n" data-en="Base" data-ru="Основа">Base</span>:</span> <span class="value">Debian</span></div>
+                    <div><span class="label"><span class="i18n" data-en="Environment" data-ru="Окружение">Environment</span>:</span> <span class="value">XFCE</span></div>
+                    <div><span class="label"><span class="i18n" data-en="License" data-ru="Лицензия">License</span>:</span> <span class="value">GPL</span></div>
+                    <div><span class="label"><span class="i18n" data-en="Team" data-ru="Команда">Team</span>:</span> <span class="value">Coalition Iron Will</span></div>
                 </div>
-                <div class="desc i18n" data-en="Mod for Hearts of Iron IV with unique states and alternative history." data-ru="Мод для Hearts of Iron IV с уникальными государствами и альтернативной историей.">Mod for Hearts of Iron IV with unique states and alternative history.</div>
-                <div class="tags">
+            </div>
+            <div class="info-box">
+                <div class="title">📖 <span class="i18n" data-en="Description" data-ru="Описание">Description</span></div>
+                <div class="body">
+                    <p class="i18n" data-en="<strong>Roza OS</strong> — lightweight and fast Linux distribution on stable Debian base." data-ru="<strong>Roza OS</strong> — лёгкий и быстрый Linux-дистрибутив на стабильной базе Debian."><strong>Roza OS</strong> — lightweight and fast Linux distribution on stable Debian base.</p>
+                    <br />
+                    <p><strong><span class="i18n" data-en="Features" data-ru="Особенности">Features</span>:</strong></p>
+                    <ul>
+                        <li>🐧 <strong><span class="i18n" data-en="Base" data-ru="Основа">Base</span>:</strong> Debian (stable)</li>
+                        <li>🖥️ <strong><span class="i18n" data-en="Environment" data-ru="Окружение">Environment</span>:</strong> XFCE</li>
+                        <li>📦 <strong><span class="i18n" data-en="Packages" data-ru="Пакеты">Packages</span>:</strong> Firefox, VLC, LibreOffice, GParted, Remmina</li>
+                    </ul>
+                    <br />
+                    <p><strong><span class="i18n" data-en="Status" data-ru="Статус">Status</span>:</strong> 🔵 <span class="i18n" data-en="Planned. Development has not started yet." data-ru="Запланирован. Разработка ещё не началась.">Planned. Development has not started yet.</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Solarium Umbris (детально) -->
+    <div class="tab page-detail" id="tab-project-solarium">
+        <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki" data-ru="Назад к вики">Back to wiki</span></a>
+        <div class="header-info">
+            <div class="icon-big">☽</div>
+            <div>
+                <div class="name-big">Solarium Umbris <span class="sub">Mod for Hearts of Iron IV</span></div>
+                <span class="status-big frozen">❄️ <span class="i18n" data-en="Frozen" data-ru="Заморожен">Frozen</span></span>
+                <div class="tags-big">
                     <span class="tag">HOI4</span>
                     <span class="tag">Mod</span>
                     <span class="tag">Alternative history</span>
                     <span class="tag pink">Coalition Iron Will</span>
                 </div>
             </div>
-
-            <!-- Black Order -->
-            <div class="wiki-entry" onclick="switchTab('project-blackorder')">
-                <div class="top-row">
-                    <div class="icon">🖤</div>
-                    <div>
-                        <div class="name">Special Army "Black Order"</div>
-                        <div class="sub">RP Faction in BRM 5</div>
-                    </div>
-                    <span class="status-badge frozen">❄️ <span class="i18n" data-en="Frozen" data-ru="Заморожен">Frozen</span></span>
+        </div>
+        <div class="info-grid">
+            <div class="info-box">
+                <div class="title">📋 <span class="i18n" data-en="Information" data-ru="Информация">Information</span></div>
+                <div class="body">
+                    <div><span class="label"><span class="i18n" data-en="Status" data-ru="Статус">Status</span>:</span> <span class="value">❄️ <span class="i18n" data-en="Frozen" data-ru="Заморожен">Frozen</span></span></div>
+                    <div><span class="label"><span class="i18n" data-en="Game" data-ru="Игра">Game</span>:</span> <span class="value">Hearts of Iron IV</span></div>
+                    <div><span class="label"><span class="i18n" data-en="Countries" data-ru="Стран">Countries</span>:</span> <span class="value">7</span></div>
+                    <div><span class="label"><span class="i18n" data-en="Ideologies" data-ru="Идеологий">Ideologies</span>:</span> <span class="value">10+</span></div>
+                    <div><span class="label"><span class="i18n" data-en="Team" data-ru="Команда">Team</span>:</span> <span class="value">Coalition Iron Will</span></div>
                 </div>
-                <div class="desc i18n" data-en="Elite military unit in BRM 5 — a faction for experienced players." data-ru="Элитное военное подразделение в BRM 5 — фракция для опытных игроков.">Elite military unit in BRM 5 — a faction for experienced players.</div>
-                <div class="tags">
+            </div>
+            <div class="info-box">
+                <div class="title">📖 <span class="i18n" data-en="Description" data-ru="Описание">Description</span></div>
+                <div class="body">
+                    <p class="i18n" data-en="<strong>Solarium Umbris</strong> — large-scale mod for Hearts of Iron IV." data-ru="<strong>Solarium Umbris</strong> — масштабный мод для Hearts of Iron IV."><strong>Solarium Umbris</strong> — large-scale mod for Hearts of Iron IV.</p>
+                    <br />
+                    <p><strong><span class="i18n" data-en="What's inside" data-ru="Что внутри">What's inside</span>:</strong></p>
+                    <ul>
+                        <li>🌍 7 <span class="i18n" data-en="unique states" data-ru="уникальных государств">unique states</span></li>
+                        <li>⚔️ 10+ <span class="i18n" data-en="ideologies" data-ru="идеологий">ideologies</span></li>
+                        <li>📜 <span class="i18n" data-en="Unique focuses and events" data-ru="Уникальные фокусы и события">Unique focuses and events</span></li>
+                        <li>👤 <span class="i18n" data-en="Custom leaders" data-ru="Кастомные лидеры">Custom leaders</span></li>
+                    </ul>
+                    <br />
+                    <p><strong><span class="i18n" data-en="Status" data-ru="Статус">Status</span>:</strong> ❄️ <span class="i18n" data-en="Frozen." data-ru="Заморожен.">Frozen.</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Black Order (детально) -->
+    <div class="tab page-detail" id="tab-project-blackorder">
+        <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki" data-ru="Назад к вики">Back to wiki</span></a>
+        <div class="header-info">
+            <div class="icon-big">🖤</div>
+            <div>
+                <div class="name-big">Special Army "Black Order" <span class="sub">RP Faction in BRM 5</span></div>
+                <span class="status-big frozen">❄️ <span class="i18n" data-en="Frozen" data-ru="Заморожен">Frozen</span></span>
+                <div class="tags-big">
                     <span class="tag">BRM 5</span>
                     <span class="tag">RP Faction</span>
                     <span class="tag pink">Coalition Iron Will</span>
                 </div>
             </div>
-
-            <!-- Coalition Iron Will -->
-            <div class="wiki-entry" onclick="switchTab('project-coalition')" style="border-color:var(--accent-green);">
-                <div class="top-row">
-                    <div class="icon">⚔️</div>
-                    <div>
-                        <div class="name">Coalition Iron Will</div>
-                        <div class="sub">Alliance of close friends and companions</div>
-                    </div>
-                    <span class="status-badge active">🟢 <span class="i18n" data-en="Active" data-ru="Активен">Active</span></span>
+        </div>
+        <div class="info-grid">
+            <div class="info-box">
+                <div class="title">📋 <span class="i18n" data-en="Information" data-ru="Информация">Information</span></div>
+                <div class="body">
+                    <div><span class="label"><span class="i18n" data-en="Status" data-ru="Статус">Status</span>:</span> <span class="value">❄️ <span class="i18n" data-en="Frozen" data-ru="Заморожен">Frozen</span></span></div>
+                    <div><span class="label"><span class="i18n" data-en="Game" data-ru="Игра">Game</span>:</span> <span class="value">BRM 5</span></div>
+                    <div><span class="label"><span class="i18n" data-en="Type" data-ru="Тип">Type</span>:</span> <span class="value">RP Faction</span></div>
+                    <div><span class="label"><span class="i18n" data-en="Ideology" data-ru="Идеология">Ideology</span>:</span> <span class="value"><span class="i18n" data-en="Discipline, honor, professionalism" data-ru="Дисциплина, честь, профессионализм">Discipline, honor, professionalism</span></span></div>
+                    <div><span class="label"><span class="i18n" data-en="Team" data-ru="Команда">Team</span>:</span> <span class="value">Coalition Iron Will</span></div>
                 </div>
-                <div class="desc i18n" data-en="Brotherhood of like-minded people united by common goals and values." data-ru="Братство единомышленников, объединённых общими целями и ценностями.">Brotherhood of like-minded people united by common goals and values.</div>
-                <div class="tags">
+            </div>
+            <div class="info-box">
+                <div class="title">📖 <span class="i18n" data-en="Description" data-ru="Описание">Description</span></div>
+                <div class="body">
+                    <p class="i18n" data-en="<strong>Special Army &quot;Black Order&quot;</strong> — elite faction in BRM 5 (Black Rock Multiplayer 5)." data-ru="<strong>Special Army &quot;Black Order&quot;</strong> — элитная фракция в BRM 5 (Black Rock Multiplayer 5)."><strong>Special Army "Black Order"</strong> — elite faction in BRM 5 (Black Rock Multiplayer 5).</p>
+                    <br />
+                    <p><strong><span class="i18n" data-en="About the faction" data-ru="О фракции">About the faction</span>:</strong></p>
+                    <ul>
+                        <li>🖤 <strong><span class="i18n" data-en="Name" data-ru="Название">Name</span>:</strong> Special Army "Black Order"</li>
+                        <li>🎯 <strong><span class="i18n" data-en="Mission" data-ru="Миссия">Mission</span>:</strong> <span class="i18n" data-en="Complex tasks, order, protection" data-ru="Сложные задачи, порядок, защита">Complex tasks, order, protection</span></li>
+                        <li>📜 <strong><span class="i18n" data-en="Ideology" data-ru="Идеология">Ideology</span>:</strong> <span class="i18n" data-en="Discipline, honor, professionalism" data-ru="Дисциплина, честь, профессионализм">Discipline, honor, professionalism</span></li>
+                    </ul>
+                    <br />
+                    <p><strong><span class="i18n" data-en="Status" data-ru="Статус">Status</span>:</strong> ❄️ <span class="i18n" data-en="Frozen." data-ru="Заморожен.">Frozen.</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Coalition Iron Will (детально) -->
+    <div class="tab page-detail" id="tab-project-coalition">
+        <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki" data-ru="Назад к вики">Back to wiki</span></a>
+        <div class="header-info">
+            <div class="icon-big">⚔️</div>
+            <div>
+                <div class="name-big">Coalition Iron Will <span class="sub">Alliance of close friends and companions</span></div>
+                <span class="status-big active">🟢 <span class="i18n" data-en="Active" data-ru="Активен">Active</span></span>
+                <div class="tags-big">
                     <span class="tag gold">Alliance</span>
                     <span class="tag pink">Friends</span>
                     <span class="tag pink">Companions</span>
@@ -1610,447 +1812,358 @@
                 </div>
             </div>
         </div>
-
-        <!-- ========================================================== -->
-        <!-- ДЕТАЛЬНЫЕ СТРАНИЦЫ ПРОЕКТОВ -->
-        <!-- ========================================================== -->
-
-        <!-- Roza OS (детально) -->
-        <div class="tab page-detail" id="tab-project-roza">
-            <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki" data-ru="Назад к вики">Back to wiki</span></a>
-            <div class="header-info">
-                <div class="icon-big"><img src="gim/rozaos.png" alt="Roza OS" /></div>
-                <div>
-                    <div class="name-big">Roza OS <span class="sub">Debian-based Linux distribution</span></div>
-                    <span class="status-big planned">🔵 <span class="i18n" data-en="Planned" data-ru="Запланирован">Planned</span></span>
-                    <div class="tags-big">
-                        <span class="tag">Debian</span>
-                        <span class="tag">XFCE</span>
-                        <span class="tag">Linux</span>
-                        <span class="tag pink">Coalition Iron Will</span>
-                    </div>
+        <div class="info-grid">
+            <div class="info-box">
+                <div class="title">📋 <span class="i18n" data-en="Information" data-ru="Информация">Information</span></div>
+                <div class="body">
+                    <div><span class="label"><span class="i18n" data-en="Status" data-ru="Статус">Status</span>:</span> <span class="value">🟢 <span class="i18n" data-en="Active" data-ru="Активен">Active</span></span></div>
+                    <div><span class="label"><span class="i18n" data-en="Type" data-ru="Тип">Type</span>:</span> <span class="value"><span class="i18n" data-en="Alliance / Brotherhood" data-ru="Альянс / Братство">Alliance / Brotherhood</span></span></div>
+                    <div><span class="label"><span class="i18n" data-en="Founded" data-ru="Основана">Founded</span>:</span> <span class="value">2024</span></div>
+                    <div><span class="label"><span class="i18n" data-en="Values" data-ru="Ценности">Values</span>:</span> <span class="value"><span class="i18n" data-en="Friendship, solidarity, creativity" data-ru="Дружба, солидарность, творчество">Friendship, solidarity, creativity</span></span></div>
                 </div>
             </div>
-            <div class="info-grid">
-                <div class="info-box">
-                    <div class="title">📋 <span class="i18n" data-en="Information" data-ru="Информация">Information</span></div>
-                    <div class="body">
-                        <div><span class="label"><span class="i18n" data-en="Status" data-ru="Статус">Status</span>:</span> <span class="value">🔵 <span class="i18n" data-en="Planned" data-ru="Запланирован">Planned</span></span></div>
-                        <div><span class="label"><span class="i18n" data-en="Base" data-ru="Основа">Base</span>:</span> <span class="value">Debian</span></div>
-                        <div><span class="label"><span class="i18n" data-en="Environment" data-ru="Окружение">Environment</span>:</span> <span class="value">XFCE</span></div>
-                        <div><span class="label"><span class="i18n" data-en="License" data-ru="Лицензия">License</span>:</span> <span class="value">GPL</span></div>
-                        <div><span class="label"><span class="i18n" data-en="Team" data-ru="Команда">Team</span>:</span> <span class="value">Coalition Iron Will</span></div>
-                    </div>
-                </div>
-                <div class="info-box">
-                    <div class="title">📖 <span class="i18n" data-en="Description" data-ru="Описание">Description</span></div>
-                    <div class="body">
-                        <p class="i18n" data-en="<strong>Roza OS</strong> — lightweight and fast Linux distribution on stable Debian base." data-ru="<strong>Roza OS</strong> — лёгкий и быстрый Linux-дистрибутив на стабильной базе Debian."><strong>Roza OS</strong> — lightweight and fast Linux distribution on stable Debian base.</p>
-                        <br />
-                        <p><strong><span class="i18n" data-en="Features" data-ru="Особенности">Features</span>:</strong></p>
-                        <ul>
-                            <li>🐧 <strong><span class="i18n" data-en="Base" data-ru="Основа">Base</span>:</strong> Debian (stable)</li>
-                            <li>🖥️ <strong><span class="i18n" data-en="Environment" data-ru="Окружение">Environment</span>:</strong> XFCE</li>
-                            <li>📦 <strong><span class="i18n" data-en="Packages" data-ru="Пакеты">Packages</span>:</strong> Firefox, VLC, LibreOffice, GParted, Remmina</li>
-                        </ul>
-                        <br />
-                        <p><strong><span class="i18n" data-en="Status" data-ru="Статус">Status</span>:</strong> 🔵 <span class="i18n" data-en="Planned. Development has not started yet." data-ru="Запланирован. Разработка ещё не началась.">Planned. Development has not started yet.</span></p>
-                    </div>
+            <div class="info-box">
+                <div class="title">📖 <span class="i18n" data-en="Description" data-ru="Описание">Description</span></div>
+                <div class="body">
+                    <p class="i18n" data-en="<strong>Coalition Iron Will</strong> — is not just a team. It's a brotherhood, a union of like-minded people." data-ru="<strong>Coalition Iron Will</strong> — это не просто команда. Это братство, союз единомышленников."><strong>Coalition Iron Will</strong> — is not just a team. It's a brotherhood, a union of like-minded people.</p>
+                    <br />
+                    <p><strong><span class="i18n" data-en="Who we are" data-ru="Кто мы">Who we are</span>:</strong></p>
+                    <ul>
+                        <li>🤝 <strong><span class="i18n" data-en="Friends" data-ru="Друзья">Friends</span></strong> — <span class="i18n" data-en="always support each other" data-ru="всегда поддерживаем друг друга">always support each other</span></li>
+                        <li>⚔️ <strong><span class="i18n" data-en="Companions" data-ru="Подвижники">Companions</span></strong> — <span class="i18n" data-en="create projects together" data-ru="создаём проекты вместе">create projects together</span></li>
+                        <li>💡 <strong><span class="i18n" data-en="Creators" data-ru="Творцы">Creators</span></strong> — <span class="i18n" data-en="bring ideas to life" data-ru="воплощаем идеи в жизнь">bring ideas to life</span></li>
+                    </ul>
+                    <br />
+                    <p><strong><span class="i18n" data-en="Values" data-ru="Ценности">Values</span>:</strong> <span class="i18n" data-en="Solidarity, honesty, creativity, support." data-ru="Солидарность, честность, творчество, поддержка.">Solidarity, honesty, creativity, support.</span></p>
+                    <br />
+                    <p><strong><span class="i18n" data-en="Status" data-ru="Статус">Status</span>:</strong> 🟢 <span class="i18n" data-en="Active. The coalition continues to exist and develop." data-ru="Активен. Коалиция продолжает существовать и развиваться.">Active. The coalition continues to exist and develop.</span></p>
                 </div>
             </div>
         </div>
-
-        <!-- Solarium Umbris (детально) -->
-        <div class="tab page-detail" id="tab-project-solarium">
-            <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki" data-ru="Назад к вики">Back to wiki</span></a>
-            <div class="header-info">
-                <div class="icon-big">☽</div>
-                <div>
-                    <div class="name-big">Solarium Umbris <span class="sub">Mod for Hearts of Iron IV</span></div>
-                    <span class="status-big frozen">❄️ <span class="i18n" data-en="Frozen" data-ru="Заморожен">Frozen</span></span>
-                    <div class="tags-big">
-                        <span class="tag">HOI4</span>
-                        <span class="tag">Mod</span>
-                        <span class="tag">Alternative history</span>
-                        <span class="tag pink">Coalition Iron Will</span>
-                    </div>
-                </div>
-            </div>
-            <div class="info-grid">
-                <div class="info-box">
-                    <div class="title">📋 <span class="i18n" data-en="Information" data-ru="Информация">Information</span></div>
-                    <div class="body">
-                        <div><span class="label"><span class="i18n" data-en="Status" data-ru="Статус">Status</span>:</span> <span class="value">❄️ <span class="i18n" data-en="Frozen" data-ru="Заморожен">Frozen</span></span></div>
-                        <div><span class="label"><span class="i18n" data-en="Game" data-ru="Игра">Game</span>:</span> <span class="value">Hearts of Iron IV</span></div>
-                        <div><span class="label"><span class="i18n" data-en="Countries" data-ru="Стран">Countries</span>:</span> <span class="value">7</span></div>
-                        <div><span class="label"><span class="i18n" data-en="Ideologies" data-ru="Идеологий">Ideologies</span>:</span> <span class="value">10+</span></div>
-                        <div><span class="label"><span class="i18n" data-en="Team" data-ru="Команда">Team</span>:</span> <span class="value">Coalition Iron Will</span></div>
-                    </div>
-                </div>
-                <div class="info-box">
-                    <div class="title">📖 <span class="i18n" data-en="Description" data-ru="Описание">Description</span></div>
-                    <div class="body">
-                        <p class="i18n" data-en="<strong>Solarium Umbris</strong> — large-scale mod for Hearts of Iron IV." data-ru="<strong>Solarium Umbris</strong> — масштабный мод для Hearts of Iron IV."><strong>Solarium Umbris</strong> — large-scale mod for Hearts of Iron IV.</p>
-                        <br />
-                        <p><strong><span class="i18n" data-en="What's inside" data-ru="Что внутри">What's inside</span>:</strong></p>
-                        <ul>
-                            <li>🌍 7 <span class="i18n" data-en="unique states" data-ru="уникальных государств">unique states</span></li>
-                            <li>⚔️ 10+ <span class="i18n" data-en="ideologies" data-ru="идеологий">ideologies</span></li>
-                            <li>📜 <span class="i18n" data-en="Unique focuses and events" data-ru="Уникальные фокусы и события">Unique focuses and events</span></li>
-                            <li>👤 <span class="i18n" data-en="Custom leaders" data-ru="Кастомные лидеры">Custom leaders</span></li>
-                        </ul>
-                        <br />
-                        <p><strong><span class="i18n" data-en="Status" data-ru="Статус">Status</span>:</strong> ❄️ <span class="i18n" data-en="Frozen." data-ru="Заморожен.">Frozen.</span></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Black Order (детально) -->
-        <div class="tab page-detail" id="tab-project-blackorder">
-            <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki" data-ru="Назад к вики">Back to wiki</span></a>
-            <div class="header-info">
-                <div class="icon-big">🖤</div>
-                <div>
-                    <div class="name-big">Special Army "Black Order" <span class="sub">RP Faction in BRM 5</span></div>
-                    <span class="status-big frozen">❄️ <span class="i18n" data-en="Frozen" data-ru="Заморожен">Frozen</span></span>
-                    <div class="tags-big">
-                        <span class="tag">BRM 5</span>
-                        <span class="tag">RP Faction</span>
-                        <span class="tag pink">Coalition Iron Will</span>
-                    </div>
-                </div>
-            </div>
-            <div class="info-grid">
-                <div class="info-box">
-                    <div class="title">📋 <span class="i18n" data-en="Information" data-ru="Информация">Information</span></div>
-                    <div class="body">
-                        <div><span class="label"><span class="i18n" data-en="Status" data-ru="Статус">Status</span>:</span> <span class="value">❄️ <span class="i18n" data-en="Frozen" data-ru="Заморожен">Frozen</span></span></div>
-                        <div><span class="label"><span class="i18n" data-en="Game" data-ru="Игра">Game</span>:</span> <span class="value">BRM 5</span></div>
-                        <div><span class="label"><span class="i18n" data-en="Type" data-ru="Тип">Type</span>:</span> <span class="value">RP Faction</span></div>
-                        <div><span class="label"><span class="i18n" data-en="Ideology" data-ru="Идеология">Ideology</span>:</span> <span class="value"><span class="i18n" data-en="Discipline, honor, professionalism" data-ru="Дисциплина, честь, профессионализм">Discipline, honor, professionalism</span></span></div>
-                        <div><span class="label"><span class="i18n" data-en="Team" data-ru="Команда">Team</span>:</span> <span class="value">Coalition Iron Will</span></div>
-                    </div>
-                </div>
-                <div class="info-box">
-                    <div class="title">📖 <span class="i18n" data-en="Description" data-ru="Описание">Description</span></div>
-                    <div class="body">
-                        <p class="i18n" data-en="<strong>Special Army &quot;Black Order&quot;</strong> — elite faction in BRM 5 (Black Rock Multiplayer 5)." data-ru="<strong>Special Army &quot;Black Order&quot;</strong> — элитная фракция в BRM 5 (Black Rock Multiplayer 5)."><strong>Special Army "Black Order"</strong> — elite faction in BRM 5 (Black Rock Multiplayer 5).</p>
-                        <br />
-                        <p><strong><span class="i18n" data-en="About the faction" data-ru="О фракции">About the faction</span>:</strong></p>
-                        <ul>
-                            <li>🖤 <strong><span class="i18n" data-en="Name" data-ru="Название">Name</span>:</strong> Special Army "Black Order"</li>
-                            <li>🎯 <strong><span class="i18n" data-en="Mission" data-ru="Миссия">Mission</span>:</strong> <span class="i18n" data-en="Complex tasks, order, protection" data-ru="Сложные задачи, порядок, защита">Complex tasks, order, protection</span></li>
-                            <li>📜 <strong><span class="i18n" data-en="Ideology" data-ru="Идеология">Ideology</span>:</strong> <span class="i18n" data-en="Discipline, honor, professionalism" data-ru="Дисциплина, честь, профессионализм">Discipline, honor, professionalism</span></li>
-                        </ul>
-                        <br />
-                        <p><strong><span class="i18n" data-en="Status" data-ru="Статус">Status</span>:</strong> ❄️ <span class="i18n" data-en="Frozen." data-ru="Заморожен.">Frozen.</span></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Coalition Iron Will (детально) -->
-        <div class="tab page-detail" id="tab-project-coalition">
-            <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki" data-ru="Назад к вики">Back to wiki</span></a>
-            <div class="header-info">
-                <div class="icon-big">⚔️</div>
-                <div>
-                    <div class="name-big">Coalition Iron Will <span class="sub">Alliance of close friends and companions</span></div>
-                    <span class="status-big active">🟢 <span class="i18n" data-en="Active" data-ru="Активен">Active</span></span>
-                    <div class="tags-big">
-                        <span class="tag gold">Alliance</span>
-                        <span class="tag pink">Friends</span>
-                        <span class="tag pink">Companions</span>
-                        <span class="tag green">Coalition Iron Will</span>
-                    </div>
-                </div>
-            </div>
-            <div class="info-grid">
-                <div class="info-box">
-                    <div class="title">📋 <span class="i18n" data-en="Information" data-ru="Информация">Information</span></div>
-                    <div class="body">
-                        <div><span class="label"><span class="i18n" data-en="Status" data-ru="Статус">Status</span>:</span> <span class="value">🟢 <span class="i18n" data-en="Active" data-ru="Активен">Active</span></span></div>
-                        <div><span class="label"><span class="i18n" data-en="Type" data-ru="Тип">Type</span>:</span> <span class="value"><span class="i18n" data-en="Alliance / Brotherhood" data-ru="Альянс / Братство">Alliance / Brotherhood</span></span></div>
-                        <div><span class="label"><span class="i18n" data-en="Founded" data-ru="Основана">Founded</span>:</span> <span class="value">2024</span></div>
-                        <div><span class="label"><span class="i18n" data-en="Values" data-ru="Ценности">Values</span>:</span> <span class="value"><span class="i18n" data-en="Friendship, solidarity, creativity" data-ru="Дружба, солидарность, творчество">Friendship, solidarity, creativity</span></span></div>
-                    </div>
-                </div>
-                <div class="info-box">
-                    <div class="title">📖 <span class="i18n" data-en="Description" data-ru="Описание">Description</span></div>
-                    <div class="body">
-                        <p class="i18n" data-en="<strong>Coalition Iron Will</strong> — is not just a team. It's a brotherhood, a union of like-minded people." data-ru="<strong>Coalition Iron Will</strong> — это не просто команда. Это братство, союз единомышленников."><strong>Coalition Iron Will</strong> — is not just a team. It's a brotherhood, a union of like-minded people.</p>
-                        <br />
-                        <p><strong><span class="i18n" data-en="Who we are" data-ru="Кто мы">Who we are</span>:</strong></p>
-                        <ul>
-                            <li>🤝 <strong><span class="i18n" data-en="Friends" data-ru="Друзья">Friends</span></strong> — <span class="i18n" data-en="always support each other" data-ru="всегда поддерживаем друг друга">always support each other</span></li>
-                            <li>⚔️ <strong><span class="i18n" data-en="Companions" data-ru="Подвижники">Companions</span></strong> — <span class="i18n" data-en="create projects together" data-ru="создаём проекты вместе">create projects together</span></li>
-                            <li>💡 <strong><span class="i18n" data-en="Creators" data-ru="Творцы">Creators</span></strong> — <span class="i18n" data-en="bring ideas to life" data-ru="воплощаем идеи в жизнь">bring ideas to life</span></li>
-                        </ul>
-                        <br />
-                        <p><strong><span class="i18n" data-en="Values" data-ru="Ценности">Values</span>:</strong> <span class="i18n" data-en="Solidarity, honesty, creativity, support." data-ru="Солидарность, честность, творчество, поддержка.">Solidarity, honesty, creativity, support.</span></p>
-                        <br />
-                        <p><strong><span class="i18n" data-en="Status" data-ru="Статус">Status</span>:</strong> 🟢 <span class="i18n" data-en="Active. The coalition continues to exist and develop." data-ru="Активен. Коалиция продолжает существовать и развиваться.">Active. The coalition continues to exist and develop.</span></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ========================================================== -->
-        <!-- CONTACT -->
-        <!-- ========================================================== -->
-        <div class="tab" id="tab-contact">
-            <div class="hero">
-                <h2>✉️ <span class="i18n" data-en="Contacts" data-ru="Контакты">Contacts</span></h2>
-                <p class="i18n" data-en="Reach me through any of these platforms" data-ru="Свяжись со мной через любую из этих платформ">Reach me through any of these platforms</p>
-            </div>
-
-            <div class="contact-grid">
-                <a class="contact-card" href="https://t.me/VladislavFoskKosarh" target="_blank" rel="noopener">
-                    <span class="contact-icon">✈️</span>
-                    <span class="contact-info">
-                        <span class="contact-name">Telegram</span>
-                        <span class="contact-handle">@VladislavFoskKosarh</span>
-                    </span>
-                </a>
-
-                <a class="contact-card" href="https://www.youtube.com/@VladislavFoskKosarh" target="_blank" rel="noopener">
-                    <span class="contact-icon">▶️</span>
-                    <span class="contact-info">
-                        <span class="contact-name">YouTube</span>
-                        <span class="contact-handle">@VladislavFoskKosarh</span>
-                    </span>
-                </a>
-
-                <a class="contact-card" href="https://github.com/VladislavFosk" target="_blank" rel="noopener">
-                    <span class="contact-icon">◉</span>
-                    <span class="contact-info">
-                        <span class="contact-name">GitHub</span>
-                        <span class="contact-handle">github.com/VladislavFosk</span>
-                    </span>
-                </a>
-
-                <a class="contact-card" href="https://gamejolt.com/@VladislavFosk" target="_blank" rel="noopener">
-                    <span class="contact-icon">🎮</span>
-                    <span class="contact-info">
-                        <span class="contact-name">GameJolt</span>
-                        <span class="contact-handle">@VladislavFosk</span>
-                    </span>
-                </a>
-            </div>
-
-            <div class="block" style="margin-top:20px; border-color:var(--accent-1);">
-                <div class="block-text" style="text-align:center;">
-                    ⚔️ Made by the <strong style="color:var(--accent-1);">Coalition Iron Will</strong>
-                </div>
-            </div>
-        </div>
-
     </div>
 
-    <!-- ====== МУЗЫКА ====== -->
-    <div class="music-controls" id="music-controls" aria-label="Music player">
-        <button id="music-toggle" title="Play / Pause" aria-label="Play / Pause">▶</button>
-        <button id="music-next" class="music-action" title="Next track" aria-label="Next track">⏭</button>
-        <div class="music-track">
-            <span class="music-track-title" id="music-track-title">55 Days at Peking</span>
-            <div class="music-progress-row">
-                <span class="music-time" id="music-current">0:00</span>
-                <input type="range" class="music-progress" id="music-progress" min="0" max="100" step="0.1" value="0" aria-label="Track progress" />
-                <span class="music-time" id="music-duration">0:00</span>
+    <!-- ========================================================== -->
+    <!-- CONTACT -->
+    <!-- ========================================================== -->
+    <div class="tab" id="tab-contact">
+        <div class="hero">
+            <h2>✉️ <span class="i18n" data-en="Contacts" data-ru="Контакты">Contacts</span></h2>
+            <p class="i18n" data-en="Reach me through any of these platforms" data-ru="Свяжись со мной через любую из этих платформ">Reach me through any of these platforms</p>
+        </div>
+
+        <div class="contact-grid">
+            <a class="contact-card" href="[https://t.me/VladislavFoskKosarh](https://t.me/VladislavFoskKosarh)" target="\_blank" rel="noopener">
+                <span class="contact-icon">✈️</span>
+                <span class="contact-info">
+                    <span class="contact-name">Telegram</span>
+                    <span class="contact-handle">@VladislavFoskKosarh</span>
+                </span>
+            </a>
+
+            <a class="contact-card" href="[https://www.youtube.com/@VladislavFoskKosarh](https://www.youtube.com/@VladislavFoskKosarh)" target="\_blank" rel="noopener">
+                <span class="contact-icon">▶️</span>
+                <span class="contact-info">
+                    <span class="contact-name">YouTube</span>
+                    <span class="contact-handle">@VladislavFoskKosarh</span>
+                </span>
+            </a>
+
+            <a class="contact-card" href="[https://github.com/VladislavFosk](https://github.com/VladislavFosk)" target="\_blank" rel="noopener">
+                <span class="contact-icon">◉</span>
+                <span class="contact-info">
+                    <span class="contact-name">GitHub</span>
+                    <span class="contact-handle">github.com/VladislavFosk</span>
+                </span>
+            </a>
+
+            <a class="contact-card" href="[https://gamejolt.com/@VladislavFosk](https://gamejolt.com/@VladislavFosk)" target="\_blank" rel="noopener">
+                <span class="contact-icon">🎮</span>
+                <span class="contact-info">
+                    <span class="contact-name">GameJolt</span>
+                    <span class="contact-handle">@VladislavFosk</span>
+                </span>
+            </a>
+        </div>
+
+        <div class="block" style="margin-top:20px; border-color:var(--accent-1);">
+            <div class="block-text" style="text-align:center;">
+                ⚔️ Made by the <strong style="color:var(--accent-1);">Coalition Iron Will</strong>
             </div>
         </div>
-        <button id="music-mute" class="music-action" title="Mute" aria-label="Mute">🔊</button>
-        <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.01" value="0.5" aria-label="Volume" />
     </div>
 
-    <audio id="bg-music" preload="metadata">
-        <source src="music/peking.mp3" type="audio/mpeg">
-        Ваш браузер не поддерживает аудио.
-    </audio>
+</div>
 
-    <!-- ====== НИЖНЯЯ НАВИГАЦИЯ ДЛЯ ТЕЛЕФОНА ====== -->
-    <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
-        <button class="active" data-tab="home"><span class="mobile-icon">🏠</span><span class="i18n" data-en="Home" data-ru="Главная">Home</span></button>
-        <button data-tab="wiki"><span class="mobile-icon">📚</span><span class="i18n" data-en="Wiki" data-ru="Вики">Wiki</span></button>
-        <button data-tab="contact"><span class="mobile-icon">✉️</span><span class="i18n" data-en="Contact" data-ru="Контакты">Contact</span></button>
-    </nav>
+<!-- ====== МУЗЫКА ====== -->
+<div class="music-controls" id="music-controls" aria-label="Music player">
+    <button id="music-toggle" title="Play / Pause" aria-label="Play / Pause">▶</button>
+    <button id="music-next" class="music-action" title="Next track" aria-label="Next track">⏭</button>
+    <div class="music-track">
+        <span class="music-track-title" id="music-track-title">55 Days at Peking</span>
+        <div class="music-progress-row">
+            <span class="music-time" id="music-current">0:00</span>
+            <input type="range" class="music-progress" id="music-progress" min="0" max="100" step="0.1" value="0" aria-label="Track progress" />
+            <span class="music-time" id="music-duration">0:00</span>
+        </div>
+    </div>
+    <button id="music-mute" class="music-action" title="Mute" aria-label="Mute">🔊</button>
+    <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.01" value="0.5" aria-label="Volume" />
+</div>
 
-    <!-- ====== ПОДВАЛ ====== -->
-    <footer class="footer">
-        ☽ Solarium Umbris · 2026
-        <span class="divider">·</span>
-        <a href="#" onclick="switchTab('home'); return false;">Home</a>
-        <span class="divider">·</span>
-        <a href="#" onclick="switchTab('wiki'); return false;">My Wiki</a>
-        <span class="divider">·</span>
-        <a href="#" onclick="switchTab('contact'); return false;">Contact</a>
-        <br />
-        <span style="font-size:10px; opacity:0.6;">⚔️ Made by the <span class="highlight">Coalition Iron Will</span></span>
-    </footer>
+<audio id="bg-music" preload="metadata">
+    <source src="music/peking.mp3" type="audio/mpeg">
+    Ваш браузер не поддерживает аудио.
+</audio>
 
-    <!-- ====== JS ====== -->
-    <script>
-        // ============================================================
-        // 1. НАВИГАЦИЯ
-        // ============================================================
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
-            const target = document.getElementById('tab-' + tabId);
-            if (target) target.classList.add('active');
+<!-- ====== НИЖНЯЯ НАВИГАЦИЯ ДЛЯ ТЕЛЕФОНА ====== -->
+<nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
+    <button class="active" data-tab="home"><span class="mobile-icon">🏠</span><span class="i18n" data-en="Home" data-ru="Главная">Home</span></button>
+    <button data-tab="wiki"><span class="mobile-icon">📚</span><span class="i18n" data-en="Wiki" data-ru="Вики">Wiki</span></button>
+    <button data-tab="contact"><span class="mobile-icon">✉️</span><span class="i18n" data-en="Contact" data-ru="Контакты">Contact</span></button>
+</nav>
 
-            document.querySelectorAll('.nav-buttons button, .mobile-nav button').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.tab === tabId);
-            });
+<!-- ====== ПОДВАЛ ====== -->
+<footer class="footer">
+    ☽ Solarium Umbris · 2026
+    <span class="divider">·</span>
+    <a href="#" onclick="switchTab('home'); return false;">Home</a>
+    <span class="divider">·</span>
+    <a href="#" onclick="switchTab('wiki'); return false;">My Wiki</a>
+    <span class="divider">·</span>
+    <a href="#" onclick="switchTab('contact'); return false;">Contact</a>
+    <br />
+    <span style="font-size:10px; opacity:0.6;">⚔️ Made by the <span class="highlight">Coalition Iron Will</span></span>
+</footer>
 
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            if (history.pushState) {
-                history.pushState({ tab: tabId }, '', '#' + tabId);
-            }
-        }
+<!-- ====== JS ====== -->
+<script>
+    // ============================================================
+    // 1. НАВИГАЦИЯ
+    // ============================================================
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+        const target = document.getElementById('tab-' + tabId);
+        if (target) target.classList.add('active');
 
         document.querySelectorAll('.nav-buttons button, .mobile-nav button').forEach(btn => {
-            btn.addEventListener('click', function() {
-                switchTab(this.dataset.tab);
-            });
+            btn.classList.toggle('active', btn.dataset.tab === tabId);
         });
 
-        window.addEventListener('popstate', function(e) {
-            if (e.state && e.state.tab) {
-                switchTab(e.state.tab);
-            }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (history.pushState) {
+            history.pushState({ tab: tabId }, '', '#' + tabId);
+        }
+    }
+
+    document.querySelectorAll('.nav-buttons button, .mobile-nav button').forEach(btn => {
+        btn.addEventListener('click', function() {
+            switchTab(this.dataset.tab);
         });
+    });
 
-        // ============================================================
-        // 2. ПЕРЕКЛЮЧЕНИЕ ЯЗЫКА
-        // ============================================================
-        let currentLang = 'en';
-        const langToggle = document.getElementById('langToggle');
+    window.addEventListener('popstate', function(e) {
+        if (e.state && e.state.tab) {
+            switchTab(e.state.tab);
+        }
+    });
 
-        function toggleLang() {
-            currentLang = currentLang === 'en' ? 'ru' : 'en';
-            langToggle.textContent = currentLang === 'en' ? 'РУС' : 'ENG';
+    // ============================================================
+    // 2. ПЕРЕКЛЮЧЕНИЕ ЯЗЫКА
+    // ============================================================
+    let currentLang = 'en';
+    const langToggle = document.getElementById('langToggle');
 
-            document.querySelectorAll('.i18n').forEach(el => {
-                const text = el.getAttribute('data-' + currentLang);
-                if (text) {
-                    if (text.includes('<')) {
-                        el.innerHTML = text;
-                    } else {
-                        el.textContent = text;
-                    }
+    function toggleLang() {
+        currentLang = currentLang === 'en' ? 'ru' : 'en';
+        langToggle.textContent = currentLang === 'en' ? 'РУС' : 'ENG';
+
+        document.querySelectorAll('.i18n').forEach(el => {
+            const text = el.getAttribute('data-' + currentLang);
+            if (text) {
+                if (text.includes('<')) {
+                    el.innerHTML = text;
+                } else {
+                    el.textContent = text;
                 }
-            });
-
-            const subtitle = document.querySelector('.header .logo .subtitle');
-            if (currentLang === 'en') {
-                subtitle.textContent = '✦ Encyclopedia of Worlds ✦';
-            } else {
-                subtitle.textContent = '✦ Энциклопедия миров ✦';
             }
+        });
 
-            try {
-                localStorage.setItem('solarium-lang', currentLang);
-            } catch (e) {}
+        const subtitle = document.querySelector('.header .logo .subtitle');
+        if (currentLang === 'en') {
+            subtitle.textContent = '✦ Encyclopedia of Worlds ✦';
+        } else {
+            subtitle.textContent = '✦ Энциклопедия миров ✦';
         }
 
         try {
-            const savedLang = localStorage.getItem('solarium-lang');
-            if (savedLang && (savedLang === 'en' || savedLang === 'ru')) {
-                currentLang = savedLang;
-                langToggle.textContent = currentLang === 'en' ? 'РУС' : 'ENG';
-                document.addEventListener('DOMContentLoaded', function() {
-                    toggleLang();
-                });
-            }
+            localStorage.setItem('solarium-lang', currentLang);
         } catch (e) {}
+    }
 
-        // ============================================================
-        // 3. МУЗЫКА — ПЛЕЕР С ПРОГРЕССОМ, MUTE И NEXT
-        // ============================================================
-const audio = document.getElementById('bg-music');
-const musicToggle = document.getElementById('music-toggle');
-const musicTitle = document.getElementById('music-track-title');
-
-// Проверяем, существует ли файл
-fetch('music/peking.mp3', { method: 'HEAD' })
-    .then(response => {
-        if (!response.ok) {
-            musicTitle.textContent = '⚠️ Файл не найден: music/peking.mp3';
-            musicTitle.style.color = '#f87171';
-        } else {
-            musicTitle.textContent = '55 Days at Peking';
-            musicTitle.style.color = '';
-            audio.src = 'music/peking.mp3';
+    try {
+        const savedLang = localStorage.getItem('solarium-lang');
+        if (savedLang && (savedLang === 'en' || savedLang === 'ru')) {
+            currentLang = savedLang;
+            langToggle.textContent = currentLang === 'en' ? 'РУС' : 'ENG';
+            document.addEventListener('DOMContentLoaded', function() {
+                toggleLang();
+            });
         }
-    })
-    .catch(() => {
-        musicTitle.textContent = '❌ Ошибка загрузки музыки';
-        musicTitle.style.color = '#f87171';
+    } catch (e) {}
+
+    // ============================================================
+    // ============================================================
+    // 3. МУЗЫКА — НАДЁЖНЫЙ ЛОКАЛЬНЫЙ ПЛЕЕР
+    // ============================================================
+    const audio = document.getElementById('bg-music');
+    const musicToggle = document.getElementById('music-toggle');
+    const musicMute = document.getElementById('music-mute');
+    const musicNext = document.getElementById('music-next');
+    const musicProgress = document.getElementById('music-progress');
+    const musicCurrent = document.getElementById('music-current');
+    const musicDuration = document.getElementById('music-duration');
+    const volumeSlider = document.getElementById('volume-slider');
+    const musicTitle = document.getElementById('music-track-title');
+
+    // Важно: путь должен быть относительно HTML-файла.
+    const MUSIC_SRC = 'music/peking.mp3';
+    audio.src = MUSIC_SRC;
+    audio.preload = 'metadata';
+    audio.volume = 0.5;
+
+    function formatTime(seconds) {
+        if (!Number.isFinite(seconds)) return '0:00';
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
+        return mins + ':' + secs;
+    }
+
+    function setMusicStatus(text, error = false) {
+        musicTitle.textContent = text;
+        musicTitle.style.color = error ? '#f87171' : '';
+    }
+
+    audio.addEventListener('loadedmetadata', () => {
+        musicDuration.textContent = formatTime(audio.duration);
+        musicProgress.max = audio.duration || 100;
+        setMusicStatus('55 Days at Peking');
     });
 
-musicToggle.addEventListener('click', async () => {
-    if (audio.src && !audio.paused) {
-        audio.pause();
-        musicToggle.textContent = '▶';
-        return;
-    }
-    
-    if (!audio.src || audio.src === '') {
-        musicTitle.textContent = '❌ Файл не найден';
-        return;
-    }
-    
-    try {
-        await audio.play();
+    audio.addEventListener('timeupdate', () => {
+        musicCurrent.textContent = formatTime(audio.currentTime);
+        if (!musicProgress.matches(':active')) {
+            musicProgress.value = audio.currentTime;
+        }
+    });
+
+    audio.addEventListener('play', () => {
         musicToggle.textContent = '⏸';
-    } catch (e) {
-        console.error(e);
-        musicTitle.textContent = '❌ Ошибка воспроизведения';
+        musicToggle.setAttribute('aria-label', 'Pause');
+    });
+
+    audio.addEventListener('pause', () => {
+        musicToggle.textContent = '▶';
+        musicToggle.setAttribute('aria-label', 'Play');
+    });
+
+    audio.addEventListener('ended', () => {
+        audio.currentTime = 0;
+        musicProgress.value = 0;
+        musicCurrent.textContent = '0:00';
+        musicToggle.textContent = '▶';
+    });
+
+    audio.addEventListener('error', () => {
+        setMusicStatus('⚠️ Не удалось загрузить music/peking.mp3', true);
+        musicToggle.disabled = true;
+        musicToggle.style.opacity = '0.45';
+    });
+
+    musicToggle.addEventListener('click', async () => {
+        if (audio.paused) {
+            try {
+                await audio.play();
+            } catch (error) {
+                console.error('Audio playback error:', error);
+                setMusicStatus('⚠️ Нажмите Play ещё раз или проверьте music/peking.mp3', true);
+            }
+        } else {
+            audio.pause();
+        }
+    });
+
+    musicMute.addEventListener('click', () => {
+        audio.muted = !audio.muted;
+        musicMute.textContent = audio.muted ? '🔇' : '🔊';
+        musicMute.classList.toggle('muted', audio.muted);
+        musicMute.setAttribute('aria-label', audio.muted ? 'Unmute' : 'Mute');
+    });
+
+    volumeSlider.addEventListener('input', () => {
+        audio.volume = Number(volumeSlider.value);
+        audio.muted = audio.volume === 0;
+        musicMute.textContent = audio.muted ? '🔇' : '🔊';
+        musicMute.classList.toggle('muted', audio.muted);
+    });
+
+    musicProgress.addEventListener('input', () => {
+        if (Number.isFinite(audio.duration)) {
+            audio.currentTime = Number(musicProgress.value);
+        }
+    });
+
+    // Пока доступен только один трек — кнопка Next возвращает его в начало.
+    musicNext.addEventListener('click', () => {
+        audio.currentTime = 0;
+        musicProgress.value = 0;
+        musicCurrent.textContent = '0:00';
+        audio.play().catch(() => {});
+    });
+
+    // Загружаем метаданные сразу. Автозапуска нет: современные браузеры
+    // блокируют звук без действия пользователя.
+    audio.load();
+
+    // 4. ЗВЁЗДЫ
+    // ============================================================
+    function createStars() {
+        const container = document.getElementById('stars');
+        const count = 120;
+        for (let i = 0; i < count; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = Math.random() * 3 + 1;
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+            star.style.animationDelay = (Math.random() * 5) + 's';
+            container.appendChild(star);
+        }
     }
-});
+    createStars();
 
-        // ============================================================
-        // 4. ЗВЁЗДЫ
-        // ============================================================
-        function createStars() {
-            const container = document.getElementById('stars');
-            const count = 120;
-            for (let i = 0; i < count; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                const size = Math.random() * 3 + 1;
-                star.style.width = size + 'px';
-                star.style.height = size + 'px';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
-                star.style.animationDelay = (Math.random() * 5) + 's';
-                container.appendChild(star);
-            }
+    // ============================================================
+    // 5. ЗАПУСК
+    // ============================================================
+    function checkHash() {
+        const hash = window.location.hash.replace('#', '');
+        if (hash && document.getElementById('tab-' + hash)) {
+            switchTab(hash);
         }
-        createStars();
+    }
+    checkHash();
 
-        // ============================================================
-        // 5. ЗАПУСК
-        // ============================================================
-        function checkHash() {
-            const hash = window.location.hash.replace('#', '');
-            if (hash && document.getElementById('tab-' + hash)) {
-                switchTab(hash);
-            }
+    document.addEventListener('DOMContentLoaded', function() {
+        const savedLang = localStorage.getItem('solarium-lang');
+        if (savedLang && savedLang !== currentLang) {
+            currentLang = savedLang;
+            langToggle.textContent = currentLang === 'en' ? 'РУС' : 'ENG';
+            toggleLang();
         }
-        checkHash();
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const savedLang = localStorage.getItem('solarium-lang');
-            if (savedLang && savedLang !== currentLang) {
-                currentLang = savedLang;
-                langToggle.textContent = currentLang === 'en' ? 'РУС' : 'ENG';
-                toggleLang();
-            }
-        });
-    </script>
+    });
+</script>
 
 </body>
 </html>
