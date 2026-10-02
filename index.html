@@ -1,1643 +1,601 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Solarium Umbris — энциклопедия миров, проектов и идей Владислава Фоска-Косарха" />
+<meta name="theme-color" content="#160a17" />
 <title>Solarium Umbris — Мир Косарха</title>
-<link rel="icon" href="gim/logo.png" type="image/png">
-<link rel="shortcut icon" href="gim/logo.png" type="image/png">
+<link rel="icon" href="gim/logo.png" type="image/png" />
 <style>
-/* ================================================================
-БАЗА
-================================================================ */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-:root {
-    /* Фон — глубокий фиолетово-багровый, с усиленным багровым */
-    --bg: #160a17;
-    --bg-alt: #1e0c1c;
-    --bg-card: #26102a;
-    --bg-card-hover: #341333;
-    --bg-deep: #1f0d20;
-    --border: #4a1e42;
-    --border-soft: #3a1734;
-
-    --text: #f0dcec;
-    --text-secondary: #d0a8c8;
-    --text-muted: #9a6b90;
-
-    /* Акценты: фиолетовый + усиленный багровый */
-    --accent-1: #a855f7;      /* фиолетовый */
-    --accent-2: #d946ef;      /* фуксия */
-    --accent-3: #e11d48;      /* яркий багровый */
-    --accent-4: #9f1239;      /* тёмно-багровый */
-    --accent-5: #7f1d3a;      /* глубокий багровый */
-    --accent-gold: #e0b64a;
-    --accent-green: #4ade80;
-
-    --glow: rgba(168, 85, 247, 0.20);
-    --glow-red: rgba(225, 29, 72, 0.22);
-    --radius: 14px;
-    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    line-height: 1.6;
-    background-image:
-        radial-gradient(ellipse at 12% 8%, rgba(168, 85, 247, 0.14) 0%, transparent 55%),
-        radial-gradient(ellipse at 88% 12%, rgba(225, 29, 72, 0.16) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 88%, rgba(159, 18, 57, 0.20) 0%, transparent 55%),
-        radial-gradient(ellipse at 20% 92%, rgba(127, 29, 58, 0.16) 0%, transparent 55%),
-        radial-gradient(ellipse at 50% 50%, rgba(159, 18, 57, 0.08) 0%, transparent 70%);
-    overflow-x: hidden;
-}
-
-/* ====== ЗВЁЗДЫ ====== */
-.stars {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-}
-
-.star {
-    position: absolute;
-    width: 3px;
-    height: 3px;
-    background: #f5d0e8;
-    border-radius: 50%;
-    animation: twinkle var(--duration) ease-in-out infinite alternate;
-    opacity: 0.3;
-    box-shadow: 0 0 6px rgba(244, 114, 182, 0.5);
-}
-
-@keyframes twinkle {
-    0%   { opacity: 0.15; transform: scale(0.8); }
-    100% { opacity: 0.9;  transform: scale(1.2); }
-}
-
-/* ====== ШАПКА ====== */
-.header {
-    background: linear-gradient(180deg, rgba(38, 16, 42, 0.95), rgba(31, 13, 32, 0.92));
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border);
-    padding: 12px 30px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 12px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 10px 40px rgba(120, 20, 60, 0.45);
-}
-
-.header .logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-}
-
-.header .logo .icon {
-    font-size: 22px;
-    width: 42px;
-    height: 42px;
-    display: grid;
-    place-items: center;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    background: linear-gradient(145deg, #341333, #1f0d20);
-    box-shadow: inset 0 0 18px rgba(225, 29, 72, 0.20);
-    color: var(--accent-2);
-}
-
-.header .logo h1 {
-    font-size: 20px;
-    font-weight: 300;
-    letter-spacing: 2px;
-    color: var(--text);
-}
-
-.header .logo h1 span {
-    background: linear-gradient(135deg, var(--accent-1), var(--accent-3), var(--accent-4));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-weight: 600;
-}
-
-.header .logo .subtitle {
-    font-size: 10px;
-    background: linear-gradient(135deg, var(--accent-2), var(--accent-3));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    display: block;
-    font-weight: 600;
-}
-
-.header .right-group {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-
-.header .nav-buttons {
-    display: flex;
-    gap: 4px;
-    flex-wrap: wrap;
-}
-
-.header .nav-buttons button {
-    padding: 6px 16px;
-    border: 1px solid transparent;
-    background: transparent;
-    color: var(--text-secondary);
-    border-radius: 20px;
-    font-size: 13px;
-    font-family: inherit;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.header .nav-buttons button:hover {
-    color: var(--text);
-    background: var(--bg-card);
-    border-color: var(--border);
-}
-
-.header .nav-buttons button.active {
-    color: #fff;
-    background: linear-gradient(135deg, var(--accent-1), var(--accent-3));
-    border-color: var(--accent-3);
-    box-shadow: 0 0 20px var(--glow-red);
-}
-
-/* ====== КНОПКА ЯЗЫКА ====== */
-.lang-toggle {
-    padding: 4px 12px;
-    border: 1px solid var(--border);
-    background: var(--bg-card);
-    color: var(--text-secondary);
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-    font-family: inherit;
-    letter-spacing: 0.5px;
-}
-
-.lang-toggle:hover {
-    border-color: var(--accent-3);
-    color: var(--text);
-    background: var(--bg-card-hover);
-    box-shadow: 0 0 16px var(--glow-red);
-}
-
-/* ====== ОСНОВНАЯ ЧАСТЬ ====== */
-.main-container {
-    flex: 1;
-    max-width: 1100px;
-    margin: 0 auto;
-    width: 100%;
-    padding: 30px 24px 50px;
-    position: relative;
-    z-index: 1;
-}
-
-/* ====== ВКЛАДКИ ====== */
-.tab {
-    display: none;
-    animation: fadeIn 0.4s ease;
-}
-
-.tab.active {
-    display: block;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes tabIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ====== ГЕРОЙ ====== */
-.hero {
-    padding: 20px 0 10px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 28px;
-    position: relative;
-    overflow: hidden;
-}
-
-.hero::after {
-    content: '';
-    position: absolute;
-    width: 200px;
-    height: 200px;
-    right: -80px;
-    top: -90px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(225, 29, 72, 0.22), transparent 70%);
-    pointer-events: none;
-}
-
-.hero::before {
-    content: '';
-    position: absolute;
-    width: 160px;
-    height: 160px;
-    left: -60px;
-    bottom: -80px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(168, 85, 247, 0.15), transparent 70%);
-    pointer-events: none;
-}
-
-.hero h2 {
-    font-size: 32px;
-    font-weight: 300;
-    letter-spacing: 2px;
-    color: var(--text);
-}
-
-.hero h2 span {
-    background: linear-gradient(135deg, var(--accent-2), var(--accent-3), var(--accent-4));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.hero p {
-    color: var(--text-secondary);
-    font-size: 15px;
-    margin-top: 4px;
-}
-
-.stats-bar {
-    display: flex;
-    gap: 30px;
-    flex-wrap: wrap;
-    margin-top: 12px;
-    font-size: 13px;
-    color: var(--text-muted);
-}
-
-.stats-bar .stat {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--text-secondary);
-}
-
-.stats-bar .stat strong {
-    color: var(--text);
-    font-size: 18px;
-}
-
-/* ====== ПРОФИЛЬ ====== */
-.profile-hero {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    padding: 20px 24px;
-    margin-bottom: 18px;
-    background: linear-gradient(145deg, var(--bg-card), var(--bg-alt));
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    flex-wrap: wrap;
-    box-shadow: 0 14px 40px rgba(120, 20, 60, 0.35);
-    position: relative;
-    overflow: hidden;
-}
-
-.profile-hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--accent-1), var(--accent-3), var(--accent-4));
-}
-
-.profile-hero .avatar {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--accent-3);
-    flex-shrink: 0;
-    background: var(--bg);
-    box-shadow: 0 0 28px var(--glow-red);
-}
-
-.profile-hero .profile-main .name {
-    font-size: 28px;
-    font-weight: 600;
-    background: linear-gradient(135deg, var(--accent-2), var(--accent-3), var(--accent-4));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.profile-hero .profile-main .nick {
-    color: var(--text-muted);
-    font-size: 15px;
-}
-
-.profile-hero .profile-main .title {
-    font-size: 18px;
-    color: var(--text-secondary);
-    margin: 2px 0 8px;
-}
-
-.profile-hero .profile-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-}
-
-.profile-hero .profile-tags span {
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    background: var(--bg-deep);
-    border: 1px solid var(--border);
-    color: var(--text-secondary);
-}
-
-/* ====== БЫСТРАЯ ИНФОРМАЦИЯ ====== */
-.quick-info {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 10px;
-    margin: 0 0 20px;
-}
-
-.quick-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 16px;
-    background: linear-gradient(145deg, var(--bg-card), var(--bg-alt));
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    transition: var(--transition);
-    box-shadow: 0 8px 24px rgba(120, 20, 60, 0.28);
-}
-
-.quick-item:hover {
-    border-color: var(--accent-3);
-    transform: translateY(-3px);
-    box-shadow: 0 18px 48px rgba(150, 25, 70, 0.42);
-}
-
-.quick-item .quick-icon {
-    font-size: 18px;
-}
-
-.quick-item small {
-    display: block;
-    color: var(--text-muted);
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.quick-item strong {
-    display: block;
-    color: var(--text);
-    font-size: 13px;
-}
-
-/* ====== БЛОКИ ====== */
-.block {
-    margin: 14px 0;
-    padding: 16px 20px;
-    background: linear-gradient(145deg, var(--bg-card), var(--bg-alt));
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    transition: var(--transition);
-    box-shadow: 0 14px 40px rgba(120, 20, 60, 0.30);
-}
-
-.block:hover {
-    border-color: var(--accent-4);
-    box-shadow: 0 18px 48px rgba(150, 25, 70, 0.42);
-}
-
-.block-title {
-    color: var(--text-secondary);
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.block-text {
-    color: var(--text-secondary);
-    font-size: 14px;
-    line-height: 1.8;
-}
-
-.block-text strong {
-    color: var(--text);
-}
-
-.block-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 10px;
-}
-
-.block-tags .tag {
-    padding: 2px 12px;
-    border-radius: 12px;
-    font-size: 11px;
-    background: var(--bg-deep);
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-}
-
-.block-tags .tag.accent { border-color: var(--accent-1); color: var(--accent-2); }
-.block-tags .tag.gold   { border-color: var(--accent-gold); color: var(--accent-gold); }
-.block-tags .tag.pink   { border-color: var(--accent-2); color: var(--accent-2); }
-.block-tags .tag.green  { border-color: var(--accent-green); color: var(--accent-green); }
-
-/* ====== ДОСТИЖЕНИЯ ====== */
-.achievement-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(225, 29, 72, 0.14);
-}
-
-.achievement-item:last-child {
-    border-bottom: none;
-}
-
-.achievement-item .ach-icon {
-    font-size: 24px;
-    width: 36px;
-    flex-shrink: 0;
-    text-align: center;
-    margin-top: 2px;
-}
-
-.achievement-item .ach-text .title {
-    color: var(--text);
-    font-weight: 600;
-    font-size: 14px;
-    display: block;
-}
-
-.achievement-item .ach-text .desc {
-    color: var(--text-secondary);
-    font-size: 13px;
-    display: block;
-    margin-top: 2px;
-}
-
-/* ====== ПРОЕКТ В ВИКИ ====== */
-.wiki-entry {
-    cursor: pointer;
-    transition: var(--transition);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px 20px;
-    background: linear-gradient(145deg, var(--bg-card), var(--bg-alt));
-    margin-bottom: 14px;
-    box-shadow: 0 8px 24px rgba(120, 20, 60, 0.28);
-    position: relative;
-    overflow: hidden;
-}
-
-.wiki-entry::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0; width: 2px;
-    background: transparent;
-    transition: var(--transition);
-}
-
-.wiki-entry:hover {
-    border-color: var(--accent-3);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 24px var(--glow-red), 0 14px 40px rgba(150, 25, 70, 0.42);
-    background: var(--bg-card-hover);
-}
-
-.wiki-entry:hover::before { background: linear-gradient(180deg, var(--accent-2), var(--accent-3)); }
-
-.wiki-entry .top-row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-.wiki-entry .icon {
-    font-size: 32px;
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--bg-deep);
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    flex-shrink: 0;
-    overflow: hidden;
-}
-
-.wiki-entry .icon img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-.wiki-entry .name {
-    font-weight: 600;
-    font-size: 18px;
-    color: var(--text);
-}
-
-.wiki-entry .sub {
-    color: var(--text-muted);
-    font-size: 13px;
-    display: block;
-}
-
-.wiki-entry .status-badge {
-    margin-left: auto;
-    padding: 2px 12px;
-    border-radius: 12px;
-    font-size: 11px;
-    flex-shrink: 0;
-}
-
-.wiki-entry .status-badge.frozen {
-    background: rgba(225, 29, 72, 0.20);
-    color: #fda4af;
-    border: 1px solid rgba(225, 29, 72, 0.42);
-}
-
-.wiki-entry .status-badge.planned {
-    background: rgba(168, 85, 247, 0.20);
-    color: #d8b4fe;
-    border: 1px solid rgba(168, 85, 247, 0.38);
-}
-
-.wiki-entry .status-badge.active {
-    background: rgba(74, 222, 128, 0.15);
-    color: #86efac;
-    border: 1px solid rgba(74, 222, 128, 0.25);
-}
-
-.wiki-entry .desc {
-    margin-top: 8px;
-    color: var(--text-secondary);
-    font-size: 13px;
-}
-
-.wiki-entry .tags {
-    margin-top: 8px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-}
-
-.wiki-entry .tags .tag {
-    padding: 2px 10px;
-    border-radius: 12px;
-    font-size: 10px;
-    background: var(--bg-deep);
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-}
-
-.wiki-entry .tags .tag.accent { border-color: var(--accent-1); color: var(--accent-2); }
-.wiki-entry .tags .tag.pink   { border-color: var(--accent-2); color: var(--accent-2); }
-.wiki-entry .tags .tag.gold   { border-color: var(--accent-gold); color: var(--accent-gold); }
-.wiki-entry .tags .tag.green  { border-color: var(--accent-green); color: var(--accent-green); }
-
-/* ====== ДЕТАЛЬНАЯ СТРАНИЦА ПРОЕКТА ====== */
-.page-detail .back {
-    display: inline-block;
-    color: var(--accent-2);
-    text-decoration: none;
-    font-size: 13px;
-    cursor: pointer;
-    margin-bottom: 16px;
-    transition: var(--transition);
-}
-
-.page-detail .back:hover {
-    color: var(--accent-3);
-    text-decoration: underline;
-}
-
-.page-detail .header-info {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 16px;
-    margin-bottom: 20px;
-}
-
-.page-detail .icon-big {
-    font-size: 44px;
-    width: 68px;
-    height: 68px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--bg-deep);
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    flex-shrink: 0;
-    overflow: hidden;
-    box-shadow: 0 0 24px rgba(225, 29, 72, 0.18);
-}
-
-.page-detail .icon-big img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-.page-detail .name-big {
-    font-size: 26px;
-    font-weight: 400;
-    color: var(--text);
-}
-
-.page-detail .name-big .sub {
-    font-size: 14px;
-    color: var(--text-muted);
-    font-weight: 300;
-    display: block;
-}
-
-.page-detail .status-big {
-    display: inline-block;
-    padding: 3px 14px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 500;
-    margin-top: 4px;
-}
-
-.page-detail .status-big.frozen {
-    background: rgba(225, 29, 72, 0.20);
-    color: #fda4af;
-    border: 1px solid rgba(225, 29, 72, 0.42);
-}
-
-.page-detail .status-big.planned {
-    background: rgba(168, 85, 247, 0.20);
-    color: #d8b4fe;
-    border: 1px solid rgba(168, 85, 247, 0.38);
-}
-
-.page-detail .status-big.active {
-    background: rgba(74, 222, 128, 0.15);
-    color: #86efac;
-    border: 1px solid rgba(74, 222, 128, 0.25);
-}
-
-.info-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-bottom: 16px;
-}
-
-@media (max-width: 720px) {
-    .info-grid { grid-template-columns: 1fr; }
-}
-
-.info-box {
-    background: var(--bg-deep);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: 0 14px 40px rgba(120, 20, 60, 0.30);
-    transition: var(--transition);
-}
-
-.info-box:hover {
-    transform: translateY(-3px);
-    border-color: var(--accent-4);
-    box-shadow: 0 18px 48px rgba(150, 25, 70, 0.42);
-}
-
-.info-box .title {
-    background: linear-gradient(145deg, var(--bg-card), var(--bg-alt));
-    padding: 8px 14px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-secondary);
-    border-bottom: 1px solid var(--border);
-}
-
-.info-box .body {
-    padding: 14px 16px;
-    color: var(--text-secondary);
-    font-size: 13px;
-    line-height: 1.8;
-}
-
-.info-box .body ul { padding-left: 20px; }
-.info-box .body ul li { margin-bottom: 4px; }
-.info-box .body .label { color: var(--text-muted); }
-.info-box .body .value { color: var(--text); }
-
-.page-detail .tags-big {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin: 4px 0 0;
-}
-
-.page-detail .tags-big .tag {
-    padding: 2px 12px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 500;
-    background: var(--bg-deep);
-    color: var(--text-muted);
-    border: 1px solid var(--border);
-}
-
-.page-detail .tags-big .tag.accent { border-color: var(--accent-1); color: var(--accent-2); }
-.page-detail .tags-big .tag.pink   { border-color: var(--accent-2); color: var(--accent-2); }
-.page-detail .tags-big .tag.gold   { border-color: var(--accent-gold); color: var(--accent-gold); }
-.page-detail .tags-big .tag.green  { border-color: var(--accent-green); color: var(--accent-green); }
-
-/* ====== КОНТАКТЫ ====== */
-.contact-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 12px;
-    margin-top: 16px;
-}
-
-.contact-card {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 16px;
-    background: linear-gradient(145deg, var(--bg-card), var(--bg-alt));
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    text-decoration: none;
-    color: inherit;
-    transition: var(--transition);
-    box-shadow: 0 8px 24px rgba(120, 20, 60, 0.28);
-}
-
-.contact-card:hover {
-    border-color: var(--accent-3);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 20px var(--glow-red), 0 14px 40px rgba(150, 25, 70, 0.42);
-}
-
-.contact-card .contact-icon {
-    font-size: 24px;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--bg-deep);
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    flex-shrink: 0;
-}
-
-.contact-card .contact-info .contact-name {
-    display: block;
-    color: var(--text);
-    font-weight: 600;
-    font-size: 14px;
-}
-
-.contact-card .contact-info .contact-handle {
-    display: block;
-    color: var(--text-muted);
-    font-size: 12px;
-}
-
-/* ====== ПОДВАЛ ====== */
-.footer {
-    border-top: 1px solid var(--border);
-    padding: 16px 30px;
-    text-align: center;
-    font-size: 12px;
-    color: var(--text-muted);
-    background: linear-gradient(180deg, rgba(31, 13, 32, 0.85), rgba(38, 16, 42, 0.9));
-    margin-top: auto;
-    position: relative;
-    z-index: 1;
-}
-
-.footer a {
-    color: var(--accent-2);
-    text-decoration: none;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.footer a:hover {
-    color: var(--accent-3);
-    text-decoration: underline;
-}
-
-.footer .divider { color: var(--border); margin: 0 6px; }
-
-.footer .highlight {
-    background: linear-gradient(135deg, var(--accent-2), var(--accent-3), var(--accent-4));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-weight: 600;
-}
-
-/* ====== МОБИЛЬНАЯ НАВИГАЦИЯ ====== */
-.mobile-nav { display: none; }
-
-@media (max-width: 760px) {
-    .header {
-        padding: 10px 14px;
-        position: sticky;
-        flex-direction: row;
-        gap: 8px;
-        align-items: center;
-    }
-
-    .header .logo { min-width: 0; gap: 8px; }
-    .header .logo .icon { width: 36px; height: 36px; font-size: 20px; }
-    .header .logo h1 { font-size: 16px; letter-spacing: 1px; }
-    .header .logo .subtitle { font-size: 8px; letter-spacing: 1.5px; }
-    .header .right-group { margin-left: auto; gap: 6px; width: auto; justify-content: flex-end; }
-    .header .nav-buttons { display: none; }
-    .lang-toggle { padding: 5px 9px; font-size: 10px; }
-
-    .main-container { padding: 18px 12px 100px; }
-
-    .hero { padding: 8px 0 14px; margin-bottom: 18px; }
-    .hero h2 { font-size: 23px; line-height: 1.3; }
-    .hero p { font-size: 13px; }
-
-    .stats-bar { gap: 10px 18px; }
-    .stats-bar .stat strong { font-size: 16px; }
-
-    .profile-hero {
-        flex-direction: column;
-        text-align: center;
-        padding: 18px 14px;
-        gap: 12px;
-    }
-
-    .profile-hero .avatar { width: 92px; height: 92px; }
-    .profile-hero .profile-main .name { font-size: 23px; line-height: 1.3; }
-    .profile-hero .profile-main .nick { font-size: 13px; }
-    .profile-hero .profile-main .title { font-size: 14px; line-height: 1.4; }
-    .profile-hero .profile-tags { justify-content: center; }
-
-    .quick-info { grid-template-columns: 1fr 1fr; gap: 8px; }
-    .quick-item { min-width: 0; padding: 10px; }
-    .quick-item strong { font-size: 12px; overflow-wrap: anywhere; }
-
-    .block { padding: 14px; margin: 10px 0; }
-    .block-title { font-size: 15px; }
-    .block-text { font-size: 13px; overflow-wrap: anywhere; }
-    .block-text[style*="grid-template-columns"] {
-        grid-template-columns: 1fr !important;
-        gap: 4px !important;
-    }
-
-    .wiki-entry { padding: 14px; margin-bottom: 10px; }
-    .wiki-entry .top-row { align-items: flex-start; }
-    .wiki-entry .icon { width: 44px; height: 44px; font-size: 28px; }
-    .wiki-entry .name { font-size: 16px; line-height: 1.35; }
-    .wiki-entry .sub { font-size: 11px; }
-    .wiki-entry .status-badge { margin-left: auto; padding: 3px 8px; font-size: 10px; }
-    .wiki-entry .desc { font-size: 12px; }
-
-    .page-detail .header-info {
-        flex-direction: column;
-        text-align: center;
-        gap: 12px;
-    }
-
-    .page-detail .icon-big { width: 64px; height: 64px; font-size: 40px; }
-    .page-detail .name-big { font-size: 21px; line-height: 1.35; }
-    .page-detail .name-big .sub { font-size: 12px; margin-top: 3px; }
-
-    .info-grid { grid-template-columns: 1fr; gap: 10px; }
-    .info-box .body { font-size: 12px; overflow-wrap: anywhere; }
-
-    .contact-grid { grid-template-columns: 1fr; }
-
-    .footer { padding: 14px 12px 92px; font-size: 11px; }
-
-    .mobile-nav {
-        position: fixed;
-        display: flex;
-        left: 8px;
-        right: 8px;
-        bottom: 8px;
-        z-index: 110;
-        background: linear-gradient(145deg, rgba(38, 16, 42, 0.96), rgba(31, 13, 32, 0.96));
-        backdrop-filter: blur(18px);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 6px;
-        box-shadow: 0 12px 40px rgba(120, 20, 60, 0.55);
-    }
-
-    .mobile-nav button {
-        flex: 1;
-        border: 0;
-        background: transparent;
-        color: var(--text-secondary);
-        padding: 7px 4px;
-        border-radius: 11px;
-        font: inherit;
-        font-size: 11px;
-        cursor: pointer;
-    }
-
-    .mobile-nav button.active {
-        background: linear-gradient(135deg, var(--accent-1), var(--accent-3));
-        color: #fff;
-    }
-
-    .mobile-icon { display: block; font-size: 17px; margin-bottom: 2px; }
-}
-
-@media (max-width: 400px) {
-    .quick-info { grid-template-columns: 1fr; }
-}
-
-/* ====== ДОПОЛНИТЕЛЬНЫЕ УЛУЧШЕНИЯ ====== */
-::selection { background: rgba(225, 29, 72, 0.40); color: #fff; }
-button, a, input { -webkit-tap-highlight-color: transparent; }
-button:focus-visible, a:focus-visible, input:focus-visible {
-    outline: 2px solid var(--accent-3);
-    outline-offset: 3px;
-}
-
-.reveal {
-    opacity: 0;
-    transform: translateY(22px);
-    transition: opacity .65s ease, transform .65s ease;
-}
-.reveal.visible {
-    opacity: 1;
-    transform: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        scroll-behavior: auto !important;
-        animation-duration: .01ms !important;
-        transition-duration: .01ms !important;
-    }
-}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#160a17;--bg-alt:#1e0c1c;--bg-card:#26102a;--bg-hover:#341333;--bg-deep:#1f0d20;--border:#4a1e42;--text:#f0dcec;--text2:#d0a8c8;--muted:#9a6b90;--a1:#a855f7;--a2:#d946ef;--a3:#e11d48;--a4:#9f1239;--gold:#e0b64a;--green:#4ade80;--glow:rgba(225,29,72,.22);--r:14px;--t:.3s cubic-bezier(.4,0,.2,1);--card:linear-gradient(145deg,var(--bg-card),var(--bg-alt));--grad:linear-gradient(135deg,var(--a2),var(--a3),var(--a4));--sh:0 12px 36px rgba(120,20,60,.32);--sh-h:0 18px 48px rgba(150,25,70,.42)}
+html{scroll-behavior:smooth}
+body{font:16px/1.6 Inter,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;background-image:radial-gradient(ellipse at 12% 8%,rgba(168,85,247,.14),transparent 55%),radial-gradient(ellipse at 88% 12%,rgba(225,29,72,.16),transparent 50%),radial-gradient(ellipse at 80% 88%,rgba(159,18,57,.2),transparent 55%),radial-gradient(ellipse at 20% 92%,rgba(127,29,58,.16),transparent 55%)}
+.grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.stars{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.star{position:absolute;background:#f5d0e8;border-radius:50%;opacity:.3;box-shadow:0 0 6px rgba(244,114,182,.5);animation:twinkle var(--duration) ease-in-out infinite alternate}
+@keyframes twinkle{from{opacity:.15;transform:scale(.8)}to{opacity:.9;transform:scale(1.2)}}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}}
+
+/* Шапка */
+.header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:12px 30px;background:linear-gradient(180deg,rgba(38,16,42,.95),rgba(31,13,32,.92));backdrop-filter:blur(16px);border-bottom:1px solid var(--border);box-shadow:0 10px 40px rgba(120,20,60,.45)}
+.logo{display:flex;align-items:center;gap:12px}
+.logo .icon{width:42px;height:42px;display:grid;place-items:center;font-size:22px;color:var(--a2);border:1px solid var(--border);border-radius:12px;background:linear-gradient(145deg,#341333,#1f0d20)}
+.logo h1{font-size:20px;font-weight:300;letter-spacing:2px}
+.logo h1 span{font-weight:600}
+.subtitle{display:block;font-size:10px;letter-spacing:3px;text-transform:uppercase;font-weight:600}
+.right-group,.nav-buttons{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.nav-buttons button{padding:6px 16px;border:1px solid transparent;background:none;color:var(--text2);border-radius:20px;font:inherit;font-size:13px;cursor:pointer;transition:var(--t)}
+.nav-buttons button:hover{color:var(--text);background:var(--bg-card);border-color:var(--border)}
+.nav-buttons button.active{color:#fff;background:linear-gradient(135deg,var(--a1),var(--a3));border-color:var(--a3);box-shadow:0 0 20px var(--glow)}
+.lang-toggle{padding:4px 12px;border:1px solid var(--border);background:var(--bg-card);color:var(--text2);border-radius:20px;font-family:inherit;font-size:12px;font-weight:600;letter-spacing:.5px;cursor:pointer;transition:var(--t)}
+.lang-toggle:hover{border-color:var(--a3);color:var(--text);background:var(--bg-hover);box-shadow:0 0 16px var(--glow)}
+
+/* Каркас */
+main{flex:1;max-width:1100px;margin:0 auto;width:100%;padding:30px 24px 50px;position:relative;z-index:1}
+.tab{display:none;animation:fade .4s ease}
+.tab.active{display:block}
+.hero{padding:20px 0 10px;border-bottom:1px solid var(--border);margin-bottom:28px}
+.hero h2{font-size:32px;font-weight:300;letter-spacing:2px}
+.hero p{color:var(--text2);margin-top:4px}
+.stats-bar{display:flex;gap:30px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:var(--text2)}
+.stats-bar strong{color:var(--text);font-size:18px}
+
+/* Карточки */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--sh);transition:var(--t)}
+.card:hover{border-color:var(--a3);box-shadow:var(--sh-h)}
+.profile-hero{display:flex;align-items:center;gap:24px;padding:20px 24px;margin-bottom:18px;flex-wrap:wrap;border-top:2px solid var(--a3)}
+.avatar{width:120px;height:120px;border-radius:50%;object-fit:cover;border:2px solid var(--a3);box-shadow:0 0 28px var(--glow);flex-shrink:0;background:var(--bg)}
+.name{font-size:28px;font-weight:600}
+.nick{color:var(--muted)}
+.ptitle{font-size:18px;color:var(--text2);margin:2px 0 8px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tag{padding:2px 12px;border-radius:12px;font-size:11px;background:var(--bg-deep);border:1px solid var(--border);color:var(--muted)}
+.tag.pink{border-color:var(--a2);color:var(--a2)}
+.tag.gold{border-color:var(--gold);color:var(--gold)}
+.tag.green{border-color:var(--green);color:var(--green)}
+.quick-info{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:20px}
+.quick-item{display:flex;align-items:center;gap:10px;padding:12px 16px}
+.quick-item:hover{transform:translateY(-3px)}
+.quick-item>span{font-size:18px}
+.quick-item small{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.5px}
+.quick-item strong{font-size:13px}
+.block{margin:14px 0;padding:16px 20px}
+.block h3{font-size:16px;color:var(--text2);margin-bottom:8px}
+.block-text{color:var(--text2);font-size:14px;line-height:1.8}
+.block-text strong{color:var(--text)}
+.block-text p+p{margin-top:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:2px 20px}
+.friends{display:flex;gap:20px;flex-wrap:wrap;font-size:24px}
+.ach{display:flex;gap:14px;padding:10px 0;border-bottom:1px solid rgba(225,29,72,.14)}
+.ach:last-child{border:0}
+.ach>span:first-child{font-size:24px;width:36px;text-align:center;flex-shrink:0}
+.ach b{display:block;color:var(--text);font-size:14px}
+.ach small{display:block;color:var(--text2);font-size:13px;margin-top:2px}
+
+/* Вики */
+.wiki-entry{display:block;padding:16px 20px;margin-bottom:14px;cursor:pointer}
+.wiki-entry:hover{transform:translateY(-2px);background:var(--bg-hover)}
+.wiki-entry>p{margin-top:8px;color:var(--text2);font-size:13px}
+.top-row{display:flex;align-items:center;gap:14px}
+.ico{width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:30px;background:var(--bg-deep);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;flex-shrink:0}
+.ico img{width:100%;height:100%;object-fit:contain}
+.pname{font-size:18px;font-weight:600}
+.sub{display:block;color:var(--muted);font-size:13px;font-weight:300}
+.badge{margin-left:auto;padding:2px 12px;border-radius:12px;font-size:11px;white-space:nowrap}
+.badge.frozen{background:rgba(225,29,72,.2);color:#fda4af;border:1px solid rgba(225,29,72,.42)}
+.badge.planned{background:rgba(168,85,247,.2);color:#d8b4fe;border:1px solid rgba(168,85,247,.38)}
+.badge.active{background:rgba(74,222,128,.15);color:#86efac;border:1px solid rgba(74,222,128,.25)}
+.back{display:inline-block;color:var(--a2);font-size:13px;cursor:pointer;margin-bottom:16px}
+.back:hover{color:var(--a3);text-decoration:underline}
+.header-info{display:flex;align-items:center;gap:20px;border-bottom:1px solid var(--border);padding-bottom:16px;margin-bottom:20px}
+.header-info .ico{width:68px;height:68px;font-size:44px}
+.header-info .pname{font-size:26px;font-weight:400}
+.header-info .badge{display:inline-block;margin:4px 0 0}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.info-box{overflow:hidden;background:var(--bg-deep)}
+.info-box:hover{transform:translateY(-3px)}
+.info-box h4{padding:8px 14px;font-size:13px;color:var(--text2);background:var(--card);border-bottom:1px solid var(--border)}
+.info-box .body{padding:14px 16px;color:var(--text2);font-size:13px;line-height:1.8}
+.body ul{padding-left:20px}
+.body li{margin-bottom:4px}
+.body p+p,.body ul+p{margin-top:14px}
+.label{color:var(--muted)}
+.label::after{content:": "}
+.value{color:var(--text)}
+
+/* Контакты */
+.contact-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:16px}
+.contact-card{display:flex;align-items:center;gap:12px;padding:14px 16px;color:inherit;text-decoration:none}
+.contact-card:hover{transform:translateY(-2px)}
+.contact-card .ico{width:40px;height:40px;font-size:22px}
+.contact-card b{display:block;font-size:14px}
+.contact-card small{color:var(--muted);font-size:12px}
+
+/* Подвал и мобильное меню */
+.footer{margin-top:auto;position:relative;z-index:1;border-top:1px solid var(--border);padding:16px 30px;text-align:center;font-size:12px;color:var(--muted);background:linear-gradient(180deg,rgba(31,13,32,.85),rgba(38,16,42,.9))}
+.footer a{color:var(--a2);text-decoration:none}
+.footer a:hover{color:var(--a3);text-decoration:underline}
+.footer .dot{margin:0 6px;color:var(--border)}
+.mobile-nav{display:none;position:fixed;left:8px;right:8px;bottom:8px;z-index:110;padding:6px;background:rgba(38,16,42,.96);backdrop-filter:blur(18px);border:1px solid var(--border);border-radius:16px;box-shadow:0 12px 40px rgba(120,20,60,.55)}
+.mobile-nav button{flex:1;border:0;background:none;color:var(--text2);padding:7px 4px;border-radius:11px;font:inherit;font-size:11px;cursor:pointer}
+.mobile-nav button.active{background:linear-gradient(135deg,var(--a1),var(--a3));color:#fff}
+.mobile-nav .mi{display:block;font-size:17px}
+
+/* Прочее */
+::selection{background:rgba(225,29,72,.4);color:#fff}
+button,a{-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--a3);outline-offset:3px}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .65s ease,transform .65s ease}
+.reveal.visible{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+@media(max-width:760px){
+.header{padding:10px 14px;flex-wrap:nowrap}
+.logo h1{font-size:16px;letter-spacing:1px}
+.subtitle{font-size:8px;letter-spacing:1.5px}
+.nav-buttons{display:none}
+.right-group{margin-left:auto}
+main{padding:18px 12px 100px}
+.hero h2{font-size:23px;line-height:1.3}
+.profile-hero{flex-direction:column;text-align:center;padding:18px 14px}
+.profile-hero .tags{justify-content:center}
+.avatar{width:92px;height:92px}
+.name{font-size:23px}
+.ptitle{font-size:14px}
+.quick-info{grid-template-columns:1fr 1fr}
+.grid2,.info-grid{grid-template-columns:1fr}
+.header-info{flex-direction:column;text-align:center}
+.header-info .pname{font-size:21px}
+.footer{padding:14px 12px 92px}
+.mobile-nav{display:flex}
+}
+@media(max-width:400px){.quick-info{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<!-- ====== ЗВЁЗДЫ ====== -->
-<div class="stars" id="stars"></div>
+<div class="stars" id="stars" aria-hidden="true"></div>
 
-<!-- ====== ШАПКА ====== -->
 <header class="header">
     <div class="logo">
         <span class="icon">☽</span>
         <div>
-            <h1>Solarium <span>Umbris</span></h1>
-            <span class="subtitle">✦ Мир Косарха ✦</span>
+            <h1>Solarium <span class="grad">Umbris</span></h1>
+            <span class="subtitle grad">✦ Мир Косарха ✦</span>
         </div>
     </div>
     <div class="right-group">
-        <div class="nav-buttons" id="tabNav">
-            <button class="active" data-tab="home">🏠 <span class="i18n" data-en="Home" data-ru="Главная">Главная</span></button>
-            <button data-tab="wiki">📚 <span class="i18n" data-en="My Wiki" data-ru="Моя Вики">Моя Вики</span></button>
-            <button data-tab="contact">✉️ <span class="i18n" data-en="Contact" data-ru="Контакты">Контакты</span></button>
-        </div>
-        <button class="lang-toggle" id="langToggle" onclick="toggleLang()">РУС</button>
+        <nav class="nav-buttons" id="tabNav" aria-label="Main navigation">
+            <button class="active" data-tab="home">🏠 <span class="i18n" data-en="Home">Главная</span></button>
+            <button data-tab="wiki">📚 <span class="i18n" data-en="My Wiki">Моя Вики</span></button>
+            <button data-tab="contact">✉️ <span class="i18n" data-en="Contact">Контакты</span></button>
+        </nav>
+        <button class="lang-toggle" id="langToggle" onclick="toggleLang()" aria-label="Switch language">ENG</button>
     </div>
 </header>
 
-<!-- ====== ОСНОВНАЯ ЧАСТЬ ====== -->
-<div class="main-container">
+<main>
 
-    <!-- HOME -->
-    <div class="tab active" id="tab-home">
-        <div class="hero reveal">
-            <h2>✧ <span class="i18n" data-en="Welcome to the World of Kosarh" data-ru="Добро пожаловать в Мир Косарха">Добро пожаловать в Мир Косарха</span></h2>
-            <p class="i18n" data-en="Encyclopedia of worlds, projects and ideas" data-ru="Энциклопедия миров, проектов и идей">Энциклопедия миров, проектов и идей</p>
-            <div class="stats-bar">
-                <span class="stat">📦 <strong>3</strong> <span class="i18n" data-en="projects" data-ru="проекта">проекта</span></span>
-                <span class="stat">🏆 <strong>3</strong> <span class="i18n" data-en="achievements" data-ru="достижения">достижения</span></span>
-                <span class="stat">👤 <strong>18</strong> <span class="i18n" data-en="years old" data-ru="лет">лет</span></span>
-            </div>
-        </div>
-
-        <!-- ПРОФИЛЬ -->
-        <div class="profile-hero reveal">
-            <img class="avatar" src="gim/AVATARKA.jpg" alt="Vladislav Fosk-Kosarh" />
-            <div class="profile-main">
-                <div class="name">Vladislav Fosk-Kosarh</div>
-                <div class="nick">@Foskarh</div>
-                <div class="title">👑 <span class="i18n" data-en="Supreme Sovereign of the Kosarh Free Land" data-ru="Верховный правитель Свободной Земли Косарха">Верховный правитель Свободной Земли Косарха</span></div>
-                <div class="profile-tags">
-                    <span>💻 <span class="i18n" data-en="Developer" data-ru="Разработчик">Разработчик</span></span>
-                    <span>🐧 Linux</span>
-                    <span>🛠️ <span class="i18n" data-en="Creator" data-ru="Творец">Творец</span></span>
-                    <span>⚔️ Coalition Iron Will</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- БЫСТРАЯ ИНФОРМАЦИЯ -->
-        <div class="quick-info reveal">
-            <div class="quick-item">
-                <span class="quick-icon">🎂</span>
-                <div><small class="i18n" data-en="Age" data-ru="Возраст">Возраст</small><strong>18 <span class="i18n" data-en="years" data-ru="лет">лет</span></strong></div>
-            </div>
-            <div class="quick-item">
-                <span class="quick-icon">🏴</span>
-                <div><small class="i18n" data-en="Nationality" data-ru="Национальность">Национальность</small><strong>Kosarh</strong></div>
-            </div>
-            <div class="quick-item">
-                <span class="quick-icon">🎓</span>
-                <div><small class="i18n" data-en="Education" data-ru="Образование">Образование</small><strong class="i18n" data-en="Technician" data-ru="Техник">Техник</strong></div>
-            </div>
-            <div class="quick-item">
-                <span class="quick-icon">⚔️</span>
-                <div><small class="i18n" data-en="Organization" data-ru="Организация">Организация</small><strong>Coalition Iron Will</strong></div>
-            </div>
-        </div>
-
-        <!-- О СЕБЕ -->
-        <div class="block reveal">
-            <div class="block-title">📜 <span class="i18n" data-en="About Me" data-ru="О себе">О себе</span></div>
-            <div class="block-text">
-                <p class="i18n" data-en="<strong>Hi.</strong> My main job is as a maintenance technician — I work with equipment and hardware. Programming is my new hobby; I'm just starting to get into it, learning little by little. I want to create something of my own, even if it's small, but made with my own hands." data-ru="<strong>Привет.</strong> Моя основная работа — наладчик, я имею дело с оборудованием и железом. А программирование — это моё новое увлечение, я только начинаю в него погружаться, изучаю понемногу. Хочется сделать что-то своё, пусть даже небольшое, но своими руками."><strong>Привет.</strong> Моя основная работа — наладчик, я имею дело с оборудованием и железом. А программирование — это моё новое увлечение, я только начинаю в него погружаться, изучаю понемногу. Хочется сделать что-то своё, пусть даже небольшое, но своими руками.</p>
-                <br />
-                <p class="i18n" data-en="I put effort into it, trying to figure things out even when something doesn't work. It's my escape." data-ru="Я вкладываю в это старание, даже когда что-то не получается, пытаюсь разобраться. Это моя отдушина.">Я вкладываю в это старание, даже когда что-то не получается, пытаюсь разобраться. Это моя отдушина.</p>
-                <br />
-                <p class="i18n" data-en="But I'm human, and emotions take their toll. When something goes wrong — code gets stuck, a project won't compile, or just some little thing throws me off — I get upset. I can withdraw into myself, go quiet, stop noticing what's going on around me." data-ru="Но я человек, и эмоции берут своё. Когда что-то идёт не так — завис код, не собирается проект или просто какая-то мелочь выбивает из колеи — я расстраиваюсь. Могу замкнуться в себе, замолчать, перестать замечать, что творится вокруг.">Но я человек, и эмоции берут своё. Когда что-то идёт не так — завис код, не собирается проект или просто какая-то мелочь выбивает из колеи — я расстраиваюсь. Могу замкнуться в себе, замолчать, перестать замечать, что творится вокруг.</p>
-                <br />
-                <p class="i18n" data-en="That's how I am. With all my ups and downs, weaknesses, and stubbornness." data-ru="Такой я есть. Со всеми своими взлётами, падениями, слабостями и упрямством.">Такой я есть. Со всеми своими взлётами, падениями, слабостями и упрямством.</p>
-                <div class="block-tags">
-                    <span class="tag gold">☀️ <span class="i18n" data-en="Sun Child" data-ru="Солнечный ребёнок">Солнечный ребёнок</span></span>
-                    <span class="tag pink">✝️ <span class="i18n" data-en="Orthodox Christian" data-ru="Православный христианин">Православный христианин</span></span>
-                </div>
-            </div>
-        </div>
-
-        <!-- ЯЗЫКИ -->
-        <div class="block">
-            <div class="block-title">🗣️ <span class="i18n" data-en="Languages" data-ru="Языки">Языки</span></div>
-            <div class="block-text">
-                🇷🇺 <span class="i18n" data-en="Russian" data-ru="Русский">Русский</span> — <strong class="i18n" data-en="Native" data-ru="Родной">Родной</strong><br />
-                🇬🇧 <span class="i18n" data-en="English" data-ru="Английский">Английский</span> — <strong class="i18n" data-en="So-so" data-ru="Так себе">Так себе</strong> <span style="color:var(--text-muted);">(<span class="i18n" data-en="often use translator" data-ru="часто пользуюсь переводчиком">часто пользуюсь переводчиком</span>)</span>
-            </div>
-        </div>
-
-        <!-- ОС -->
-        <div class="block">
-            <div class="block-title">💻 <span class="i18n" data-en="Operating Systems" data-ru="Операционные системы">Операционные системы</span></div>
-            <div class="block-text">
-                🪟 Windows<br />
-                🐧 GNU/Linux (Debian, XFCE)
-            </div>
-        </div>
-
-        <!-- НАВЫКИ -->
-        <div class="block">
-            <div class="block-title">🧠 <span class="i18n" data-en="Skills" data-ru="Навыки">Навыки</span></div>
-            <div class="block-text">
-                <strong>💻 <span class="i18n" data-en="Programming" data-ru="Программирование">Программирование</span>:</strong> HTML, CSS, JavaScript<br />
-                <strong>🐧 Linux:</strong> Debian, XFCE, <span class="i18n" data-en="System setup" data-ru="Настройка системы">Настройка системы</span><br />
-                <strong>🔧 <span class="i18n" data-en="Hardware" data-ru="Железо">Железо</span>:</strong> PC, <span class="i18n" data-en="Troubleshooting, Maintenance" data-ru="Диагностика, обслуживание">Диагностика, обслуживание</span><br />
-                <strong>🎮 <span class="i18n" data-en="Modding" data-ru="Моддинг">Моддинг</span>:</strong> HOI4, <span class="i18n" data-en="Game projects, Worldbuilding" data-ru="Игровые проекты, миростроение">Игровые проекты, миростроение</span>
-            </div>
-        </div>
-
-        <!-- ДРУЗЬЯ -->
-        <div class="block">
-            <div class="block-title">🤝 <span class="i18n" data-en="Friends &amp; Brothers" data-ru="Друзья и братья">Друзья и братья</span></div>
-            <div class="block-text" style="font-size:24px; display:flex; gap:20px; flex-wrap:wrap;">
-                <span>🛡️ Tverd</span>
-                <span>⚡ Yonkia</span>
-                <span>🔥 Koivo</span>
-                <span>🌊 Femadoria</span>
-            </div>
-        </div>
-
-        <!-- ИГРЫ И МУЛЬТЫ -->
-        <div class="block">
-            <div class="block-title">🎮 <span class="i18n" data-en="Games &amp; Cartoons" data-ru="Игры и мультфильмы">Игры и мультфильмы</span></div>
-            <div class="block-text" style="display:grid; grid-template-columns:1fr 1fr; gap:2px 20px;">
-                <span>🎮 Hearts of Iron IV</span>
-                <span>🎮 Garry's Mod</span>
-                <span>🎮 Skyrim</span>
-                <span>🎮 Dark Souls 2</span>
-                <span>🎮 Don't Starve Together</span>
-                <span>🎬 Kikoriki ❤️</span>
-                <span>🎬 BoJack Horseman</span>
-                <span>🎬 Rick and Morty</span>
-                <span>🎬 Gravity Falls</span>
-                <span>🎬 Futurama</span>
-                <span>🎬 My Little Pony ❤️</span>
-            </div>
-        </div>
-
-        <!-- ДОСТИЖЕНИЯ -->
-        <div class="block">
-            <div class="block-title">🏆 <span class="i18n" data-en="Achievements" data-ru="Достижения">Достижения</span></div>
-            <div class="achievement-item">
-                <span class="ach-icon">🥇</span>
-                <span class="ach-text">
-                    <span class="title i18n" data-en="Winner's Diploma — &quot;Legacy of Outstanding Entrepreneurs of Russia&quot;" data-ru="Диплом победителя — &quot;Наследие выдающихся предпринимателей России&quot;">Диплом победителя — "Наследие выдающихся предпринимателей России"</span>
-                    <span class="desc i18n" data-en="All-Russian competition on the history of entrepreneurship. Finalist of the regional stage in Tver." data-ru="Всероссийский конкурс по истории предпринимательства. Финалист регионального этапа в Твери.">Всероссийский конкурс по истории предпринимательства. Финалист регионального этапа в Твери.</span>
-                </span>
-            </div>
-            <div class="achievement-item">
-                <span class="ach-icon">📜</span>
-                <span class="ach-text">
-                    <span class="title i18n" data-en="Participant Certificate — &quot;Through the Pages of the Great Victory&quot;" data-ru="Сертификат участника — &quot;По страницам Великой Победы&quot;">Сертификат участника — "По страницам Великой Победы"</span>
-                    <span class="desc i18n" data-en="Team intellectual game dedicated to the 80th anniversary of Victory in the Great Patriotic War 1941–1945." data-ru="Командная интеллектуальная игра к 80-летию Победы в Великой Отечественной войне 1941–1945.">Командная интеллектуальная игра к 80-летию Победы в Великой Отечественной войне 1941–1945.</span>
-                </span>
-            </div>
-            <div class="achievement-item">
-                <span class="ach-icon">🥇</span>
-                <span class="ach-text">
-                    <span class="title i18n" data-en="Winner's Diploma — &quot;Scarlet Sails&quot;" data-ru="Диплом победителя — &quot;Алые паруса&quot;">Диплом победителя — "Алые паруса"</span>
-                    <span class="desc i18n" data-en="Winner of the All-Russian distance Olympiad in Physics among students of professional educational organizations." data-ru="Победитель Всероссийской дистанционной олимпиады по физике среди студентов профессиональных образовательных организаций.">Победитель Всероссийской дистанционной олимпиады по физике среди студентов профессиональных образовательных организаций.</span>
-                </span>
-            </div>
+<!-- ГЛАВНАЯ -->
+<section class="tab active" id="tab-home">
+    <div class="hero reveal">
+        <h2>✧ <span class="i18n grad" data-en="Welcome to the World of Kosarh">Добро пожаловать в Мир Косарха</span></h2>
+        <p class="i18n" data-en="Encyclopedia of worlds, projects and ideas">Энциклопедия миров, проектов и идей</p>
+        <div class="stats-bar">
+            <span>📦 <strong>4</strong> <span class="i18n" data-en="projects">проекта</span></span>
+            <span>🏆 <strong>3</strong> <span class="i18n" data-en="achievements">достижения</span></span>
+            <span>👤 <strong>18</strong> <span class="i18n" data-en="years old">лет</span></span>
         </div>
     </div>
 
-    <!-- MY WIKI -->
-    <div class="tab" id="tab-wiki">
-        <div class="hero">
-            <h2>📚 <span class="i18n" data-en="My Wiki" data-ru="Моя Вики">Моя Вики</span></h2>
-            <p class="i18n" data-en="All projects, ideas and developments" data-ru="Все проекты, идеи и разработки">Все проекты, идеи и разработки</p>
-        </div>
-
-        <!-- Roza OS -->
-        <div class="wiki-entry reveal" onclick="switchTab('project-roza')">
-            <div class="top-row">
-                <div class="icon"><img src="gim/rozaos.png" alt="Roza OS" /></div>
-                <div>
-                    <div class="name">Roza OS</div>
-                    <div class="sub">Debian-based Linux distribution</div>
-                </div>
-                <span class="status-badge planned">🔵 <span class="i18n" data-en="Planned" data-ru="Запланирован">Запланирован</span></span>
-            </div>
-            <div class="desc i18n" data-en="Linux distribution based on Debian with XFCE desktop and preinstalled packages." data-ru="Linux-дистрибутив на базе Debian с окружением XFCE и предустановленными пакетами.">Linux-дистрибутив на базе Debian с окружением XFCE и предустановленными пакетами.</div>
+    <div class="profile-hero card reveal">
+        <img class="avatar" src="gim/AVATARKA.jpg" alt="Vladislav Fosk-Kosarh" width="120" height="120" />
+        <div>
+            <div class="name grad">Vladislav Fosk-Kosarh</div>
+            <div class="nick">@Foskarh</div>
+            <div class="ptitle">👑 <span class="i18n" data-en="Supreme Sovereign of the Kosarh Free Land">Верховный правитель Свободной Земли Косарха</span></div>
             <div class="tags">
-                <span class="tag">Debian</span>
-                <span class="tag">XFCE</span>
-                <span class="tag">Linux</span>
-                <span class="tag pink">Coalition Iron Will</span>
+                <span class="tag">💻 <span class="i18n" data-en="Developer">Разработчик</span></span>
+                <span class="tag">🐧 Linux</span>
+                <span class="tag">🛠️ <span class="i18n" data-en="Creator">Творец</span></span>
+                <span class="tag">⚔️ Coalition Iron Will</span>
             </div>
         </div>
+    </div>
 
-        <!-- Solarium Umbris -->
-        <div class="wiki-entry" onclick="switchTab('project-solarium')">
-            <div class="top-row">
-                <div class="icon">☽</div>
-                <div>
-                    <div class="name">Solarium Umbris</div>
-                    <div class="sub">Mod for Hearts of Iron IV</div>
-                </div>
-                <span class="status-badge frozen">❄️ <span class="i18n" data-en="Frozen" data-ru="Заморожен">Заморожен</span></span>
-            </div>
-            <div class="desc i18n" data-en="Mod for Hearts of Iron IV with unique states and alternative history." data-ru="Мод для Hearts of Iron IV с уникальными государствами и альтернативной историей.">Мод для Hearts of Iron IV с уникальными государствами и альтернативной историей.</div>
+    <div class="quick-info reveal">
+        <div class="quick-item card"><span>🎂</span><div><small class="i18n" data-en="Age">Возраст</small><strong>18 <span class="i18n" data-en="years">лет</span></strong></div></div>
+        <div class="quick-item card"><span>🏴</span><div><small class="i18n" data-en="Nationality">Национальность</small><strong>Kosarh</strong></div></div>
+        <div class="quick-item card"><span>🎓</span><div><small class="i18n" data-en="Education">Образование</small><strong class="i18n" data-en="Technician">Техник</strong></div></div>
+        <div class="quick-item card"><span>⚔️</span><div><small class="i18n" data-en="Organization">Организация</small><strong>Coalition Iron Will</strong></div></div>
+    </div>
+
+    <div class="block card reveal">
+        <h3>📜 <span class="i18n" data-en="About Me">О себе</span></h3>
+        <div class="block-text">
+            <p class="i18n" data-en="<strong>Hi.</strong> My main job is as a maintenance technician — I work with equipment and hardware. Programming is my new hobby; I'm just starting to get into it, learning little by little. I want to create something of my own, even if it's small, but made with my own hands."><strong>Привет.</strong> Моя основная работа — наладчик, я имею дело с оборудованием и железом. А программирование — это моё новое увлечение, я только начинаю в него погружаться, изучаю понемногу. Хочется сделать что-то своё, пусть даже небольшое, но своими руками.</p>
+            <p class="i18n" data-en="I put effort into it, trying to figure things out even when something doesn't work. It's my escape.">Я вкладываю в это старание, даже когда что-то не получается, пытаюсь разобраться. Это моя отдушина.</p>
+            <p class="i18n" data-en="But I'm human, and emotions take their toll. When something goes wrong — code gets stuck, a project won't compile, or just some little thing throws me off — I get upset. I can withdraw into myself, go quiet, stop noticing what's going on around me.">Но я человек, и эмоции берут своё. Когда что-то идёт не так — завис код, не собирается проект или просто какая-то мелочь выбивает из колеи — я расстраиваюсь. Могу замкнуться в себе, замолчать, перестать замечать, что творится вокруг.</p>
+            <p class="i18n" data-en="That's how I am. With all my ups and downs, weaknesses, and stubbornness.">Такой я есть. Со всеми своими взлётами, падениями, слабостями и упрямством.</p>
             <div class="tags">
-                <span class="tag">HOI4</span>
-                <span class="tag">Mod</span>
-                <span class="tag">Alternative history</span>
-                <span class="tag pink">Coalition Iron Will</span>
-            </div>
-        </div>
-
-        <!-- Black Order -->
-        <div class="wiki-entry" onclick="switchTab('project-blackorder')">
-            <div class="top-row">
-                <div class="icon">🖤</div>
-                <div>
-                    <div class="name">Special Army "Black Order"</div>
-                    <div class="sub">RP Faction in BRM 5</div>
-                </div>
-                <span class="status-badge frozen">❄️ <span class="i18n" data-en="Frozen" data-ru="Заморожен">Заморожен</span></span>
-            </div>
-            <div class="desc i18n" data-en="Elite military unit in BRM 5 — a faction for experienced players." data-ru="Элитное военное подразделение в BRM 5 — фракция для опытных игроков.">Элитное военное подразделение в BRM 5 — фракция для опытных игроков.</div>
-            <div class="tags">
-                <span class="tag">BRM 5</span>
-                <span class="tag">RP Faction</span>
-                <span class="tag pink">Coalition Iron Will</span>
-            </div>
-        </div>
-
-        <!-- Coalition Iron Will -->
-        <div class="wiki-entry" onclick="switchTab('project-coalition')" style="border-color:var(--accent-green);">
-            <div class="top-row">
-                <div class="icon">⚔️</div>
-                <div>
-                    <div class="name">Coalition Iron Will</div>
-                    <div class="sub">Alliance of close friends and companions</div>
-                </div>
-                <span class="status-badge active">🟢 <span class="i18n" data-en="Active" data-ru="Активен">Активен</span></span>
-            </div>
-            <div class="desc i18n" data-en="Brotherhood of like-minded people united by common goals and values." data-ru="Братство единомышленников, объединённых общими целями и ценностями.">Братство единомышленников, объединённых общими целями и ценностями.</div>
-            <div class="tags">
-                <span class="tag gold">Alliance</span>
-                <span class="tag pink">Friends</span>
-                <span class="tag pink">Companions</span>
-                <span class="tag green">Coalition Iron Will</span>
+                <span class="tag gold">☀️ <span class="i18n" data-en="Sun Child">Солнечный ребёнок</span></span>
+                <span class="tag pink">✝️ <span class="i18n" data-en="Orthodox Christian">Православный христианин</span></span>
             </div>
         </div>
     </div>
 
-    <!-- ДЕТАЛЬНЫЕ СТРАНИЦЫ ПРОЕКТОВ -->
-
-    <!-- Roza OS -->
-    <div class="tab page-detail" id="tab-project-roza">
-        <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki" data-ru="Назад к вики">Назад к вики</span></a>
-        <div class="header-info">
-            <div class="icon-big"><img src="gim/rozaos.png" alt="Roza OS" /></div>
-            <div>
-                <div class="name-big">Roza OS <span class="sub">Debian-based Linux distribution</span></div>
-                <span class="status-big planned">🔵 <span class="i18n" data-en="Planned" data-ru="Запланирован">Запланирован</span></span>
-                <div class="tags-big">
-                    <span class="tag">Debian</span>
-                    <span class="tag">XFCE</span>
-                    <span class="tag">Linux</span>
-                    <span class="tag pink">Coalition Iron Will</span>
-                </div>
-            </div>
-        </div>
-        <div class="info-grid">
-            <div class="info-box reveal">
-                <div class="title">📋 <span class="i18n" data-en="Information" data-ru="Информация">Информация</span></div>
-                <div class="body">
-                    <div><span class="label"><span class="i18n" data-en="Status" data-ru="Статус">Статус</span>:</span> <span class="value">🔵 <span class="i18n" data-en="Planned" data-ru="Запланирован">Запланирован</span></span></div>
-                    <div><span class="label"><span class="i18n" data-en="Base" data-ru="Основа">Основа</span>:</span> <span class="value">Debian</span></div>
-                    <div><span class="label"><span class="i18n" data-en="Environment" data-ru="Окружение">Окружение</span>:</span> <span class="value">XFCE</span></div>
-                    <div><span class="label"><span class="i18n" data-en="License" data-ru="Лицензия">Лицензия</span>:</span> <span class="value">GPL</span></div>
-                    <div><span class="label"><span class="i18n" data-en="Team" data-ru="Команда">Команда</span>:</span> <span class="value">Coalition Iron Will</span></div>
-                </div>
-            </div>
-            <div class="info-box">
-                <div class="title">📖 <span class="i18n" data-en="Description" data-ru="Описание">Описание</span></div>
-                <div class="body">
-                    <p class="i18n" data-en="<strong>Roza OS</strong> — lightweight and fast Linux distribution on stable Debian base." data-ru="<strong>Roza OS</strong> — лёгкий и быстрый Linux-дистрибутив на стабильной базе Debian."><strong>Roza OS</strong> — лёгкий и быстрый Linux-дистрибутив на стабильной базе Debian.</p>
-                    <br />
-                    <p><strong><span class="i18n" data-en="Features" data-ru="Особенности">Особенности</span>:</strong></p>
-                    <ul>
-                        <li>🐧 <strong><span class="i18n" data-en="Base" data-ru="Основа">Основа</span>:</strong> Debian (stable)</li>
-                        <li>🖥️ <strong><span class="i18n" data-en="Environment" data-ru="Окружение">Окружение</span>:</strong> XFCE</li>
-                        <li>📦 <strong><span class="i18n" data-en="Packages" data-ru="Пакеты">Пакеты</span>:</strong> Firefox, VLC, LibreOffice, GParted, Remmina</li>
-                    </ul>
-                    <br />
-                    <p><strong><span class="i18n" data-en="Status" data-ru="Статус">Статус</span>:</strong> 🔵 <span class="i18n" data-en="Planned. Development has not started yet." data-ru="Запланирован. Разработка ещё не началась.">Запланирован. Разработка ещё не началась.</span></p>
-                </div>
-            </div>
+    <div class="block card">
+        <h3>🗣️ <span class="i18n" data-en="Languages">Языки</span></h3>
+        <div class="block-text">
+            🇷🇺 <span class="i18n" data-en="Russian">Русский</span> — <strong class="i18n" data-en="Native">Родной</strong><br />
+            🇬🇧 <span class="i18n" data-en="English">Английский</span> — <strong class="i18n" data-en="So-so">Так себе</strong> <span class="label">(<span class="i18n" data-en="often use translator">часто пользуюсь переводчиком</span>)</span>
         </div>
     </div>
 
-    <!-- Solarium Umbris -->
-    <div class="tab page-detail" id="tab-project-solarium">
-        <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki" data-ru="Назад к вики">Назад к вики</span></a>
-        <div class="header-info">
-            <div class="icon-big">☽</div>
-            <div>
-                <div class="name-big">Solarium Umbris <span class="sub">Mod for Hearts of Iron IV</span></div>
-                <span class="status-big frozen">❄️ <span class="i18n" data-en="Frozen" data-ru="Заморожен">Заморожен</span></span>
-                <div class="tags-big">
-                    <span class="tag">HOI4</span>
-                    <span class="tag">Mod</span>
-                    <span class="tag">Alternative history</span>
-                    <span class="tag pink">Coalition Iron Will</span>
-                </div>
-            </div>
-        </div>
-        <div class="info-grid">
-            <div class="info-box">
-                <div class="title">📋 <span class="i18n" data-en="Information" data-ru="Информация">Информация</span></div>
-                <div class="body">
-                    <div><span class="label"><span class="i18n" data-en="Status" data-ru="Статус">Статус</span>:</span> <span class="value">❄️ <span class="i18n" data-en="Frozen" data-ru="Заморожен">Заморожен</span></span></div>
-                    <div><span class="label"><span class="i18n" data-en="Game" data-ru="Игра">Игра</span>:</span> <span class="value">Hearts of Iron IV</span></div>
-                    <div><span class="label"><span class="i18n" data-en="Countries" data-ru="Стран">Стран</span>:</span> <span class="value">7</span></div>
-                    <div><span class="label"><span class="i18n" data-en="Ideologies" data-ru="Идеологий">Идеологий</span>:</span> <span class="value">10+</span></div>
-                    <div><span class="label"><span class="i18n" data-en="Team" data-ru="Команда">Команда</span>:</span> <span class="value">Coalition Iron Will</span></div>
-                </div>
-            </div>
-            <div class="info-box">
-                <div class="title">📖 <span class="i18n" data-en="Description" data-ru="Описание">Описание</span></div>
-                <div class="body">
-                    <p class="i18n" data-en="<strong>Solarium Umbris</strong> — large-scale mod for Hearts of Iron IV." data-ru="<strong>Solarium Umbris</strong> — масштабный мод для Hearts of Iron IV."><strong>Solarium Umbris</strong> — масштабный мод для Hearts of Iron IV.</p>
-                    <br />
-                    <p><strong><span class="i18n" data-en="What's inside" data-ru="Что внутри">Что внутри</span>:</strong></p>
-                    <ul>
-                        <li>🌍 7 <span class="i18n" data-en="unique states" data-ru="уникальных государств">уникальных государств</span></li>
-                        <li>⚔️ 10+ <span class="i18n" data-en="ideologies" data-ru="идеологий">идеологий</span></li>
-                        <li>📜 <span class="i18n" data-en="Unique focuses and events" data-ru="Уникальные фокусы и события">Уникальные фокусы и события</span></li>
-                        <li>👤 <span class="i18n" data-en="Custom leaders" data-ru="Кастомные лидеры">Кастомные лидеры</span></li>
-                    </ul>
-                    <br />
-                    <p><strong><span class="i18n" data-en="Status" data-ru="Статус">Статус</span>:</strong> ❄️ <span class="i18n" data-en="Frozen." data-ru="Заморожен.">Заморожен.</span></p>
-                </div>
-            </div>
+    <div class="block card">
+        <h3>💻 <span class="i18n" data-en="Operating Systems">Операционные системы</span></h3>
+        <div class="block-text">🪟 Windows<br />🐧 GNU/Linux (Debian, XFCE)</div>
+    </div>
+
+    <div class="block card">
+        <h3>🧠 <span class="i18n" data-en="Skills">Навыки</span></h3>
+        <div class="block-text">
+            <strong>💻 <span class="i18n" data-en="Programming">Программирование</span>:</strong> HTML, CSS, JavaScript<br />
+            <strong>🐧 Linux:</strong> Debian, XFCE, <span class="i18n" data-en="System setup">Настройка системы</span><br />
+            <strong>🔧 <span class="i18n" data-en="Hardware">Железо</span>:</strong> PC, <span class="i18n" data-en="Troubleshooting, Maintenance">Диагностика, обслуживание</span><br />
+            <strong>🎮 <span class="i18n" data-en="Modding">Моддинг</span>:</strong> HOI4, <span class="i18n" data-en="Game projects, Worldbuilding">Игровые проекты, миростроение</span>
         </div>
     </div>
 
-    <!-- Black Order -->
-    <div class="tab page-detail" id="tab-project-blackorder">
-        <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki" data-ru="Назад к вики">Назад к вики</span></a>
-        <div class="header-info">
-            <div class="icon-big">🖤</div>
-            <div>
-                <div class="name-big">Special Army "Black Order" <span class="sub">RP Faction in BRM 5</span></div>
-                <span class="status-big frozen">❄️ <span class="i18n" data-en="Frozen" data-ru="Заморожен">Заморожен</span></span>
-                <div class="tags-big">
-                    <span class="tag">BRM 5</span>
-                    <span class="tag">RP Faction</span>
-                    <span class="tag pink">Coalition Iron Will</span>
-                </div>
-            </div>
-        </div>
-        <div class="info-grid">
-            <div class="info-box">
-                <div class="title">📋 <span class="i18n" data-en="Information" data-ru="Информация">Информация</span></div>
-                <div class="body">
-                    <div><span class="label"><span class="i18n" data-en="Status" data-ru="Статус">Статус</span>:</span> <span class="value">❄️ <span class="i18n" data-en="Frozen" data-ru="Заморожен">Заморожен</span></span></div>
-                    <div><span class="label"><span class="i18n" data-en="Game" data-ru="Игра">Игра</span>:</span> <span class="value">BRM 5</span></div>
-                    <div><span class="label"><span class="i18n" data-en="Type" data-ru="Тип">Тип</span>:</span> <span class="value">RP Faction</span></div>
-                    <div><span class="label"><span class="i18n" data-en="Ideology" data-ru="Идеология">Идеология</span>:</span> <span class="value"><span class="i18n" data-en="Discipline, honor, professionalism" data-ru="Дисциплина, честь, профессионализм">Дисциплина, честь, профессионализм</span></span></div>
-                    <div><span class="label"><span class="i18n" data-en="Team" data-ru="Команда">Команда</span>:</span> <span class="value">Coalition Iron Will</span></div>
-                </div>
-            </div>
-            <div class="info-box">
-                <div class="title">📖 <span class="i18n" data-en="Description" data-ru="Описание">Описание</span></div>
-                <div class="body">
-                    <p class="i18n" data-en="<strong>Special Army &quot;Black Order&quot;</strong> — elite faction in BRM 5 (Black Rock Multiplayer 5)." data-ru="<strong>Special Army &quot;Black Order&quot;</strong> — элитная фракция в BRM 5 (Black Rock Multiplayer 5)."><strong>Special Army "Black Order"</strong> — элитная фракция в BRM 5 (Black Rock Multiplayer 5).</p>
-                    <br />
-                    <p><strong><span class="i18n" data-en="About the faction" data-ru="О фракции">О фракции</span>:</strong></p>
-                    <ul>
-                        <li>🖤 <strong><span class="i18n" data-en="Name" data-ru="Название">Название</span>:</strong> Special Army "Black Order"</li>
-                        <li>🎯 <strong><span class="i18n" data-en="Mission" data-ru="Миссия">Миссия</span>:</strong> <span class="i18n" data-en="Complex tasks, order, protection" data-ru="Сложные задачи, порядок, защита">Сложные задачи, порядок, защита</span></li>
-                        <li>📜 <strong><span class="i18n" data-en="Ideology" data-ru="Идеология">Идеология</span>:</strong> <span class="i18n" data-en="Discipline, honor, professionalism" data-ru="Дисциплина, честь, профессионализм">Дисциплина, честь, профессионализм</span></li>
-                    </ul>
-                    <br />
-                    <p><strong><span class="i18n" data-en="Status" data-ru="Статус">Статус</span>:</strong> ❄️ <span class="i18n" data-en="Frozen." data-ru="Заморожен.">Заморожен.</span></p>
-                </div>
-            </div>
+    <div class="block card">
+        <h3>🤝 <span class="i18n" data-en="Friends &amp; Brothers">Друзья и братья</span></h3>
+        <div class="friends"><span>🛡️ Tverd</span><span>⚡ Yonkia</span><span>🔥 Koivo</span><span>🌊 Femadoria</span></div>
+    </div>
+
+    <div class="block card">
+        <h3>🎮 <span class="i18n" data-en="Games &amp; Cartoons">Игры и мультфильмы</span></h3>
+        <div class="block-text grid2">
+            <span>🎮 Hearts of Iron IV</span><span>🎮 Garry's Mod</span><span>🎮 Skyrim</span><span>🎮 Dark Souls 2</span><span>🎮 Don't Starve Together</span>
+            <span>🎬 Kikoriki ❤️</span><span>🎬 BoJack Horseman</span><span>🎬 Rick and Morty</span><span>🎬 Gravity Falls</span><span>🎬 Futurama</span><span>🎬 My Little Pony ❤️</span>
         </div>
     </div>
 
-    <!-- Coalition Iron Will -->
-    <div class="tab page-detail" id="tab-project-coalition">
-        <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki" data-ru="Назад к вики">Назад к вики</span></a>
-        <div class="header-info">
-            <div class="icon-big">⚔️</div>
-            <div>
-                <div class="name-big">Coalition Iron Will <span class="sub">Alliance of close friends and companions</span></div>
-                <span class="status-big active">🟢 <span class="i18n" data-en="Active" data-ru="Активен">Активен</span></span>
-                <div class="tags-big">
-                    <span class="tag gold">Alliance</span>
-                    <span class="tag pink">Friends</span>
-                    <span class="tag pink">Companions</span>
-                    <span class="tag green">Coalition Iron Will</span>
-                </div>
+    <div class="block card">
+        <h3>🏆 <span class="i18n" data-en="Achievements">Достижения</span></h3>
+        <div class="ach"><span>🥇</span><span>
+            <b class="i18n" data-en="Winner's Diploma — &quot;Legacy of Outstanding Entrepreneurs of Russia&quot;">Диплом победителя — «Наследие выдающихся предпринимателей России»</b>
+            <small class="i18n" data-en="All-Russian competition on the history of entrepreneurship. Finalist of the regional stage in Tver.">Всероссийский конкурс по истории предпринимательства. Финалист регионального этапа в Твери.</small></span></div>
+        <div class="ach"><span>📜</span><span>
+            <b class="i18n" data-en="Participant Certificate — &quot;Through the Pages of the Great Victory&quot;">Сертификат участника — «По страницам Великой Победы»</b>
+            <small class="i18n" data-en="Team intellectual game dedicated to the 80th anniversary of Victory in the Great Patriotic War 1941–1945.">Командная интеллектуальная игра к 80-летию Победы в Великой Отечественной войне 1941–1945.</small></span></div>
+        <div class="ach"><span>🥇</span><span>
+            <b class="i18n" data-en="Winner's Diploma — &quot;Scarlet Sails&quot;">Диплом победителя — «Алые паруса»</b>
+            <small class="i18n" data-en="Winner of the All-Russian distance Olympiad in Physics among students of professional educational organizations.">Победитель Всероссийской дистанционной олимпиады по физике среди студентов профессиональных образовательных организаций.</small></span></div>
+    </div>
+</section>
+
+<!-- ВИКИ -->
+<section class="tab" id="tab-wiki">
+    <div class="hero">
+        <h2>📚 <span class="i18n grad" data-en="My Wiki">Моя Вики</span></h2>
+        <p class="i18n" data-en="All projects, ideas and developments">Все проекты, идеи и разработки</p>
+    </div>
+
+    <div class="wiki-entry card reveal" onclick="switchTab('project-roza')">
+        <div class="top-row">
+            <div class="ico"><img src="gim/rozaos.png" alt="Roza OS" /></div>
+            <div><div class="pname">Roza OS</div><span class="sub">Debian-based Linux distribution</span></div>
+            <span class="badge planned">🔵 <span class="i18n" data-en="Planned">Запланирован</span></span>
+        </div>
+        <p class="i18n" data-en="Linux distribution based on Debian with XFCE desktop and preinstalled packages.">Linux-дистрибутив на базе Debian с окружением XFCE и предустановленными пакетами.</p>
+        <div class="tags"><span class="tag">Debian</span><span class="tag">XFCE</span><span class="tag">Linux</span><span class="tag pink">Coalition Iron Will</span></div>
+    </div>
+
+    <div class="wiki-entry card" onclick="switchTab('project-solarium')">
+        <div class="top-row">
+            <div class="ico">☽</div>
+            <div><div class="pname">Solarium Umbris</div><span class="sub">Mod for Hearts of Iron IV</span></div>
+            <span class="badge frozen">❄️ <span class="i18n" data-en="Frozen">Заморожен</span></span>
+        </div>
+        <p class="i18n" data-en="Mod for Hearts of Iron IV with unique states and alternative history.">Мод для Hearts of Iron IV с уникальными государствами и альтернативной историей.</p>
+        <div class="tags"><span class="tag">HOI4</span><span class="tag">Mod</span><span class="tag">Alternative history</span><span class="tag pink">Coalition Iron Will</span></div>
+    </div>
+
+    <div class="wiki-entry card" onclick="switchTab('project-blackorder')">
+        <div class="top-row">
+            <div class="ico">🖤</div>
+            <div><div class="pname">Special Army "Black Order"</div><span class="sub">RP Faction in BRM 5</span></div>
+            <span class="badge frozen">❄️ <span class="i18n" data-en="Frozen">Заморожен</span></span>
+        </div>
+        <p class="i18n" data-en="Elite military unit in BRM 5 — a faction for experienced players.">Элитное военное подразделение в BRM 5 — фракция для опытных игроков.</p>
+        <div class="tags"><span class="tag">BRM 5</span><span class="tag">RP Faction</span><span class="tag pink">Coalition Iron Will</span></div>
+    </div>
+
+    <div class="wiki-entry card" onclick="switchTab('project-coalition')" style="border-color:var(--green)">
+        <div class="top-row">
+            <div class="ico">⚔️</div>
+            <div><div class="pname">Coalition Iron Will</div><span class="sub">Alliance of close friends and companions</span></div>
+            <span class="badge active">🟢 <span class="i18n" data-en="Active">Активен</span></span>
+        </div>
+        <p class="i18n" data-en="Brotherhood of like-minded people united by common goals and values.">Братство единомышленников, объединённых общими целями и ценностями.</p>
+        <div class="tags"><span class="tag gold">Alliance</span><span class="tag pink">Friends</span><span class="tag pink">Companions</span><span class="tag green">Coalition Iron Will</span></div>
+    </div>
+</section>
+
+<!-- Roza OS -->
+<section class="tab" id="tab-project-roza">
+    <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki">Назад к вики</span></a>
+    <div class="header-info">
+        <div class="ico"><img src="gim/rozaos.png" alt="Roza OS" /></div>
+        <div>
+            <div class="pname">Roza OS <span class="sub">Debian-based Linux distribution</span></div>
+            <span class="badge planned">🔵 <span class="i18n" data-en="Planned">Запланирован</span></span>
+            <div class="tags"><span class="tag">Debian</span><span class="tag">XFCE</span><span class="tag">Linux</span><span class="tag pink">Coalition Iron Will</span></div>
+        </div>
+    </div>
+    <div class="info-grid">
+        <div class="info-box card">
+            <h4>📋 <span class="i18n" data-en="Information">Информация</span></h4>
+            <div class="body">
+                <div><span class="label i18n" data-en="Status">Статус</span><span class="value">🔵 <span class="i18n" data-en="Planned">Запланирован</span></span></div>
+                <div><span class="label i18n" data-en="Base">Основа</span><span class="value">Debian</span></div>
+                <div><span class="label i18n" data-en="Environment">Окружение</span><span class="value">XFCE</span></div>
+                <div><span class="label i18n" data-en="License">Лицензия</span><span class="value">GPL</span></div>
+                <div><span class="label i18n" data-en="Team">Команда</span><span class="value">Coalition Iron Will</span></div>
             </div>
         </div>
-        <div class="info-grid">
-            <div class="info-box">
-                <div class="title">📋 <span class="i18n" data-en="Information" data-ru="Информация">Информация</span></div>
-                <div class="body">
-                    <div><span class="label"><span class="i18n" data-en="Status" data-ru="Статус">Статус</span>:</span> <span class="value">🟢 <span class="i18n" data-en="Active" data-ru="Активен">Активен</span></span></div>
-                    <div><span class="label"><span class="i18n" data-en="Type" data-ru="Тип">Тип</span>:</span> <span class="value"><span class="i18n" data-en="Alliance / Brotherhood" data-ru="Альянс / Братство">Альянс / Братство</span></span></div>
-                    <div><span class="label"><span class="i18n" data-en="Founded" data-ru="Основана">Основана</span>:</span> <span class="value">2024</span></div>
-                    <div><span class="label"><span class="i18n" data-en="Values" data-ru="Ценности">Ценности</span>:</span> <span class="value"><span class="i18n" data-en="Friendship, solidarity, creativity" data-ru="Дружба, солидарность, творчество">Дружба, солидарность, творчество</span></span></div>
-                </div>
-            </div>
-            <div class="info-box">
-                <div class="title">📖 <span class="i18n" data-en="Description" data-ru="Описание">Описание</span></div>
-                <div class="body">
-                    <p class="i18n" data-en="<strong>Coalition Iron Will</strong> — is not just a team. It's a brotherhood, a union of like-minded people." data-ru="<strong>Coalition Iron Will</strong> — это не просто команда. Это братство, союз единомышленников."><strong>Coalition Iron Will</strong> — это не просто команда. Это братство, союз единомышленников.</p>
-                    <br />
-                    <p><strong><span class="i18n" data-en="Who we are" data-ru="Кто мы">Кто мы</span>:</strong></p>
-                    <ul>
-                        <li>🤝 <strong><span class="i18n" data-en="Friends" data-ru="Друзья">Друзья</span></strong> — <span class="i18n" data-en="always support each other" data-ru="всегда поддерживаем друг друга">всегда поддерживаем друг друга</span></li>
-                        <li>⚔️ <strong><span class="i18n" data-en="Companions" data-ru="Подвижники">Подвижники</span></strong> — <span class="i18n" data-en="create projects together" data-ru="создаём проекты вместе">создаём проекты вместе</span></li>
-                        <li>💡 <strong><span class="i18n" data-en="Creators" data-ru="Творцы">Творцы</span></strong> — <span class="i18n" data-en="bring ideas to life" data-ru="воплощаем идеи в жизнь">воплощаем идеи в жизнь</span></li>
-                    </ul>
-                    <br />
-                    <p><strong><span class="i18n" data-en="Values" data-ru="Ценности">Ценности</span>:</strong> <span class="i18n" data-en="Solidarity, honesty, creativity, support." data-ru="Солидарность, честность, творчество, поддержка.">Солидарность, честность, творчество, поддержка.</span></p>
-                    <br />
-                    <p><strong><span class="i18n" data-en="Status" data-ru="Статус">Статус</span>:</strong> 🟢 <span class="i18n" data-en="Active. The coalition continues to exist and develop." data-ru="Активен. Коалиция продолжает существовать и развиваться.">Активен. Коалиция продолжает существовать и развиваться.</span></p>
-                </div>
+        <div class="info-box card">
+            <h4>📖 <span class="i18n" data-en="Description">Описание</span></h4>
+            <div class="body">
+                <p class="i18n" data-en="<strong>Roza OS</strong> — lightweight and fast Linux distribution on stable Debian base."><strong>Roza OS</strong> — лёгкий и быстрый Linux-дистрибутив на стабильной базе Debian.</p>
+                <p><strong class="i18n" data-en="Features:">Особенности:</strong></p>
+                <ul>
+                    <li>🐧 <strong class="i18n" data-en="Base:">Основа:</strong> Debian (stable)</li>
+                    <li>🖥️ <strong class="i18n" data-en="Environment:">Окружение:</strong> XFCE</li>
+                    <li>📦 <strong class="i18n" data-en="Packages:">Пакеты:</strong> Firefox, VLC, LibreOffice, GParted, Remmina</li>
+                </ul>
+                <p>🔵 <span class="i18n" data-en="Planned. Development has not started yet.">Запланирован. Разработка ещё не началась.</span></p>
             </div>
         </div>
     </div>
+</section>
 
-    <!-- CONTACT -->
-    <div class="tab" id="tab-contact">
-        <div class="hero">
-            <h2>✉️ <span class="i18n" data-en="Contacts" data-ru="Контакты">Контакты</span></h2>
-            <p class="i18n" data-en="Reach me through any of these platforms" data-ru="Свяжись со мной через любую из этих платформ">Свяжись со мной через любую из этих платформ</p>
+<!-- Solarium Umbris -->
+<section class="tab" id="tab-project-solarium">
+    <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki">Назад к вики</span></a>
+    <div class="header-info">
+        <div class="ico">☽</div>
+        <div>
+            <div class="pname">Solarium Umbris <span class="sub">Mod for Hearts of Iron IV</span></div>
+            <span class="badge frozen">❄️ <span class="i18n" data-en="Frozen">Заморожен</span></span>
+            <div class="tags"><span class="tag">HOI4</span><span class="tag">Mod</span><span class="tag">Alternative history</span><span class="tag pink">Coalition Iron Will</span></div>
         </div>
-
-        <div class="contact-grid">
-            <a class="contact-card reveal" href="https://t.me/VladislavFoskKosarh" target="_blank" rel="noopener">
-                <span class="contact-icon">✈️</span>
-                <span class="contact-info">
-                    <span class="contact-name">Telegram</span>
-                    <span class="contact-handle">@VladislavFoskKosarh</span>
-                </span>
-            </a>
-
-            <a class="contact-card" href="https://www.youtube.com/@VladislavFoskKosarh" target="_blank" rel="noopener">
-                <span class="contact-icon">▶️</span>
-                <span class="contact-info">
-                    <span class="contact-name">YouTube</span>
-                    <span class="contact-handle">@VladislavFoskKosarh</span>
-                </span>
-            </a>
-
-            <a class="contact-card" href="https://github.com/VladislavFosk" target="_blank" rel="noopener">
-                <span class="contact-icon">◉</span>
-                <span class="contact-info">
-                    <span class="contact-name">GitHub</span>
-                    <span class="contact-handle">github.com/VladislavFosk</span>
-                </span>
-            </a>
-
-            <a class="contact-card" href="https://gamejolt.com/@VladislavFosk" target="_blank" rel="noopener">
-                <span class="contact-icon">🎮</span>
-                <span class="contact-info">
-                    <span class="contact-name">GameJolt</span>
-                    <span class="contact-handle">@VladislavFosk</span>
-                </span>
-            </a>
+    </div>
+    <div class="info-grid">
+        <div class="info-box card">
+            <h4>📋 <span class="i18n" data-en="Information">Информация</span></h4>
+            <div class="body">
+                <div><span class="label i18n" data-en="Status">Статус</span><span class="value">❄️ <span class="i18n" data-en="Frozen">Заморожен</span></span></div>
+                <div><span class="label i18n" data-en="Game">Игра</span><span class="value">Hearts of Iron IV</span></div>
+                <div><span class="label i18n" data-en="Countries">Стран</span><span class="value">7</span></div>
+                <div><span class="label i18n" data-en="Ideologies">Идеологий</span><span class="value">10+</span></div>
+                <div><span class="label i18n" data-en="Team">Команда</span><span class="value">Coalition Iron Will</span></div>
+            </div>
         </div>
-
-        <div class="block" style="margin-top:20px; border-color:var(--accent-3);">
-            <div class="block-text" style="text-align:center;">
-                ⚔️ Made by the <strong style="color:var(--accent-2);">Coalition Iron Will</strong>
+        <div class="info-box card">
+            <h4>📖 <span class="i18n" data-en="Description">Описание</span></h4>
+            <div class="body">
+                <p class="i18n" data-en="<strong>Solarium Umbris</strong> — large-scale mod for Hearts of Iron IV."><strong>Solarium Umbris</strong> — масштабный мод для Hearts of Iron IV.</p>
+                <p><strong class="i18n" data-en="What's inside:">Что внутри:</strong></p>
+                <ul>
+                    <li>🌍 7 <span class="i18n" data-en="unique states">уникальных государств</span></li>
+                    <li>⚔️ 10+ <span class="i18n" data-en="ideologies">идеологий</span></li>
+                    <li>📜 <span class="i18n" data-en="Unique focuses and events">Уникальные фокусы и события</span></li>
+                    <li>👤 <span class="i18n" data-en="Custom leaders">Кастомные лидеры</span></li>
+                </ul>
+                <p>❄️ <span class="i18n" data-en="Frozen.">Заморожен.</span></p>
             </div>
         </div>
     </div>
+</section>
 
-</div>
+<!-- Black Order -->
+<section class="tab" id="tab-project-blackorder">
+    <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki">Назад к вики</span></a>
+    <div class="header-info">
+        <div class="ico">🖤</div>
+        <div>
+            <div class="pname">Special Army "Black Order" <span class="sub">RP Faction in BRM 5</span></div>
+            <span class="badge frozen">❄️ <span class="i18n" data-en="Frozen">Заморожен</span></span>
+            <div class="tags"><span class="tag">BRM 5</span><span class="tag">RP Faction</span><span class="tag pink">Coalition Iron Will</span></div>
+        </div>
+    </div>
+    <div class="info-grid">
+        <div class="info-box card">
+            <h4>📋 <span class="i18n" data-en="Information">Информация</span></h4>
+            <div class="body">
+                <div><span class="label i18n" data-en="Status">Статус</span><span class="value">❄️ <span class="i18n" data-en="Frozen">Заморожен</span></span></div>
+                <div><span class="label i18n" data-en="Game">Игра</span><span class="value">BRM 5</span></div>
+                <div><span class="label i18n" data-en="Type">Тип</span><span class="value">RP Faction</span></div>
+                <div><span class="label i18n" data-en="Ideology">Идеология</span><span class="value i18n" data-en="Discipline, honor, professionalism">Дисциплина, честь, профессионализм</span></div>
+                <div><span class="label i18n" data-en="Team">Команда</span><span class="value">Coalition Iron Will</span></div>
+            </div>
+        </div>
+        <div class="info-box card">
+            <h4>📖 <span class="i18n" data-en="Description">Описание</span></h4>
+            <div class="body">
+                <p class="i18n" data-en="<strong>Special Army &quot;Black Order&quot;</strong> — elite faction in BRM 5 (Black Rock Multiplayer 5)."><strong>Special Army «Black Order»</strong> — элитная фракция в BRM 5 (Black Rock Multiplayer 5).</p>
+                <p><strong class="i18n" data-en="About the faction:">О фракции:</strong></p>
+                <ul>
+                    <li>🎯 <strong class="i18n" data-en="Mission:">Миссия:</strong> <span class="i18n" data-en="Complex tasks, order, protection">Сложные задачи, порядок, защита</span></li>
+                    <li>📜 <strong class="i18n" data-en="Ideology:">Идеология:</strong> <span class="i18n" data-en="Discipline, honor, professionalism">Дисциплина, честь, профессионализм</span></li>
+                </ul>
+                <p>❄️ <span class="i18n" data-en="Frozen.">Заморожен.</span></p>
+            </div>
+        </div>
+    </div>
+</section>
 
-<!-- ====== НИЖНЯЯ НАВИГАЦИЯ ДЛЯ ТЕЛЕФОНА ====== -->
+<!-- Coalition Iron Will -->
+<section class="tab" id="tab-project-coalition">
+    <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki">Назад к вики</span></a>
+    <div class="header-info">
+        <div class="ico">⚔️</div>
+        <div>
+            <div class="pname">Coalition Iron Will <span class="sub">Alliance of close friends and companions</span></div>
+            <span class="badge active">🟢 <span class="i18n" data-en="Active">Активен</span></span>
+            <div class="tags"><span class="tag gold">Alliance</span><span class="tag pink">Friends</span><span class="tag pink">Companions</span><span class="tag green">Coalition Iron Will</span></div>
+        </div>
+    </div>
+    <div class="info-grid">
+        <div class="info-box card">
+            <h4>📋 <span class="i18n" data-en="Information">Информация</span></h4>
+            <div class="body">
+                <div><span class="label i18n" data-en="Status">Статус</span><span class="value">🟢 <span class="i18n" data-en="Active">Активен</span></span></div>
+                <div><span class="label i18n" data-en="Type">Тип</span><span class="value i18n" data-en="Alliance / Brotherhood">Альянс / Братство</span></div>
+                <div><span class="label i18n" data-en="Founded">Основана</span><span class="value">2024</span></div>
+                <div><span class="label i18n" data-en="Values">Ценности</span><span class="value i18n" data-en="Friendship, solidarity, creativity">Дружба, солидарность, творчество</span></div>
+            </div>
+        </div>
+        <div class="info-box card">
+            <h4>📖 <span class="i18n" data-en="Description">Описание</span></h4>
+            <div class="body">
+                <p class="i18n" data-en="<strong>Coalition Iron Will</strong> — is not just a team. It's a brotherhood, a union of like-minded people."><strong>Coalition Iron Will</strong> — это не просто команда. Это братство, союз единомышленников.</p>
+                <p><strong class="i18n" data-en="Who we are:">Кто мы:</strong></p>
+                <ul>
+                    <li>🤝 <strong class="i18n" data-en="Friends">Друзья</strong> — <span class="i18n" data-en="always support each other">всегда поддерживаем друг друга</span></li>
+                    <li>⚔️ <strong class="i18n" data-en="Companions">Подвижники</strong> — <span class="i18n" data-en="create projects together">создаём проекты вместе</span></li>
+                    <li>💡 <strong class="i18n" data-en="Creators">Творцы</strong> — <span class="i18n" data-en="bring ideas to life">воплощаем идеи в жизнь</span></li>
+                </ul>
+                <p>🟢 <span class="i18n" data-en="Active. The coalition continues to exist and develop.">Активен. Коалиция продолжает существовать и развиваться.</span></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- КОНТАКТЫ -->
+<section class="tab" id="tab-contact">
+    <div class="hero">
+        <h2>✉️ <span class="i18n grad" data-en="Contacts">Контакты</span></h2>
+        <p class="i18n" data-en="Reach me through any of these platforms">Свяжись со мной через любую из этих платформ</p>
+    </div>
+    <div class="contact-grid">
+        <a class="contact-card card" href="https://t.me/VladislavFoskKosarh" target="_blank" rel="noopener"><span class="ico">✈️</span><span><b>Telegram</b><small>@VladislavFoskKosarh</small></span></a>
+        <a class="contact-card card" href="https://www.youtube.com/@VladislavFoskKosarh" target="_blank" rel="noopener"><span class="ico">▶️</span><span><b>YouTube</b><small>@VladislavFoskKosarh</small></span></a>
+        <a class="contact-card card" href="https://github.com/VladislavFosk" target="_blank" rel="noopener"><span class="ico">◉</span><span><b>GitHub</b><small>github.com/VladislavFosk</small></span></a>
+        <a class="contact-card card" href="https://gamejolt.com/@VladislavFosk" target="_blank" rel="noopener"><span class="ico">🎮</span><span><b>GameJolt</b><small>@VladislavFosk</small></span></a>
+    </div>
+    <div class="block card" style="margin-top:20px;border-color:var(--a3);text-align:center">
+        ⚔️ Made by the <strong class="grad">Coalition Iron Will</strong>
+    </div>
+</section>
+
+</main>
+
 <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
-    <button class="active" data-tab="home"><span class="mobile-icon">🏠</span><span class="i18n" data-en="Home" data-ru="Главная">Главная</span></button>
-    <button data-tab="wiki"><span class="mobile-icon">📚</span><span class="i18n" data-en="Wiki" data-ru="Вики">Вики</span></button>
-    <button data-tab="contact"><span class="mobile-icon">✉️</span><span class="i18n" data-en="Contact" data-ru="Контакты">Контакты</span></button>
+    <button class="active" data-tab="home"><span class="mi">🏠</span><span class="i18n" data-en="Home">Главная</span></button>
+    <button data-tab="wiki"><span class="mi">📚</span><span class="i18n" data-en="Wiki">Вики</span></button>
+    <button data-tab="contact"><span class="mi">✉️</span><span class="i18n" data-en="Contact">Контакты</span></button>
 </nav>
 
-<!-- ====== ПОДВАЛ ====== -->
 <footer class="footer">
-    ☽ Solarium Umbris · <span class="i18n" data-en="World of Kosarh" data-ru="Мир Косарха">Мир Косарха</span> · 2026
-    <span class="divider">·</span>
-    <a href="#" onclick="switchTab('home'); return false;"><span class="i18n" data-en="Home" data-ru="Главная">Главная</span></a>
-    <span class="divider">·</span>
-    <a href="#" onclick="switchTab('wiki'); return false;"><span class="i18n" data-en="My Wiki" data-ru="Моя Вики">Моя Вики</span></a>
-    <span class="divider">·</span>
-    <a href="#" onclick="switchTab('contact'); return false;"><span class="i18n" data-en="Contact" data-ru="Контакты">Контакты</span></a>
-    <br />
-    <span style="font-size:10px; opacity:0.6;">⚔️ Made by the <span class="highlight">Coalition Iron Will</span></span>
+    ☽ Solarium Umbris · <span class="i18n" data-en="World of Kosarh">Мир Косарха</span> · 2026
+    <span class="dot">·</span><a href="#home"><span class="i18n" data-en="Home">Главная</span></a>
+    <span class="dot">·</span><a href="#wiki"><span class="i18n" data-en="My Wiki">Моя Вики</span></a>
+    <span class="dot">·</span><a href="#contact"><span class="i18n" data-en="Contact">Контакты</span></a>
+    <br /><small style="opacity:.6">⚔️ Made by the <span class="grad">Coalition Iron Will</span></small>
 </footer>
 
-<!-- ====== JS ====== -->
 <script>
     // ============================================================
     // 1. НАВИГАЦИЯ
     // ============================================================
-    function switchTab(tabId) {
-        document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+    function switchTab(tabId, push = true) {
         const target = document.getElementById('tab-' + tabId);
-        if (target) target.classList.add('active');
+        if (!target) return;
 
+        document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+        target.classList.add('active');
+
+        // Страницы проектов подсвечивают пункт «Вики»
+        const navId = tabId.startsWith('project-') ? 'wiki' : tabId;
         document.querySelectorAll('.nav-buttons button, .mobile-nav button').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.tab === tabId);
+            const on = btn.dataset.tab === navId;
+            btn.classList.toggle('active', on);
+            if (on) btn.setAttribute('aria-current', 'page');
+            else btn.removeAttribute('aria-current');
         });
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        if (history.pushState) {
+        if (push && location.hash !== '#' + tabId) {
             history.pushState({ tab: tabId }, '', '#' + tabId);
         }
     }
 
     document.querySelectorAll('.nav-buttons button, .mobile-nav button').forEach(btn => {
-        btn.addEventListener('click', function() {
-            switchTab(this.dataset.tab);
-        });
+        btn.addEventListener('click', () => switchTab(btn.dataset.tab));
     });
 
-    window.addEventListener('popstate', function(e) {
-        if (e.state && e.state.tab) {
-            switchTab(e.state.tab);
-        }
+    // Кнопки «назад/вперёд» в браузере (в том числе возврат на главную)
+    window.addEventListener('popstate', () => {
+        switchTab(location.hash.replace('#', '') || 'home', false);
+    });
+
+    // Клавиатура: карточки вики и ссылки «назад» работают по Enter/Space
+    document.querySelectorAll('.wiki-entry, .page-detail .back').forEach(el => {
+        el.setAttribute('role', el.matches('.back') ? 'link' : 'button');
+        el.tabIndex = 0;
+        el.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                el.click();
+            }
+        });
     });
 
     // ============================================================
     // 2. ПЕРЕКЛЮЧЕНИЕ ЯЗЫКА
     // ============================================================
+    // Русский текст берём прямо из разметки
+    document.querySelectorAll('.i18n').forEach(el => { el.dataset.ru = el.innerHTML; });
+
     let currentLang = 'ru';
     const langToggle = document.getElementById('langToggle');
 
-    function toggleLang() {
-        currentLang = currentLang === 'en' ? 'ru' : 'en';
-        langToggle.textContent = currentLang === 'en' ? 'РУС' : 'ENG';
+    function applyLang(lang) {
+        currentLang = lang;
+        langToggle.textContent = lang === 'en' ? 'РУС' : 'ENG';
+        document.documentElement.lang = lang;
 
         document.querySelectorAll('.i18n').forEach(el => {
-            const text = el.getAttribute('data-' + currentLang);
-            if (text) {
-                if (text.includes('<')) {
-                    el.innerHTML = text;
-                } else {
-                    el.textContent = text;
-                }
-            }
+            const text = el.getAttribute('data-' + lang);
+            if (!text) return;
+            if (text.includes('<')) el.innerHTML = text;
+            else el.textContent = text;
         });
 
-        const subtitle = document.querySelector('.header .logo .subtitle');
-        if (currentLang === 'en') {
-            subtitle.textContent = '✦ World of Kosarh ✦';
-        } else {
-            subtitle.textContent = '✦ Мир Косарха ✦';
-        }
-
-        try {
-            localStorage.setItem('solarium-lang', currentLang);
-        } catch (e) {}
+        document.querySelector('.header .logo .subtitle').textContent =
+            lang === 'en' ? '✦ World of Kosarh ✦' : '✦ Мир Косарха ✦';
     }
 
+    function toggleLang() {
+        applyLang(currentLang === 'en' ? 'ru' : 'en');
+        try { localStorage.setItem('solarium-lang', currentLang); } catch (e) {}
+    }
+
+    // Восстановление языка — один раз, без двойного переключения
     try {
-        const savedLang = localStorage.getItem('solarium-lang');
-        if (savedLang && (savedLang === 'en' || savedLang === 'ru')) {
-            currentLang = savedLang;
-            langToggle.textContent = currentLang === 'en' ? 'РУС' : 'ENG';
-            document.addEventListener('DOMContentLoaded', function() {
-                toggleLang();
-            });
-        }
+        if (localStorage.getItem('solarium-lang') === 'en') applyLang('en');
     } catch (e) {}
 
     // ============================================================
-    // 3. ЗВЁЗДЫ
+    // 3. ЗВЁЗДЫ (на телефонах меньше — экономим батарею)
     // ============================================================
     function createStars() {
         const container = document.getElementById('stars');
-        const count = 120;
+        const count = window.innerWidth < 760 ? 55 : 120;
+        const frag = document.createDocumentFragment();
         for (let i = 0; i < count; i++) {
             const star = document.createElement('div');
             star.className = 'star';
@@ -1648,42 +606,33 @@ button:focus-visible, a:focus-visible, input:focus-visible {
             star.style.top = Math.random() * 100 + '%';
             star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
             star.style.animationDelay = (Math.random() * 5) + 's';
-            container.appendChild(star);
+            frag.appendChild(star);
         }
+        container.appendChild(frag);
     }
     createStars();
 
-    // Плавное появление элементов при прокрутке
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                revealObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.08 });
-    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    // Плавное появление; если IntersectionObserver недоступен — просто показываем
+    const revealEls = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.08 });
+        revealEls.forEach(el => revealObserver.observe(el));
+    } else {
+        revealEls.forEach(el => el.classList.add('visible'));
+    }
 
     // ============================================================
     // 4. ЗАПУСК
     // ============================================================
-    function checkHash() {
-        const hash = window.location.hash.replace('#', '');
-        if (hash && document.getElementById('tab-' + hash)) {
-            switchTab(hash);
-        }
-    }
-    checkHash();
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const savedLang = localStorage.getItem('solarium-lang');
-        if (savedLang && savedLang !== currentLang) {
-            currentLang = savedLang;
-            langToggle.textContent = currentLang === 'en' ? 'РУС' : 'ENG';
-            toggleLang();
-        }
-    });
+    const startTab = location.hash.replace('#', '');
+    if (startTab) switchTab(startTab, false);
 </script>
-
 </body>
 </html>
