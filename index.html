@@ -130,6 +130,30 @@ button,a{-webkit-tap-highlight-color:transparent}
 .reveal{opacity:0;transform:translateY(22px);transition:opacity .65s ease,transform .65s ease}
 .reveal.visible{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* ===== GitHub Block ===== */
+.gh-heatmap{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,10px);gap:3px;overflow-x:auto;padding:6px 0}
+.gh-heatmap .cell{width:10px;height:10px;border-radius:2px;background:#2a1530;border:1px solid rgba(225,29,72,.08)}
+.gh-heatmap .cell[data-l="1"]{background:#4a1e42}
+.gh-heatmap .cell[data-l="2"]{background:#7a2a5e}
+.gh-heatmap .cell[data-l="3"]{background:#b0306e}
+.gh-heatmap .cell[data-l="4"]{background:var(--a3);box-shadow:0 0 6px var(--glow)}
+.gh-heatmap-legend{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);margin-top:6px}
+.gh-heatmap-legend .cell{width:10px;height:10px;border-radius:2px}
+.gh-repos{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.gh-repo{display:block;padding:12px 14px;border:1px solid var(--border);border-radius:10px;
+         background:var(--bg-deep);text-decoration:none;color:var(--text);transition:var(--t)}
+.gh-repo:hover{border-color:var(--a3);transform:translateY(-2px);box-shadow:var(--sh)}
+.gh-repo b{display:block;font-size:14px;color:var(--text);margin-bottom:4px}
+.gh-repo small{display:block;font-size:12px;color:var(--muted);line-height:1.5}
+.gh-repo .gh-meta{display:flex;gap:12px;margin-top:8px;font-size:11px;color:var(--text2)}
+.gh-repo .gh-meta span{display:flex;align-items:center;gap:4px}
+.gh-search{width:100%;margin-top:6px;padding:8px 12px;border-radius:10px;
+           background:var(--bg-deep);border:1px solid var(--border);color:var(--text);
+           font:inherit;font-size:13px;outline:none;transition:var(--t)}
+.gh-search:focus{border-color:var(--a3);box-shadow:0 0 12px var(--glow)}
+.gh-status{margin-top:10px;font-size:12px;color:var(--muted)}
+
 @media(max-width:760px){
 .header{padding:10px 14px;flex-wrap:nowrap}
 .logo h1{font-size:16px;letter-spacing:1px}
@@ -149,6 +173,7 @@ main{padding:18px 12px 100px}
 .header-info .pname{font-size:21px}
 .footer{padding:14px 12px 92px}
 .mobile-nav{display:flex}
+.gh-repos{grid-template-columns:1fr}
 }
 @media(max-width:400px){.quick-info{grid-template-columns:1fr}}
 </style>
@@ -247,6 +272,32 @@ main{padding:18px 12px 100px}
             <strong>🎮 <span class="i18n" data-en="Modding">Моддинг</span>:</strong> HOI4, <span class="i18n" data-en="Game projects, Worldbuilding">Игровые проекты, миростроение</span>
         </div>
     </div>
+
+    <!-- ===== GITHUB BLOCK START ===== -->
+    <div class="block card">
+        <h3>🐙 <span class="i18n" data-en="GitHub Activity">Активность GitHub</span></h3>
+
+        <!-- Heatmap -->
+        <div id="ghHeatmap" class="gh-heatmap" aria-label="GitHub contributions heatmap"></div>
+        <div id="ghHeatmapLegend" class="gh-heatmap-legend"></div>
+
+        <!-- Избранные репозитории -->
+        <h4 style="margin:18px 0 8px;font-size:14px;color:var(--text2)">
+            📌 <span class="i18n" data-en="Pinned Repositories">Избранные репозитории</span>
+        </h4>
+        <div id="ghPinned" class="gh-repos"></div>
+
+        <!-- Все проекты + поиск -->
+        <h4 style="margin:22px 0 8px;font-size:14px;color:var(--text2)">
+            📦 <span class="i18n" data-en="All Repositories">Все репозитории</span>
+        </h4>
+        <input id="ghSearch" type="text" placeholder="Поиск репозиториев..."
+               class="gh-search" oninput="ghFilterRepos()" />
+        <div id="ghAll" class="gh-repos"></div>
+
+        <p id="ghStatus" class="gh-status"></p>
+    </div>
+    <!-- ===== GITHUB BLOCK END ===== -->
 
     <div class="block card">
         <h3>🤝 <span class="i18n" data-en="Friends &amp; Brothers">Друзья и братья</span></h3>
@@ -518,7 +569,6 @@ main{padding:18px 12px 100px}
         document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
         target.classList.add('active');
 
-        // Страницы проектов подсвечивают пункт «Вики»
         const navId = tabId.startsWith('project-') ? 'wiki' : tabId;
         document.querySelectorAll('.nav-buttons button, .mobile-nav button').forEach(btn => {
             const on = btn.dataset.tab === navId;
@@ -537,12 +587,10 @@ main{padding:18px 12px 100px}
         btn.addEventListener('click', () => switchTab(btn.dataset.tab));
     });
 
-    // Кнопки «назад/вперёд» в браузере (в том числе возврат на главную)
     window.addEventListener('popstate', () => {
         switchTab(location.hash.replace('#', '') || 'home', false);
     });
 
-    // Клавиатура: карточки вики и ссылки «назад» работают по Enter/Space
     document.querySelectorAll('.wiki-entry, .page-detail .back').forEach(el => {
         el.setAttribute('role', el.matches('.back') ? 'link' : 'button');
         el.tabIndex = 0;
@@ -557,7 +605,6 @@ main{padding:18px 12px 100px}
     // ============================================================
     // 2. ПЕРЕКЛЮЧЕНИЕ ЯЗЫКА
     // ============================================================
-    // Русский текст берём прямо из разметки
     document.querySelectorAll('.i18n').forEach(el => { el.dataset.ru = el.innerHTML; });
 
     let currentLang = 'ru';
@@ -584,13 +631,12 @@ main{padding:18px 12px 100px}
         try { localStorage.setItem('solarium-lang', currentLang); } catch (e) {}
     }
 
-    // Восстановление языка — один раз, без двойного переключения
     try {
         if (localStorage.getItem('solarium-lang') === 'en') applyLang('en');
     } catch (e) {}
 
     // ============================================================
-    // 3. ЗВЁЗДЫ (на телефонах меньше — экономим батарею)
+    // 3. ЗВЁЗДЫ
     // ============================================================
     function createStars() {
         const container = document.getElementById('stars');
@@ -612,7 +658,6 @@ main{padding:18px 12px 100px}
     }
     createStars();
 
-    // Плавное появление; если IntersectionObserver недоступен — просто показываем
     const revealEls = document.querySelectorAll('.reveal');
     if ('IntersectionObserver' in window) {
         const revealObserver = new IntersectionObserver((entries) => {
@@ -633,6 +678,136 @@ main{padding:18px 12px 100px}
     // ============================================================
     const startTab = location.hash.replace('#', '');
     if (startTab) switchTab(startTab, false);
+
+    // ============================================================
+    // 5. GITHUB BLOCK — only VladislavFosk
+    // ============================================================
+    const GH_USER = 'VladislavFosk';
+
+    function ghEl(tag, cls, html){
+        const e = document.createElement(tag);
+        if (cls) e.className = cls;
+        if (html != null) e.innerHTML = html;
+        return e;
+    }
+
+    async function ghLoadHeatmap(){
+        const wrap = document.getElementById('ghHeatmap');
+        const legend = document.getElementById('ghHeatmapLegend');
+        if (!wrap) return;
+
+        try {
+            const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${GH_USER}?y=last`);
+            const data = await res.json();
+            const days = (data.contributions || []).slice(-371);
+            const map = {};
+            days.forEach(d => { map[d.date] = d.count; });
+
+            wrap.innerHTML = '';
+            const end = new Date();
+            const start = new Date(end);
+            start.setDate(end.getDate() - 370);
+            start.setDate(start.getDate() - start.getDay());
+
+            for (let i = 0; i < 371; i++){
+                const d = new Date(start);
+                d.setDate(start.getDate() + i);
+                const iso = d.toISOString().slice(0,10);
+                const c = map[iso] || 0;
+                let lvl = 0;
+                if (c > 0) lvl = 1;
+                if (c >= 3) lvl = 2;
+                if (c >= 6) lvl = 3;
+                if (c >= 10) lvl = 4;
+                const cell = ghEl('div','cell');
+                cell.dataset.l = lvl;
+                cell.title = `${iso}: ${c} contributions`;
+                wrap.appendChild(cell);
+            }
+
+            legend.innerHTML =
+                '<span>Меньше</span>' +
+                '<span class="cell" style="background:#2a1530"></span>' +
+                '<span class="cell" style="background:#4a1e42"></span>' +
+                '<span class="cell" style="background:#7a2a5e"></span>' +
+                '<span class="cell" style="background:#b0306e"></span>' +
+                '<span class="cell" style="background:var(--a3)"></span>' +
+                '<span>Больше</span>';
+        } catch (e) {
+            wrap.innerHTML = '<span style="font-size:12px;color:var(--muted)">Не удалось загрузить heatmap</span>';
+        }
+    }
+
+    let ghRepos = [];
+
+    function ghRepoCard(r){
+        const desc = r.description ? r.description : 'Без описания';
+        const lang = r.language ? `<span>💻 ${r.language}</span>` : '';
+        const stars = `<span>⭐ ${r.stargazers_count}</span>`;
+        const forks = `<span>🍴 ${r.forks_count}</span>`;
+        return `<a class="gh-repo" href="${r.html_url}" target="_blank" rel="noopener">
+            <b>${r.name}</b>
+            <small>${desc}</small>
+            <div class="gh-meta">${lang}${stars}${forks}</div>
+        </a>`;
+    }
+
+    function ghRenderPinned(){
+        const box = document.getElementById('ghPinned');
+        if (!box) return;
+        const pinned = [...ghRepos]
+            .sort((a,b) => (b.stargazers_count - a.stargazers_count) || (new Date(b.updated_at) - new Date(a.updated_at)))
+            .slice(0,4);
+        box.innerHTML = pinned.length
+            ? pinned.map(ghRepoCard).join('')
+            : '<p style="font-size:13px;color:var(--muted)">Нет репозиториев</p>';
+    }
+
+    function ghRenderAll(filter = ''){
+        const box = document.getElementById('ghAll');
+        if (!box) return;
+        const q = filter.trim().toLowerCase();
+        const list = ghRepos.filter(r =>
+            !q ||
+            r.name.toLowerCase().includes(q) ||
+            (r.description || '').toLowerCase().includes(q) ||
+            (r.language || '').toLowerCase().includes(q)
+        );
+        box.innerHTML = list.length
+            ? list.map(ghRepoCard).join('')
+            : '<p style="font-size:13px;color:var(--muted)">Ничего не найдено</p>';
+    }
+
+    function ghFilterRepos(){
+        const input = document.getElementById('ghSearch');
+        ghRenderAll(input ? input.value : '');
+    }
+
+    async function ghLoadRepos(){
+        const status = document.getElementById('ghStatus');
+        try {
+            const res = await fetch(`https://api.github.com/users/${GH_USER}/repos?sort=updated&per_page=100`);
+            if (!res.ok) throw new Error('GitHub API ' + res.status);
+            const repos = await res.json();
+
+            ghRepos = repos.filter(r =>
+                r.owner.login.toLowerCase() === GH_USER.toLowerCase() &&
+                !r.fork &&
+                !r.archived
+            );
+
+            ghRenderPinned();
+            ghRenderAll();
+            if (status) status.textContent = `Загружено репозиториев: ${ghRepos.length} (@${GH_USER})`;
+        } catch (e) {
+            if (status) status.textContent = 'Ошибка загрузки репозиториев: ' + e.message;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        ghLoadHeatmap();
+        ghLoadRepos();
+    });
 </script>
 </body>
 </html>
