@@ -1,660 +1,482 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="Solarium Umbris — энциклопедия миров, проектов и идей Владислава Фоска-Косарха" />
-<meta name="theme-color" content="#160a17" />
-<title>Solarium Umbris — Мир Косарха</title>
-<link rel="icon" href="gim/logo.png" type="image/png" />
-<link rel="stylesheet" href="style.css" />
-</head>
-<body>
-
-<div class="stars" id="stars" aria-hidden="true"></div>
-
-<header class="header">
-    <div class="logo">
-        <span class="icon">☽</span>
-        <div>
-            <h1>Solarium <span class="grad">Umbris</span></h1>
-            <span class="subtitle grad">✦ Мир Косарха ✦</span>
-        </div>
-    </div>
-    <div class="right-group">
-        <nav class="nav-buttons" id="tabNav" aria-label="Main navigation">
-            <button class="active" data-tab="home">🏠 <span class="i18n" data-en="Home">Главная</span></button>
-            <button data-tab="wiki">📚 <span class="i18n" data-en="My Wiki">Моя Вики</span></button>
-            <button data-tab="contact">✉️ <span class="i18n" data-en="Contact">Контакты</span></button>
-        </nav>
-        <button class="lang-toggle" id="langToggle" aria-label="Switch language">ENG</button>
-    </div>
-</header>
-
-<main>
-
-<!-- ГЛАВНАЯ -->
-<section class="tab active" id="tab-home">
-    <div class="hero reveal">
-        <h2>✧ <span class="i18n grad" data-en="Welcome to the World of Kosarh">Добро пожаловать в Мир Косарха</span></h2>
-        <p class="i18n" data-en="Encyclopedia of worlds, projects and ideas">Энциклопедия миров, проектов и идей</p>
-        <div class="stats-bar">
-            <span>📦 <strong>4</strong> <span class="i18n" data-en="projects">проекта</span></span>
-            <span>🏆 <strong>3</strong> <span class="i18n" data-en="achievements">достижения</span></span>
-            <span>👤 <strong>18</strong> <span class="i18n" data-en="years old">лет</span></span>
-        </div>
-    </div>
-
-    <div class="profile-hero card reveal">
-        <img class="avatar" src="gim/AVATARKA.jpg" alt="Vladislav Fosk-Kosarh" width="120" height="120" />
-        <div>
-            <div class="name grad">Vladislav Fosk-Kosarh</div>
-            <div class="nick">@Foskarh</div>
-            <div class="ptitle">👑 <span class="i18n" data-en="Supreme Sovereign of the Kosarh Free Land">Верховный правитель Свободной Земли Косарха</span></div>
-            <div class="tags">
-                <span class="tag">💻 <span class="i18n" data-en="Developer">Разработчик</span></span>
-                <span class="tag">🐧 Linux</span>
-                <span class="tag">🛠️ <span class="i18n" data-en="Creator">Творец</span></span>
-                <span class="tag">⚔️ Coalition Iron Will</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="quick-info reveal">
-        <div class="quick-item card"><span>🎂</span><div><small class="i18n" data-en="Age">Возраст</small><strong>18 <span class="i18n" data-en="years">лет</span></strong></div></div>
-        <div class="quick-item card"><span>🏴</span><div><small class="i18n" data-en="Nationality">Национальность</small><strong>Kosarh</strong></div></div>
-        <div class="quick-item card"><span>🎓</span><div><small class="i18n" data-en="Education">Образование</small><strong class="i18n" data-en="Technician">Техник</strong></div></div>
-        <div class="quick-item card"><span>⚔️</span><div><small class="i18n" data-en="Organization">Организация</small><strong>Coalition Iron Will</strong></div></div>
-    </div>
-
-    <div class="block card reveal">
-        <h3>📜 <span class="i18n" data-en="About Me">О себе</span></h3>
-        <div class="block-text">
-            <p class="i18n" data-en="<strong>Hi.</strong> My main job is as a maintenance technician — I work with equipment and hardware. Programming is my new hobby; I'm just starting to get into it, learning little by little. I want to create something of my own, even if it's small, but made with my own hands."><strong>Привет.</strong> Моя основная работа — наладчик, я имею дело с оборудованием и железом. А программирование — это моё новое увлечение, я только начинаю в него погружаться, изучаю понемногу. Хочется сделать что-то своё, пусть даже небольшое, но своими руками.</p>
-            <p class="i18n" data-en="I put effort into it, trying to figure things out even when something doesn't work. It's my escape.">Я вкладываю в это старание, даже когда что-то не получается, пытаюсь разобраться. Это моя отдушина.</p>
-            <p class="i18n" data-en="But I'm human, and emotions take their toll. When something goes wrong — code gets stuck, a project won't compile, or just some little thing throws me off — I get upset. I can withdraw into myself, go quiet, stop noticing what's going on around me.">Но я человек, и эмоции берут своё. Когда что-то идёт не так — завис код, не собирается проект или просто какая-то мелочь выбивает из колеи — я расстраиваюсь. Могу замкнуться в себе, замолчать, перестать замечать, что творится вокруг.</p>
-            <p class="i18n" data-en="That's how I am. With all my ups and downs, weaknesses, and stubbornness.">Такой я есть. Со всеми своими взлётами, падениями, слабостями и упрямством.</p>
-            <div class="tags">
-                <span class="tag gold">☀️ <span class="i18n" data-en="Sun Child">Солнечный ребёнок</span></span>
-                <span class="tag pink">✝️ <span class="i18n" data-en="Orthodox Christian">Православный христианин</span></span>
-            </div>
-        </div>
-    </div>
-
-    <div class="block card">
-        <h3>🗣️ <span class="i18n" data-en="Languages">Языки</span></h3>
-        <div class="block-text">
-            🇷🇺 <span class="i18n" data-en="Russian">Русский</span> — <strong class="i18n" data-en="Native">Родной</strong><br />
-            🇬🇧 <span class="i18n" data-en="English">Английский</span> — <strong class="i18n" data-en="So-so">Так себе</strong> <span class="label">(<span class="i18n" data-en="often use translator">часто пользуюсь переводчиком</span>)</span>
-        </div>
-    </div>
-
-    <div class="block card">
-        <h3>💻 <span class="i18n" data-en="Operating Systems">Операционные системы</span></h3>
-        <div class="block-text">🪟 Windows<br />🐧 GNU/Linux (Debian, XFCE)</div>
-    </div>
-
-    <div class="block card">
-        <h3>🧠 <span class="i18n" data-en="Skills">Навыки</span></h3>
-        <div class="block-text">
-            <strong>💻 <span class="i18n" data-en="Programming">Программирование</span>:</strong> HTML, CSS, JavaScript<br />
-            <strong>🐧 Linux:</strong> Debian, XFCE, <span class="i18n" data-en="System setup">Настройка системы</span><br />
-            <strong>🔧 <span class="i18n" data-en="Hardware">Железо</span>:</strong> PC, <span class="i18n" data-en="Troubleshooting, Maintenance">Диагностика, обслуживание</span><br />
-            <strong>🎮 <span class="i18n" data-en="Modding">Моддинг</span>:</strong> HOI4, <span class="i18n" data-en="Game projects, Worldbuilding">Игровые проекты, миростроение</span>
-        </div>
-    </div>
-
-    <!-- ===== GITHUB BLOCK START ===== -->
-    <div class="block card">
-        <h3>🐙 <span class="i18n" data-en="GitHub Activity">Активность GitHub</span></h3>
-
-        <!-- Heatmap -->
-        <div id="ghHeatmap" class="gh-heatmap" aria-label="GitHub contributions heatmap"></div>
-        <div id="ghHeatmapLegend" class="gh-heatmap-legend"></div>
-
-        <!-- Избранные репозитории -->
-        <h4 style="margin:18px 0 8px;font-size:14px;color:var(--text2)">
-            📌 <span class="i18n" data-en="Pinned Repositories">Избранные репозитории</span>
-        </h4>
-        <div id="ghPinned" class="gh-repos"></div>
-
-        <!-- Все проекты + поиск -->
-        <h4 style="margin:22px 0 8px;font-size:14px;color:var(--text2)">
-            📦 <span class="i18n" data-en="All Repositories">Все репозитории</span>
-        </h4>
-        <input id="ghSearch" type="text" placeholder="Поиск репозиториев..." class="gh-search" />
-        <div id="ghAll" class="gh-repos"></div>
-
-        <p id="ghStatus" class="gh-status"></p>
-    </div>
-    <!-- ===== GITHUB BLOCK END ===== -->
-
-<div class="block card">
-    <h3>🤝 <span class="i18n" data-en="Friends &amp; Brothers">Друзья и братья</span></h3>
-    <div class="friends">
-        <span>🛡️ Tverd</span>
-        <span>⚡ Yonkia</span>
-        <span>🔥 Koivo</span>
-        <span>🌊 <a class="friend-link" href="https://b0o0q.github.io/qwq.github.io/" target="_blank" rel="noopener">Femadoria</a></span>
-    </div>
-</div>
-
-    <div class="block card">
-        <h3>🏆 <span class="i18n" data-en="Achievements">Достижения</span></h3>
-        <div class="ach"><span>🥇</span><span>
-            <b class="i18n" data-en="Winner's Diploma — &quot;Legacy of Outstanding Entrepreneurs of Russia&quot;">Диплом победителя — «Наследие выдающихся предпринимателей России»</b>
-            <small class="i18n" data-en="All-Russian competition on the history of entrepreneurship. Finalist of the regional stage in Tver.">Всероссийский конкурс по истории предпринимательства. Финалист регионального этапа в Твери.</small></span></div>
-        <div class="ach"><span>📜</span><span>
-            <b class="i18n" data-en="Participant Certificate — &quot;Through the Pages of the Great Victory&quot;">Сертификат участника — «По страницам Великой Победы»</b>
-            <small class="i18n" data-en="Team intellectual game dedicated to the 80th anniversary of Victory in the Great Patriotic War 1941–1945.">Командная интеллектуальная игра к 80-летию Победы в Великой Отечественной войне 1941–1945.</small></span></div>
-        <div class="ach"><span>🥇</span><span>
-            <b class="i18n" data-en="Winner's Diploma — &quot;Scarlet Sails&quot;">Диплом победителя — «Алые паруса»</b>
-            <small class="i18n" data-en="Winner of the All-Russian distance Olympiad in Physics among students of professional educational organizations.">Победитель Всероссийской дистанционной олимпиады по физике среди студентов профессиональных образовательных организаций.</small></span></div>
-    </div>
-</section>
-
-<!-- ВИКИ -->
-<section class="tab" id="tab-wiki">
-    <div class="hero">
-        <h2>📚 <span class="i18n grad" data-en="My Wiki">Моя Вики</span></h2>
-        <p class="i18n" data-en="All projects, ideas and developments">Все проекты, идеи и разработки</p>
-    </div>
-
-    <div class="wiki-entry card reveal" onclick="switchTab('project-roza')">
-        <div class="top-row">
-            <div class="ico"><img src="gim/rozaos.png" alt="Roza OS" /></div>
-            <div><div class="pname">Roza OS</div><span class="sub">Debian-based Linux distribution</span></div>
-            <span class="badge planned">🔵 <span class="i18n" data-en="Planned">Запланирован</span></span>
-        </div>
-        <p class="i18n" data-en="Linux distribution based on Debian with XFCE desktop and preinstalled packages.">Linux-дистрибутив на базе Debian с окружением XFCE и предустановленными пакетами.</p>
-        <div class="tags"><span class="tag">Debian</span><span class="tag">XFCE</span><span class="tag">Linux</span><span class="tag pink">Coalition Iron Will</span></div>
-    </div>
-
-    <div class="wiki-entry card" onclick="switchTab('project-solarium')">
-        <div class="top-row">
-            <div class="ico">☽</div>
-            <div><div class="pname">Solarium Umbris</div><span class="sub">Mod for Hearts of Iron IV</span></div>
-            <span class="badge frozen">❄️ <span class="i18n" data-en="Frozen">Заморожен</span></span>
-        </div>
-        <p class="i18n" data-en="Mod for Hearts of Iron IV with unique states and alternative history.">Мод для Hearts of Iron IV с уникальными государствами и альтернативной историей.</p>
-        <div class="tags"><span class="tag">HOI4</span><span class="tag">Mod</span><span class="tag">Alternative history</span><span class="tag pink">Coalition Iron Will</span></div>
-    </div>
-
-    <div class="wiki-entry card" onclick="switchTab('project-blackorder')">
-        <div class="top-row">
-            <div class="ico">🖤</div>
-            <div><div class="pname">Special Army "Black Order"</div><span class="sub">RP Faction in BRM 5</span></div>
-            <span class="badge frozen">❄️ <span class="i18n" data-en="Frozen">Заморожен</span></span>
-        </div>
-        <p class="i18n" data-en="Elite military unit in BRM 5 — a faction for experienced players.">Элитное военное подразделение в BRM 5 — фракция для опытных игроков.</p>
-        <div class="tags"><span class="tag">BRM 5</span><span class="tag">RP Faction</span><span class="tag pink">Coalition Iron Will</span></div>
-    </div>
-
-    <div class="wiki-entry card" onclick="switchTab('project-coalition')" style="border-color:var(--green)">
-        <div class="top-row">
-            <div class="ico">⚔️</div>
-            <div><div class="pname">Coalition Iron Will</div><span class="sub">Alliance of close friends and companions</span></div>
-            <span class="badge active">🟢 <span class="i18n" data-en="Active">Активен</span></span>
-        </div>
-        <p class="i18n" data-en="Brotherhood of like-minded people united by common goals and values.">Братство единомышленников, объединённых общими целями и ценностями.</p>
-        <div class="tags"><span class="tag gold">Alliance</span><span class="tag pink">Friends</span><span class="tag pink">Companions</span><span class="tag green">Coalition Iron Will</span></div>
-    </div>
-</section>
-
-<!-- Roza OS -->
-<section class="tab" id="tab-project-roza">
-    <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki">Назад к вики</span></a>
-    <div class="header-info">
-        <div class="ico"><img src="gim/rozaos.png" alt="Roza OS" /></div>
-        <div>
-            <div class="pname">Roza OS <span class="sub">Debian-based Linux distribution</span></div>
-            <span class="badge planned">🔵 <span class="i18n" data-en="Planned">Запланирован</span></span>
-            <div class="tags"><span class="tag">Debian</span><span class="tag">XFCE</span><span class="tag">Linux</span><span class="tag pink">Coalition Iron Will</span></div>
-        </div>
-    </div>
-    <div class="info-grid">
-        <div class="info-box card">
-            <h4>📋 <span class="i18n" data-en="Information">Информация</span></h4>
-            <div class="body">
-                <div><span class="label i18n" data-en="Status">Статус</span><span class="value">🔵 <span class="i18n" data-en="Planned">Запланирован</span></span></div>
-                <div><span class="label i18n" data-en="Base">Основа</span><span class="value">Debian</span></div>
-                <div><span class="label i18n" data-en="Environment">Окружение</span><span class="value">XFCE</span></div>
-                <div><span class="label i18n" data-en="License">Лицензия</span><span class="value">GPL</span></div>
-                <div><span class="label i18n" data-en="Team">Команда</span><span class="value">Coalition Iron Will</span></div>
-            </div>
-        </div>
-        <div class="info-box card">
-            <h4>📖 <span class="i18n" data-en="Description">Описание</span></h4>
-            <div class="body">
-                <p class="i18n" data-en="<strong>Roza OS</strong> — lightweight and fast Linux distribution on stable Debian base."><strong>Roza OS</strong> — лёгкий и быстрый Linux-дистрибутив на стабильной базе Debian.</p>
-                <p><strong class="i18n" data-en="Features:">Особенности:</strong></p>
-                <ul>
-                    <li>🐧 <strong class="i18n" data-en="Base:">Основа:</strong> Debian (stable)</li>
-                    <li>🖥️ <strong class="i18n" data-en="Environment:">Окружение:</strong> XFCE</li>
-                    <li>📦 <strong class="i18n" data-en="Packages:">Пакеты:</strong> Firefox, VLC, LibreOffice, GParted, Remmina</li>
-                </ul>
-                <p>🔵 <span class="i18n" data-en="Planned. Development has not started yet.">Запланирован. Разработка ещё не началась.</span></p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Solarium Umbris -->
-<section class="tab" id="tab-project-solarium">
-    <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki">Назад к вики</span></a>
-    <div class="header-info">
-        <div class="ico">☽</div>
-        <div>
-            <div class="pname">Solarium Umbris <span class="sub">Mod for Hearts of Iron IV</span></div>
-            <span class="badge frozen">❄️ <span class="i18n" data-en="Frozen">Заморожен</span></span>
-            <div class="tags"><span class="tag">HOI4</span><span class="tag">Mod</span><span class="tag">Alternative history</span><span class="tag pink">Coalition Iron Will</span></div>
-        </div>
-    </div>
-    <div class="info-grid">
-        <div class="info-box card">
-            <h4>📋 <span class="i18n" data-en="Information">Информация</span></h4>
-            <div class="body">
-                <div><span class="label i18n" data-en="Status">Статус</span><span class="value">❄️ <span class="i18n" data-en="Frozen">Заморожен</span></span></div>
-                <div><span class="label i18n" data-en="Game">Игра</span><span class="value">Hearts of Iron IV</span></div>
-                <div><span class="label i18n" data-en="Countries">Стран</span><span class="value">7</span></div>
-                <div><span class="label i18n" data-en="Ideologies">Идеологий</span><span class="value">10+</span></div>
-                <div><span class="label i18n" data-en="Team">Команда</span><span class="value">Coalition Iron Will</span></div>
-            </div>
-        </div>
-        <div class="info-box card">
-            <h4>📖 <span class="i18n" data-en="Description">Описание</span></h4>
-            <div class="body">
-                <p class="i18n" data-en="<strong>Solarium Umbris</strong> — large-scale mod for Hearts of Iron IV."><strong>Solarium Umbris</strong> — масштабный мод для Hearts of Iron IV.</p>
-                <p><strong class="i18n" data-en="What's inside:">Что внутри:</strong></p>
-                <ul>
-                    <li>🌍 7 <span class="i18n" data-en="unique states">уникальных государств</span></li>
-                    <li>⚔️ 10+ <span class="i18n" data-en="ideologies">идеологий</span></li>
-                    <li>📜 <span class="i18n" data-en="Unique focuses and events">Уникальные фокусы и события</span></li>
-                    <li>👤 <span class="i18n" data-en="Custom leaders">Кастомные лидеры</span></li>
-                </ul>
-                <p>❄️ <span class="i18n" data-en="Frozen.">Заморожен.</span></p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Black Order -->
-<section class="tab" id="tab-project-blackorder">
-    <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki">Назад к вики</span></a>
-    <div class="header-info">
-        <div class="ico">🖤</div>
-        <div>
-            <div class="pname">Special Army "Black Order" <span class="sub">RP Faction in BRM 5</span></div>
-            <span class="badge frozen">❄️ <span class="i18n" data-en="Frozen">Заморожен</span></span>
-            <div class="tags"><span class="tag">BRM 5</span><span class="tag">RP Faction</span><span class="tag pink">Coalition Iron Will</span></div>
-        </div>
-    </div>
-    <div class="info-grid">
-        <div class="info-box card">
-            <h4>📋 <span class="i18n" data-en="Information">Информация</span></h4>
-            <div class="body">
-                <div><span class="label i18n" data-en="Status">Статус</span><span class="value">❄️ <span class="i18n" data-en="Frozen">Заморожен</span></span></div>
-                <div><span class="label i18n" data-en="Game">Игра</span><span class="value">BRM 5</span></div>
-                <div><span class="label i18n" data-en="Type">Тип</span><span class="value">RP Faction</span></div>
-                <div><span class="label i18n" data-en="Ideology">Идеология</span><span class="value i18n" data-en="Discipline, honor, professionalism">Дисциплина, честь, профессионализм</span></div>
-                <div><span class="label i18n" data-en="Team">Команда</span><span class="value">Coalition Iron Will</span></div>
-            </div>
-        </div>
-        <div class="info-box card">
-            <h4>📖 <span class="i18n" data-en="Description">Описание</span></h4>
-            <div class="body">
-                <p class="i18n" data-en="<strong>Special Army &quot;Black Order&quot;</strong> — elite faction in BRM 5 (Black Rock Multiplayer 5)."><strong>Special Army «Black Order»</strong> — элитная фракция в BRM 5 (Black Rock Multiplayer 5).</p>
-                <p><strong class="i18n" data-en="About the faction:">О фракции:</strong></p>
-                <ul>
-                    <li>🎯 <strong class="i18n" data-en="Mission:">Миссия:</strong> <span class="i18n" data-en="Complex tasks, order, protection">Сложные задачи, порядок, защита</span></li>
-                    <li>📜 <strong class="i18n" data-en="Ideology:">Идеология:</strong> <span class="i18n" data-en="Discipline, honor, professionalism">Дисциплина, честь, профессионализм</span></li>
-                </ul>
-                <p>❄️ <span class="i18n" data-en="Frozen.">Заморожен.</span></p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Coalition Iron Will -->
-<section class="tab" id="tab-project-coalition">
-    <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki">Назад к вики</span></a>
-    <div class="header-info">
-        <div class="ico">⚔️</div>
-        <div>
-            <div class="pname">Coalition Iron Will <span class="sub">Alliance of close friends and companions</span></div>
-            <span class="badge active">🟢 <span class="i18n" data-en="Active">Активен</span></span>
-            <div class="tags"><span class="tag gold">Alliance</span><span class="tag pink">Friends</span><span class="tag pink">Companions</span><span class="tag green">Coalition Iron Will</span></div>
-        </div>
-    </div>
-    <div class="info-grid">
-        <div class="info-box card">
-            <h4>📋 <span class="i18n" data-en="Information">Информация</span></h4>
-            <div class="body">
-                <div><span class="label i18n" data-en="Status">Статус</span><span class="value">🟢 <span class="i18n" data-en="Active">Активен</span></span></div>
-                <div><span class="label i18n" data-en="Type">Тип</span><span class="value i18n" data-en="Alliance / Brotherhood">Альянс / Братство</span></div>
-                <div><span class="label i18n" data-en="Founded">Основана</span><span class="value">2024</span></div>
-                <div><span class="label i18n" data-en="Values">Ценности</span><span class="value i18n" data-en="Friendship, solidarity, creativity">Дружба, солидарность, творчество</span></div>
-            </div>
-        </div>
-        <div class="info-box card">
-            <h4>📖 <span class="i18n" data-en="Description">Описание</span></h4>
-            <div class="body">
-                <p class="i18n" data-en="<strong>Coalition Iron Will</strong> — is not just a team. It's a brotherhood, a union of like-minded people."><strong>Coalition Iron Will</strong> — это не просто команда. Это братство, союз единомышленников.</p>
-                <p><strong class="i18n" data-en="Who we are:">Кто мы:</strong></p>
-                <ul>
-                    <li>🤝 <strong class="i18n" data-en="Friends">Друзья</strong> — <span class="i18n" data-en="always support each other">всегда поддерживаем друг друга</span></li>
-                    <li>⚔️ <strong class="i18n" data-en="Companions">Подвижники</strong> — <span class="i18n" data-en="create projects together">создаём проекты вместе</span></li>
-                    <li>💡 <strong class="i18n" data-en="Creators">Творцы</strong> — <span class="i18n" data-en="bring ideas to life">воплощаем идеи в жизнь</span></li>
-                </ul>
-                <p>🟢 <span class="i18n" data-en="Active. The coalition continues to exist and develop.">Активен. Коалиция продолжает существовать и развиваться.</span></p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- КОНТАКТЫ -->
-<section class="tab" id="tab-contact">
-    <div class="hero">
-        <h2>✉️ <span class="i18n grad" data-en="Contacts">Контакты</span></h2>
-        <p class="i18n" data-en="Reach me through any of these platforms">Свяжись со мной через любую из этих платформ</p>
-    </div>
-    <div class="contact-grid">
-        <a class="contact-card card" href="https://t.me/VladislavFoskKosarh" target="_blank" rel="noopener"><span class="ico">✈️</span><span><b>Telegram</b><small>@VladislavFoskKosarh</small></span></a>
-        <a class="contact-card card" href="https://www.youtube.com/@VladislavFoskKosarh" target="_blank" rel="noopener"><span class="ico">▶️</span><span><b>YouTube</b><small>@VladislavFoskKosarh</small></span></a>
-        <a class="contact-card card" href="https://github.com/VladislavFosk" target="_blank" rel="noopener"><span class="ico">◉</span><span><b>GitHub</b><small>github.com/VladislavFosk</small></span></a>
-        <a class="contact-card card" href="https://gamejolt.com/@VladislavFosk" target="_blank" rel="noopener"><span class="ico">🎮</span><span><b>GameJolt</b><small>@VladislavFosk</small></span></a>
-    </div>
-    <div class="block card" style="margin-top:20px;border-color:var(--a3);text-align:center">
-        ⚔️ Made by the <strong class="grad">Coalition Iron Will</strong>
-    </div>
-</section>
-
-</main>
-
-
-<!-- ===== MUSIC PLAYER ===== -->
+<!-- COMPACT MUSIC PLAYER -->
 <div class="music-player" id="musicPlayer">
-    <div class="music-player-main">
-        <div class="music-disc">♫</div>
-        <div class="music-track-info">
-            <strong id="musicTitle">Dead season</strong>
-            <span id="musicStatus">Solarium Umbris</span>
+    <div class="music-panel" id="musicPanel">
+        <div class="music-top">
+            <div class="music-cover">♫</div>
+
+            <div class="music-info">
+                <div class="music-label">NOW PLAYING</div>
+                <div class="music-title" id="musicTitle">Dead season</div>
+                <div class="music-status" id="musicStatus">Готов к воспроизведению</div>
+            </div>
+
+            <button class="music-close" id="musicClose" type="button" aria-label="Закрыть плеер">×</button>
+        </div>
+
+        <div class="music-progress">
+            <span id="musicCurrent">0:00</span>
+            <input type="range" id="musicSeek" min="0" max="100" value="0" step="0.1" aria-label="Позиция воспроизведения">
+            <span id="musicDuration">0:00</span>
+        </div>
+
+        <div class="music-bottom">
+            <div class="music-controls">
+                <button id="musicPrev" type="button" aria-label="Предыдущий трек">⏮</button>
+                <button id="musicPlay" class="music-play" type="button" aria-label="Воспроизвести">▶</button>
+                <button id="musicNext" type="button" aria-label="Следующий трек">⏭</button>
+            </div>
+
+            <label class="music-volume">
+                <span aria-hidden="true">♬</span>
+                <input type="range" id="musicVolume" min="0" max="1" value="0.7" step="0.01" aria-label="Громкость">
+            </label>
         </div>
     </div>
 
-    <div class="music-controls">
-        <button type="button" id="musicPrev" aria-label="Предыдущий трек">⏮</button>
-        <button type="button" id="musicPlay" class="music-play" aria-label="Воспроизвести">▶</button>
-        <button type="button" id="musicNext" aria-label="Следующий трек">⏭</button>
-    </div>
-
-    <div class="music-time">
-        <span id="musicCurrent">0:00</span>
-        <input id="musicSeek" type="range" min="0" max="100" step="0.1" value="0">
-        <span id="musicDuration">0:00</span>
-    </div>
-
-    <div class="music-volume">
-        <span>🔊</span>
-        <input id="musicVolume" type="range" min="0" max="1" step="0.01" value="0.7">
-    </div>
+    <button class="music-toggle" id="musicToggle" type="button" aria-label="Открыть музыкальный плеер" aria-expanded="false">
+        <span class="music-toggle-note">♫</span>
+        <span class="music-bars" aria-hidden="true">
+            <i></i><i></i><i></i><i></i>
+        </span>
+    </button>
 
     <audio id="musicAudio" preload="metadata"></audio>
 </div>
 
 <style>
+/* Компактный музыкальный плеер */
 .music-player {
     position: fixed;
-    z-index: 9999;
-    left: 50%;
+    right: 18px;
     bottom: 18px;
-    transform: translateX(-50%);
-    width: min(900px, calc(100% - 28px));
-    box-sizing: border-box;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 9px 16px;
-    align-items: center;
-    padding: 12px 15px;
-    background: rgba(15, 9, 18, .96);
-    border: 1px solid rgba(190, 105, 255, .35);
-    border-radius: 14px;
-    box-shadow: 0 8px 30px rgba(0,0,0,.45);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    z-index: 9999;
+    font-family: inherit;
 }
 
-.music-player-main {
-    min-width: 0;
+.music-player button {
+    font-family: inherit;
+}
+
+.music-toggle {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid rgba(190, 105, 255, .4);
+    border-radius: 12px;
+    background: linear-gradient(145deg, #1e1126, #0c0810);
+    color: #c77dff;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, .4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: transform .2s ease, border-color .2s ease;
 }
 
-.music-disc {
-    width: 38px;
-    height: 38px;
-    flex: 0 0 38px;
-    display: grid;
-    place-items: center;
-    border-radius: 10px;
-    background: rgba(190,105,255,.14);
-    color: var(--a3, #c77dff);
-    font-size: 21px;
+.music-toggle:hover {
+    transform: translateY(-2px);
+    border-color: rgba(190, 105, 255, .8);
 }
 
-.music-track-info {
-    min-width: 0;
+.music-toggle-note {
+    font-size: 20px;
+}
+
+.music-bars {
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
     display: flex;
-    flex-direction: column;
+    align-items: flex-end;
     gap: 2px;
+    height: 10px;
+    opacity: 0;
 }
 
-.music-track-info strong,
-.music-track-info span {
+.music-bars i {
+    display: block;
+    width: 2px;
+    height: 4px;
+    border-radius: 2px;
+    background: #c77dff;
+}
+
+.music-bars i:nth-child(2) { height: 8px; }
+.music-bars i:nth-child(3) { height: 6px; }
+.music-bars i:nth-child(4) { height: 10px; }
+
+.music-player.playing .music-bars {
+    opacity: 1;
+}
+
+.music-player.playing .music-bars i {
+    animation: musicBars .7s ease-in-out infinite alternate;
+}
+
+.music-player.playing .music-bars i:nth-child(2) { animation-delay: -.2s; }
+.music-player.playing .music-bars i:nth-child(3) { animation-delay: -.4s; }
+.music-player.playing .music-bars i:nth-child(4) { animation-delay: -.1s; }
+
+@keyframes musicBars {
+    from { transform: scaleY(.4); }
+    to { transform: scaleY(1); }
+}
+
+.music-panel {
+    position: absolute;
+    right: 0;
+    bottom: 54px;
+    width: 260px;
+    box-sizing: border-box;
+    padding: 13px;
+    border: 1px solid rgba(190, 105, 255, .3);
+    border-radius: 13px;
+    background: linear-gradient(145deg, rgba(24, 14, 30, .98), rgba(10, 7, 13, .98));
+    box-shadow: 0 12px 35px rgba(0, 0, 0, .5);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(8px) scale(.97);
+    transform-origin: bottom right;
+    transition: opacity .2s ease, transform .2s ease, visibility .2s;
+}
+
+.music-player.open .music-panel {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+}
+
+.music-top {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 12px;
+}
+
+.music-cover {
+    display: flex;
+    flex: 0 0 36px;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(190, 105, 255, .25);
+    border-radius: 9px;
+    background: rgba(190, 105, 255, .12);
+    color: #c77dff;
+    font-size: 19px;
+}
+
+.music-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.music-label {
+    margin-bottom: 3px;
+    color: rgba(199, 125, 255, .75);
+    font-size: 8px;
+    letter-spacing: 1.2px;
+}
+
+.music-title {
     overflow: hidden;
+    color: var(--text, #fff);
+    font-size: 12px;
+    font-weight: 600;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.music-track-info strong {
-    color: var(--text, #fff);
-    font-size: 14px;
+.music-status {
+    overflow: hidden;
+    margin-top: 3px;
+    color: var(--text2, #aaa);
+    font-size: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.music-track-info span {
-    color: var(--text2, #aaa);
-    font-size: 11px;
+.music-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 25px;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: rgba(255, 255, 255, .6);
+    cursor: pointer;
+    font-size: 19px;
+}
+
+.music-close:hover {
+    background: rgba(255, 255, 255, .08);
+    color: #fff;
+}
+
+.music-progress {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 12px;
+    color: rgba(255, 255, 255, .55);
+    font-size: 9px;
+    font-variant-numeric: tabular-nums;
+}
+
+.music-progress input {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    accent-color: #c77dff;
+    cursor: pointer;
+}
+
+.music-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
 }
 
 .music-controls {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
 }
 
 .music-controls button {
-    width: 34px;
-    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
     padding: 0;
-    border: 1px solid rgba(255,255,255,.12);
-    border-radius: 9px;
-    background: rgba(255,255,255,.06);
-    color: var(--text, #fff);
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .05);
+    color: rgba(255, 255, 255, .85);
     cursor: pointer;
-    font-size: 14px;
+    font-size: 11px;
 }
 
 .music-controls button:hover {
-    background: rgba(190,105,255,.18);
+    border-color: rgba(190, 105, 255, .4);
+    background: rgba(190, 105, 255, .15);
 }
 
 .music-controls .music-play {
-    width: 42px;
-    height: 42px;
+    width: 36px;
+    height: 36px;
+    border-color: rgba(190, 105, 255, .4);
     border-radius: 50%;
-    background: rgba(190,105,255,.18);
-    border-color: rgba(190,105,255,.45);
-    font-size: 16px;
-}
-
-.music-time {
-    grid-column: 1 / -1;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--text2, #aaa);
-    font-size: 10px;
-}
-
-.music-time input {
-    flex: 1;
-    min-width: 0;
-    accent-color: var(--a3, #c77dff);
+    background: rgba(190, 105, 255, .16);
+    color: #d9a5ff;
+    font-size: 13px;
 }
 
 .music-volume {
     display: flex;
     align-items: center;
-    gap: 7px;
-    justify-self: end;
+    gap: 5px;
+    color: rgba(255, 255, 255, .65);
+    font-size: 12px;
 }
 
 .music-volume input {
-    width: 90px;
-    accent-color: var(--a3, #c77dff);
+    width: 55px;
+    margin: 0;
+    accent-color: #c77dff;
+    cursor: pointer;
 }
 
-@media (max-width: 650px) {
+@media (max-width: 600px) {
     .music-player {
-        bottom: 8px;
-        width: calc(100% - 16px);
-        margin-bottom: 58px;
-        padding: 10px 12px;
+        right: 10px;
+        bottom: 10px;
     }
 
-    .music-volume {
-        grid-column: 1 / -1;
-        justify-self: stretch;
+    .music-toggle {
+        width: 40px;
+        height: 40px;
     }
 
-    .music-volume input {
-        flex: 1;
-        width: auto;
+    .music-panel {
+        bottom: 49px;
+        width: min(260px, calc(100vw - 24px));
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .music-toggle,
+    .music-panel {
+        transition: none;
+    }
+
+    .music-player.playing .music-bars i {
+        animation: none;
     }
 }
 </style>
 
 <script>
 (function () {
+    "use strict";
+
     const audio = document.getElementById("musicAudio");
+    const player = document.getElementById("musicPlayer");
+    const toggle = document.getElementById("musicToggle");
+    const close = document.getElementById("musicClose");
     const playButton = document.getElementById("musicPlay");
     const prevButton = document.getElementById("musicPrev");
     const nextButton = document.getElementById("musicNext");
     const title = document.getElementById("musicTitle");
     const status = document.getElementById("musicStatus");
     const seek = document.getElementById("musicSeek");
-    const volume = document.getElementById("musicVolume");
     const current = document.getElementById("musicCurrent");
     const duration = document.getElementById("musicDuration");
+    const volume = document.getElementById("musicVolume");
+
+    if (
+        !audio || !player || !toggle || !close ||
+        !playButton || !prevButton || !nextButton ||
+        !title || !status || !seek || !current ||
+        !duration || !volume
+    ) {
+        return;
+    }
 
     const tracks = [
-        {
-            title: "Dead season",
-            file: "music/Dead season.mp3"
-        },
-        {
-            title: "nebo",
-            file: "music/nebo.mp3"
-        },
-        {
-            title: "theme",
-            file: "music/theme.mp3"
-        }
+        { title: "Dead season", src: "music/Dead%20season.mp3" },
+        { title: "nebo", src: "music/nebo.mp3" },
+        { title: "theme", src: "music/theme.mp3" }
     ];
 
-    let index = 0;
+    let trackIndex = 0;
+    let seeking = false;
 
-    function time(seconds) {
-        if (!Number.isFinite(seconds)) return "0:00";
+    function formatTime(seconds) {
+        if (!Number.isFinite(seconds) || seconds < 0) {
+            return "0:00";
+        }
+
         const minutes = Math.floor(seconds / 60);
-        const secondsPart = Math.floor(seconds % 60).toString().padStart(2, "0");
+        const secondsPart = Math.floor(seconds % 60)
+            .toString()
+            .padStart(2, "0");
+
         return minutes + ":" + secondsPart;
     }
 
-    function loadTrack(number, autoplay) {
-        index = (number + tracks.length) % tracks.length;
+    function updatePlayButton() {
+        const isPlaying = !audio.paused;
 
-        const track = tracks[index];
+        playButton.textContent = isPlaying ? "Ⅱ" : "▶";
+        playButton.setAttribute(
+            "aria-label",
+            isPlaying ? "Пауза" : "Воспроизвести"
+        );
 
-        // URL создаётся относительно index.html, поэтому папка music
-        // находится именно рядом с index.html.
-        audio.src = new URL(track.file, document.baseURI).href;
-        audio.load();
+        player.classList.toggle("playing", isPlaying);
+    }
 
+    function loadTrack(index, autoplay) {
+        trackIndex = (index + tracks.length) % tracks.length;
+
+        const track = tracks[trackIndex];
+
+        audio.src = track.src;
         title.textContent = track.title;
-        status.textContent = "Solarium Umbris";
+        status.textContent = "Готов к воспроизведению";
         current.textContent = "0:00";
         duration.textContent = "0:00";
         seek.value = 0;
 
+        audio.load();
+        updatePlayButton();
+
         if (autoplay) {
-            const promise = audio.play();
-            if (promise) {
-                promise.catch(function () {
-                    status.textContent = "Нажмите ▶ ещё раз";
-                });
-            }
+            audio.play().catch(function () {
+                status.textContent = "Нажмите ▶ для запуска";
+                updatePlayButton();
+            });
         }
     }
 
+    toggle.addEventListener("click", function () {
+        const isOpen = player.classList.toggle("open");
+        toggle.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    close.addEventListener("click", function () {
+        player.classList.remove("open");
+        toggle.setAttribute("aria-expanded", "false");
+    });
+
     playButton.addEventListener("click", function () {
         if (audio.paused) {
-            const promise = audio.play();
-
-            if (promise) {
-                promise.catch(function () {
-                    status.textContent = "Не удалось воспроизвести файл";
-                });
-            }
+            audio.play().catch(function () {
+                status.textContent = "Не удалось запустить трек";
+            });
         } else {
             audio.pause();
         }
     });
 
     prevButton.addEventListener("click", function () {
-        loadTrack(index - 1, true);
+        loadTrack(trackIndex - 1, true);
     });
 
     nextButton.addEventListener("click", function () {
-        loadTrack(index + 1, true);
+        loadTrack(trackIndex + 1, true);
     });
 
     audio.addEventListener("play", function () {
-        playButton.textContent = "Ⅱ";
         status.textContent = "Сейчас играет";
+        updatePlayButton();
     });
 
-    audio.addEventListener("pause", function () {
-        playButton.textContent = "▶";
-    });
+    audio.addEventListener("pause", updatePlayButton);
 
     audio.addEventListener("loadedmetadata", function () {
-        duration.textContent = time(audio.duration);
+        duration.textContent = formatTime(audio.duration);
     });
 
     audio.addEventListener("timeupdate", function () {
-        current.textContent = time(audio.currentTime);
+        current.textContent = formatTime(audio.currentTime);
 
-        if (audio.duration) {
+        if (!seeking && Number.isFinite(audio.duration) && audio.duration > 0) {
             seek.value = (audio.currentTime / audio.duration) * 100;
         }
     });
 
     seek.addEventListener("input", function () {
-        if (audio.duration) {
+        seeking = true;
+
+        if (Number.isFinite(audio.duration) && audio.duration > 0) {
+            current.textContent = formatTime(
+                (Number(seek.value) / 100) * audio.duration
+            );
+        }
+    });
+
+    seek.addEventListener("change", function () {
+        if (Number.isFinite(audio.duration) && audio.duration > 0) {
             audio.currentTime = (Number(seek.value) / 100) * audio.duration;
         }
+
+        seeking = false;
     });
 
     volume.addEventListener("input", function () {
@@ -662,39 +484,15 @@
     });
 
     audio.addEventListener("ended", function () {
-        loadTrack(index + 1, true);
+        loadTrack(trackIndex + 1, true);
     });
 
     audio.addEventListener("error", function () {
-        status.textContent = "Ошибка загрузки: " + tracks[index].file;
-        playButton.textContent = "▶";
+        status.textContent = "Не удалось загрузить файл";
+        updatePlayButton();
     });
 
-    audio.volume = 0.7;
+    audio.volume = Number(volume.value);
     loadTrack(0, false);
 })();
 </script>
-
-
-<nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
-    <button class="active" data-tab="home"><span class="mi">🏠</span><span class="i18n" data-en="Home">Главная</span></button>
-    <button data-tab="wiki"><span class="mi">📚</span><span class="i18n" data-en="Wiki">Вики</span></button>
-    <button data-tab="contact"><span class="mi">✉️</span><span class="i18n" data-en="Contact">Контакты</span></button>
-</nav>
-
-<footer class="footer">
-    ☽ Solarium Umbris · <span class="i18n" data-en="World of Kosarh">Мир Косарха</span> · 2026
-    <span class="dot">·</span><a href="#home"><span class="i18n" data-en="Home">Главная</span></a>
-    <span class="dot">·</span><a href="#wiki"><span class="i18n" data-en="My Wiki">Моя Вики</span></a>
-    <span class="dot">·</span><a href="#contact"><span class="i18n" data-en="Contact">Контакты</span></a>
-    <br /><small style="opacity:.6">⚔️ Made by the <span class="grad">Coalition Iron Will</span></small>
-</footer>
-
-<script src="script.js"></script>
-</body>
-<audio controls>
-    <source src="music/Dead%20season.mp3" type="audio/mpeg">
-    <source src="music/nebo.mp3" type="audio/mpeg">
-    <source src="music/theme.mp3" type="audio/mpeg">
-</audio>
-</html>
