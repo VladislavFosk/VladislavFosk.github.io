@@ -553,9 +553,9 @@
 <script>
 (() => {
     const tracks = [
-        { title: "Dead season", src: "Dead%20season.mp3" },
-        { title: "nebo", src: "nebo.mp3" },
-        { title: "theme", src: "theme.mp3" }
+        { title: "Dead season", src: "music/Dead%20season.mp3" },
+        { title: "nebo", src: "music/nebo.mp3" },
+        { title: "theme", src: "music/theme.mp3" }
     ];
 
     const audio = document.getElementById("musicAudio");
@@ -638,6 +638,19 @@
 
     audio.addEventListener("ended", () => {
         loadTrack(trackIndex + 1, true);
+    });
+
+    audio.addEventListener("error", () => {
+        const track = tracks[trackIndex];
+        title.textContent = track.title;
+        document.getElementById("musicStatus").textContent =
+            "Файл не найден: " + track.src;
+        updatePlayButton();
+    });
+
+    audio.addEventListener("canplay", () => {
+        document.getElementById("musicStatus").textContent =
+            "Solarium Umbris · Music";
     });
 
     loadTrack(0);
