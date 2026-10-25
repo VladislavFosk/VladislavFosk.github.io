@@ -714,3 +714,29 @@ button, a { -webkit-tap-highlight-color:transparent; }
 @media (max-width:400px) {
   .quick-info { grid-template-columns:1fr; }
 }
+
+
+/* Кнопка фоновой музыки */
+#music-toggle {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 1000;
+  padding: 10px 16px;
+  border: 1px solid var(--a3, #704b80);
+  border-radius: 8px;
+  background: rgba(22, 10, 23, .92);
+  color: var(--text, #eee);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background .2s, border-color .2s;
+  backdrop-filter: blur(10px);
+}
+#music-toggle:hover {
+  background: rgba(65, 35, 70, .95);
+  border-color: #b18ac7;
+}
+@media (max-width: 760px) {
+  #music-toggle { right: 12px; bottom: 82px; }
+}
