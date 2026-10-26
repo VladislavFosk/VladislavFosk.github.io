@@ -1,3 +1,4 @@
+
 /* ============================================================
    БАЗА
    ============================================================ */
@@ -713,4 +714,146 @@ button, a { -webkit-tap-highlight-color:transparent; }
 
 @media (max-width:400px) {
   .quick-info { grid-template-columns:1fr; }
+}
+
+/* Roza OS navigation */
+.roza-layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:18px;align-items:start}
+.roza-sidebar{padding:10px;position:sticky;top:20px}
+.roza-side-title{font-weight:800;padding:12px 10px 14px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.roza-link{display:block;width:100%;text-align:left;background:transparent;color:var(--muted);border:0;border-radius:8px;padding:10px 11px;margin:2px 0;font:inherit;cursor:pointer}
+.roza-link:hover,.roza-link.active{background:rgba(255,255,255,.06);color:var(--text)}
+.roza-content{min-width:0}
+.roza-page{display:none}
+.roza-page.active{display:block}
+.roza-download,.roza-back-button{border:1px solid var(--a3);background:transparent;color:var(--text);padding:10px 16px;border-radius:9px;cursor:pointer;font:inherit;margin-top:8px}
+.roza-download:hover,.roza-back-button:hover{background:rgba(255,255,255,.06)}
+.roza-back-card{text-align:center}
+@media(max-width:760px){.roza-layout{grid-template-columns:1fr}.roza-sidebar{position:static}.roza-link{display:inline-block;width:auto}}
+
+.github-activity{position:relative;overflow:hidden;background:radial-gradient(ellipse at top right,rgba(168,85,247,.12),transparent 55%),linear-gradient(145deg,#1e0c1c,#160a17);border:1px solid rgba(168,85,247,.25);border-radius:18px}
+.github-activity-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
+.github-activity-label{color:#c084fc;font-size:10px;font-weight:800;letter-spacing:2px}
+.github-activity-header h3{margin-top:8px}
+.github-activity-header p{margin-top:6px;color:var(--muted);font-size:13px}
+.github-profile-link{flex-shrink:0;padding:9px 14px;border:1px solid rgba(217,70,239,.35);border-radius:9px;color:#e9b8ff;background:rgba(168,85,247,.09);text-decoration:none;font-size:13px;transition:var(--t)}
+.github-profile-link:hover{border-color:#d946ef;background:rgba(168,85,247,.18);transform:translateY(-2px)}
+.github-activity .gh-heatmap{padding:12px;background:rgba(10,5,13,.32);border:1px solid rgba(168,85,247,.12);border-radius:12px}
+@media(max-width:600px){.github-activity-header{align-items:flex-start}.github-activity-header h3{font-size:18px}.github-profile-link{padding:7px 10px;font-size:12px}}
+
+
+
+/* ============================================================
+   WORLD OF KOSARH — CINEMATIC MOTION & TYPOGRAPHY
+   ============================================================ */
+:root {
+  --font-body: 'Manrope', 'Segoe UI', sans-serif;
+  --font-display: 'Cinzel', Georgia, serif;
+  --motion-smooth: cubic-bezier(.2,.75,.25,1);
+}
+
+body { font-family: var(--font-body); }
+h1, h2, h3, h4, .section-title, .hero h2, .logo h1 {
+  font-family: var(--font-display);
+  text-wrap: balance;
+}
+.logo h1 { letter-spacing: .055em; }
+button, input, textarea, select { font-family: var(--font-body); }
+
+/* Мягкое появление страницы */
+.tab.active { animation: pageArrival .72s var(--motion-smooth) both; }
+@keyframes pageArrival {
+  from { opacity: 0; transform: translateY(12px); filter: blur(4px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+/* Плавные появления блоков при прокрутке */
+.reveal { opacity: 0; transform: translateY(26px) scale(.985); filter: blur(3px); transition: opacity .8s var(--motion-smooth), transform .8s var(--motion-smooth), filter .8s var(--motion-smooth); }
+.reveal.visible { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+
+/* Карточки с объёмом и свечением */
+.card, .wiki-entry, .project-card, .contact-card, .gh-repo, .block {
+  transition: transform .35s var(--motion-smooth), border-color .35s ease, box-shadow .35s ease, background-color .35s ease;
+}
+.card:hover, .wiki-entry:hover, .project-card:hover, .contact-card:hover, .gh-repo:hover {
+  transform: translateY(-5px);
+  border-color: rgba(217,70,239,.55);
+  box-shadow: 0 18px 42px rgba(0,0,0,.28), 0 0 24px rgba(168,85,247,.09);
+}
+
+/* Световой отблеск на основных кнопках */
+.nav-buttons button, .lang-toggle, .roza-link, .roza-download, .roza-back-button, .github-profile-link {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.nav-buttons button::after, .lang-toggle::after, .roza-download::after, .roza-back-button::after, .github-profile-link::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 -130%;
+  width: 75%;
+  transform: skewX(-22deg);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.13), transparent);
+  transition: left .65s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+.nav-buttons button:hover::after, .lang-toggle:hover::after, .roza-download:hover::after, .roza-back-button:hover::after, .github-profile-link:hover::after { left: 150%; }
+
+/* Медленное дыхание фоновых сияний */
+body::before {
+  content: '';
+  position: fixed;
+  inset: -25%;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 20% 30%, rgba(168,85,247,.08), transparent 38%), radial-gradient(ellipse at 78% 65%, rgba(225,29,72,.07), transparent 40%);
+  animation: ambientDrift 24s ease-in-out infinite alternate;
+}
+@keyframes ambientDrift {
+  0% { transform: translate3d(-1.5%, -1%, 0) scale(1); }
+  100% { transform: translate3d(1.5%, 1%, 0) scale(1.06); }
+}
+
+/* Звёзды слегка двигаются и мерцают */
+.star { will-change: opacity, transform; }
+
+/* Подчёркивание ссылок появляется плавно */
+a:not(.card):not(.contact-card):not(.gh-repo) { text-underline-offset: 4px; }
+
+/* График GitHub: ячейки, создаваемые script.js */
+#ghHeatmap {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(7, 10px);
+  grid-auto-columns: 10px;
+  gap: 4px;
+  overflow-x: auto;
+  padding: 14px;
+  border: 1px solid rgba(168,85,247,.15);
+  border-radius: 12px;
+  background: rgba(10,5,13,.4);
+  scrollbar-color: #6d347b #1a0c1d;
+  scrollbar-width: thin;
+}
+#ghHeatmap .cell, #ghHeatmapLegend .cell {
+  display: block;
+  width: 10px;
+  height: 10px;
+  min-width: 10px;
+  border-radius: 3px;
+  background: #2a1630;
+  transition: transform .16s ease, outline-color .16s ease;
+}
+#ghHeatmap .cell:hover { transform: scale(1.35); outline: 1px solid rgba(255,255,255,.55); }
+#ghHeatmap .cell[data-l="1"], #ghHeatmapLegend .cell[data-l="1"] { background: #63317a; }
+#ghHeatmap .cell[data-l="2"], #ghHeatmapLegend .cell[data-l="2"] { background: #913bb2; }
+#ghHeatmap .cell[data-l="3"], #ghHeatmapLegend .cell[data-l="3"] { background: #c044c9; }
+#ghHeatmap .cell[data-l="4"], #ghHeatmapLegend .cell[data-l="4"] { background: #f05b91; }
+#ghHeatmapLegend { display: flex; align-items: center; justify-content: flex-end; gap: 5px; margin-top: 10px; color: var(--muted); font-size: 11px; }
+
+:focus-visible { outline: 2px solid #d946ef; outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+  .reveal { opacity: 1; transform: none; filter: none; }
 }
