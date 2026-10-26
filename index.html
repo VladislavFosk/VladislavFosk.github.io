@@ -1,32 +1,107 @@
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="World of Kosarh" />
+<meta name="description" content="World of Kosarh — энциклопедия миров, проектов и идей Владислава Фоска-Косарха." />
 <meta name="theme-color" content="#160a17" />
 <title>World of Kosarh</title>
+
 <link rel="icon" href="gim/logo.png" type="image/png" />
 <link rel="stylesheet" href="style.css" />
+
 <style>
-.roza-layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:18px;align-items:start}
-.roza-sidebar{padding:10px;position:sticky;top:20px}
-.roza-side-title{font-weight:800;padding:12px 10px 14px;border-bottom:1px solid var(--border);margin-bottom:6px}
-.roza-link{display:block;width:100%;text-align:left;background:transparent;color:var(--muted);border:0;border-radius:8px;padding:10px 11px;margin:2px 0;font:inherit;cursor:pointer}
-.roza-link:hover,.roza-link.active{background:rgba(255,255,255,.06);color:var(--text)}
-.roza-content{min-width:0}
-.roza-page{display:none}
-.roza-page.active{display:block}
-.roza-download,.roza-back-button{border:1px solid var(--a3);background:transparent;color:var(--text);padding:10px 16px;border-radius:9px;cursor:pointer;font:inherit;margin-top:8px}
-.roza-download:hover,.roza-back-button:hover{background:rgba(255,255,255,.06)}
-.roza-back-card{text-align:center}
-@media(max-width:760px){
-.roza-layout{grid-template-columns:1fr}
-.roza-sidebar{position:static}
-.roza-link{display:inline-block;width:auto}
+.roza-layout {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+}
+
+.roza-sidebar {
+    padding: 10px;
+    position: sticky;
+    top: 20px;
+}
+
+.roza-side-title {
+    font-weight: 800;
+    padding: 12px 10px 14px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 6px;
+}
+
+.roza-link {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    color: var(--muted);
+    border: 0;
+    border-radius: 8px;
+    padding: 10px 11px;
+    margin: 2px 0;
+    font: inherit;
+    cursor: pointer;
+}
+
+.roza-link:hover,
+.roza-link.active {
+    background: rgba(255,255,255,.06);
+    color: var(--text);
+}
+
+.roza-content {
+    min-width: 0;
+}
+
+.roza-page {
+    display: none;
+}
+
+.roza-page.active {
+    display: block;
+}
+
+.roza-download,
+.roza-back-button {
+    border: 1px solid var(--a3);
+    background: transparent;
+    color: var(--text);
+    padding: 10px 16px;
+    border-radius: 9px;
+    cursor: pointer;
+    font: inherit;
+    margin-top: 8px;
+}
+
+.roza-download:hover,
+.roza-back-button:hover {
+    background: rgba(255,255,255,.06);
+}
+
+.roza-back-card {
+    text-align: center;
+}
+
+@media(max-width:760px) {
+    .roza-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .roza-sidebar {
+        position: static;
+    }
+
+    .roza-link {
+        display: inline-block;
+        width: auto;
+    }
 }
 </style>
 </head>
+
 <body>
 
 <div class="stars" id="stars" aria-hidden="true"></div>
@@ -34,478 +109,2736 @@
 <header class="header">
     <div class="logo">
         <span class="icon">☽</span>
+
         <div>
-            <h1>Solarium <span class="grad">Umbris</span></h1>
+            <h1>World of <span class="grad">Kosarh</span></h1>
             <span class="subtitle grad">✦ Мир Косарха ✦</span>
         </div>
     </div>
+
     <div class="right-group">
         <nav class="nav-buttons" id="tabNav" aria-label="Main navigation">
-            <button class="active" data-tab="home">🏠 <span class="i18n" data-en="Home">Главная</span></button>
-            <button data-tab="wiki">📚 <span class="i18n" data-en="My Wiki">Моя Вики</span></button>
-            <button data-tab="contact">✉️ <span class="i18n" data-en="Contact">Контакты</span></button>
+
+            <button class="active" data-tab="home">
+                🏠
+                <span class="i18n" data-en="Home">Главная</span>
+            </button>
+
+            <button data-tab="wiki">
+                📚
+                <span class="i18n" data-en="My Wiki">Моя Вики</span>
+            </button>
+
+            <button data-tab="contact">
+                ✉️
+                <span class="i18n" data-en="Contact">Контакты</span>
+            </button>
+
         </nav>
-        <button class="lang-toggle" id="langToggle" aria-label="Switch language">ENG</button>
+
+        <button
+            class="lang-toggle"
+            id="langToggle"
+            aria-label="Switch language"
+        >
+            ENG
+        </button>
     </div>
 </header>
 
+
 <main>
 
-<!-- ГЛАВНАЯ -->
+<!-- ============================================================
+     ГЛАВНАЯ
+     ============================================================ -->
+
 <section class="tab active" id="tab-home">
+
     <div class="hero reveal">
-        <h2>✧ <span class="i18n grad" data-en="Welcome to the World of Kosarh">Добро пожаловать в Мир Косарха</span></h2>
-        <p class="i18n" data-en="Encyclopedia of worlds, projects and ideas">Энциклопедия миров, проектов и идей</p>
+        <h2>
+            ✧
+            <span
+                class="i18n grad"
+                data-en="Welcome to the World of Kosarh"
+            >
+                Добро пожаловать в Мир Косарха
+            </span>
+        </h2>
+
+        <p
+            class="i18n"
+            data-en="Encyclopedia of worlds, projects and ideas"
+        >
+            Энциклопедия миров, проектов и идей
+        </p>
+
         <div class="stats-bar">
-            <span>📦 <strong>4</strong> <span class="i18n" data-en="projects">проекта</span></span>
-            <span>🏆 <strong>3</strong> <span class="i18n" data-en="achievements">достижения</span></span>
-            <span>👤 <strong>18</strong> <span class="i18n" data-en="years old">лет</span></span>
+            <span>
+                📦
+                <strong>4</strong>
+                <span
+                    class="i18n"
+                    data-en="projects"
+                >
+                    проекта
+                </span>
+            </span>
+
+            <span>
+                🏆
+                <strong>3</strong>
+                <span
+                    class="i18n"
+                    data-en="achievements"
+                >
+                    достижения
+                </span>
+            </span>
+
+            <span>
+                👤
+                <strong>18</strong>
+                <span
+                    class="i18n"
+                    data-en="years old"
+                >
+                    лет
+                </span>
+            </span>
         </div>
     </div>
+
 
     <div class="profile-hero card reveal">
-        <img class="avatar" src="gim/AVATARKA.jpg" alt="Vladislav Fosk-Kosarh" width="120" height="120" />
+
+        <img
+            class="avatar"
+            src="gim/AVATARKA.jpg"
+            alt="Vladislav Fosk-Kosarh"
+            width="120"
+            height="120"
+        />
+
         <div>
-            <div class="name grad">Vladislav Fosk-Kosarh</div>
-            <div class="nick">@Foskarh</div>
-            <div class="ptitle">👑 <span class="i18n" data-en="Supreme Sovereign of the Kosarh Free Land">Верховный правитель Свободной Земли Косарха</span></div>
+            <div class="name grad">
+                Vladislav Fosk-Kosarh
+            </div>
+
+            <div class="nick">
+                @Foskarh
+            </div>
+
+            <div class="ptitle">
+                👑
+                <span
+                    class="i18n"
+                    data-en="Supreme Sovereign of the Kosarh Free Land"
+                >
+                    Верховный правитель Свободной Земли Косарха
+                </span>
+            </div>
+
             <div class="tags">
-                <span class="tag">💻 <span class="i18n" data-en="Developer">Разработчик</span></span>
-                <span class="tag">🐧 Linux</span>
-                <span class="tag">🛠️ <span class="i18n" data-en="Creator">Творец</span></span>
-                <span class="tag">⚔️ Coalition Iron Will</span>
+
+                <span class="tag">
+                    💻
+                    <span
+                        class="i18n"
+                        data-en="Developer"
+                    >
+                        Разработчик
+                    </span>
+                </span>
+
+                <span class="tag">
+                    🐧 Linux
+                </span>
+
+                <span class="tag">
+                    🛠️
+                    <span
+                        class="i18n"
+                        data-en="Creator"
+                    >
+                        Творец
+                    </span>
+                </span>
+
+                <span class="tag">
+                    ⚔️ Coalition Iron Will
+                </span>
+
             </div>
         </div>
     </div>
+
 
     <div class="quick-info reveal">
-        <div class="quick-item card"><span>🎂</span><div><small class="i18n" data-en="Age">Возраст</small><strong>18 <span class="i18n" data-en="years">лет</span></strong></div></div>
-        <div class="quick-item card"><span>🏴</span><div><small class="i18n" data-en="Nationality">Национальность</small><strong>Kosarh</strong></div></div>
-        <div class="quick-item card"><span>🎓</span><div><small class="i18n" data-en="Education">Образование</small><strong class="i18n" data-en="Technician">Техник</strong></div></div>
-        <div class="quick-item card"><span>⚔️</span><div><small class="i18n" data-en="Organization">Организация</small><strong>Coalition Iron Will</strong></div></div>
+
+        <div class="quick-item card">
+            <span>🎂</span>
+            <div>
+                <small
+                    class="i18n"
+                    data-en="Age"
+                >
+                    Возраст
+                </small>
+
+                <strong>
+                    18
+                    <span
+                        class="i18n"
+                        data-en="years"
+                    >
+                        лет
+                    </span>
+                </strong>
+            </div>
+        </div>
+
+        <div class="quick-item card">
+            <span>🏴</span>
+            <div>
+                <small
+                    class="i18n"
+                    data-en="Nationality"
+                >
+                    Национальность
+                </small>
+
+                <strong>
+                    Kosarh
+                </strong>
+            </div>
+        </div>
+
+        <div class="quick-item card">
+            <span>🎓</span>
+            <div>
+                <small
+                    class="i18n"
+                    data-en="Education"
+                >
+                    Образование
+                </small>
+
+                <strong
+                    class="i18n"
+                    data-en="Technician"
+                >
+                    Техник
+                </strong>
+            </div>
+        </div>
+
+        <div class="quick-item card">
+            <span>⚔️</span>
+            <div>
+                <small
+                    class="i18n"
+                    data-en="Organization"
+                >
+                    Организация
+                </small>
+
+                <strong>
+                    Coalition Iron Will
+                </strong>
+            </div>
+        </div>
+
     </div>
 
+
     <div class="block card reveal">
-        <h3>📜 <span class="i18n" data-en="About Me">О себе</span></h3>
+
+        <h3>
+            📜
+            <span
+                class="i18n"
+                data-en="About Me"
+            >
+                О себе
+            </span>
+        </h3>
+
         <div class="block-text">
-            <p class="i18n" data-en="<strong>Hi.</strong> My main job is as a maintenance technician — I work with equipment and hardware. Programming is my new hobby; I'm just starting to get into it, learning little by little. I want to create something of my own, even if it's small, but made with my own hands."><strong>Привет.</strong> Моя основная работа — наладчик, я имею дело с оборудованием и железом. А программирование — это моё новое увлечение, я только начинаю в него погружаться, изучаю понемногу. Хочется сделать что-то своё, пусть даже небольшое, но своими руками.</p>
-            <p class="i18n" data-en="I put effort into it, trying to figure things out even when something doesn't work. It's my escape.">Я вкладываю в это старание, даже когда что-то не получается, пытаюсь разобраться. Это моя отдушина.</p>
-            <p class="i18n" data-en="But I'm human, and emotions take their toll. When something goes wrong — code gets stuck, a project won't compile, or just some little thing throws me off — I get upset. I can withdraw into myself, go quiet, stop noticing what's going on around me.">Но я человек, и эмоции берут своё. Когда что-то идёт не так — завис код, не собирается проект или просто какая-то мелочь выбивает из колеи — я расстраиваюсь. Могу замкнуться в себе, замолчать, перестать замечать, что творится вокруг.</p>
-            <p class="i18n" data-en="That's how I am. With all my ups and downs, weaknesses, and stubbornness.">Такой я есть. Со всеми своими взлётами, падениями, слабостями и упрямством.</p>
+
+            <p
+                class="i18n"
+                data-en="<strong>Hi.</strong> My main job is as a maintenance technician — I work with equipment and hardware. Programming is my new hobby; I'm just starting to get into it, learning little by little. I want to create something of my own, even if it's small, but made with my own hands."
+            >
+                <strong>Привет.</strong>
+                Моя основная работа — наладчик, я имею дело с оборудованием и железом.
+                А программирование — это моё новое увлечение, я только начинаю в него погружаться,
+                изучаю понемногу. Хочется сделать что-то своё, пусть даже небольшое,
+                но своими руками.
+            </p>
+
+            <p
+                class="i18n"
+                data-en="I put effort into it, trying to figure things out even when something doesn't work. It's my escape."
+            >
+                Я вкладываю в это старание, даже когда что-то не получается,
+                пытаюсь разобраться. Это моя отдушина.
+            </p>
+
+            <p
+                class="i18n"
+                data-en="But I'm human, and emotions take their toll. When something goes wrong — code gets stuck, a project won't compile, or just some little thing throws me off — I get upset. I can withdraw into myself, go quiet, stop noticing what's going on around me."
+            >
+                Но я человек, и эмоции берут своё. Когда что-то идёт не так —
+                завис код, не собирается проект или просто какая-то мелочь выбивает из колеи —
+                я расстраиваюсь. Могу замкнуться в себе, замолчать,
+                перестать замечать, что творится вокруг.
+            </p>
+
+            <p
+                class="i18n"
+                data-en="That's how I am. With all my ups and downs, weaknesses, and stubbornness."
+            >
+                Такой я есть. Со всеми своими взлётами, падениями,
+                слабостями и упрямством.
+            </p>
+
             <div class="tags">
-                <span class="tag gold">☀️ <span class="i18n" data-en="Sun Child">Солнечный ребёнок</span></span>
-                <span class="tag pink">✝️ <span class="i18n" data-en="Orthodox Christian">Православный христианин</span></span>
+
+                <span class="tag gold">
+                    ☀️
+                    <span
+                        class="i18n"
+                        data-en="Sun Child"
+                    >
+                        Солнечный ребёнок
+                    </span>
+                </span>
+
+                <span class="tag pink">
+                    ✝️
+                    <span
+                        class="i18n"
+                        data-en="Orthodox Christian"
+                    >
+                        Православный христианин
+                    </span>
+                </span>
+
             </div>
         </div>
     </div>
 
+
     <div class="block card">
-        <h3>🗣️ <span class="i18n" data-en="Languages">Языки</span></h3>
+
+        <h3>
+            🗣️
+            <span
+                class="i18n"
+                data-en="Languages"
+            >
+                Языки
+            </span>
+        </h3>
+
         <div class="block-text">
-            🇷🇺 <span class="i18n" data-en="Russian">Русский</span> — <strong class="i18n" data-en="Native">Родной</strong><br />
-            🇬🇧 <span class="i18n" data-en="English">Английский</span> — <strong class="i18n" data-en="So-so">Так себе</strong> <span class="label">(<span class="i18n" data-en="often use translator">часто пользуюсь переводчиком</span>)</span>
+
+            🇷🇺
+            <span
+                class="i18n"
+                data-en="Russian"
+            >
+                Русский
+            </span>
+            —
+            <strong
+                class="i18n"
+                data-en="Native"
+            >
+                Родной
+            </strong>
+
+            <br />
+
+            🇬🇧
+            <span
+                class="i18n"
+                data-en="English"
+            >
+                Английский
+            </span>
+            —
+            <strong
+                class="i18n"
+                data-en="So-so"
+            >
+                Так себе
+            </strong>
+
+            <span class="label">
+                (
+                <span
+                    class="i18n"
+                    data-en="often use translator"
+                >
+                    часто пользуюсь переводчиком
+                </span>
+                )
+            </span>
+
         </div>
     </div>
 
-    <div class="block card">
-        <h3>💻 <span class="i18n" data-en="Operating Systems">Операционные системы</span></h3>
-        <div class="block-text">🪟 Windows<br />🐧 GNU/Linux (Debian, XFCE)</div>
-    </div>
 
     <div class="block card">
-        <h3>🧠 <span class="i18n" data-en="Skills">Навыки</span></h3>
+
+        <h3>
+            💻
+            <span
+                class="i18n"
+                data-en="Operating Systems"
+            >
+                Операционные системы
+            </span>
+        </h3>
+
         <div class="block-text">
-            <strong>💻 <span class="i18n" data-en="Programming">Программирование</span>:</strong> HTML, CSS, JavaScript<br />
-            <strong>🐧 Linux:</strong> Debian, XFCE, <span class="i18n" data-en="System setup">Настройка системы</span><br />
-            <strong>🔧 <span class="i18n" data-en="Hardware">Железо</span>:</strong> PC, <span class="i18n" data-en="Troubleshooting, Maintenance">Диагностика, обслуживание</span><br />
-            <strong>🎮 <span class="i18n" data-en="Modding">Моддинг</span>:</strong> HOI4, <span class="i18n" data-en="Game projects, Worldbuilding">Игровые проекты, миростроение</span>
+            🪟 Windows
+            <br />
+            🐧 GNU/Linux (Debian, XFCE)
         </div>
     </div>
 
-    <!-- ===== GITHUB BLOCK START ===== -->
+
     <div class="block card">
-        <h3>🐙 <span class="i18n" data-en="GitHub Activity">Активность GitHub</span></h3>
 
-        <!-- Heatmap -->
-        <div id="ghHeatmap" class="gh-heatmap" aria-label="GitHub contributions heatmap"></div>
-        <div id="ghHeatmapLegend" class="gh-heatmap-legend"></div>
+        <h3>
+            🧠
+            <span
+                class="i18n"
+                data-en="Skills"
+            >
+                Навыки
+            </span>
+        </h3>
 
-        <!-- Избранные репозитории -->
+        <div class="block-text">
+
+            <strong>
+                💻
+                <span
+                    class="i18n"
+                    data-en="Programming"
+                >
+                    Программирование
+                </span>:
+            </strong>
+
+            HTML, CSS, JavaScript
+
+            <br />
+
+            <strong>
+                🐧 Linux:
+            </strong>
+
+            Debian, XFCE,
+            <span
+                class="i18n"
+                data-en="System setup"
+            >
+                Настройка системы
+            </span>
+
+            <br />
+
+            <strong>
+                🔧
+                <span
+                    class="i18n"
+                    data-en="Hardware"
+                >
+                    Железо
+                </span>:
+            </strong>
+
+            PC,
+            <span
+                class="i18n"
+                data-en="Troubleshooting, Maintenance"
+            >
+                Диагностика, обслуживание
+            </span>
+
+            <br />
+
+            <strong>
+                🎮
+                <span
+                    class="i18n"
+                    data-en="Modding"
+                >
+                    Моддинг
+                </span>:
+            </strong>
+
+            HOI4,
+            <span
+                class="i18n"
+                data-en="Game projects, Worldbuilding"
+            >
+                Игровые проекты, миростроение
+            </span>
+
+        </div>
+    </div>
+
+
+    <!-- ========================================================
+         GITHUB
+         ======================================================== -->
+
+    <div class="block card">
+
+        <h3>
+            🐙
+            <span
+                class="i18n"
+                data-en="GitHub Activity"
+            >
+                Активность GitHub
+            </span>
+        </h3>
+
+        <div
+            id="ghHeatmap"
+            class="gh-heatmap"
+            aria-label="GitHub contributions heatmap"
+        ></div>
+
+        <div
+            id="ghHeatmapLegend"
+            class="gh-heatmap-legend"
+        ></div>
+
+
         <h4 style="margin:18px 0 8px;font-size:14px;color:var(--text2)">
-            📌 <span class="i18n" data-en="Pinned Repositories">Избранные репозитории</span>
+            📌
+            <span
+                class="i18n"
+                data-en="Pinned Repositories"
+            >
+                Избранные репозитории
+            </span>
         </h4>
-        <div id="ghPinned" class="gh-repos"></div>
 
-        <!-- Все проекты + поиск -->
+        <div
+            id="ghPinned"
+            class="gh-repos"
+        ></div>
+
+
         <h4 style="margin:22px 0 8px;font-size:14px;color:var(--text2)">
-            📦 <span class="i18n" data-en="All Repositories">Все репозитории</span>
+            📦
+            <span
+                class="i18n"
+                data-en="All Repositories"
+            >
+                Все репозитории
+            </span>
         </h4>
-        <input id="ghSearch" type="text" placeholder="Поиск репозиториев..." class="gh-search" />
-        <div id="ghAll" class="gh-repos"></div>
 
-        <p id="ghStatus" class="gh-status"></p>
-    </div>
-    <!-- ===== GITHUB BLOCK END ===== -->
+        <input
+            id="ghSearch"
+            type="text"
+            placeholder="Поиск репозиториев..."
+            class="gh-search"
+            aria-label="Поиск репозиториев"
+        />
 
-<div class="block card">
-    <h3>🤝 <span class="i18n" data-en="Friends &amp; Brothers">Друзья и братья</span></h3>
-    <div class="friends">
-        <span>🛡️ Tverd</span>
-        <span>⚡ Yonkia</span>
-        <span>🔥 Koivo</span>
-        <span>🌊 <a class="friend-link" href="https://b0o0q.github.io/qwq.github.io/" target="_blank" rel="noopener">Femadoria</a></span>
+        <div
+            id="ghAll"
+            class="gh-repos"
+        ></div>
+
+        <p
+            id="ghStatus"
+            class="gh-status"
+            aria-live="polite"
+        ></p>
+
     </div>
-</div>
+
+
+    <!-- ========================================================
+         ДРУЗЬЯ
+         ======================================================== -->
 
     <div class="block card">
-        <h3>🏆 <span class="i18n" data-en="Achievements">Достижения</span></h3>
-        <div class="ach"><span>🥇</span><span>
-            <b class="i18n" data-en="Winner's Diploma — &quot;Legacy of Outstanding Entrepreneurs of Russia&quot;">Диплом победителя — «Наследие выдающихся предпринимателей России»</b>
-            <small class="i18n" data-en="All-Russian competition on the history of entrepreneurship. Finalist of the regional stage in Tver.">Всероссийский конкурс по истории предпринимательства. Финалист регионального этапа в Твери.</small></span></div>
-        <div class="ach"><span>📜</span><span>
-            <b class="i18n" data-en="Participant Certificate — &quot;Through the Pages of the Great Victory&quot;">Сертификат участника — «По страницам Великой Победы»</b>
-            <small class="i18n" data-en="Team intellectual game dedicated to the 80th anniversary of Victory in the Great Patriotic War 1941–1945.">Командная интеллектуальная игра к 80-летию Победы в Великой Отечественной войне 1941–1945.</small></span></div>
-        <div class="ach"><span>🥇</span><span>
-            <b class="i18n" data-en="Winner's Diploma — &quot;Scarlet Sails&quot;">Диплом победителя — «Алые паруса»</b>
-            <small class="i18n" data-en="Winner of the All-Russian distance Olympiad in Physics among students of professional educational organizations.">Победитель Всероссийской дистанционной олимпиады по физике среди студентов профессиональных образовательных организаций.</small></span></div>
+
+        <h3>
+            🤝
+            <span
+                class="i18n"
+                data-en="Friends &amp; Brothers"
+            >
+                Друзья и братья
+            </span>
+        </h3>
+
+        <div class="friends">
+
+            <span>🛡️ Tverd</span>
+
+            <span>⚡ Yonkia</span>
+
+            <span>🔥 Koivo</span>
+
+            <span>
+                🌊
+                <a
+                    class="friend-link"
+                    href="https://b0o0q.github.io/qwq.github.io/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Femadoria
+                </a>
+            </span>
+
+        </div>
     </div>
+
+
+    <!-- ========================================================
+         ДОСТИЖЕНИЯ
+         ======================================================== -->
+
+    <div class="block card">
+
+        <h3>
+            🏆
+            <span
+                class="i18n"
+                data-en="Achievements"
+            >
+                Достижения
+            </span>
+        </h3>
+
+        <div class="ach">
+
+            <span>🥇</span>
+
+            <span>
+                <b
+                    class="i18n"
+                    data-en="Winner's Diploma — &quot;Legacy of Outstanding Entrepreneurs of Russia&quot;"
+                >
+                    Диплом победителя — «Наследие выдающихся предпринимателей России»
+                </b>
+
+                <small
+                    class="i18n"
+                    data-en="All-Russian competition on the history of entrepreneurship. Finalist of the regional stage in Tver."
+                >
+                    Всероссийский конкурс по истории предпринимательства.
+                    Финалист регионального этапа в Твери.
+                </small>
+            </span>
+
+        </div>
+
+
+        <div class="ach">
+
+            <span>📜</span>
+
+            <span>
+                <b
+                    class="i18n"
+                    data-en="Participant Certificate — &quot;Through the Pages of the Great Victory&quot;"
+                >
+                    Сертификат участника — «По страницам Великой Победы»
+                </b>
+
+                <small
+                    class="i18n"
+                    data-en="Team intellectual game dedicated to the 80th anniversary of Victory in the Great Patriotic War 1941–1945."
+                >
+                    Командная интеллектуальная игра к 80-летию
+                    Победы в Великой Отечественной войне 1941–1945.
+                </small>
+            </span>
+
+        </div>
+
+
+        <div class="ach">
+
+            <span>🥇</span>
+
+            <span>
+                <b
+                    class="i18n"
+                    data-en="Winner's Diploma — &quot;Scarlet Sails&quot;"
+                >
+                    Диплом победителя — «Алые паруса»
+                </b>
+
+                <small
+                    class="i18n"
+                    data-en="Winner of the All-Russian distance Olympiad in Physics among students of professional educational organizations."
+                >
+                    Победитель Всероссийской дистанционной олимпиады
+                    по физике среди студентов профессиональных
+                    образовательных организаций.
+                </small>
+            </span>
+
+        </div>
+
+    </div>
+
 </section>
 
-<!-- ВИКИ -->
+
+<!-- ============================================================
+     ВИКИ
+     ============================================================ -->
+
 <section class="tab" id="tab-wiki">
+
     <div class="hero">
-        <h2>📚 <span class="i18n grad" data-en="My Wiki">Моя Вики</span></h2>
-        <p class="i18n" data-en="All projects, ideas and developments">Все проекты, идеи и разработки</p>
+
+        <h2>
+            📚
+            <span
+                class="i18n grad"
+                data-en="My Wiki"
+            >
+                Моя Вики
+            </span>
+        </h2>
+
+        <p
+            class="i18n"
+            data-en="All projects, ideas and developments"
+        >
+            Все проекты, идеи и разработки
+        </p>
+
     </div>
 
-    <div class="wiki-entry card reveal" onclick="switchTab('project-roza')">
+
+    <div
+        class="wiki-entry card reveal"
+        onclick="switchTab('project-roza')"
+    >
+
         <div class="top-row">
-            <div class="ico"><img src="gim/rozaos.png" alt="Roza OS" /></div>
-            <div><div class="pname">Roza OS</div><span class="sub">Private Linux OS Project</span></div>
-            <span class="badge" style="border-color:var(--a3);color:var(--a3)">🔒 <span class="i18n" data-en="Classified">Засекречено</span></span>
+
+            <div class="ico">
+                <img
+                    src="gim/rozaos.png"
+                    alt="Roza OS"
+                />
+            </div>
+
+            <div>
+                <div class="pname">
+                    Roza OS
+                </div>
+
+                <span class="sub">
+                    Private Linux OS Project
+                </span>
+            </div>
+
+            <span
+                class="badge"
+                style="border-color:var(--a3);color:var(--a3)"
+            >
+                🔒
+                <span
+                    class="i18n"
+                    data-en="Classified"
+                >
+                    Засекречено
+                </span>
+            </span>
+
         </div>
-        <p class="i18n" data-en="A private operating system project. Technical information is currently classified.">Закрытый проект операционной системы. Техническая информация пока засекречена.</p>
-        <div class="tags"><span class="tag">Roza OS</span><span class="tag">Linux</span><span class="tag">Private Project</span><span class="tag pink">Coalition Iron Will</span></div>
+
+        <p
+            class="i18n"
+            data-en="A private operating system project. Technical information is currently classified."
+        >
+            Закрытый проект операционной системы.
+            Техническая информация пока засекречена.
+        </p>
+
+        <div class="tags">
+            <span class="tag">Roza OS</span>
+            <span class="tag">Linux</span>
+            <span class="tag">Private Project</span>
+            <span class="tag pink">Coalition Iron Will</span>
+        </div>
+
     </div>
 
-    <div class="wiki-entry card" onclick="switchTab('project-solarium')">
+
+    <div
+        class="wiki-entry card reveal"
+        onclick="switchTab('project-solarium')"
+    >
+
         <div class="top-row">
+
             <div class="ico">☽</div>
-            <div><div class="pname">World of Kosarh</div><span class="sub">Mod for Hearts of Iron IV</span></div>
-            <span class="badge frozen">❄️ <span class="i18n" data-en="Frozen">Заморожен</span></span>
+
+            <div>
+                <div class="pname">
+                    World of Kosarh
+                </div>
+
+                <span class="sub">
+                    Mod for Hearts of Iron IV
+                </span>
+            </div>
+
+            <span class="badge frozen">
+                ❄️
+                <span
+                    class="i18n"
+                    data-en="Frozen"
+                >
+                    Заморожен
+                </span>
+            </span>
+
         </div>
-        <p class="i18n" data-en="Mod for Hearts of Iron IV with unique states and alternative history.">Мод для Hearts of Iron IV с уникальными государствами и альтернативной историей.</p>
-        <div class="tags"><span class="tag">HOI4</span><span class="tag">Mod</span><span class="tag">Alternative history</span><span class="tag pink">Coalition Iron Will</span></div>
+
+        <p
+            class="i18n"
+            data-en="Mod for Hearts of Iron IV with unique states and alternative history."
+        >
+            Мод для Hearts of Iron IV с уникальными государствами
+            и альтернативной историей.
+        </p>
+
+        <div class="tags">
+            <span class="tag">HOI4</span>
+            <span class="tag">Mod</span>
+            <span class="tag">Alternative history</span>
+            <span class="tag pink">Coalition Iron Will</span>
+        </div>
+
     </div>
 
-    <div class="wiki-entry card" onclick="switchTab('project-blackorder')">
+
+    <div
+        class="wiki-entry card reveal"
+        onclick="switchTab('project-blackorder')"
+    >
+
         <div class="top-row">
+
             <div class="ico">🖤</div>
-            <div><div class="pname">Special Army "Black Order"</div><span class="sub">RP Faction in BRM 5</span></div>
-            <span class="badge frozen">❄️ <span class="i18n" data-en="Frozen">Заморожен</span></span>
+
+            <div>
+                <div class="pname">
+                    Special Army "Black Order"
+                </div>
+
+                <span class="sub">
+                    RP Faction in BRM 5
+                </span>
+            </div>
+
+            <span class="badge frozen">
+                ❄️
+                <span
+                    class="i18n"
+                    data-en="Frozen"
+                >
+                    Заморожен
+                </span>
+            </span>
+
         </div>
-        <p class="i18n" data-en="Elite military unit in BRM 5 — a faction for experienced players.">Элитное военное подразделение в BRM 5 — фракция для опытных игроков.</p>
-        <div class="tags"><span class="tag">BRM 5</span><span class="tag">RP Faction</span><span class="tag pink">Coalition Iron Will</span></div>
+
+        <p
+            class="i18n"
+            data-en="Elite military unit in BRM 5 — a faction for experienced players."
+        >
+            Элитное военное подразделение в BRM 5 —
+            фракция для опытных игроков.
+        </p>
+
+        <div class="tags">
+            <span class="tag">BRM 5</span>
+            <span class="tag">RP Faction</span>
+            <span class="tag pink">Coalition Iron Will</span>
+        </div>
+
     </div>
 
-    <div class="wiki-entry card" onclick="switchTab('project-coalition')" style="border-color:var(--green)">
+
+    <div
+        class="wiki-entry card reveal"
+        onclick="switchTab('project-coalition')"
+        style="border-color:var(--green)"
+    >
+
         <div class="top-row">
+
             <div class="ico">⚔️</div>
-            <div><div class="pname">Coalition Iron Will</div><span class="sub">Alliance of close friends and companions</span></div>
-            <span class="badge active">🟢 <span class="i18n" data-en="Active">Активен</span></span>
+
+            <div>
+                <div class="pname">
+                    Coalition Iron Will
+                </div>
+
+                <span class="sub">
+                    Alliance of close friends and companions
+                </span>
+            </div>
+
+            <span class="badge active">
+                🟢
+                <span
+                    class="i18n"
+                    data-en="Active"
+                >
+                    Активен
+                </span>
+            </span>
+
         </div>
-        <p class="i18n" data-en="Brotherhood of like-minded people united by common goals and values.">Братство единомышленников, объединённых общими целями и ценностями.</p>
-        <div class="tags"><span class="tag gold">Alliance</span><span class="tag pink">Friends</span><span class="tag pink">Companions</span><span class="tag green">Coalition Iron Will</span></div>
+
+        <p
+            class="i18n"
+            data-en="Brotherhood of like-minded people united by common goals and values."
+        >
+            Братство единомышленников,
+            объединённых общими целями и ценностями.
+        </p>
+
+        <div class="tags">
+            <span class="tag gold">Alliance</span>
+            <span class="tag pink">Friends</span>
+            <span class="tag pink">Companions</span>
+            <span class="tag green">Coalition Iron Will</span>
+        </div>
+
     </div>
+
 </section>
 
-<!-- Roza OS -->
+
+<!-- ============================================================
+     ROZA OS
+     ============================================================ -->
+
 <section class="tab" id="tab-project-roza">
-    <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki">Назад к вики</span></a>
+
+    <a
+        class="back"
+        onclick="switchTab('wiki')"
+    >
+        ←
+        <span
+            class="i18n"
+            data-en="Back to wiki"
+        >
+            Назад к вики
+        </span>
+    </a>
+
 
     <div class="header-info">
-        <div class="ico"><img src="gim/rozaos.png" alt="Roza OS" /></div>
+
+        <div class="ico">
+            <img
+                src="gim/rozaos.png"
+                alt="Roza OS"
+            />
+        </div>
+
         <div>
-            <div class="pname">Roza OS <span class="sub">Private Linux OS Project</span></div>
-            <span class="badge" style="border-color:var(--a3);color:var(--a3)">🔒 <span class="i18n" data-en="Classified">Засекречено</span></span>
+
+            <div class="pname">
+                Roza OS
+                <span class="sub">
+                    Private Linux OS Project
+                </span>
+            </div>
+
+            <span
+                class="badge"
+                style="border-color:var(--a3);color:var(--a3)"
+            >
+                🔒
+                <span
+                    class="i18n"
+                    data-en="Classified"
+                >
+                    Засекречено
+                </span>
+            </span>
+
             <div class="tags">
                 <span class="tag">Roza OS</span>
                 <span class="tag">Linux</span>
                 <span class="tag">Private Project</span>
                 <span class="tag pink">Coalition Iron Will</span>
             </div>
+
         </div>
+
     </div>
+
 
     <div class="roza-layout">
+
         <aside class="roza-sidebar card">
-            <div class="roza-side-title">🌹 Roza OS</div>
-            <button class="roza-link active" onclick="showRozaSection('overview', this)">📋 <span class="i18n" data-en="Overview">Обзор</span></button>
-            <button class="roza-link" onclick="showRozaSection('architecture', this)">⚙️ <span class="i18n" data-en="Architecture">Архитектура</span></button>
-            <button class="roza-link" onclick="showRozaSection('desktop', this)">🖥️ <span class="i18n" data-en="Desktop">Рабочее окружение</span></button>
-            <button class="roza-link" onclick="showRozaSection('packages', this)">📦 <span class="i18n" data-en="Packages">Пакеты</span></button>
-            <button class="roza-link" onclick="showRozaSection('security', this)">🛡️ <span class="i18n" data-en="Security">Безопасность</span></button>
-            <button class="roza-link" onclick="showRozaSection('development', this)">🛠️ <span class="i18n" data-en="Development">Разработка</span></button>
-            <button class="roza-link" onclick="showRozaSection('releases', this)">🚀 <span class="i18n" data-en="Releases">Релизы</span></button>
-            <button class="roza-link" onclick="showRozaSection('faq', this)">❓ FAQ</span></button>
+
+            <div class="roza-side-title">
+                🌹 Roza OS
+            </div>
+
+            <button
+                class="roza-link active"
+                onclick="showRozaSection('overview', this)"
+            >
+                📋
+                <span
+                    class="i18n"
+                    data-en="Overview"
+                >
+                    Обзор
+                </span>
+            </button>
+
+            <button
+                class="roza-link"
+                onclick="showRozaSection('architecture', this)"
+            >
+                ⚙️
+                <span
+                    class="i18n"
+                    data-en="Architecture"
+                >
+                    Архитектура
+                </span>
+            </button>
+
+            <button
+                class="roza-link"
+                onclick="showRozaSection('desktop', this)"
+            >
+                🖥️
+                <span
+                    class="i18n"
+                    data-en="Desktop"
+                >
+                    Рабочее окружение
+                </span>
+            </button>
+
+            <button
+                class="roza-link"
+                onclick="showRozaSection('packages', this)"
+            >
+                📦
+                <span
+                    class="i18n"
+                    data-en="Packages"
+                >
+                    Пакеты
+                </span>
+            </button>
+
+            <button
+                class="roza-link"
+                onclick="showRozaSection('security', this)"
+            >
+                🛡️
+                <span
+                    class="i18n"
+                    data-en="Security"
+                >
+                    Безопасность
+                </span>
+            </button>
+
+            <button
+                class="roza-link"
+                onclick="showRozaSection('development', this)"
+            >
+                🛠️
+                <span
+                    class="i18n"
+                    data-en="Development"
+                >
+                    Разработка
+                </span>
+            </button>
+
+            <button
+                class="roza-link"
+                onclick="showRozaSection('releases', this)"
+            >
+                🚀
+                <span
+                    class="i18n"
+                    data-en="Releases"
+                >
+                    Релизы
+                </span>
+            </button>
+
+            <button
+                class="roza-link"
+                onclick="showRozaSection('faq', this)"
+            >
+                ❓
+                <span
+                    class="i18n"
+                    data-en="FAQ"
+                >
+                    FAQ
+                </span>
+            </button>
+
         </aside>
 
+
         <div class="roza-content">
-            <div class="roza-page active" id="roza-overview">
+
+            <div
+                class="roza-page active"
+                id="roza-overview"
+            >
+
                 <div class="info-grid">
+
                     <div class="info-box card">
-                        <h4>📋 <span class="i18n" data-en="General Information">Общая информация</span></h4>
+
+                        <h4>
+                            📋
+                            <span
+                                class="i18n"
+                                data-en="General Information"
+                            >
+                                Общая информация
+                            </span>
+                        </h4>
+
                         <div class="body">
-                            <div><span class="label i18n" data-en="Status">Статус</span><span class="value">🔒 <span class="i18n" data-en="Classified">Засекречено</span></span></div>
-                            <div><span class="label i18n" data-en="Type">Тип</span><span class="value i18n" data-en="Operating System">Операционная система</span></div>
-                            <div><span class="label i18n" data-en="Platform">Платформа</span><span class="value">Linux</span></div>
-                            <div><span class="label i18n" data-en="Base">Основа</span><span class="value">Debian</span></div>
-                            <div><span class="label i18n" data-en="Desktop">Окружение</span><span class="value">XFCE</span></div>
-                            <div><span class="label i18n" data-en="License">Лицензия</span><span class="value">GPL</span></div>
+
+                            <div>
+                                <span
+                                    class="label i18n"
+                                    data-en="Status"
+                                >
+                                    Статус
+                                </span>
+
+                                <span class="value">
+                                    🔒
+                                    <span
+                                        class="i18n"
+                                        data-en="Classified"
+                                    >
+                                        Засекречено
+                                    </span>
+                                </span>
+                            </div>
+
+                            <div>
+                                <span
+                                    class="label i18n"
+                                    data-en="Type"
+                                >
+                                    Тип
+                                </span>
+
+                                <span
+                                    class="value i18n"
+                                    data-en="Operating System"
+                                >
+                                    Операционная система
+                                </span>
+                            </div>
+
+                            <div>
+                                <span
+                                    class="label i18n"
+                                    data-en="Platform"
+                                >
+                                    Платформа
+                                </span>
+
+                                <span class="value">
+                                    Linux
+                                </span>
+                            </div>
+
+                            <div>
+                                <span
+                                    class="label i18n"
+                                    data-en="Base"
+                                >
+                                    Основа
+                                </span>
+
+                                <span class="value">
+                                    Debian
+                                </span>
+                            </div>
+
+                            <div>
+                                <span
+                                    class="label i18n"
+                                    data-en="Desktop"
+                                >
+                                    Окружение
+                                </span>
+
+                                <span class="value">
+                                    XFCE
+                                </span>
+                            </div>
+
+                            <div>
+                                <span
+                                    class="label i18n"
+                                    data-en="License"
+                                >
+                                    Лицензия
+                                </span>
+
+                                <span class="value">
+                                    GPL
+                                </span>
+                            </div>
+
                         </div>
                     </div>
+
+
                     <div class="info-box card">
-                        <h4>🔐 <span class="i18n" data-en="Classified Information">Засекреченная информация</span></h4>
+
+                        <h4>
+                            🔐
+                            <span
+                                class="i18n"
+                                data-en="Classified Information"
+                            >
+                                Засекреченная информация
+                            </span>
+                        </h4>
+
                         <div class="body">
-                            <p><strong>Roza OS</strong> — <span class="i18n" data-en="a private operating system project.">закрытый проект операционной системы.</span></p>
-                            <p>🔒 <span class="i18n" data-en="Internal architecture, custom components and technical documentation are currently classified.">Внутренняя архитектура, собственные компоненты и техническая документация пока засекречены.</span></p>
-                            <p>📁 <span class="i18n" data-en="More information will be published as the project becomes ready.">Дополнительная информация будет опубликована по мере готовности проекта.</span></p>
+
+                            <p>
+                                <strong>Roza OS</strong> —
+                                <span
+                                    class="i18n"
+                                    data-en="a private operating system project."
+                                >
+                                    закрытый проект операционной системы.
+                                </span>
+                            </p>
+
+                            <p>
+                                🔒
+                                <span
+                                    class="i18n"
+                                    data-en="Internal architecture, custom components and technical documentation are currently classified."
+                                >
+                                    Внутренняя архитектура,
+                                    собственные компоненты и техническая документация
+                                    пока засекречены.
+                                </span>
+                            </p>
+
+                            <p>
+                                📁
+                                <span
+                                    class="i18n"
+                                    data-en="More information will be published as the project becomes ready."
+                                >
+                                    Дополнительная информация будет опубликована
+                                    по мере готовности проекта.
+                                </span>
+                            </p>
+
                         </div>
                     </div>
+
                 </div>
+
+
                 <div class="block card">
-                    <h3>🖥️ <span class="i18n" data-en="System Overview">Обзор системы</span></h3>
+
+                    <h3>
+                        🖥️
+                        <span
+                            class="i18n"
+                            data-en="System Overview"
+                        >
+                            Обзор системы
+                        </span>
+                    </h3>
+
                     <div class="block-text">
-                        <p><strong>Roza OS</strong> — <span class="i18n" data-en="a planned Linux operating system project based on Debian with XFCE.">планируемый проект операционной системы на базе Linux, Debian и XFCE.</span></p>
-                        <p>🔒 <span class="i18n" data-en="Further technical details are classified.">Остальные технические детали засекречены.</span></p>
+
+                        <p>
+                            <strong>Roza OS</strong> —
+                            <span
+                                class="i18n"
+                                data-en="a planned Linux operating system project based on Debian with XFCE."
+                            >
+                                планируемый проект операционной системы
+                                на базе Linux, Debian и XFCE.
+                            </span>
+                        </p>
+
+                        <p>
+                            🔒
+                            <span
+                                class="i18n"
+                                data-en="Further technical details are classified."
+                            >
+                                Остальные технические детали засекречены.
+                            </span>
+                        </p>
+
                     </div>
                 </div>
+
             </div>
 
-            <div class="roza-page" id="roza-architecture">
-                <div class="block card"><h3>⚙️ <span class="i18n" data-en="Architecture">Архитектура</span></h3><div class="block-text">
-                    <p>🔒 <strong>Kernel:</strong> <span class="i18n" data-en="classified">засекречено</span></p>
-                    <p>🔒 <strong>System architecture:</strong> <span class="i18n" data-en="classified">засекречено</span></p>
-                    <p>🔒 <strong>Custom components:</strong> <span class="i18n" data-en="classified">засекречено</span></p>
-                </div></div>
-            </div>
 
-            <div class="roza-page" id="roza-desktop">
-                <div class="block card"><h3>🖥️ <span class="i18n" data-en="Desktop Environment">Рабочее окружение</span></h3><div class="block-text">
-                    <p>XFCE — <span class="i18n" data-en="the planned desktop environment for Roza OS.">планируемое рабочее окружение Roza OS.</span></p>
-                    <p>🔒 <span class="i18n" data-en="Theme, customizations and interface details are classified.">Тема, модификации и детали интерфейса засекречены.</span></p>
-                </div></div>
-            </div>
+            <div
+                class="roza-page"
+                id="roza-architecture"
+            >
 
-            <div class="roza-page" id="roza-packages">
-                <div class="block card"><h3>📦 <span class="i18n" data-en="Packages and Software">Пакеты и программное обеспечение</span></h3><div class="block-text">
-                    <p>🔒 <span class="i18n" data-en="The final package set has not been publicly announced.">Финальный набор пакетов пока публично не объявлен.</span></p>
-                    <p>🔒 <span class="i18n" data-en="Package selection and custom software details are classified.">Выбор пакетов и детали собственного ПО засекречены.</span></p>
-                </div></div>
-            </div>
-
-            <div class="roza-page" id="roza-security">
-                <div class="block card"><h3>🛡️ <span class="i18n" data-en="Security">Безопасность</span></h3><div class="block-text">
-                    <p>🔒 <span class="i18n" data-en="Security model and hardening details are currently classified.">Модель безопасности и детали защиты пока засекречены.</span></p>
-                    <p>🔐 <span class="i18n" data-en="Public security documentation will be added when available.">Публичная документация по безопасности появится позже.</span></p>
-                </div></div>
-            </div>
-
-            <div class="roza-page" id="roza-development">
-                <div class="block card"><h3>🛠️ <span class="i18n" data-en="Development">Разработка</span></h3><div class="block-text">
-                    <p>🔵 <strong><span class="i18n" data-en="Status">Статус</span>:</strong> <span class="i18n" data-en="Planning / preparation">Планирование / подготовка</span></p>
-                    <p>🔒 <strong><span class="i18n" data-en="Roadmap">Дорожная карта</span>:</strong> <span class="i18n" data-en="classified">засекречена</span></p>
-                    <p>🧪 <strong><span class="i18n" data-en="Testing">Тестирование</span>:</strong> <span class="i18n" data-en="not publicly available">публично недоступно</span></p>
-                </div></div>
-            </div>
-
-            <div class="roza-page" id="roza-releases">
                 <div class="block card">
-                    <h3>🚀 <span class="i18n" data-en="Releases">Релизы</span></h3>
+
+                    <h3>
+                        ⚙️
+                        <span
+                            class="i18n"
+                            data-en="Architecture"
+                        >
+                            Архитектура
+                        </span>
+                    </h3>
+
                     <div class="block-text">
-                        <p>📦 <strong>Roza OS — Pre-release</strong></p>
-                        <p>🔒 <span class="i18n" data-en="No public image is available yet.">Публичный образ пока недоступен.</span></p>
-                        <button class="roza-download" onclick="event.stopPropagation(); rozaNotReady()">⛔ <span class="i18n" data-en="Download image — not ready">Скачать образ — пока не готово</span></button>
+
+                        <p>
+                            🔒
+                            <strong>Kernel:</strong>
+                            <span
+                                class="i18n"
+                                data-en="classified"
+                            >
+                                засекречено
+                            </span>
+                        </p>
+
+                        <p>
+                            🔒
+                            <strong>System architecture:</strong>
+                            <span
+                                class="i18n"
+                                data-en="classified"
+                            >
+                                засекречено
+                            </span>
+                        </p>
+
+                        <p>
+                            🔒
+                            <strong>Custom components:</strong>
+                            <span
+                                class="i18n"
+                                data-en="classified"
+                            >
+                                засекречено
+                            </span>
+                        </p>
+
                     </div>
                 </div>
+
             </div>
 
-            <div class="roza-page" id="roza-faq">
-                <div class="block card"><h3>❓ FAQ</h3><div class="block-text">
-                    <p><strong>Когда выйдет Roza OS?</strong><br><span class="i18n" data-en="There is currently no public release date.">Публичной даты релиза пока нет.</span></p>
-                    <p><strong>Где скачать образ?</strong><br><span class="i18n" data-en="The image is not ready yet.">Образ пока не готов.</span></p>
-                    <p><strong>Почему информация закрыта?</strong><br><span class="i18n" data-en="Some project details are intentionally kept private until the project is ready for disclosure.">Часть информации намеренно остаётся закрытой до готовности проекта к публикации.</span></p>
-                </div></div>
+
+            <div
+                class="roza-page"
+                id="roza-desktop"
+            >
+
+                <div class="block card">
+
+                    <h3>
+                        🖥️
+                        <span
+                            class="i18n"
+                            data-en="Desktop Environment"
+                        >
+                            Рабочее окружение
+                        </span>
+                    </h3>
+
+                    <div class="block-text">
+
+                        <p>
+                            XFCE —
+                            <span
+                                class="i18n"
+                                data-en="the planned desktop environment for Roza OS."
+                            >
+                                планируемое рабочее окружение Roza OS.
+                            </span>
+                        </p>
+
+                        <p>
+                            🔒
+                            <span
+                                class="i18n"
+                                data-en="Theme, customizations and interface details are classified."
+                            >
+                                Тема, модификации и детали интерфейса
+                                засекречены.
+                            </span>
+                        </p>
+
+                    </div>
+                </div>
+
             </div>
+
+
+            <div
+                class="roza-page"
+                id="roza-packages"
+            >
+
+                <div class="block card">
+
+                    <h3>
+                        📦
+                        <span
+                            class="i18n"
+                            data-en="Packages and Software"
+                        >
+                            Пакеты и программное обеспечение
+                        </span>
+                    </h3>
+
+                    <div class="block-text">
+
+                        <p>
+                            🔒
+                            <span
+                                class="i18n"
+                                data-en="The final package set has not been publicly announced."
+                            >
+                                Финальный набор пакетов пока публично
+                                не объявлен.
+                            </span>
+                        </p>
+
+                        <p>
+                            🔒
+                            <span
+                                class="i18n"
+                                data-en="Package selection and custom software details are classified."
+                            >
+                                Выбор пакетов и детали собственного ПО
+                                засекречены.
+                            </span>
+                        </p>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div
+                class="roza-page"
+                id="roza-security"
+            >
+
+                <div class="block card">
+
+                    <h3>
+                        🛡️
+                        <span
+                            class="i18n"
+                            data-en="Security"
+                        >
+                            Безопасность
+                        </span>
+                    </h3>
+
+                    <div class="block-text">
+
+                        <p>
+                            🔒
+                            <span
+                                class="i18n"
+                                data-en="Security model and hardening details are currently classified."
+                            >
+                                Модель безопасности и детали защиты
+                                пока засекречены.
+                            </span>
+                        </p>
+
+                        <p>
+                            🔐
+                            <span
+                                class="i18n"
+                                data-en="Public security documentation will be added when available."
+                            >
+                                Публичная документация по безопасности
+                                появится позже.
+                            </span>
+                        </p>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div
+                class="roza-page"
+                id="roza-development"
+            >
+
+                <div class="block card">
+
+                    <h3>
+                        🛠️
+                        <span
+                            class="i18n"
+                            data-en="Development"
+                        >
+                            Разработка
+                        </span>
+                    </h3>
+
+                    <div class="block-text">
+
+                        <p>
+                            🔵
+                            <strong>
+                                <span
+                                    class="i18n"
+                                    data-en="Status"
+                                >
+                                    Статус
+                                </span>:
+                            </strong>
+
+                            <span
+                                class="i18n"
+                                data-en="Planning / preparation"
+                            >
+                                Планирование / подготовка
+                            </span>
+                        </p>
+
+                        <p>
+                            🔒
+                            <strong>
+                                <span
+                                    class="i18n"
+                                    data-en="Roadmap"
+                                >
+                                    Дорожная карта
+                                </span>:
+                            </strong>
+
+                            <span
+                                class="i18n"
+                                data-en="classified"
+                            >
+                                засекречена
+                            </span>
+                        </p>
+
+                        <p>
+                            🧪
+                            <strong>
+                                <span
+                                    class="i18n"
+                                    data-en="Testing"
+                                >
+                                    Тестирование
+                                </span>:
+                            </strong>
+
+                            <span
+                                class="i18n"
+                                data-en="not publicly available"
+                            >
+                                публично недоступно
+                            </span>
+                        </p>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div
+                class="roza-page"
+                id="roza-releases"
+            >
+
+                <div class="block card">
+
+                    <h3>
+                        🚀
+                        <span
+                            class="i18n"
+                            data-en="Releases"
+                        >
+                            Релизы
+                        </span>
+                    </h3>
+
+                    <div class="block-text">
+
+                        <p>
+                            📦
+                            <strong>
+                                Roza OS — Pre-release
+                            </strong>
+                        </p>
+
+                        <p>
+                            🔒
+                            <span
+                                class="i18n"
+                                data-en="No public image is available yet."
+                            >
+                                Публичный образ пока недоступен.
+                            </span>
+                        </p>
+
+                        <button
+                            class="roza-download"
+                            onclick="event.stopPropagation(); rozaNotReady()"
+                        >
+                            ⛔
+                            <span
+                                class="i18n"
+                                data-en="Download image — not ready"
+                            >
+                                Скачать образ — пока не готово
+                            </span>
+                        </button>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div
+                class="roza-page"
+                id="roza-faq"
+            >
+
+                <div class="block card">
+
+                    <h3>
+                        ❓ FAQ
+                    </h3>
+
+                    <div class="block-text">
+
+                        <p>
+                            <strong>
+                                Когда выйдет Roza OS?
+                            </strong>
+                            <br />
+
+                            <span
+                                class="i18n"
+                                data-en="There is currently no public release date."
+                            >
+                                Публичной даты релиза пока нет.
+                            </span>
+                        </p>
+
+                        <p>
+                            <strong>
+                                Где скачать образ?
+                            </strong>
+                            <br />
+
+                            <span
+                                class="i18n"
+                                data-en="The image is not ready yet."
+                            >
+                                Образ пока не готов.
+                            </span>
+                        </p>
+
+                        <p>
+                            <strong>
+                                Почему информация закрыта?
+                            </strong>
+                            <br />
+
+                            <span
+                                class="i18n"
+                                data-en="Some project details are intentionally kept private until the project is ready for disclosure."
+                            >
+                                Часть информации намеренно остаётся закрытой
+                                до готовности проекта к публикации.
+                            </span>
+                        </p>
+
+                    </div>
+                </div>
+
+            </div>
+
 
             <div class="block card roza-back-card">
-                <button class="roza-back-button" onclick="switchTab('wiki')">← <span class="i18n" data-en="Return to Wiki">Вернуться в Вики</span></button>
+
+                <button
+                    class="roza-back-button"
+                    onclick="switchTab('wiki')"
+                >
+                    ←
+                    <span
+                        class="i18n"
+                        data-en="Return to Wiki"
+                    >
+                        Вернуться в Вики
+                    </span>
+                </button>
+
             </div>
+
         </div>
     </div>
+
 </section>
 
-<!-- Solarium Umbris -->
-<section class="tab" id="tab-project-solarium">
-    <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki">Назад к вики</span></a>
+
+<!-- ============================================================
+     WORLD OF KOSARH / HOI4
+     ============================================================ -->
+
+<section
+    class="tab"
+    id="tab-project-solarium"
+>
+
+    <a
+        class="back"
+        onclick="switchTab('wiki')"
+    >
+        ←
+        <span
+            class="i18n"
+            data-en="Back to wiki"
+        >
+            Назад к вики
+        </span>
+    </a>
+
+
     <div class="header-info">
-        <div class="ico">☽</div>
+
+        <div class="ico">
+            ☽
+        </div>
+
         <div>
-            <div class="pname">Solarium Umbris <span class="sub">Mod for Hearts of Iron IV</span></div>
-            <span class="badge frozen">❄️ <span class="i18n" data-en="Frozen">Заморожен</span></span>
-            <div class="tags"><span class="tag">HOI4</span><span class="tag">Mod</span><span class="tag">Alternative history</span><span class="tag pink">Coalition Iron Will</span></div>
+
+            <div class="pname">
+                World of Kosarh
+                <span class="sub">
+                    Mod for Hearts of Iron IV
+                </span>
+            </div>
+
+            <span class="badge frozen">
+                ❄️
+                <span
+                    class="i18n"
+                    data-en="Frozen"
+                >
+                    Заморожен
+                </span>
+            </span>
+
+            <div class="tags">
+                <span class="tag">HOI4</span>
+                <span class="tag">Mod</span>
+                <span class="tag">Alternative history</span>
+                <span class="tag pink">Coalition Iron Will</span>
+            </div>
+
         </div>
+
     </div>
+
+
     <div class="info-grid">
+
         <div class="info-box card">
-            <h4>📋 <span class="i18n" data-en="Information">Информация</span></h4>
+
+            <h4>
+                📋
+                <span
+                    class="i18n"
+                    data-en="Information"
+                >
+                    Информация
+                </span>
+            </h4>
+
             <div class="body">
-                <div><span class="label i18n" data-en="Status">Статус</span><span class="value">❄️ <span class="i18n" data-en="Frozen">Заморожен</span></span></div>
-                <div><span class="label i18n" data-en="Game">Игра</span><span class="value">Hearts of Iron IV</span></div>
-                <div><span class="label i18n" data-en="Countries">Стран</span><span class="value">7</span></div>
-                <div><span class="label i18n" data-en="Ideologies">Идеологий</span><span class="value">10+</span></div>
-                <div><span class="label i18n" data-en="Team">Команда</span><span class="value">Coalition Iron Will</span></div>
+
+                <div>
+                    <span
+                        class="label i18n"
+                        data-en="Status"
+                    >
+                        Статус
+                    </span>
+
+                    <span class="value">
+                        ❄️
+                        <span
+                            class="i18n"
+                            data-en="Frozen"
+                        >
+                            Заморожен
+                        </span>
+                    </span>
+                </div>
+
+                <div>
+                    <span
+                        class="label i18n"
+                        data-en="Game"
+                    >
+                        Игра
+                    </span>
+
+                    <span class="value">
+                        Hearts of Iron IV
+                    </span>
+                </div>
+
+                <div>
+                    <span
+                        class="label i18n"
+                        data-en="Countries"
+                    >
+                        Стран
+                    </span>
+
+                    <span class="value">
+                        7
+                    </span>
+                </div>
+
+                <div>
+                    <span
+                        class="label i18n"
+                        data-en="Ideologies"
+                    >
+                        Идеологий
+                    </span>
+
+                    <span class="value">
+                        10+
+                    </span>
+                </div>
+
+                <div>
+                    <span
+                        class="label i18n"
+                        data-en="Team"
+                    >
+                        Команда
+                    </span>
+
+                    <span class="value">
+                        Coalition Iron Will
+                    </span>
+                </div>
+
             </div>
         </div>
+
+
         <div class="info-box card">
-            <h4>📖 <span class="i18n" data-en="Description">Описание</span></h4>
+
+            <h4>
+                📖
+                <span
+                    class="i18n"
+                    data-en="Description"
+                >
+                    Описание
+                </span>
+            </h4>
+
             <div class="body">
-                <p class="i18n" data-en="<strong>World of Kosarh</strong> — large-scale mod for Hearts of Iron IV."><strong>World of Kosarh</strong> — масштабный мод для Hearts of Iron IV.</p>
-                <p><strong class="i18n" data-en="What's inside:">Что внутри:</strong></p>
+
+                <p
+                    class="i18n"
+                    data-en="<strong>World of Kosarh</strong> — large-scale mod for Hearts of Iron IV."
+                >
+                    <strong>World of Kosarh</strong> —
+                    масштабный мод для Hearts of Iron IV.
+                </p>
+
+                <p>
+                    <strong
+                        class="i18n"
+                        data-en="What's inside:"
+                    >
+                        Что внутри:
+                    </strong>
+                </p>
+
                 <ul>
-                    <li>🌍 7 <span class="i18n" data-en="unique states">уникальных государств</span></li>
-                    <li>⚔️ 10+ <span class="i18n" data-en="ideologies">идеологий</span></li>
-                    <li>📜 <span class="i18n" data-en="Unique focuses and events">Уникальные фокусы и события</span></li>
-                    <li>👤 <span class="i18n" data-en="Custom leaders">Кастомные лидеры</span></li>
+
+                    <li>
+                        🌍 7
+                        <span
+                            class="i18n"
+                            data-en="unique states"
+                        >
+                            уникальных государств
+                        </span>
+                    </li>
+
+                    <li>
+                        ⚔️ 10+
+                        <span
+                            class="i18n"
+                            data-en="ideologies"
+                        >
+                            идеологий
+                        </span>
+                    </li>
+
+                    <li>
+                        📜
+                        <span
+                            class="i18n"
+                            data-en="Unique focuses and events"
+                        >
+                            Уникальные фокусы и события
+                        </span>
+                    </li>
+
+                    <li>
+                        👤
+                        <span
+                            class="i18n"
+                            data-en="Custom leaders"
+                        >
+                            Кастомные лидеры
+                        </span>
+                    </li>
+
                 </ul>
-                <p>❄️ <span class="i18n" data-en="Frozen.">Заморожен.</span></p>
+
+                <p>
+                    ❄️
+                    <span
+                        class="i18n"
+                        data-en="Frozen."
+                    >
+                        Заморожен.
+                    </span>
+                </p>
+
             </div>
         </div>
+
     </div>
+
 </section>
 
-<!-- Black Order -->
-<section class="tab" id="tab-project-blackorder">
-    <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki">Назад к вики</span></a>
+
+<!-- ============================================================
+     BLACK ORDER
+     ============================================================ -->
+
+<section
+    class="tab"
+    id="tab-project-blackorder"
+>
+
+    <a
+        class="back"
+        onclick="switchTab('wiki')"
+    >
+        ←
+        <span
+            class="i18n"
+            data-en="Back to wiki"
+        >
+            Назад к вики
+        </span>
+    </a>
+
+
     <div class="header-info">
-        <div class="ico">🖤</div>
+
+        <div class="ico">
+            🖤
+        </div>
+
         <div>
-            <div class="pname">Special Army "Black Order" <span class="sub">RP Faction in BRM 5</span></div>
-            <span class="badge frozen">❄️ <span class="i18n" data-en="Frozen">Заморожен</span></span>
-            <div class="tags"><span class="tag">BRM 5</span><span class="tag">RP Faction</span><span class="tag pink">Coalition Iron Will</span></div>
+
+            <div class="pname">
+                Special Army "Black Order"
+                <span class="sub">
+                    RP Faction in BRM 5
+                </span>
+            </div>
+
+            <span class="badge frozen">
+                ❄️
+                <span
+                    class="i18n"
+                    data-en="Frozen"
+                >
+                    Заморожен
+                </span>
+            </span>
+
+            <div class="tags">
+                <span class="tag">BRM 5</span>
+                <span class="tag">RP Faction</span>
+                <span class="tag pink">Coalition Iron Will</span>
+            </div>
+
         </div>
+
     </div>
+
+
     <div class="info-grid">
+
         <div class="info-box card">
-            <h4>📋 <span class="i18n" data-en="Information">Информация</span></h4>
+
+            <h4>
+                📋
+                <span
+                    class="i18n"
+                    data-en="Information"
+                >
+                    Информация
+                </span>
+            </h4>
+
             <div class="body">
-                <div><span class="label i18n" data-en="Status">Статус</span><span class="value">❄️ <span class="i18n" data-en="Frozen">Заморожен</span></span></div>
-                <div><span class="label i18n" data-en="Game">Игра</span><span class="value">BRM 5</span></div>
-                <div><span class="label i18n" data-en="Type">Тип</span><span class="value">RP Faction</span></div>
-                <div><span class="label i18n" data-en="Ideology">Идеология</span><span class="value i18n" data-en="Discipline, honor, professionalism">Дисциплина, честь, профессионализм</span></div>
-                <div><span class="label i18n" data-en="Team">Команда</span><span class="value">Coalition Iron Will</span></div>
+
+                <div>
+                    <span
+                        class="label i18n"
+                        data-en="Status"
+                    >
+                        Статус
+                    </span>
+
+                    <span class="value">
+                        ❄️
+                        <span
+                            class="i18n"
+                            data-en="Frozen"
+                        >
+                            Заморожен
+                        </span>
+                    </span>
+                </div>
+
+                <div>
+                    <span
+                        class="label i18n"
+                        data-en="Game"
+                    >
+                        Игра
+                    </span>
+
+                    <span class="value">
+                        BRM 5
+                    </span>
+                </div>
+
+                <div>
+                    <span
+                        class="label i18n"
+                        data-en="Type"
+                    >
+                        Тип
+                    </span>
+
+                    <span class="value">
+                        RP Faction
+                    </span>
+                </div>
+
+                <div>
+                    <span
+                        class="label i18n"
+                        data-en="Ideology"
+                    >
+                        Идеология
+                    </span>
+
+                    <span
+                        class="value i18n"
+                        data-en="Discipline, honor, professionalism"
+                    >
+                        Дисциплина, честь, профессионализм
+                    </span>
+                </div>
+
+                <div>
+                    <span
+                        class="label i18n"
+                        data-en="Team"
+                    >
+                        Команда
+                    </span>
+
+                    <span class="value">
+                        Coalition Iron Will
+                    </span>
+                </div>
+
             </div>
         </div>
+
+
         <div class="info-box card">
-            <h4>📖 <span class="i18n" data-en="Description">Описание</span></h4>
+
+            <h4>
+                📖
+                <span
+                    class="i18n"
+                    data-en="Description"
+                >
+                    Описание
+                </span>
+            </h4>
+
             <div class="body">
-                <p class="i18n" data-en="<strong>Special Army &quot;Black Order&quot;</strong> — elite faction in BRM 5 (Black Rock Multiplayer 5)."><strong>Special Army «Black Order»</strong> — элитная фракция в BRM 5 (Black Rock Multiplayer 5).</p>
-                <p><strong class="i18n" data-en="About the faction:">О фракции:</strong></p>
+
+                <p
+                    class="i18n"
+                    data-en="<strong>Special Army &quot;Black Order&quot;</strong> — elite faction in BRM 5 (Black Rock Multiplayer 5)."
+                >
+                    <strong>
+                        Special Army «Black Order»
+                    </strong>
+                    — элитная фракция в BRM 5
+                    (Black Rock Multiplayer 5).
+                </p>
+
+                <p>
+                    <strong
+                        class="i18n"
+                        data-en="About the faction:"
+                    >
+                        О фракции:
+                    </strong>
+                </p>
+
                 <ul>
-                    <li>🎯 <strong class="i18n" data-en="Mission:">Миссия:</strong> <span class="i18n" data-en="Complex tasks, order, protection">Сложные задачи, порядок, защита</span></li>
-                    <li>📜 <strong class="i18n" data-en="Ideology:">Идеология:</strong> <span class="i18n" data-en="Discipline, honor, professionalism">Дисциплина, честь, профессионализм</span></li>
+
+                    <li>
+                        🎯
+                        <strong
+                            class="i18n"
+                            data-en="Mission:"
+                        >
+                            Миссия:
+                        </strong>
+
+                        <span
+                            class="i18n"
+                            data-en="Complex tasks, order, protection"
+                        >
+                            Сложные задачи, порядок, защита
+                        </span>
+                    </li>
+
+                    <li>
+                        📜
+                        <strong
+                            class="i18n"
+                            data-en="Ideology:"
+                        >
+                            Идеология:
+                        </strong>
+
+                        <span
+                            class="i18n"
+                            data-en="Discipline, honor, professionalism"
+                        >
+                            Дисциплина, честь, профессионализм
+                        </span>
+                    </li>
+
                 </ul>
-                <p>❄️ <span class="i18n" data-en="Frozen.">Заморожен.</span></p>
+
+                <p>
+                    ❄️
+                    <span
+                        class="i18n"
+                        data-en="Frozen."
+                    >
+                        Заморожен.
+                    </span>
+                </p>
+
             </div>
         </div>
+
     </div>
+
 </section>
 
-<!-- Coalition Iron Will -->
-<section class="tab" id="tab-project-coalition">
-    <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki">Назад к вики</span></a>
+
+<!-- ============================================================
+     COALITION IRON WILL
+     ============================================================ -->
+
+<section
+    class="tab"
+    id="tab-project-coalition"
+>
+
+    <a
+        class="back"
+        onclick="switchTab('wiki')"
+    >
+        ←
+        <span
+            class="i18n"
+            data-en="Back to wiki"
+        >
+            Назад к вики
+        </span>
+    </a>
+
+
     <div class="header-info">
-        <div class="ico">⚔️</div>
+
+        <div class="ico">
+            ⚔️
+        </div>
+
         <div>
-            <div class="pname">Coalition Iron Will <span class="sub">Alliance of close friends and companions</span></div>
-            <span class="badge active">🟢 <span class="i18n" data-en="Active">Активен</span></span>
-            <div class="tags"><span class="tag gold">Alliance</span><span class="tag pink">Friends</span><span class="tag pink">Companions</span><span class="tag green">Coalition Iron Will</span></div>
+
+            <div class="pname">
+                Coalition Iron Will
+                <span class="sub">
+                    Alliance of close friends and companions
+                </span>
+            </div>
+
+            <span class="badge active">
+                🟢
+                <span
+                    class="i18n"
+                    data-en="Active"
+                >
+                    Активен
+                </span>
+            </span>
+
+            <div class="tags">
+                <span class="tag gold">Alliance</span>
+                <span class="tag pink">Friends</span>
+                <span class="tag pink">Companions</span>
+                <span class="tag green">Coalition Iron Will</span>
+            </div>
+
         </div>
+
     </div>
+
+
     <div class="info-grid">
+
         <div class="info-box card">
-            <h4>📋 <span class="i18n" data-en="Information">Информация</span></h4>
+
+            <h4>
+                📋
+                <span
+                    class="i18n"
+                    data-en="Information"
+                >
+                    Информация
+                </span>
+            </h4>
+
             <div class="body">
-                <div><span class="label i18n" data-en="Status">Статус</span><span class="value">🟢 <span class="i18n" data-en="Active">Активен</span></span></div>
-                <div><span class="label i18n" data-en="Type">Тип</span><span class="value i18n" data-en="Alliance / Brotherhood">Альянс / Братство</span></div>
-                <div><span class="label i18n" data-en="Founded">Основана</span><span class="value">2024</span></div>
-                <div><span class="label i18n" data-en="Values">Ценности</span><span class="value i18n" data-en="Friendship, solidarity, creativity">Дружба, солидарность, творчество</span></div>
+
+                <div>
+                    <span
+                        class="label i18n"
+                        data-en="Status"
+                    >
+                        Статус
+                    </span>
+
+                    <span class="value">
+                        🟢
+                        <span
+                            class="i18n"
+                            data-en="Active"
+                        >
+                            Активен
+                        </span>
+                    </span>
+                </div>
+
+                <div>
+                    <span
+                        class="label i18n"
+                        data-en="Type"
+                    >
+                        Тип
+                    </span>
+
+                    <span
+                        class="value i18n"
+                        data-en="Alliance / Brotherhood"
+                    >
+                        Альянс / Братство
+                    </span>
+                </div>
+
+                <div>
+                    <span
+                        class="label i18n"
+                        data-en="Founded"
+                    >
+                        Основана
+                    </span>
+
+                    <span class="value">
+                        2024
+                    </span>
+                </div>
+
+                <div>
+                    <span
+                        class="label i18n"
+                        data-en="Values"
+                    >
+                        Ценности
+                    </span>
+
+                    <span
+                        class="value i18n"
+                        data-en="Friendship, solidarity, creativity"
+                    >
+                        Дружба, солидарность, творчество
+                    </span>
+                </div>
+
             </div>
         </div>
+
+
         <div class="info-box card">
-            <h4>📖 <span class="i18n" data-en="Description">Описание</span></h4>
+
+            <h4>
+                📖
+                <span
+                    class="i18n"
+                    data-en="Description"
+                >
+                    Описание
+                </span>
+            </h4>
+
             <div class="body">
-                <p class="i18n" data-en="<strong>Coalition Iron Will</strong> — is not just a team. It's a brotherhood, a union of like-minded people."><strong>Coalition Iron Will</strong> — это не просто команда. Это братство, союз единомышленников.</p>
-                <p><strong class="i18n" data-en="Who we are:">Кто мы:</strong></p>
+
+                <p
+                    class="i18n"
+                    data-en="<strong>Coalition Iron Will</strong> — is not just a team. It's a brotherhood, a union of like-minded people."
+                >
+                    <strong>
+                        Coalition Iron Will
+                    </strong>
+                    — это не просто команда.
+                    Это братство, союз единомышленников.
+                </p>
+
+                <p>
+                    <strong
+                        class="i18n"
+                        data-en="Who we are:"
+                    >
+                        Кто мы:
+                    </strong>
+                </p>
+
                 <ul>
-                    <li>🤝 <strong class="i18n" data-en="Friends">Друзья</strong> — <span class="i18n" data-en="always support each other">всегда поддерживаем друг друга</span></li>
-                    <li>⚔️ <strong class="i18n" data-en="Companions">Подвижники</strong> — <span class="i18n" data-en="create projects together">создаём проекты вместе</span></li>
-                    <li>💡 <strong class="i18n" data-en="Creators">Творцы</strong> — <span class="i18n" data-en="bring ideas to life">воплощаем идеи в жизнь</span></li>
+
+                    <li>
+                        🤝
+                        <strong
+                            class="i18n"
+                            data-en="Friends"
+                        >
+                            Друзья
+                        </strong>
+                        —
+                        <span
+                            class="i18n"
+                            data-en="always support each other"
+                        >
+                            всегда поддерживаем друг друга
+                        </span>
+                    </li>
+
+                    <li>
+                        ⚔️
+                        <strong
+                            class="i18n"
+                            data-en="Companions"
+                        >
+                            Подвижники
+                        </strong>
+                        —
+                        <span
+                            class="i18n"
+                            data-en="create projects together"
+                        >
+                            создаём проекты вместе
+                        </span>
+                    </li>
+
+                    <li>
+                        💡
+                        <strong
+                            class="i18n"
+                            data-en="Creators"
+                        >
+                            Творцы
+                        </strong>
+                        —
+                        <span
+                            class="i18n"
+                            data-en="bring ideas to life"
+                        >
+                            воплощаем идеи в жизнь
+                        </span>
+                    </li>
+
                 </ul>
-                <p>🟢 <span class="i18n" data-en="Active. The coalition continues to exist and develop.">Активен. Коалиция продолжает существовать и развиваться.</span></p>
+
+                <p>
+                    🟢
+                    <span
+                        class="i18n"
+                        data-en="Active. The coalition continues to exist and develop."
+                    >
+                        Активен. Коалиция продолжает существовать
+                        и развиваться.
+                    </span>
+                </p>
+
             </div>
         </div>
+
     </div>
+
 </section>
 
-<!-- КОНТАКТЫ -->
-<section class="tab" id="tab-contact">
+
+<!-- ============================================================
+     КОНТАКТЫ
+     ============================================================ -->
+
+<section
+    class="tab"
+    id="tab-contact"
+>
+
     <div class="hero">
-        <h2>✉️ <span class="i18n grad" data-en="Contacts">Контакты</span></h2>
-        <p class="i18n" data-en="Reach me through any of these platforms">Свяжись со мной через любую из этих платформ</p>
+
+        <h2>
+            ✉️
+            <span
+                class="i18n grad"
+                data-en="Contacts"
+            >
+                Контакты
+            </span>
+        </h2>
+
+        <p
+            class="i18n"
+            data-en="Reach me through any of these platforms"
+        >
+            Свяжись со мной через любую из этих платформ
+        </p>
+
     </div>
+
+
     <div class="contact-grid">
-        <a class="contact-card card" href="https://t.me/VladislavFoskKosarh" target="_blank" rel="noopener"><span class="ico">✈️</span><span><b>Telegram</b><small>@VladislavFoskKosarh</small></span></a>
-        <a class="contact-card card" href="https://www.youtube.com/@VladislavFoskKosarh" target="_blank" rel="noopener"><span class="ico">▶️</span><span><b>YouTube</b><small>@VladislavFoskKosarh</small></span></a>
-        <a class="contact-card card" href="https://github.com/VladislavFosk" target="_blank" rel="noopener"><span class="ico">◉</span><span><b>GitHub</b><small>github.com/VladislavFosk</small></span></a>
-        <a class="contact-card card" href="https://gamejolt.com/@VladislavFosk" target="_blank" rel="noopener"><span class="ico">🎮</span><span><b>GameJolt</b><small>@VladislavFosk</small></span></a>
+
+        <a
+            class="contact-card card"
+            href="https://t.me/VladislavFoskKosarh"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            <span class="ico">✈️</span>
+
+            <span>
+                <b>Telegram</b>
+                <small>
+                    @VladislavFoskKosarh
+                </small>
+            </span>
+        </a>
+
+
+        <a
+            class="contact-card card"
+            href="https://www.youtube.com/@VladislavFoskKosarh"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            <span class="ico">▶️</span>
+
+            <span>
+                <b>YouTube</b>
+                <small>
+                    @VladislavFoskKosarh
+                </small>
+            </span>
+        </a>
+
+
+        <a
+            class="contact-card card"
+            href="https://github.com/VladislavFosk"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            <span class="ico">◉</span>
+
+            <span>
+                <b>GitHub</b>
+                <small>
+                    github.com/VladislavFosk
+                </small>
+            </span>
+        </a>
+
+
+        <a
+            class="contact-card card"
+            href="https://gamejolt.com/@VladislavFosk"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            <span class="ico">🎮</span>
+
+            <span>
+                <b>GameJolt</b>
+                <small>
+                    @VladislavFosk
+                </small>
+            </span>
+        </a>
+
     </div>
-    <div class="block card" style="margin-top:20px;border-color:var(--a3);text-align:center">
-        ⚔️ Made by the <strong class="grad">Coalition Iron Will</strong>
+
+
+    <div
+        class="block card"
+        style="margin-top:20px;border-color:var(--a3);text-align:center"
+    >
+        ⚔️ Made by the
+        <strong class="grad">
+            Coalition Iron Will
+        </strong>
     </div>
+
 </section>
 
 </main>
 
-<nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
-    <button class="active" data-tab="home"><span class="mi">🏠</span><span class="i18n" data-en="Home">Главная</span></button>
-    <button data-tab="wiki"><span class="mi">📚</span><span class="i18n" data-en="Wiki">Вики</span></button>
-    <button data-tab="contact"><span class="mi">✉️</span><span class="i18n" data-en="Contact">Контакты</span></button>
+
+<!-- ============================================================
+     МОБИЛЬНАЯ НАВИГАЦИЯ
+     ============================================================ -->
+
+<nav
+    class="mobile-nav"
+    id="mobileNav"
+    aria-label="Mobile navigation"
+>
+
+    <button
+        class="active"
+        data-tab="home"
+    >
+        <span class="mi">🏠</span>
+        <span
+            class="i18n"
+            data-en="Home"
+        >
+            Главная
+        </span>
+    </button>
+
+    <button data-tab="wiki">
+        <span class="mi">📚</span>
+        <span
+            class="i18n"
+            data-en="Wiki"
+        >
+            Вики
+        </span>
+    </button>
+
+    <button data-tab="contact">
+        <span class="mi">✉️</span>
+        <span
+            class="i18n"
+            data-en="Contact"
+        >
+            Контакты
+        </span>
+    </button>
+
 </nav>
 
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+
 <footer class="footer">
-    ☽ Solarium Umbris · <span class="i18n" data-en="World of Kosarh">Мир Косарха</span> · 2026
-    <span class="dot">·</span><a href="#home"><span class="i18n" data-en="Home">Главная</span></a>
-    <span class="dot">·</span><a href="#wiki"><span class="i18n" data-en="My Wiki">Моя Вики</span></a>
-    <span class="dot">·</span><a href="#contact"><span class="i18n" data-en="Contact">Контакты</span></a>
-    <br /><small style="opacity:.6">⚔️ Made by the <span class="grad">Coalition Iron Will</span></small>
-</footer>
+
+    ☽ World of Kosarh ·
+    <span
+        class="i18n"
+        data-en="World of Kosarh"
+    >
+        Мир Косарха
+    </span>
+
+    · 2026
+
+    <span class="dot">·</span>
+
+    <a href="#home">
+        <span
+            class="i18n"
+            data-en="Home"
+        >
+            Главная
+        </span>
+    </a>
+
+    <span class="dot">·</span>
+
+    <a href="#wiki">
+        <span
+            class="i18n"
+            data-en="My Wiki"
+        >
+            Моя Вики
+        </span>
+    </a>
+
+    <span class="dot">·</span>
+
+    <a href="#contact">
+        <span
+            class="i18n"
+            data-en="Contact"
+        >
+            Контакты
+        </span>
+    </a>
+
+    <br />
+
+    <small style="opacity:.6">
+        ⚔️ Made by the
+        <span class="grad">
+            Coalition Iron Will
+        </span>
+    </small>
 
 </footer>
+
 
 <script src="script.js" defer></script>
+
 <script>
 function showRozaSection(section, button) {
-    document.querySelectorAll('.roza-page').forEach(el => el.classList.remove('active'));
-    const page = document.getElementById('roza-' + section);
-    if (page) page.classList.add('active');
-    document.querySelectorAll('.roza-link').forEach(el => el.classList.remove('active'));
-    if (button) button.classList.add('active');
+    document.querySelectorAll('.roza-page').forEach(el => {
+        el.classList.remove('active');
+    });
+
+    const page =
+        document.getElementById('roza-' + section);
+
+    if (page) {
+        page.classList.add('active');
+    }
+
+    document.querySelectorAll('.roza-link').forEach(el => {
+        el.classList.remove('active');
+    });
+
+    if (button) {
+        button.classList.add('active');
+    }
 }
+
 function rozaNotReady() {
-    alert('Образ Roza OS пока не готов. Следите за обновлениями проекта.');
+    alert(
+        'Образ Roza OS пока не готов. Следите за обновлениями проекта.'
+    );
 }
 </script>
+
 </body>
 </html>
-
+```
