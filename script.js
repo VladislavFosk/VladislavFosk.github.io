@@ -340,32 +340,316 @@ if (music && musicToggle) {
 
 
 // ============================================================
-// 5. GITHUB — VLADISLAVFOSK
+// 5. GITHUB
 // ============================================================
 
 const GH_USER = 'VladislavFosk';
+const GH_API = 'https://api.github.com';
 
 let ghRepos = [];
 
-
-// ============================================================
-// 6. ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ GITHUB
-// ============================================================
-
-function ghEl(tag, cls = '', text = null) {
-    const el =
-        document.createElement(tag);
+function ghEl(tag, cls, text) {
+    const el = document.createElement(tag);
 
     if (cls) {
         el.className = cls;
     }
 
-    if (text !== null) {
+    if (text !== undefined && text !== null) {
         el.textContent = text;
     }
 
     return el;
 }
+
+async function ghFetch(url) {
+    const response = await fetch(url, {
+        headers: {
+            'Accept': 'application/vnd.github+json'
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error(`GitHub API ${response.status}`);
+    }
+
+    return response.json();
+}
+
+async function ghLoadHeatmap() {
+    const wrap = document.getElementById('ghHeatmap');
+    const legend = document.getElementById('ghHeatmapLegend');
+
+    if (!wrap) return;
+
+    try {
+        const data = await fetch(
+            `https://github-contributions-api.jogruber.de/v4/${GH_USER}?y=last`
+        ).then(response => {
+            if (!response.ok) {
+                throw new Error(`Heatmap API ${response.status}`);
+            }
+
+            return response.json();
+        });
+
+        const days = data.contributions || [];
+        const map = {};
+
+        days.forEach(day => {
+            map[day.date] = day.count;
+        });
+
+        wrap.replaceChildren();
+
+        const end = new Date();
+        const start = new Date(end);
+
+        start.setDate(end.getDate() - 364);
+        start.setDate(start.getDate() - start.getDay());
+
+        for (let i = 0; i < 371; i++) {
+            const date = new Date(start);
+            date.setDate(start.getDate() + i);
+
+            const iso =
+                `${date.getFullYear()}-` +
+                `${String(date.getMonth() + 1).padStart(2, '0')}-` +
+                `${String(date.getDate()).padStart(2, '0')}`;
+
+            const count = map[iso] || 0;
+
+            const level =
+                count >= 10 ? 4 :
+                count >= 6 ? 3 :
+                count >= 3 ? 2 :
+                count > 0 ? 1 :
+                0;
+
+            const cell = ghEl('div', 'cell');
+
+            cell.dataset.l = level;
+            cell.title = `${iso}: ${count} contributions`;
+
+            wrap.appendChild(cell);
+        }
+
+        if (legend) {
+            legend.replaceChildren();
+
+            legend.appendChild(
+                ghEl('span', '', 'Меньше')
+            );
+
+            for (let level = 0; level <= 4; level++) {
+                const cell = ghEl('span', 'cell');
+
+                cell.dataset.l = level;
+
+                legend.appendChild(cell);
+            }
+
+            legend.appendChild(
+                ghEl('span', '', 'Больше')
+            );
+        }
+
+    } catch (error) {
+        console.error('GitHub heatmap error:', error);
+
+        wrap.replaceChildren(
+            ghEl('span', '', 'Не удалось загрузить активность GitHub')
+        );
+
+        if (wrap.firstElementChild) {
+            wrap.firstElementChild.style.cssText =
+                'font-size:12px;color:var(--muted)';
+        }
+    }
+}
+
+function ghRepoCard(repo) {
+    const card = document.createElement('a');
+
+    card.className = 'gh-repo';
+    card.href = repo.html_url;
+    card.target = '_blank';
+    card.rel = 'noopener noreferrer';
+
+    const name = ghEl('b', '', repo.name);
+
+    const description = ghEl(
+        'small',
+        '',
+        repo.description || 'Без описания'
+    );
+
+    const meta = ghEl('div', 'gh-meta');
+
+    if (repo.language) {
+        meta.appendChild(
+            ghEl('span', '', `💻 ${repo.language}`)
+        );
+    }
+
+    meta.appendChild(
+        ghEl('span', '', `⭐ ${repo.stargazers_count}`)
+    );
+
+    meta.appendChild(
+        ghEl('span', '', `🍴 ${repo.forks_count}`)
+    );
+
+    card.append(
+        name,
+        description,
+        meta
+    );
+
+    return card;
+}
+
+function ghRenderPinned() {
+    const box = document.getElementById('ghPinned');
+
+    if (!box) return;
+
+    const pinned = [...ghRepos]
+        .sort((a, b) => {
+            const stars =
+                b.stargazers_count -
+                a.stargazers_count;
+
+            if (stars !== 0) {
+                return stars;
+            }
+
+            return (
+                new Date(b.updated_at) -
+                new Date(a.updated_at)
+            );
+        })
+        .slice(0, 4);
+
+    box.replaceChildren();
+
+    if (!pinned.length) {
+        box.appendChild(
+            ghEl('p', '', 'Нет репозиториев')
+        );
+
+        return;
+    }
+
+    pinned.forEach(repo => {
+        box.appendChild(
+            ghRepoCard(repo)
+        );
+    });
+}
+
+function ghRenderAll(filter = '') {
+    const box = document.getElementById('ghAll');
+
+    if (!box) return;
+
+    const query = filter
+        .trim()
+        .toLowerCase();
+
+    const list = ghRepos.filter(repo => {
+        return (
+            !query ||
+            repo.name.toLowerCase().includes(query) ||
+            (repo.description || '')
+                .toLowerCase()
+                .includes(query) ||
+            (repo.language || '')
+                .toLowerCase()
+                .includes(query)
+        );
+    });
+
+    box.replaceChildren();
+
+    if (!list.length) {
+        box.appendChild(
+            ghEl('p', '', 'Ничего не найдено')
+        );
+
+        return;
+    }
+
+    list.forEach(repo => {
+        box.appendChild(
+            ghRepoCard(repo)
+        );
+    });
+}
+
+function ghFilterRepos() {
+    const input =
+        document.getElementById('ghSearch');
+
+    ghRenderAll(
+        input ? input.value : ''
+    );
+}
+
+async function ghLoadRepos() {
+    const status =
+        document.getElementById('ghStatus');
+
+    try {
+        const repos = await ghFetch(
+            `${GH_API}/users/${GH_USER}/repos?` +
+            `sort=updated&direction=desc&per_page=100`
+        );
+
+        ghRepos = repos.filter(repo => {
+            return (
+                repo.owner &&
+                repo.owner.login.toLowerCase() ===
+                    GH_USER.toLowerCase() &&
+                !repo.fork &&
+                !repo.archived
+            );
+        });
+
+        ghRenderPinned();
+        ghRenderAll();
+
+        if (status) {
+            status.textContent =
+                `GitHub: @${GH_USER} · ` +
+                `Загружено репозиториев: ${ghRepos.length}`;
+        }
+
+    } catch (error) {
+        console.error(
+            'GitHub repositories error:',
+            error
+        );
+
+        if (status) {
+            status.textContent =
+                'Не удалось загрузить данные GitHub';
+        }
+    }
+}
+
+const ghSearchInput =
+    document.getElementById('ghSearch');
+
+if (ghSearchInput) {
+    ghSearchInput.addEventListener(
+        'input',
+        ghFilterRepos
+    );
+}
+
+ghLoadHeatmap();
+ghLoadRepos();
 
 
 // ============================================================
