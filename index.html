@@ -1,101 +1,101 @@
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="World of Kosarh — энциклопедия миров, проектов и идей Владислава Фоска-Косарха." />
+<meta name="description" content="World of Kosarh" />
 <meta name="theme-color" content="#160a17" />
 <title>World of Kosarh</title>
-
 <link rel="icon" href="gim/logo.png" type="image/png" />
 <link rel="stylesheet" href="style.css" />
 
 <style>
-.roza-layout {
-    display: grid;
-    grid-template-columns: 220px minmax(0, 1fr);
-    gap: 18px;
-    align-items: start;
+.roza-layout{
+    display:grid;
+    grid-template-columns:220px minmax(0,1fr);
+    gap:18px;
+    align-items:start
 }
 
-.roza-sidebar {
-    padding: 10px;
-    position: sticky;
-    top: 20px;
+.roza-sidebar{
+    padding:10px;
+    position:sticky;
+    top:20px
 }
 
-.roza-side-title {
-    font-weight: 800;
-    padding: 12px 10px 14px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 6px;
+.roza-side-title{
+    font-weight:800;
+    padding:12px 10px 14px;
+    border-bottom:1px solid var(--border);
+    margin-bottom:6px
 }
 
-.roza-link {
-    display: block;
-    width: 100%;
-    text-align: left;
-    background: transparent;
-    color: var(--muted);
-    border: 0;
-    border-radius: 8px;
-    padding: 10px 11px;
-    margin: 2px 0;
-    font: inherit;
-    cursor: pointer;
+.roza-link{
+    display:block;
+    width:100%;
+    text-align:left;
+    background:transparent;
+    color:var(--muted);
+    border:0;
+    border-radius:8px;
+    padding:10px 11px;
+    margin:2px 0;
+    font:inherit;
+    cursor:pointer
 }
 
 .roza-link:hover,
-.roza-link.active {
-    background: rgba(255,255,255,.06);
-    color: var(--text);
+.roza-link.active{
+    background:rgba(255,255,255,.06);
+    color:var(--text)
 }
 
-.roza-content {
-    min-width: 0;
+.roza-content{
+    min-width:0
 }
 
-.roza-page {
-    display: none;
+.roza-page{
+    display:none
 }
 
-.roza-page.active {
-    display: block;
+.roza-page.active{
+    display:block
 }
 
 .roza-download,
-.roza-back-button {
-    border: 1px solid var(--a3);
-    background: transparent;
-    color: var(--text);
-    padding: 10px 16px;
-    border-radius: 9px;
-    cursor: pointer;
-    font: inherit;
-    margin-top: 8px;
+.roza-back-button{
+    border:1px solid var(--a3);
+    background:transparent;
+    color:var(--text);
+    padding:10px 16px;
+    border-radius:9px;
+    cursor:pointer;
+    font:inherit;
+    margin-top:8px
 }
 
 .roza-download:hover,
-.roza-back-button:hover {
-    background: rgba(255,255,255,.06);
+.roza-back-button:hover{
+    background:rgba(255,255,255,.06)
 }
 
-.roza-back-card {
-    text-align: center;
+.roza-back-card{
+    text-align:center
 }
 
-@media(max-width:760px) {
-    .roza-layout {
-        grid-template-columns: 1fr;
+@media(max-width:760px){
+    .roza-layout{
+        grid-template-columns:1fr
     }
 
-    .roza-sidebar {
-        position: static;
+    .roza-sidebar{
+        position:static
     }
 
-    .roza-link {
-        display: inline-block;
-        width: auto;
+    .roza-link{
+        display:inline-block;
+        width:auto
     }
 }
 </style>
@@ -110,41 +110,31 @@
         <span class="icon">☽</span>
 
         <div>
-            <h1>World of <span class="grad">Kosarh</span></h1>
+            <h1>Solarium <span class="grad">Umbris</span></h1>
             <span class="subtitle grad">✦ Мир Косарха ✦</span>
         </div>
     </div>
 
     <div class="right-group">
         <nav class="nav-buttons" id="tabNav" aria-label="Main navigation">
-
             <button class="active" data-tab="home">
-                🏠
-                <span class="i18n" data-en="Home">Главная</span>
+                🏠 <span class="i18n" data-en="Home">Главная</span>
             </button>
 
             <button data-tab="wiki">
-                📚
-                <span class="i18n" data-en="My Wiki">Моя Вики</span>
+                📚 <span class="i18n" data-en="My Wiki">Моя Вики</span>
             </button>
 
             <button data-tab="contact">
-                ✉️
-                <span class="i18n" data-en="Contact">Контакты</span>
+                ✉️ <span class="i18n" data-en="Contact">Контакты</span>
             </button>
-
         </nav>
 
-        <button
-            class="lang-toggle"
-            id="langToggle"
-            aria-label="Switch language"
-        >
+        <button class="lang-toggle" id="langToggle" aria-label="Switch language">
             ENG
         </button>
     </div>
 </header>
-
 
 <main>
 
@@ -157,60 +147,39 @@
     <div class="hero reveal">
         <h2>
             ✧
-            <span
-                class="i18n grad"
-                data-en="Welcome to the World of Kosarh"
-            >
+            <span class="i18n grad" data-en="Welcome to the World of Kosarh">
                 Добро пожаловать в Мир Косарха
             </span>
         </h2>
 
-        <p
-            class="i18n"
-            data-en="Encyclopedia of worlds, projects and ideas"
-        >
+        <p class="i18n" data-en="Encyclopedia of worlds, projects and ideas">
             Энциклопедия миров, проектов и идей
         </p>
 
         <div class="stats-bar">
             <span>
-                📦
-                <strong>4</strong>
-                <span
-                    class="i18n"
-                    data-en="projects"
-                >
-                    проекта
-                </span>
+                📦 <strong>4</strong>
+                <span class="i18n" data-en="projects">проекта</span>
             </span>
 
             <span>
-                🏆
-                <strong>3</strong>
-                <span
-                    class="i18n"
-                    data-en="achievements"
-                >
-                    достижения
-                </span>
+                🏆 <strong>3</strong>
+                <span class="i18n" data-en="achievements">достижения</span>
             </span>
 
             <span>
-                👤
-                <strong>18</strong>
-                <span
-                    class="i18n"
-                    data-en="years old"
-                >
-                    лет
-                </span>
+                👤 <strong>18</strong>
+                <span class="i18n" data-en="years old">лет</span>
             </span>
         </div>
     </div>
 
 
-    <div class="profile-hero card reveal">
+    <!-- ========================================================
+         ИНФОРМАЦИЯ ОБО МНЕ
+         ======================================================== -->
 
+    <div class="profile-hero card reveal">
         <img
             class="avatar"
             src="gim/AVATARKA.jpg"
@@ -220,13 +189,9 @@
         />
 
         <div>
-            <div class="name grad">
-                Vladislav Fosk-Kosarh
-            </div>
+            <div class="name grad">Vladislav Fosk-Kosarh</div>
 
-            <div class="nick">
-                @Foskarh
-            </div>
+            <div class="nick">@Foskarh</div>
 
             <div class="ptitle">
                 👑
@@ -239,13 +204,9 @@
             </div>
 
             <div class="tags">
-
                 <span class="tag">
                     💻
-                    <span
-                        class="i18n"
-                        data-en="Developer"
-                    >
+                    <span class="i18n" data-en="Developer">
                         Разработчик
                     </span>
                 </span>
@@ -256,10 +217,7 @@
 
                 <span class="tag">
                     🛠️
-                    <span
-                        class="i18n"
-                        data-en="Creator"
-                    >
+                    <span class="i18n" data-en="Creator">
                         Творец
                     </span>
                 </span>
@@ -267,7 +225,6 @@
                 <span class="tag">
                     ⚔️ Coalition Iron Will
                 </span>
-
             </div>
         </div>
     </div>
@@ -277,68 +234,55 @@
 
         <div class="quick-item card">
             <span>🎂</span>
+
             <div>
-                <small
-                    class="i18n"
-                    data-en="Age"
-                >
+                <small class="i18n" data-en="Age">
                     Возраст
                 </small>
 
                 <strong>
                     18
-                    <span
-                        class="i18n"
-                        data-en="years"
-                    >
+                    <span class="i18n" data-en="years">
                         лет
                     </span>
                 </strong>
             </div>
         </div>
 
+
         <div class="quick-item card">
             <span>🏴</span>
+
             <div>
-                <small
-                    class="i18n"
-                    data-en="Nationality"
-                >
+                <small class="i18n" data-en="Nationality">
                     Национальность
                 </small>
 
-                <strong>
-                    Kosarh
-                </strong>
+                <strong>Kosarh</strong>
             </div>
         </div>
 
+
         <div class="quick-item card">
             <span>🎓</span>
+
             <div>
-                <small
-                    class="i18n"
-                    data-en="Education"
-                >
+                <small class="i18n" data-en="Education">
                     Образование
                 </small>
 
-                <strong
-                    class="i18n"
-                    data-en="Technician"
-                >
+                <strong class="i18n" data-en="Technician">
                     Техник
                 </strong>
             </div>
         </div>
 
+
         <div class="quick-item card">
             <span>⚔️</span>
+
             <div>
-                <small
-                    class="i18n"
-                    data-en="Organization"
-                >
+                <small class="i18n" data-en="Organization">
                     Организация
                 </small>
 
@@ -355,10 +299,7 @@
 
         <h3>
             📜
-            <span
-                class="i18n"
-                data-en="About Me"
-            >
+            <span class="i18n" data-en="About Me">
                 О себе
             </span>
         </h3>
@@ -371,9 +312,9 @@
             >
                 <strong>Привет.</strong>
                 Моя основная работа — наладчик, я имею дело с оборудованием и железом.
-                А программирование — это моё новое увлечение, я только начинаю в него погружаться,
-                изучаю понемногу. Хочется сделать что-то своё, пусть даже небольшое,
-                но своими руками.
+                А программирование — это моё новое увлечение, я только начинаю в него
+                погружаться, изучаю понемногу. Хочется сделать что-то своё, пусть даже
+                небольшое, но своими руками.
             </p>
 
             <p
@@ -389,8 +330,8 @@
                 data-en="But I'm human, and emotions take their toll. When something goes wrong — code gets stuck, a project won't compile, or just some little thing throws me off — I get upset. I can withdraw into myself, go quiet, stop noticing what's going on around me."
             >
                 Но я человек, и эмоции берут своё. Когда что-то идёт не так —
-                завис код, не собирается проект или просто какая-то мелочь выбивает из колеи —
-                я расстраиваюсь. Могу замкнуться в себе, замолчать,
+                завис код, не собирается проект или просто какая-то мелочь выбивает
+                из колеи — я расстраиваюсь. Могу замкнуться в себе, замолчать,
                 перестать замечать, что творится вокруг.
             </p>
 
@@ -406,20 +347,14 @@
 
                 <span class="tag gold">
                     ☀️
-                    <span
-                        class="i18n"
-                        data-en="Sun Child"
-                    >
+                    <span class="i18n" data-en="Sun Child">
                         Солнечный ребёнок
                     </span>
                 </span>
 
                 <span class="tag pink">
                     ✝️
-                    <span
-                        class="i18n"
-                        data-en="Orthodox Christian"
-                    >
+                    <span class="i18n" data-en="Orthodox Christian">
                         Православный христианин
                     </span>
                 </span>
@@ -433,10 +368,7 @@
 
         <h3>
             🗣️
-            <span
-                class="i18n"
-                data-en="Languages"
-            >
+            <span class="i18n" data-en="Languages">
                 Языки
             </span>
         </h3>
@@ -444,34 +376,22 @@
         <div class="block-text">
 
             🇷🇺
-            <span
-                class="i18n"
-                data-en="Russian"
-            >
+            <span class="i18n" data-en="Russian">
                 Русский
             </span>
             —
-            <strong
-                class="i18n"
-                data-en="Native"
-            >
+            <strong class="i18n" data-en="Native">
                 Родной
             </strong>
 
             <br />
 
             🇬🇧
-            <span
-                class="i18n"
-                data-en="English"
-            >
+            <span class="i18n" data-en="English">
                 Английский
             </span>
             —
-            <strong
-                class="i18n"
-                data-en="So-so"
-            >
+            <strong class="i18n" data-en="So-so">
                 Так себе
             </strong>
 
@@ -494,10 +414,7 @@
 
         <h3>
             💻
-            <span
-                class="i18n"
-                data-en="Operating Systems"
-            >
+            <span class="i18n" data-en="Operating Systems">
                 Операционные системы
             </span>
         </h3>
@@ -507,6 +424,7 @@
             <br />
             🐧 GNU/Linux (Debian, XFCE)
         </div>
+
     </div>
 
 
@@ -514,10 +432,7 @@
 
         <h3>
             🧠
-            <span
-                class="i18n"
-                data-en="Skills"
-            >
+            <span class="i18n" data-en="Skills">
                 Навыки
             </span>
         </h3>
@@ -526,10 +441,7 @@
 
             <strong>
                 💻
-                <span
-                    class="i18n"
-                    data-en="Programming"
-                >
+                <span class="i18n" data-en="Programming">
                     Программирование
                 </span>:
             </strong>
@@ -538,15 +450,9 @@
 
             <br />
 
-            <strong>
-                🐧 Linux:
-            </strong>
-
+            <strong>🐧 Linux:</strong>
             Debian, XFCE,
-            <span
-                class="i18n"
-                data-en="System setup"
-            >
+            <span class="i18n" data-en="System setup">
                 Настройка системы
             </span>
 
@@ -554,10 +460,7 @@
 
             <strong>
                 🔧
-                <span
-                    class="i18n"
-                    data-en="Hardware"
-                >
+                <span class="i18n" data-en="Hardware">
                     Железо
                 </span>:
             </strong>
@@ -574,10 +477,7 @@
 
             <strong>
                 🎮
-                <span
-                    class="i18n"
-                    data-en="Modding"
-                >
+                <span class="i18n" data-en="Modding">
                     Моддинг
                 </span>:
             </strong>
@@ -602,10 +502,7 @@
 
         <h3>
             🐙
-            <span
-                class="i18n"
-                data-en="GitHub Activity"
-            >
+            <span class="i18n" data-en="GitHub Activity">
                 Активность GitHub
             </span>
         </h3>
@@ -653,7 +550,6 @@
             type="text"
             placeholder="Поиск репозиториев..."
             class="gh-search"
-            aria-label="Поиск репозиториев"
         />
 
         <div
@@ -664,7 +560,6 @@
         <p
             id="ghStatus"
             class="gh-status"
-            aria-live="polite"
         ></p>
 
     </div>
@@ -700,7 +595,7 @@
                     class="friend-link"
                     href="https://b0o0q.github.io/qwq.github.io/"
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="noopener"
                 >
                     Femadoria
                 </a>
@@ -718,19 +613,18 @@
 
         <h3>
             🏆
-            <span
-                class="i18n"
-                data-en="Achievements"
-            >
+            <span class="i18n" data-en="Achievements">
                 Достижения
             </span>
         </h3>
+
 
         <div class="ach">
 
             <span>🥇</span>
 
             <span>
+
                 <b
                     class="i18n"
                     data-en="Winner's Diploma — &quot;Legacy of Outstanding Entrepreneurs of Russia&quot;"
@@ -745,6 +639,7 @@
                     Всероссийский конкурс по истории предпринимательства.
                     Финалист регионального этапа в Твери.
                 </small>
+
             </span>
 
         </div>
@@ -755,6 +650,7 @@
             <span>📜</span>
 
             <span>
+
                 <b
                     class="i18n"
                     data-en="Participant Certificate — &quot;Through the Pages of the Great Victory&quot;"
@@ -766,9 +662,10 @@
                     class="i18n"
                     data-en="Team intellectual game dedicated to the 80th anniversary of Victory in the Great Patriotic War 1941–1945."
                 >
-                    Командная интеллектуальная игра к 80-летию
-                    Победы в Великой Отечественной войне 1941–1945.
+                    Командная интеллектуальная игра к 80-летию Победы
+                    в Великой Отечественной войне 1941–1945.
                 </small>
+
             </span>
 
         </div>
@@ -779,6 +676,7 @@
             <span>🥇</span>
 
             <span>
+
                 <b
                     class="i18n"
                     data-en="Winner's Diploma — &quot;Scarlet Sails&quot;"
@@ -791,9 +689,9 @@
                     data-en="Winner of the All-Russian distance Olympiad in Physics among students of professional educational organizations."
                 >
                     Победитель Всероссийской дистанционной олимпиады
-                    по физике среди студентов профессиональных
-                    образовательных организаций.
+                    по физике среди студентов профессиональных образовательных организаций.
                 </small>
+
             </span>
 
         </div>
@@ -813,10 +711,7 @@
 
         <h2>
             📚
-            <span
-                class="i18n grad"
-                data-en="My Wiki"
-            >
+            <span class="i18n grad" data-en="My Wiki">
                 Моя Вики
             </span>
         </h2>
@@ -889,7 +784,7 @@
 
 
     <div
-        class="wiki-entry card reveal"
+        class="wiki-entry card"
         onclick="switchTab('project-solarium')"
     >
 
@@ -938,7 +833,7 @@
 
 
     <div
-        class="wiki-entry card reveal"
+        class="wiki-entry card"
         onclick="switchTab('project-blackorder')"
     >
 
@@ -986,7 +881,7 @@
 
 
     <div
-        class="wiki-entry card reveal"
+        class="wiki-entry card"
         onclick="switchTab('project-coalition')"
         style="border-color:var(--green)"
     >
@@ -1021,8 +916,8 @@
             class="i18n"
             data-en="Brotherhood of like-minded people united by common goals and values."
         >
-            Братство единомышленников,
-            объединённых общими целями и ценностями.
+            Братство единомышленников, объединённых общими целями
+            и ценностями.
         </p>
 
         <div class="tags">
@@ -1113,10 +1008,7 @@
                 onclick="showRozaSection('overview', this)"
             >
                 📋
-                <span
-                    class="i18n"
-                    data-en="Overview"
-                >
+                <span class="i18n" data-en="Overview">
                     Обзор
                 </span>
             </button>
@@ -1126,10 +1018,7 @@
                 onclick="showRozaSection('architecture', this)"
             >
                 ⚙️
-                <span
-                    class="i18n"
-                    data-en="Architecture"
-                >
+                <span class="i18n" data-en="Architecture">
                     Архитектура
                 </span>
             </button>
@@ -1139,10 +1028,7 @@
                 onclick="showRozaSection('desktop', this)"
             >
                 🖥️
-                <span
-                    class="i18n"
-                    data-en="Desktop"
-                >
+                <span class="i18n" data-en="Desktop">
                     Рабочее окружение
                 </span>
             </button>
@@ -1152,10 +1038,7 @@
                 onclick="showRozaSection('packages', this)"
             >
                 📦
-                <span
-                    class="i18n"
-                    data-en="Packages"
-                >
+                <span class="i18n" data-en="Packages">
                     Пакеты
                 </span>
             </button>
@@ -1165,10 +1048,7 @@
                 onclick="showRozaSection('security', this)"
             >
                 🛡️
-                <span
-                    class="i18n"
-                    data-en="Security"
-                >
+                <span class="i18n" data-en="Security">
                     Безопасность
                 </span>
             </button>
@@ -1178,10 +1058,7 @@
                 onclick="showRozaSection('development', this)"
             >
                 🛠️
-                <span
-                    class="i18n"
-                    data-en="Development"
-                >
+                <span class="i18n" data-en="Development">
                     Разработка
                 </span>
             </button>
@@ -1191,10 +1068,7 @@
                 onclick="showRozaSection('releases', this)"
             >
                 🚀
-                <span
-                    class="i18n"
-                    data-en="Releases"
-                >
+                <span class="i18n" data-en="Releases">
                     Релизы
                 </span>
             </button>
@@ -1204,10 +1078,7 @@
                 onclick="showRozaSection('faq', this)"
             >
                 ❓
-                <span
-                    class="i18n"
-                    data-en="FAQ"
-                >
+                <span class="i18n" data-en="FAQ">
                     FAQ
                 </span>
             </button>
@@ -1359,9 +1230,8 @@
                                     class="i18n"
                                     data-en="Internal architecture, custom components and technical documentation are currently classified."
                                 >
-                                    Внутренняя архитектура,
-                                    собственные компоненты и техническая документация
-                                    пока засекречены.
+                                    Внутренняя архитектура, собственные компоненты
+                                    и техническая документация пока засекречены.
                                 </span>
                             </p>
 
@@ -1516,8 +1386,7 @@
                                 class="i18n"
                                 data-en="Theme, customizations and interface details are classified."
                             >
-                                Тема, модификации и детали интерфейса
-                                засекречены.
+                                Тема, модификации и детали интерфейса засекречены.
                             </span>
                         </p>
 
@@ -1552,8 +1421,7 @@
                                 class="i18n"
                                 data-en="The final package set has not been publicly announced."
                             >
-                                Финальный набор пакетов пока публично
-                                не объявлен.
+                                Финальный набор пакетов пока публично не объявлен.
                             </span>
                         </p>
 
@@ -1563,8 +1431,7 @@
                                 class="i18n"
                                 data-en="Package selection and custom software details are classified."
                             >
-                                Выбор пакетов и детали собственного ПО
-                                засекречены.
+                                Выбор пакетов и детали собственного ПО засекречены.
                             </span>
                         </p>
 
@@ -1599,8 +1466,7 @@
                                 class="i18n"
                                 data-en="Security model and hardening details are currently classified."
                             >
-                                Модель безопасности и детали защиты
-                                пока засекречены.
+                                Модель безопасности и детали защиты пока засекречены.
                             </span>
                         </p>
 
@@ -1610,8 +1476,7 @@
                                 class="i18n"
                                 data-en="Public security documentation will be added when available."
                             >
-                                Публичная документация по безопасности
-                                появится позже.
+                                Публичная документация по безопасности появится позже.
                             </span>
                         </p>
 
@@ -1775,6 +1640,7 @@
                             <strong>
                                 Когда выйдет Roza OS?
                             </strong>
+
                             <br />
 
                             <span
@@ -1789,6 +1655,7 @@
                             <strong>
                                 Где скачать образ?
                             </strong>
+
                             <br />
 
                             <span
@@ -1803,6 +1670,7 @@
                             <strong>
                                 Почему информация закрыта?
                             </strong>
+
                             <br />
 
                             <span
@@ -1844,13 +1712,10 @@
 
 
 <!-- ============================================================
-     WORLD OF KOSARH / HOI4
+     SOLARIUM UMBRIS / WORLD OF KOSARH
      ============================================================ -->
 
-<section
-    class="tab"
-    id="tab-project-solarium"
->
+<section class="tab" id="tab-project-solarium">
 
     <a
         class="back"
@@ -1868,14 +1733,12 @@
 
     <div class="header-info">
 
-        <div class="ico">
-            ☽
-        </div>
+        <div class="ico">☽</div>
 
         <div>
 
             <div class="pname">
-                World of Kosarh
+                Solarium Umbris
                 <span class="sub">
                     Mod for Hearts of Iron IV
                 </span>
@@ -2026,7 +1889,6 @@
                 </p>
 
                 <ul>
-
                     <li>
                         🌍 7
                         <span
@@ -2066,7 +1928,6 @@
                             Кастомные лидеры
                         </span>
                     </li>
-
                 </ul>
 
                 <p>
@@ -2091,10 +1952,7 @@
      BLACK ORDER
      ============================================================ -->
 
-<section
-    class="tab"
-    id="tab-project-blackorder"
->
+<section class="tab" id="tab-project-blackorder">
 
     <a
         class="back"
@@ -2112,9 +1970,7 @@
 
     <div class="header-info">
 
-        <div class="ico">
-            🖤
-        </div>
+        <div class="ico">🖤</div>
 
         <div>
 
@@ -2334,10 +2190,7 @@
      COALITION IRON WILL
      ============================================================ -->
 
-<section
-    class="tab"
-    id="tab-project-coalition"
->
+<section class="tab" id="tab-project-coalition">
 
     <a
         class="back"
@@ -2355,9 +2208,7 @@
 
     <div class="header-info">
 
-        <div class="ico">
-            ⚔️
-        </div>
+        <div class="ico">⚔️</div>
 
         <div>
 
@@ -2492,11 +2343,9 @@
                     class="i18n"
                     data-en="<strong>Coalition Iron Will</strong> — is not just a team. It's a brotherhood, a union of like-minded people."
                 >
-                    <strong>
-                        Coalition Iron Will
-                    </strong>
-                    — это не просто команда.
-                    Это братство, союз единомышленников.
+                    <strong>Coalition Iron Will</strong> —
+                    это не просто команда. Это братство,
+                    союз единомышленников.
                 </p>
 
                 <p>
@@ -2586,10 +2435,7 @@
      КОНТАКТЫ
      ============================================================ -->
 
-<section
-    class="tab"
-    id="tab-contact"
->
+<section class="tab" id="tab-contact">
 
     <div class="hero">
 
@@ -2619,15 +2465,13 @@
             class="contact-card card"
             href="https://t.me/VladislavFoskKosarh"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener"
         >
             <span class="ico">✈️</span>
 
             <span>
                 <b>Telegram</b>
-                <small>
-                    @VladislavFoskKosarh
-                </small>
+                <small>@VladislavFoskKosarh</small>
             </span>
         </a>
 
@@ -2636,15 +2480,13 @@
             class="contact-card card"
             href="https://www.youtube.com/@VladislavFoskKosarh"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener"
         >
             <span class="ico">▶️</span>
 
             <span>
                 <b>YouTube</b>
-                <small>
-                    @VladislavFoskKosarh
-                </small>
+                <small>@VladislavFoskKosarh</small>
             </span>
         </a>
 
@@ -2653,15 +2495,13 @@
             class="contact-card card"
             href="https://github.com/VladislavFosk"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener"
         >
             <span class="ico">◉</span>
 
             <span>
                 <b>GitHub</b>
-                <small>
-                    github.com/VladislavFosk
-                </small>
+                <small>github.com/VladislavFosk</small>
             </span>
         </a>
 
@@ -2670,15 +2510,13 @@
             class="contact-card card"
             href="https://gamejolt.com/@VladislavFosk"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener"
         >
             <span class="ico">🎮</span>
 
             <span>
                 <b>GameJolt</b>
-                <small>
-                    @VladislavFosk
-                </small>
+                <small>@VladislavFosk</small>
             </span>
         </a>
 
@@ -2715,30 +2553,21 @@
         data-tab="home"
     >
         <span class="mi">🏠</span>
-        <span
-            class="i18n"
-            data-en="Home"
-        >
+        <span class="i18n" data-en="Home">
             Главная
         </span>
     </button>
 
     <button data-tab="wiki">
         <span class="mi">📚</span>
-        <span
-            class="i18n"
-            data-en="Wiki"
-        >
+        <span class="i18n" data-en="Wiki">
             Вики
         </span>
     </button>
 
     <button data-tab="contact">
         <span class="mi">✉️</span>
-        <span
-            class="i18n"
-            data-en="Contact"
-        >
+        <span class="i18n" data-en="Contact">
             Контакты
         </span>
     </button>
@@ -2752,14 +2581,13 @@
 
 <footer class="footer">
 
-    ☽ World of Kosarh ·
+    ☽ Solarium Umbris ·
     <span
         class="i18n"
         data-en="World of Kosarh"
     >
         Мир Косарха
     </span>
-
     · 2026
 
     <span class="dot">·</span>
@@ -2811,20 +2639,19 @@
 
 <script>
 function showRozaSection(section, button) {
-    document.querySelectorAll('.roza-page').forEach(el => {
-        el.classList.remove('active');
-    });
+    document
+        .querySelectorAll('.roza-page')
+        .forEach(el => el.classList.remove('active'));
 
-    const page =
-        document.getElementById('roza-' + section);
+    const page = document.getElementById('roza-' + section);
 
     if (page) {
         page.classList.add('active');
     }
 
-    document.querySelectorAll('.roza-link').forEach(el => {
-        el.classList.remove('active');
-    });
+    document
+        .querySelectorAll('.roza-link')
+        .forEach(el => el.classList.remove('active'));
 
     if (button) {
         button.classList.add('active');
@@ -2840,3 +2667,4 @@ function rozaNotReady() {
 
 </body>
 </html>
+```
