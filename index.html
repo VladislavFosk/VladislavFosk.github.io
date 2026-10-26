@@ -1,2668 +1,1594 @@
+
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="dark">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="World of Kosarh" />
-<meta name="theme-color" content="#160a17" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#05070a">
+<meta name="description" content="World of Kosarh">
 <title>World of Kosarh</title>
-<link rel="icon" href="gim/logo.png" type="image/png" />
-<link rel="stylesheet" href="style.css" />
+
+<link rel="icon" href="img/icon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <style>
-.roza-layout{
-    display:grid;
-    grid-template-columns:220px minmax(0,1fr);
-    gap:18px;
-    align-items:start
+:root {
+  --bg:#05070a;
+  --panel:rgba(13,17,23,.82);
+  --border:#1f293d;
+  --neon:#ffe600;
+  --cyan:#00f0ff;
+  --purple:#bd00ff;
+  --pink:#ff007f;
+  --text:#e6edf3;
+  --muted:#8b949e;
+  --glow:rgba(255,230,0,.25);
 }
 
-.roza-sidebar{
-    padding:10px;
-    position:sticky;
-    top:20px
+* { box-sizing:border-box; }
+
+html { scroll-behavior:smooth; }
+
+body {
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,sans-serif;
+  overflow-x:hidden;
 }
 
-.roza-side-title{
-    font-weight:800;
-    padding:12px 10px 14px;
-    border-bottom:1px solid var(--border);
-    margin-bottom:6px
+body::before {
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:40;
+  pointer-events:none;
+  background:repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 3px,
+    rgba(255,255,255,.025) 4px
+  );
 }
 
-.roza-link{
-    display:block;
-    width:100%;
-    text-align:left;
-    background:transparent;
-    color:var(--muted);
-    border:0;
-    border-radius:8px;
-    padding:10px 11px;
-    margin:2px 0;
-    font:inherit;
-    cursor:pointer
+body::after {
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(31,41,61,.34) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(31,41,61,.34) 1px,transparent 1px);
+  background-size:40px 40px;
+  mask-image:linear-gradient(to bottom,black,transparent 95%);
 }
 
-.roza-link:hover,
-.roza-link.active{
-    background:rgba(255,255,255,.06);
-    color:var(--text)
+button,input,select { font:inherit; }
+button { cursor:pointer; }
+a { color:inherit;text-decoration:none; }
+img { max-width:100%; }
+::selection { background:var(--neon);color:#000; }
+
+.mono { font-family:"Fira Code",monospace; }
+.muted { color:var(--muted); }
+.neon { color:var(--neon); }
+.cyan { color:var(--cyan); }
+
+.scanlines {
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:39;
+  opacity:.12;
 }
 
-.roza-content{
-    min-width:0
+#bgCanvas {
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:-1;
 }
 
-.roza-page{
-    display:none
+header {
+  position:sticky;
+  top:0;
+  z-index:30;
+  background:rgba(5,7,10,.92);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
 }
 
-.roza-page.active{
-    display:block
+.header-inner {
+  max-width:1280px;
+  height:66px;
+  margin:auto;
+  padding:0 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
 }
 
-.roza-download,
-.roza-back-button{
-    border:1px solid var(--a3);
-    background:transparent;
-    color:var(--text);
-    padding:10px 16px;
-    border-radius:9px;
-    cursor:pointer;
-    font:inherit;
-    margin-top:8px
+.brand {
+  display:flex;
+  align-items:center;
+  gap:11px;
+  min-width:0;
 }
 
-.roza-download:hover,
-.roza-back-button:hover{
-    background:rgba(255,255,255,.06)
+.brand-logo {
+  width:38px;
+  height:38px;
+  flex-shrink:0;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--neon);
+  border-radius:4px;
+  color:var(--neon);
+  font:700 17px "Fira Code",monospace;
+  background:var(--panel);
+  transition:.2s;
 }
 
-.roza-back-card{
-    text-align:center
+.brand:hover .brand-logo {
+  box-shadow:0 0 14px var(--glow);
 }
 
-@media(max-width:760px){
-    .roza-layout{
-        grid-template-columns:1fr
-    }
+.brand-name {
+  font:700 14px "Fira Code",monospace;
+  letter-spacing:.4px;
+  white-space:nowrap;
+}
 
-    .roza-sidebar{
-        position:static
-    }
+.brand-version {
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
+  font:9px "Fira Code",monospace;
+}
 
-    .roza-link{
-        display:inline-block;
-        width:auto
-    }
+.nav {
+  display:flex;
+  align-items:center;
+  gap:22px;
+}
+
+.nav-link {
+  border:0;
+  background:none;
+  color:var(--muted);
+  font:11px "Fira Code",monospace;
+  padding:10px 0;
+  transition:.2s;
+}
+
+.nav-link:hover,.nav-link.active { color:var(--neon); }
+
+.actions {
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.icon-button {
+  width:36px;
+  height:36px;
+  display:grid;
+  place-items:center;
+  color:var(--muted);
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:4px;
+  transition:.2s;
+}
+
+.icon-button:hover {
+  color:var(--neon);
+  border-color:var(--neon);
+}
+
+.github-button {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:9px 12px;
+  border:1px solid var(--border);
+  background:var(--panel);
+  border-radius:4px;
+  color:white;
+  font:11px "Fira Code",monospace;
+  transition:.2s;
+}
+
+.github-button:hover {
+  border-color:var(--neon);
+  box-shadow:0 0 12px var(--glow);
+}
+
+.theme-wrap { position:relative; }
+
+.theme-menu {
+  display:none;
+  position:absolute;
+  top:43px;
+  right:0;
+  width:160px;
+  padding:6px;
+  border:1px solid var(--border);
+  background:#0d1117;
+  box-shadow:0 10px 30px #0008;
+}
+
+.theme-wrap.open .theme-menu { display:block; }
+
+.theme-option {
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:10px;
+  border:0;
+  background:transparent;
+  color:var(--text);
+  text-align:left;
+  font:10px "Fira Code",monospace;
+}
+
+.theme-option:hover { background:#1f293d; }
+
+.theme-dot {
+  width:9px;
+  height:9px;
+  border-radius:50%;
+}
+
+.mobile-button { display:none; }
+
+.mobile-menu {
+  display:none;
+  padding:10px 20px 15px;
+  border-top:1px solid var(--border);
+  background:rgba(5,7,10,.98);
+}
+
+.mobile-menu.open { display:grid;gap:7px; }
+
+.mobile-link {
+  padding:12px;
+  border:1px solid transparent;
+  background:var(--panel);
+  color:var(--muted);
+  text-align:left;
+  font:11px "Fira Code",monospace;
+}
+
+.mobile-link.active,.mobile-link:hover {
+  color:var(--neon);
+  border-color:var(--border);
+}
+
+main {
+  flex:1;
+  width:100%;
+  max-width:1280px;
+  margin:0 auto;
+  padding:30px 24px 45px;
+}
+
+.status-bar {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:12px;
+  padding:13px 16px;
+  margin-bottom:28px;
+  border:1px solid var(--border);
+  border-radius:5px;
+  background:var(--panel);
+  box-shadow:0 8px 25px #0002;
+  font:10px "Fira Code",monospace;
+}
+
+.status-group {
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:16px;
+}
+
+.status-dot {
+  display:inline-block;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--neon);
+  box-shadow:0 0 8px var(--neon);
+  margin-right:6px;
+}
+
+.layout {
+  display:grid;
+  grid-template-columns:minmax(230px,1fr) minmax(0,3fr);
+  gap:30px;
+  align-items:start;
+}
+
+.sidebar,.main-column {
+  min-width:0;
+}
+
+.stack {
+  display:grid;
+  gap:22px;
+}
+
+.cyber-card {
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:9px;
+  backdrop-filter:blur(9px);
+  transition:border-color .2s,box-shadow .2s;
+}
+
+.cyber-card:hover { border-color:#303d55; }
+
+.profile-card {
+  padding:24px 21px;
+  text-align:center;
+}
+
+.avatar-wrap {
+  width:132px;
+  height:132px;
+  margin:0 auto 21px;
+  position:relative;
+}
+
+.avatar-ring {
+  position:absolute;
+  inset:-4px;
+  border-radius:50%;
+  background:conic-gradient(
+    var(--neon),
+    var(--cyan),
+    var(--purple),
+    var(--neon)
+  );
+  opacity:.85;
+  filter:blur(1px);
+  transition:.3s;
+}
+
+.avatar-wrap:hover .avatar-ring {
+  opacity:1;
+  filter:blur(4px);
+}
+
+.avatar {
+  position:relative;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:50%;
+  border:3px solid var(--bg);
+  background:#111722;
+}
+
+.avatar-placeholder {
+  position:relative;
+  width:100%;
+  height:100%;
+  display:grid;
+  place-items:center;
+  border:3px solid var(--bg);
+  border-radius:50%;
+  background:#111722;
+  color:var(--neon);
+  font:700 35px "Fira Code",monospace;
+}
+
+.avatar-status {
+  position:absolute;
+  right:-8px;
+  bottom:8px;
+  padding:5px 8px;
+  background:var(--bg);
+  border:1px solid var(--neon);
+  border-radius:20px;
+  color:var(--neon);
+  font:9px "Fira Code",monospace;
+}
+
+.profile-name {
+  margin:0;
+  font:700 20px "Fira Code",monospace;
+  line-height:1.5;
+  overflow-wrap:anywhere;
+}
+
+.profile-handle {
+  margin:5px 0 14px;
+  color:var(--neon);
+  font:11px "Fira Code",monospace;
+}
+
+.profile-bio {
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.8;
+  margin:0 0 18px;
+}
+
+.tags {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:6px;
+  margin:16px 0 20px;
+}
+
+.tag {
+  padding:5px 7px;
+  border:1px solid var(--border);
+  color:var(--muted);
+  font:9px "Fira Code",monospace;
+}
+
+.tag-yellow { color:var(--neon);border-color:#ffe60040; }
+.tag-cyan { color:var(--cyan);border-color:#00f0ff40; }
+.tag-purple { color:#d9a0ff;border-color:#bd00ff40; }
+
+.profile-buttons {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.action-button {
+  padding:10px 8px;
+  border:1px solid var(--border);
+  border-radius:4px;
+  background:var(--panel);
+  color:var(--text);
+  font:10px "Fira Code",monospace;
+  transition:.2s;
+}
+
+.action-button.primary {
+  color:var(--neon);
+  border-color:var(--neon);
+  background:#ffe6000b;
+}
+
+.action-button:hover {
+  border-color:var(--cyan);
+  color:var(--cyan);
+}
+
+.side-section { padding:19px; }
+
+.section-label {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:0 0 16px;
+  color:var(--neon);
+  font:700 10px "Fira Code",monospace;
+  letter-spacing:.5px;
+}
+
+.metric { margin-bottom:15px; }
+.metric:last-child { margin-bottom:0; }
+
+.metric-label {
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:7px;
+  color:var(--muted);
+  font:9px "Fira Code",monospace;
+}
+
+.metric-bar {
+  height:5px;
+  overflow:hidden;
+  background:#080b10;
+  border:1px solid var(--border);
+}
+
+.metric-fill {
+  height:100%;
+  background:var(--neon);
+  box-shadow:0 0 9px var(--glow);
+}
+
+.metric-fill.cyan-fill {
+  background:var(--cyan);
+  box-shadow:0 0 9px #00f0ff30;
+}
+
+.friend-link {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:11px;
+  border:1px solid var(--border);
+  border-radius:4px;
+  color:var(--muted);
+  font:10px "Fira Code",monospace;
+  transition:.2s;
+}
+
+.friend-link:hover {
+  border-color:var(--neon);
+  color:var(--neon);
+}
+
+.friend-link-left {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+}
+
+.friend-link-left span { overflow-wrap:anywhere; }
+
+.view-panel { display:none; }
+.view-panel.active { display:block;animation:fadeIn .25s ease; }
+
+@keyframes fadeIn {
+  from { opacity:0;transform:translateY(5px); }
+  to { opacity:1;transform:translateY(0); }
+}
+
+.hero {
+  padding:clamp(24px,4vw,40px);
+  position:relative;
+  overflow:hidden;
+  margin-bottom:27px;
+}
+
+.hero::after {
+  content:"WK";
+  position:absolute;
+  right:-4px;
+  bottom:-55px;
+  color:#ffe60008;
+  font:800 180px Inter,sans-serif;
+  pointer-events:none;
+}
+
+.eyebrow {
+  color:var(--cyan);
+  font:10px "Fira Code",monospace;
+  letter-spacing:1.5px;
+  margin-bottom:17px;
+}
+
+.hero-title {
+  position:relative;
+  z-index:1;
+  margin:0 0 17px;
+  color:white;
+  font-size:clamp(25px,3vw,38px);
+  font-weight:800;
+  letter-spacing:-1.2px;
+  line-height:1.25;
+}
+
+.hero-title span {
+  color:transparent;
+  background:linear-gradient(90deg,var(--neon),var(--cyan),var(--purple));
+  background-clip:text;
+  -webkit-background-clip:text;
+}
+
+.hero-description {
+  position:relative;
+  z-index:1;
+  max-width:670px;
+  margin:0;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.95;
+}
+
+.hero-actions {
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:23px;
+}
+
+.hero-button {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  padding:11px 14px;
+  border:1px solid var(--neon);
+  border-radius:4px;
+  background:#ffe6000b;
+  color:var(--neon);
+  font:10px "Fira Code",monospace;
+  transition:.2s;
+}
+
+.hero-button:hover {
+  background:var(--neon);
+  color:#000;
+  box-shadow:0 0 18px var(--glow);
+}
+
+.hero-button.secondary {
+  border-color:var(--border);
+  color:var(--text);
+  background:transparent;
+}
+
+.hero-button.secondary:hover {
+  border-color:var(--cyan);
+  color:var(--cyan);
+  background:transparent;
+}
+
+.section-heading {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:12px;
+  margin:29px 0 15px;
+}
+
+.section-heading h2,.section-heading h3 {
+  margin:0;
+  color:white;
+  font:700 12px "Fira Code",monospace;
+  letter-spacing:.3px;
+}
+
+.section-heading h2 i,.section-heading h3 i {
+  margin-right:7px;
+  color:var(--neon);
+}
+
+.section-note {
+  color:var(--muted);
+  font:9px "Fira Code",monospace;
+}
+
+.stats-grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+}
+
+.stat-card { padding:17px; }
+
+.stat-icon {
+  margin-bottom:13px;
+  color:var(--neon);
+  font-size:14px;
+}
+
+.stat-number {
+  color:white;
+  font:700 20px "Fira Code",monospace;
+}
+
+.stat-caption {
+  margin-top:6px;
+  color:var(--muted);
+  font:9px "Fira Code",monospace;
+  line-height:1.6;
+}
+
+.heatmap-card { padding:20px; }
+
+.heatmap-wrapper {
+  width:100%;
+  min-height:60px;
+  overflow-x:auto;
+}
+
+.heatmap-image {
+  display:block;
+  width:100%;
+  min-width:400px;
+  height:auto;
+  filter:drop-shadow(0 0 5px #ffe60020);
+}
+
+.heatmap-caption {
+  margin-top:13px;
+  color:var(--muted);
+  font:9px "Fira Code",monospace;
+}
+
+.repo-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+
+.repo-card {
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:15px;
+  min-width:0;
+  padding:19px;
+  transition:transform .2s,border-color .2s,box-shadow .2s;
+}
+
+.repo-card:hover {
+  transform:translateY(-2px);
+  border-color:var(--neon);
+  box-shadow:0 0 16px #ffe60008;
+}
+
+.repo-top {
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.repo-name {
+  display:flex;
+  align-items:flex-start;
+  gap:9px;
+  min-width:0;
+  color:var(--neon);
+  font:700 11px/1.7 "Fira Code",monospace;
+  overflow-wrap:anywhere;
+}
+
+.repo-name i { margin-top:4px; }
+
+.repo-fork {
+  color:var(--muted);
+  font-size:10px;
+  flex-shrink:0;
+}
+
+.repo-description {
+  min-height:40px;
+  margin-top:9px;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.8;
+  overflow-wrap:anywhere;
+}
+
+.repo-meta {
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:13px;
+  padding-top:12px;
+  border-top:1px solid var(--border);
+  color:var(--muted);
+  font:9px "Fira Code",monospace;
+}
+
+.repo-meta span {
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+}
+
+.language-dot {
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  display:inline-block;
+}
+
+.project-toolbar {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:12px;
+  padding:14px;
+  margin-bottom:16px;
+}
+
+.search-input,.sort-select {
+  padding:11px 13px;
+  background:#080b10;
+  border:1px solid var(--border);
+  border-radius:4px;
+  color:var(--text);
+  outline:none;
+  font:10px "Fira Code",monospace;
+}
+
+.search-input {
+  width:100%;
+  min-width:0;
+}
+
+.search-input:focus,.sort-select:focus { border-color:var(--neon); }
+
+.search-box { flex:1;min-width:180px; }
+
+.sort-select { max-width:180px; }
+
+.page-title {
+  margin:0;
+  color:white;
+  font:700 23px "Fira Code",monospace;
+}
+
+.page-description {
+  margin:13px 0 22px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.9;
+}
+
+.repo-status {
+  margin-top:14px;
+  color:var(--muted);
+  font:10px "Fira Code",monospace;
+  line-height:1.8;
+}
+
+.loading {
+  grid-column:1/-1;
+  padding:25px;
+  color:var(--muted);
+  border:1px solid var(--border);
+  border-radius:8px;
+  font:11px "Fira Code",monospace;
+  line-height:1.9;
+}
+
+.loading i { color:var(--neon);margin-right:8px; }
+
+.footer {
+  max-width:1280px;
+  width:100%;
+  margin:auto;
+  padding:20px 24px 28px;
+  border-top:1px solid var(--border);
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:12px;
+  color:var(--muted);
+  font:9px "Fira Code",monospace;
+}
+
+.footer span { color:var(--neon); }
+
+.toast {
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:60;
+  padding:13px 16px;
+  max-width:calc(100vw - 40px);
+  border:1px solid var(--neon);
+  background:#0d1117;
+  color:var(--neon);
+  font:10px "Fira Code",monospace;
+  opacity:0;
+  transform:translateY(8px);
+  pointer-events:none;
+  transition:.25s;
+}
+
+.toast.show { opacity:1;transform:translateY(0); }
+
+body.theme-synthwave {
+  --neon:#ff3df2;
+  --cyan:#00eaff;
+  --purple:#ffe600;
+  --glow:rgba(255,61,242,.22);
+}
+
+body.theme-space {
+  --neon:#38bdf8;
+  --cyan:#a78bfa;
+  --purple:#00f0ff;
+  --glow:rgba(56,189,248,.22);
+}
+
+@media (min-width:1000px) {
+  .profile-card { text-align:left; }
+  .avatar-wrap { margin-left:4px; }
+  .tags { justify-content:flex-start; }
+}
+
+@media (max-width:900px) {
+  .header-inner { padding:0 16px;gap:12px; }
+  .nav { gap:13px; }
+  .nav-link { font-size:10px; }
+  .layout { grid-template-columns:minmax(210px,1fr) minmax(0,2.4fr);gap:18px; }
+  main { padding:24px 16px 35px; }
+  .repo-grid { gap:10px; }
+}
+
+@media (max-width:700px) {
+  .header-inner { height:62px; }
+  .brand-name { font-size:12px; }
+  .brand-version { font-size:8px; }
+  .nav { display:none; }
+  .mobile-button { display:grid; }
+  .theme-wrap { display:none; }
+  .layout { grid-template-columns:1fr;gap:22px; }
+  .profile-card { text-align:center; }
+  .avatar-wrap { margin:0 auto 21px; }
+  .tags { justify-content:center; }
+  .status-bar { align-items:flex-start; }
+  .status-group { gap:10px; }
+  .hero { padding:25px 21px; }
+  .hero-title { font-size:27px; }
+  .repo-grid { grid-template-columns:1fr; }
+  .section-heading { margin-top:25px; }
+  .stats-grid { gap:8px; }
+  .stat-card { padding:12px; }
+  .stat-number { font-size:15px; }
+  .stat-caption { font-size:8px; }
+  .heatmap-card { padding:14px; }
+  .footer { padding:18px 16px 25px; }
+}
+
+@media (max-width:390px) {
+  .brand-name { font-size:10px; }
+  .brand-logo { width:33px;height:33px; }
+  .github-button { padding:9px; }
+  .github-button span { display:none; }
+  .stats-grid { grid-template-columns:1fr; }
+  .stat-card { display:flex;align-items:center;gap:12px; }
+  .stat-icon { margin:0; }
+  .stat-caption { margin-top:3px; }
+  .project-toolbar { align-items:stretch; }
+  .search-box { min-width:100%; }
+  .sort-select { max-width:none;width:100%; }
 }
 </style>
 </head>
 
 <body>
+<div class="scanlines"></div>
+<canvas id="bgCanvas" aria-hidden="true"></canvas>
 
-<div class="stars" id="stars" aria-hidden="true"></div>
+<header>
+  <div class="header-inner">
+    <a href="#profile" class="brand" aria-label="World of Kosarh — главная">
+      <div class="brand-logo">&gt;_</div>
+      <div>
+        <div class="brand-name">WORLD OF KOSARH</div>
+        <span class="brand-version">SYS.VER//2026.1</span>
+      </div>
+    </a>
 
-<header class="header">
-    <div class="logo">
-        <span class="icon">☽</span>
+    <nav class="nav">
+      <button class="nav-link active" data-view="profile">
+        <i class="fa-solid fa-user-ninja"></i> [ПРОФИЛЬ]
+      </button>
+      <button class="nav-link" data-view="projects">
+        <i class="fa-solid fa-cubes"></i> [ПРОЕКТЫ]
+      </button>
+    </nav>
 
-        <div>
-            <h1>Solarium <span class="grad">Umbris</span></h1>
-            <span class="subtitle grad">✦ Мир Косарха ✦</span>
-        </div>
-    </div>
-
-    <div class="right-group">
-        <nav class="nav-buttons" id="tabNav" aria-label="Main navigation">
-            <button class="active" data-tab="home">
-                🏠 <span class="i18n" data-en="Home">Главная</span>
-            </button>
-
-            <button data-tab="wiki">
-                📚 <span class="i18n" data-en="My Wiki">Моя Вики</span>
-            </button>
-
-            <button data-tab="contact">
-                ✉️ <span class="i18n" data-en="Contact">Контакты</span>
-            </button>
-        </nav>
-
-        <button class="lang-toggle" id="langToggle" aria-label="Switch language">
-            ENG
+    <div class="actions">
+      <div class="theme-wrap" id="theme-wrap">
+        <button class="icon-button" id="theme-button" title="Выбрать тему" aria-label="Выбрать тему">
+          <i class="fa-solid fa-palette"></i>
         </button>
+        <div class="theme-menu">
+          <button class="theme-option" data-theme="neon">
+            <span class="theme-dot" style="background:#ffe600"></span> Cyber Yellow
+          </button>
+          <button class="theme-option" data-theme="synthwave">
+            <span class="theme-dot" style="background:#ff3df2"></span> Synthwave
+          </button>
+          <button class="theme-option" data-theme="space">
+            <span class="theme-dot" style="background:#38bdf8"></span> Deep Space
+          </button>
+        </div>
+      </div>
+
+      <a class="github-button" href="https://github.com/vladislavfosk" target="_blank" rel="noopener noreferrer">
+        <i class="fa-brands fa-github"></i><span>GitHub</span>
+      </a>
+
+      <button class="icon-button mobile-button" id="mobile-menu-button" aria-label="Открыть меню">
+        <i class="fa-solid fa-bars"></i>
+      </button>
     </div>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <button class="mobile-link active" data-view="profile">
+      <i class="fa-solid fa-user-ninja"></i> [ПРОФИЛЬ]
+    </button>
+    <button class="mobile-link" data-view="projects">
+      <i class="fa-solid fa-cubes"></i> [ПРОЕКТЫ]
+    </button>
+  </div>
 </header>
 
 <main>
+  <div class="status-bar">
+    <div class="status-group">
+      <span><span class="status-dot"></span><span class="muted">СТАТУС СИСТЕМЫ:</span> <strong>ОНЛАЙН</strong></span>
+      <span class="muted"><i class="fa-solid fa-code-branch neon"></i> main*</span>
+    </div>
+    <div class="status-group">
+      <span class="muted"><i class="fa-solid fa-globe cyan"></i> WORLD OF KOSARH</span>
+      <span class="neon" id="liveClock">00:00:00</span>
+    </div>
+  </div>
 
-<!-- ============================================================
-     ГЛАВНАЯ
-     ============================================================ -->
+  <div class="layout">
+    <aside class="sidebar stack">
+      <section class="cyber-card profile-card">
+        <div class="avatar-wrap">
+          <div class="avatar-ring"></div>
+          <div class="avatar-placeholder" id="avatar-placeholder">WK</div>
+          <img class="avatar" id="profile-avatar" src="https://github.com/vladislavfosk.png" alt="Аватар GitHub" hidden>
+          <div class="avatar-status">WORLD BUILDER</div>
+        </div>
 
-<section class="tab active" id="tab-home">
+        <h1 class="profile-name">Владислав Фоск-Косарх</h1>
+        <div class="profile-handle">@vladislavfosk</div>
 
-    <div class="hero reveal">
-        <h2>
-            ✧
-            <span class="i18n grad" data-en="Welcome to the World of Kosarh">
-                Добро пожаловать в Мир Косарха
-            </span>
+        <p class="profile-bio">
+          Создатель собственных миров, моддер Hearts of Iron IV и автор цифровых проектов. История, альтернативная политика, флаги, лор и разработка.
+        </p>
+
+        <div class="tags">
+          <span class="tag tag-yellow">HOI4 MODDER</span>
+          <span class="tag tag-cyan">WORLD BUILDER</span>
+          <span class="tag tag-purple">CREATOR</span>
+        </div>
+
+        <div class="profile-buttons">
+          <a class="action-button primary" href="https://github.com/vladislavfosk" target="_blank" rel="noopener noreferrer">
+            <i class="fa-brands fa-github"></i> GITHUB
+          </a>
+          <button class="action-button" id="copy-profile">
+            <i class="fa-solid fa-link"></i> ССЫЛКА
+          </button>
+        </div>
+      </section>
+
+      <section class="cyber-card side-section">
+        <h2 class="section-label">
+          <span><i class="fa-solid fa-chart-simple"></i> МЕТРИКИ ПРОФИЛЯ</span>
+          <i class="fa-solid fa-signal"></i>
         </h2>
 
-        <p class="i18n" data-en="Encyclopedia of worlds, projects and ideas">
-            Энциклопедия миров, проектов и идей
-        </p>
-
-        <div class="stats-bar">
-            <span>
-                📦 <strong>4</strong>
-                <span class="i18n" data-en="projects">проекта</span>
-            </span>
-
-            <span>
-                🏆 <strong>3</strong>
-                <span class="i18n" data-en="achievements">достижения</span>
-            </span>
-
-            <span>
-                👤 <strong>18</strong>
-                <span class="i18n" data-en="years old">лет</span>
-            </span>
-        </div>
-    </div>
-
-
-    <!-- ========================================================
-         ИНФОРМАЦИЯ ОБО МНЕ
-         ======================================================== -->
-
-    <div class="profile-hero card reveal">
-        <img
-            class="avatar"
-            src="gim/AVATARKA.jpg"
-            alt="Vladislav Fosk-Kosarh"
-            width="120"
-            height="120"
-        />
-
-        <div>
-            <div class="name grad">Vladislav Fosk-Kosarh</div>
-
-            <div class="nick">@Foskarh</div>
-
-            <div class="ptitle">
-                👑
-                <span
-                    class="i18n"
-                    data-en="Supreme Sovereign of the Kosarh Free Land"
-                >
-                    Верховный правитель Свободной Земли Косарха
-                </span>
-            </div>
-
-            <div class="tags">
-                <span class="tag">
-                    💻
-                    <span class="i18n" data-en="Developer">
-                        Разработчик
-                    </span>
-                </span>
-
-                <span class="tag">
-                    🐧 Linux
-                </span>
-
-                <span class="tag">
-                    🛠️
-                    <span class="i18n" data-en="Creator">
-                        Творец
-                    </span>
-                </span>
-
-                <span class="tag">
-                    ⚔️ Coalition Iron Will
-                </span>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="quick-info reveal">
-
-        <div class="quick-item card">
-            <span>🎂</span>
-
-            <div>
-                <small class="i18n" data-en="Age">
-                    Возраст
-                </small>
-
-                <strong>
-                    18
-                    <span class="i18n" data-en="years">
-                        лет
-                    </span>
-                </strong>
-            </div>
+        <div class="metric">
+          <div class="metric-label">
+            <span>CREATIVITY</span><span class="neon">ACTIVE</span>
+          </div>
+          <div class="metric-bar"><div class="metric-fill" style="width:91%"></div></div>
         </div>
 
-
-        <div class="quick-item card">
-            <span>🏴</span>
-
-            <div>
-                <small class="i18n" data-en="Nationality">
-                    Национальность
-                </small>
-
-                <strong>Kosarh</strong>
-            </div>
+        <div class="metric">
+          <div class="metric-label">
+            <span>WORLD BUILDING</span><span class="cyan">ONLINE</span>
+          </div>
+          <div class="metric-bar"><div class="metric-fill cyan-fill" style="width:84%"></div></div>
         </div>
 
-
-        <div class="quick-item card">
-            <span>🎓</span>
-
-            <div>
-                <small class="i18n" data-en="Education">
-                    Образование
-                </small>
-
-                <strong class="i18n" data-en="Technician">
-                    Техник
-                </strong>
-            </div>
+        <div class="metric">
+          <div class="metric-label">
+            <span>MODDING ENGINE</span><span class="neon">RUNNING</span>
+          </div>
+          <div class="metric-bar"><div class="metric-fill" style="width:76%"></div></div>
         </div>
-
-
-        <div class="quick-item card">
-            <span>⚔️</span>
-
-            <div>
-                <small class="i18n" data-en="Organization">
-                    Организация
-                </small>
-
-                <strong>
-                    Coalition Iron Will
-                </strong>
-            </div>
-        </div>
-
-    </div>
-
-
-    <div class="block card reveal">
-
-        <h3>
-            📜
-            <span class="i18n" data-en="About Me">
-                О себе
-            </span>
-        </h3>
-
-        <div class="block-text">
-
-            <p
-                class="i18n"
-                data-en="<strong>Hi.</strong> My main job is as a maintenance technician — I work with equipment and hardware. Programming is my new hobby; I'm just starting to get into it, learning little by little. I want to create something of my own, even if it's small, but made with my own hands."
-            >
-                <strong>Привет.</strong>
-                Моя основная работа — наладчик, я имею дело с оборудованием и железом.
-                А программирование — это моё новое увлечение, я только начинаю в него
-                погружаться, изучаю понемногу. Хочется сделать что-то своё, пусть даже
-                небольшое, но своими руками.
-            </p>
-
-            <p
-                class="i18n"
-                data-en="I put effort into it, trying to figure things out even when something doesn't work. It's my escape."
-            >
-                Я вкладываю в это старание, даже когда что-то не получается,
-                пытаюсь разобраться. Это моя отдушина.
-            </p>
-
-            <p
-                class="i18n"
-                data-en="But I'm human, and emotions take their toll. When something goes wrong — code gets stuck, a project won't compile, or just some little thing throws me off — I get upset. I can withdraw into myself, go quiet, stop noticing what's going on around me."
-            >
-                Но я человек, и эмоции берут своё. Когда что-то идёт не так —
-                завис код, не собирается проект или просто какая-то мелочь выбивает
-                из колеи — я расстраиваюсь. Могу замкнуться в себе, замолчать,
-                перестать замечать, что творится вокруг.
-            </p>
-
-            <p
-                class="i18n"
-                data-en="That's how I am. With all my ups and downs, weaknesses, and stubbornness."
-            >
-                Такой я есть. Со всеми своими взлётами, падениями,
-                слабостями и упрямством.
-            </p>
-
-            <div class="tags">
-
-                <span class="tag gold">
-                    ☀️
-                    <span class="i18n" data-en="Sun Child">
-                        Солнечный ребёнок
-                    </span>
-                </span>
-
-                <span class="tag pink">
-                    ✝️
-                    <span class="i18n" data-en="Orthodox Christian">
-                        Православный христианин
-                    </span>
-                </span>
-
-            </div>
-        </div>
-    </div>
-
-
-    <div class="block card">
-
-        <h3>
-            🗣️
-            <span class="i18n" data-en="Languages">
-                Языки
-            </span>
-        </h3>
-
-        <div class="block-text">
-
-            🇷🇺
-            <span class="i18n" data-en="Russian">
-                Русский
-            </span>
-            —
-            <strong class="i18n" data-en="Native">
-                Родной
-            </strong>
-
-            <br />
-
-            🇬🇧
-            <span class="i18n" data-en="English">
-                Английский
-            </span>
-            —
-            <strong class="i18n" data-en="So-so">
-                Так себе
-            </strong>
-
-            <span class="label">
-                (
-                <span
-                    class="i18n"
-                    data-en="often use translator"
-                >
-                    часто пользуюсь переводчиком
-                </span>
-                )
-            </span>
-
-        </div>
-    </div>
-
-
-    <div class="block card">
-
-        <h3>
-            💻
-            <span class="i18n" data-en="Operating Systems">
-                Операционные системы
-            </span>
-        </h3>
-
-        <div class="block-text">
-            🪟 Windows
-            <br />
-            🐧 GNU/Linux (Debian, XFCE)
-        </div>
-
-    </div>
-
-
-    <div class="block card">
-
-        <h3>
-            🧠
-            <span class="i18n" data-en="Skills">
-                Навыки
-            </span>
-        </h3>
-
-        <div class="block-text">
-
-            <strong>
-                💻
-                <span class="i18n" data-en="Programming">
-                    Программирование
-                </span>:
-            </strong>
-
-            HTML, CSS, JavaScript
-
-            <br />
-
-            <strong>🐧 Linux:</strong>
-            Debian, XFCE,
-            <span class="i18n" data-en="System setup">
-                Настройка системы
-            </span>
-
-            <br />
-
-            <strong>
-                🔧
-                <span class="i18n" data-en="Hardware">
-                    Железо
-                </span>:
-            </strong>
-
-            PC,
-            <span
-                class="i18n"
-                data-en="Troubleshooting, Maintenance"
-            >
-                Диагностика, обслуживание
-            </span>
-
-            <br />
-
-            <strong>
-                🎮
-                <span class="i18n" data-en="Modding">
-                    Моддинг
-                </span>:
-            </strong>
-
-            HOI4,
-            <span
-                class="i18n"
-                data-en="Game projects, Worldbuilding"
-            >
-                Игровые проекты, миростроение
-            </span>
-
-        </div>
-    </div>
-
-
-    <!-- ========================================================
-         GITHUB
-         ======================================================== -->
-
-    <div class="block card">
-
-        <h3>
-            🐙
-            <span class="i18n" data-en="GitHub Activity">
-                Активность GitHub
-            </span>
-        </h3>
-
-        <div
-            id="ghHeatmap"
-            class="gh-heatmap"
-            aria-label="GitHub contributions heatmap"
-        ></div>
-
-        <div
-            id="ghHeatmapLegend"
-            class="gh-heatmap-legend"
-        ></div>
-
-
-        <h4 style="margin:18px 0 8px;font-size:14px;color:var(--text2)">
-            📌
-            <span
-                class="i18n"
-                data-en="Pinned Repositories"
-            >
-                Избранные репозитории
-            </span>
-        </h4>
-
-        <div
-            id="ghPinned"
-            class="gh-repos"
-        ></div>
-
-
-        <h4 style="margin:22px 0 8px;font-size:14px;color:var(--text2)">
-            📦
-            <span
-                class="i18n"
-                data-en="All Repositories"
-            >
-                Все репозитории
-            </span>
-        </h4>
-
-        <input
-            id="ghSearch"
-            type="text"
-            placeholder="Поиск репозиториев..."
-            class="gh-search"
-        />
-
-        <div
-            id="ghAll"
-            class="gh-repos"
-        ></div>
-
-        <p
-            id="ghStatus"
-            class="gh-status"
-        ></p>
-
-    </div>
-
-
-    <!-- ========================================================
-         ДРУЗЬЯ
-         ======================================================== -->
-
-    <div class="block card">
-
-        <h3>
-            🤝
-            <span
-                class="i18n"
-                data-en="Friends &amp; Brothers"
-            >
-                Друзья и братья
-            </span>
-        </h3>
-
-        <div class="friends">
-
-            <span>🛡️ Tverd</span>
-
-            <span>⚡ Yonkia</span>
-
-            <span>🔥 Koivo</span>
-
-            <span>
-                🌊
-                <a
-                    class="friend-link"
-                    href="https://b0o0q.github.io/qwq.github.io/"
-                    target="_blank"
-                    rel="noopener"
-                >
-                    Femadoria
-                </a>
-            </span>
-
-        </div>
-    </div>
-
-
-    <!-- ========================================================
-         ДОСТИЖЕНИЯ
-         ======================================================== -->
-
-    <div class="block card">
-
-        <h3>
-            🏆
-            <span class="i18n" data-en="Achievements">
-                Достижения
-            </span>
-        </h3>
-
-
-        <div class="ach">
-
-            <span>🥇</span>
-
-            <span>
-
-                <b
-                    class="i18n"
-                    data-en="Winner's Diploma — &quot;Legacy of Outstanding Entrepreneurs of Russia&quot;"
-                >
-                    Диплом победителя — «Наследие выдающихся предпринимателей России»
-                </b>
-
-                <small
-                    class="i18n"
-                    data-en="All-Russian competition on the history of entrepreneurship. Finalist of the regional stage in Tver."
-                >
-                    Всероссийский конкурс по истории предпринимательства.
-                    Финалист регионального этапа в Твери.
-                </small>
-
-            </span>
-
-        </div>
-
-
-        <div class="ach">
-
-            <span>📜</span>
-
-            <span>
-
-                <b
-                    class="i18n"
-                    data-en="Participant Certificate — &quot;Through the Pages of the Great Victory&quot;"
-                >
-                    Сертификат участника — «По страницам Великой Победы»
-                </b>
-
-                <small
-                    class="i18n"
-                    data-en="Team intellectual game dedicated to the 80th anniversary of Victory in the Great Patriotic War 1941–1945."
-                >
-                    Командная интеллектуальная игра к 80-летию Победы
-                    в Великой Отечественной войне 1941–1945.
-                </small>
-
-            </span>
-
-        </div>
-
-
-        <div class="ach">
-
-            <span>🥇</span>
-
-            <span>
-
-                <b
-                    class="i18n"
-                    data-en="Winner's Diploma — &quot;Scarlet Sails&quot;"
-                >
-                    Диплом победителя — «Алые паруса»
-                </b>
-
-                <small
-                    class="i18n"
-                    data-en="Winner of the All-Russian distance Olympiad in Physics among students of professional educational organizations."
-                >
-                    Победитель Всероссийской дистанционной олимпиады
-                    по физике среди студентов профессиональных образовательных организаций.
-                </small>
-
-            </span>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- ============================================================
-     ВИКИ
-     ============================================================ -->
-
-<section class="tab" id="tab-wiki">
-
-    <div class="hero">
-
-        <h2>
-            📚
-            <span class="i18n grad" data-en="My Wiki">
-                Моя Вики
-            </span>
+      </section>
+
+      <section class="cyber-card side-section">
+        <h2 class="section-label">
+          <span><i class="fa-solid fa-users"></i> ПАПКА: ДРУЗЬЯ</span>
+          <span class="muted">[SYS.NET]</span>
         </h2>
 
-        <p
-            class="i18n"
-            data-en="All projects, ideas and developments"
-        >
-            Все проекты, идеи и разработки
-        </p>
+        <a class="friend-link" href="https://vladislavfosk.github.io/#home" target="_blank" rel="noopener noreferrer">
+          <span class="friend-link-left">
+            <i class="fa-solid fa-link"></i>
+            <span>friend_site.sys</span>
+          </span>
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      </section>
+    </aside>
 
-    </div>
+    <section class="main-column">
+      <div id="view-profile" class="view-panel active">
+        <section class="cyber-card hero">
+          <div class="eyebrow">// WELCOME TO MY DIGITAL WORLD</div>
+          <h2 class="hero-title">
+            Добро пожаловать<br>
+            в <span>World of Kosarh</span>
+          </h2>
+          <p class="hero-description">
+            Моё личное цифровое пространство, где собираются проекты, альтернативные истории, модификации и идеи. От разработки миров для Hearts of Iron IV до собственных веб-проектов — здесь находится всё, над чем я работаю.
+          </p>
+          <div class="hero-actions">
+            <button class="hero-button" data-view="projects">
+              <i class="fa-solid fa-cubes"></i> ИССЛЕДОВАТЬ ПРОЕКТЫ
+            </button>
+            <a class="hero-button secondary" href="https://github.com/vladislavfosk" target="_blank" rel="noopener noreferrer">
+              <i class="fa-brands fa-github"></i> МОЙ GITHUB
+            </a>
+          </div>
+        </section>
 
-
-    <div
-        class="wiki-entry card reveal"
-        onclick="switchTab('project-roza')"
-    >
-
-        <div class="top-row">
-
-            <div class="ico">
-                <img
-                    src="gim/rozaos.png"
-                    alt="Roza OS"
-                />
-            </div>
-
-            <div>
-                <div class="pname">
-                    Roza OS
-                </div>
-
-                <span class="sub">
-                    Private Linux OS Project
-                </span>
-            </div>
-
-            <span
-                class="badge"
-                style="border-color:var(--a3);color:var(--a3)"
-            >
-                🔒
-                <span
-                    class="i18n"
-                    data-en="Classified"
-                >
-                    Засекречено
-                </span>
-            </span>
-
+        <div class="section-heading">
+          <h2><i class="fa-solid fa-chart-pie"></i> ОБЗОР ПРОФИЛЯ</h2>
+          <span class="section-note">GITHUB NETWORK</span>
         </div>
 
-        <p
-            class="i18n"
-            data-en="A private operating system project. Technical information is currently classified."
-        >
-            Закрытый проект операционной системы.
-            Техническая информация пока засекречена.
-        </p>
-
-        <div class="tags">
-            <span class="tag">Roza OS</span>
-            <span class="tag">Linux</span>
-            <span class="tag">Private Project</span>
-            <span class="tag pink">Coalition Iron Will</span>
+        <div class="stats-grid">
+          <div class="cyber-card stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-folder-open"></i></div>
+            <div class="stat-number" id="repo-count">--</div>
+            <div class="stat-caption">PUBLIC REPOSITORIES</div>
+          </div>
+          <div class="cyber-card stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-star"></i></div>
+            <div class="stat-number" id="star-count">--</div>
+            <div class="stat-caption">TOTAL STARS</div>
+          </div>
+          <div class="cyber-card stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-code-branch"></i></div>
+            <div class="stat-number" id="fork-count">--</div>
+            <div class="stat-caption">TOTAL FORKS</div>
+          </div>
         </div>
 
-    </div>
-
-
-    <div
-        class="wiki-entry card"
-        onclick="switchTab('project-solarium')"
-    >
-
-        <div class="top-row">
-
-            <div class="ico">☽</div>
-
-            <div>
-                <div class="pname">
-                    World of Kosarh
-                </div>
-
-                <span class="sub">
-                    Mod for Hearts of Iron IV
-                </span>
-            </div>
-
-            <span class="badge frozen">
-                ❄️
-                <span
-                    class="i18n"
-                    data-en="Frozen"
-                >
-                    Заморожен
-                </span>
-            </span>
-
+        <div class="section-heading">
+          <h2><i class="fa-solid fa-calendar-days"></i> ГРАФИК АКТИВНОСТИ GITHUB</h2>
+          <span class="section-note">CONTRIBUTION HISTORY</span>
         </div>
 
-        <p
-            class="i18n"
-            data-en="Mod for Hearts of Iron IV with unique states and alternative history."
-        >
-            Мод для Hearts of Iron IV с уникальными государствами
-            и альтернативной историей.
-        </p>
-
-        <div class="tags">
-            <span class="tag">HOI4</span>
-            <span class="tag">Mod</span>
-            <span class="tag">Alternative history</span>
-            <span class="tag pink">Coalition Iron Will</span>
-        </div>
-
-    </div>
-
-
-    <div
-        class="wiki-entry card"
-        onclick="switchTab('project-blackorder')"
-    >
-
-        <div class="top-row">
-
-            <div class="ico">🖤</div>
-
-            <div>
-                <div class="pname">
-                    Special Army "Black Order"
-                </div>
-
-                <span class="sub">
-                    RP Faction in BRM 5
-                </span>
-            </div>
-
-            <span class="badge frozen">
-                ❄️
-                <span
-                    class="i18n"
-                    data-en="Frozen"
-                >
-                    Заморожен
-                </span>
-            </span>
-
-        </div>
-
-        <p
-            class="i18n"
-            data-en="Elite military unit in BRM 5 — a faction for experienced players."
-        >
-            Элитное военное подразделение в BRM 5 —
-            фракция для опытных игроков.
-        </p>
-
-        <div class="tags">
-            <span class="tag">BRM 5</span>
-            <span class="tag">RP Faction</span>
-            <span class="tag pink">Coalition Iron Will</span>
-        </div>
-
-    </div>
-
-
-    <div
-        class="wiki-entry card"
-        onclick="switchTab('project-coalition')"
-        style="border-color:var(--green)"
-    >
-
-        <div class="top-row">
-
-            <div class="ico">⚔️</div>
-
-            <div>
-                <div class="pname">
-                    Coalition Iron Will
-                </div>
-
-                <span class="sub">
-                    Alliance of close friends and companions
-                </span>
-            </div>
-
-            <span class="badge active">
-                🟢
-                <span
-                    class="i18n"
-                    data-en="Active"
-                >
-                    Активен
-                </span>
-            </span>
-
-        </div>
-
-        <p
-            class="i18n"
-            data-en="Brotherhood of like-minded people united by common goals and values."
-        >
-            Братство единомышленников, объединённых общими целями
-            и ценностями.
-        </p>
-
-        <div class="tags">
-            <span class="tag gold">Alliance</span>
-            <span class="tag pink">Friends</span>
-            <span class="tag pink">Companions</span>
-            <span class="tag green">Coalition Iron Will</span>
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- ============================================================
-     ROZA OS
-     ============================================================ -->
-
-<section class="tab" id="tab-project-roza">
-
-    <a
-        class="back"
-        onclick="switchTab('wiki')"
-    >
-        ←
-        <span
-            class="i18n"
-            data-en="Back to wiki"
-        >
-            Назад к вики
-        </span>
-    </a>
-
-
-    <div class="header-info">
-
-        <div class="ico">
+        <section class="cyber-card heatmap-card">
+          <div class="heatmap-wrapper">
             <img
-                src="gim/rozaos.png"
-                alt="Roza OS"
-            />
+              id="heatmap-image"
+              class="heatmap-image"
+              src="https://ghchart.rshah.org/ffe600/vladislavfosk"
+              alt="График активности GitHub пользователя vladislavfosk"
+              loading="lazy"
+            >
+          </div>
+          <div class="heatmap-caption">DATA SOURCE: GITHUB // CONTRIBUTION ACTIVITY</div>
+          <div id="heatmap-error" class="repo-status" hidden>
+            График не загрузился. Проверь имя пользователя GitHub.
+          </div>
+        </section>
+
+        <div class="section-heading">
+          <h2><i class="fa-solid fa-thumbtack"></i> ИЗБРАННЫЕ РЕПОЗИТОРИИ</h2>
+          <button class="hero-button" data-view="projects" style="padding:8px 11px">
+            ВСЕ ПРОЕКТЫ <i class="fa-solid fa-arrow-right"></i>
+          </button>
         </div>
 
-        <div>
-
-            <div class="pname">
-                Roza OS
-                <span class="sub">
-                    Private Linux OS Project
-                </span>
-            </div>
-
-            <span
-                class="badge"
-                style="border-color:var(--a3);color:var(--a3)"
-            >
-                🔒
-                <span
-                    class="i18n"
-                    data-en="Classified"
-                >
-                    Засекречено
-                </span>
-            </span>
-
-            <div class="tags">
-                <span class="tag">Roza OS</span>
-                <span class="tag">Linux</span>
-                <span class="tag">Private Project</span>
-                <span class="tag pink">Coalition Iron Will</span>
-            </div>
-
+        <div class="repo-grid" id="pinned-projects">
+          <div class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Подключение к GitHub...</div>
         </div>
+      </div>
 
-    </div>
+      <div id="view-projects" class="view-panel">
+        <section class="cyber-card" style="padding:24px;margin-bottom:20px">
+          <div class="eyebrow">// DATABASE ACCESS: GRANTED</div>
+          <h2 class="page-title">PROJECT DATABASE</h2>
+          <p class="page-description">
+            Публичные репозитории GitHub. Здесь можно просматривать проекты, переходить к их исходному коду и искать нужные разработки.
+          </p>
 
-
-    <div class="roza-layout">
-
-        <aside class="roza-sidebar card">
-
-            <div class="roza-side-title">
-                🌹 Roza OS
+          <div class="project-toolbar cyber-card">
+            <div class="search-box">
+              <input class="search-input" id="project-search" type="search" placeholder="Поиск репозиториев..." aria-label="Поиск репозиториев">
             </div>
-
-            <button
-                class="roza-link active"
-                onclick="showRozaSection('overview', this)"
-            >
-                📋
-                <span class="i18n" data-en="Overview">
-                    Обзор
-                </span>
-            </button>
-
-            <button
-                class="roza-link"
-                onclick="showRozaSection('architecture', this)"
-            >
-                ⚙️
-                <span class="i18n" data-en="Architecture">
-                    Архитектура
-                </span>
-            </button>
-
-            <button
-                class="roza-link"
-                onclick="showRozaSection('desktop', this)"
-            >
-                🖥️
-                <span class="i18n" data-en="Desktop">
-                    Рабочее окружение
-                </span>
-            </button>
-
-            <button
-                class="roza-link"
-                onclick="showRozaSection('packages', this)"
-            >
-                📦
-                <span class="i18n" data-en="Packages">
-                    Пакеты
-                </span>
-            </button>
-
-            <button
-                class="roza-link"
-                onclick="showRozaSection('security', this)"
-            >
-                🛡️
-                <span class="i18n" data-en="Security">
-                    Безопасность
-                </span>
-            </button>
-
-            <button
-                class="roza-link"
-                onclick="showRozaSection('development', this)"
-            >
-                🛠️
-                <span class="i18n" data-en="Development">
-                    Разработка
-                </span>
-            </button>
-
-            <button
-                class="roza-link"
-                onclick="showRozaSection('releases', this)"
-            >
-                🚀
-                <span class="i18n" data-en="Releases">
-                    Релизы
-                </span>
-            </button>
-
-            <button
-                class="roza-link"
-                onclick="showRozaSection('faq', this)"
-            >
-                ❓
-                <span class="i18n" data-en="FAQ">
-                    FAQ
-                </span>
-            </button>
-
-        </aside>
-
-
-        <div class="roza-content">
-
-            <div
-                class="roza-page active"
-                id="roza-overview"
-            >
-
-                <div class="info-grid">
-
-                    <div class="info-box card">
-
-                        <h4>
-                            📋
-                            <span
-                                class="i18n"
-                                data-en="General Information"
-                            >
-                                Общая информация
-                            </span>
-                        </h4>
-
-                        <div class="body">
-
-                            <div>
-                                <span
-                                    class="label i18n"
-                                    data-en="Status"
-                                >
-                                    Статус
-                                </span>
-
-                                <span class="value">
-                                    🔒
-                                    <span
-                                        class="i18n"
-                                        data-en="Classified"
-                                    >
-                                        Засекречено
-                                    </span>
-                                </span>
-                            </div>
-
-                            <div>
-                                <span
-                                    class="label i18n"
-                                    data-en="Type"
-                                >
-                                    Тип
-                                </span>
-
-                                <span
-                                    class="value i18n"
-                                    data-en="Operating System"
-                                >
-                                    Операционная система
-                                </span>
-                            </div>
-
-                            <div>
-                                <span
-                                    class="label i18n"
-                                    data-en="Platform"
-                                >
-                                    Платформа
-                                </span>
-
-                                <span class="value">
-                                    Linux
-                                </span>
-                            </div>
-
-                            <div>
-                                <span
-                                    class="label i18n"
-                                    data-en="Base"
-                                >
-                                    Основа
-                                </span>
-
-                                <span class="value">
-                                    Debian
-                                </span>
-                            </div>
-
-                            <div>
-                                <span
-                                    class="label i18n"
-                                    data-en="Desktop"
-                                >
-                                    Окружение
-                                </span>
-
-                                <span class="value">
-                                    XFCE
-                                </span>
-                            </div>
-
-                            <div>
-                                <span
-                                    class="label i18n"
-                                    data-en="License"
-                                >
-                                    Лицензия
-                                </span>
-
-                                <span class="value">
-                                    GPL
-                                </span>
-                            </div>
-
-                        </div>
-                    </div>
-
-
-                    <div class="info-box card">
-
-                        <h4>
-                            🔐
-                            <span
-                                class="i18n"
-                                data-en="Classified Information"
-                            >
-                                Засекреченная информация
-                            </span>
-                        </h4>
-
-                        <div class="body">
-
-                            <p>
-                                <strong>Roza OS</strong> —
-                                <span
-                                    class="i18n"
-                                    data-en="a private operating system project."
-                                >
-                                    закрытый проект операционной системы.
-                                </span>
-                            </p>
-
-                            <p>
-                                🔒
-                                <span
-                                    class="i18n"
-                                    data-en="Internal architecture, custom components and technical documentation are currently classified."
-                                >
-                                    Внутренняя архитектура, собственные компоненты
-                                    и техническая документация пока засекречены.
-                                </span>
-                            </p>
-
-                            <p>
-                                📁
-                                <span
-                                    class="i18n"
-                                    data-en="More information will be published as the project becomes ready."
-                                >
-                                    Дополнительная информация будет опубликована
-                                    по мере готовности проекта.
-                                </span>
-                            </p>
-
-                        </div>
-                    </div>
-
-                </div>
-
-
-                <div class="block card">
-
-                    <h3>
-                        🖥️
-                        <span
-                            class="i18n"
-                            data-en="System Overview"
-                        >
-                            Обзор системы
-                        </span>
-                    </h3>
-
-                    <div class="block-text">
-
-                        <p>
-                            <strong>Roza OS</strong> —
-                            <span
-                                class="i18n"
-                                data-en="a planned Linux operating system project based on Debian with XFCE."
-                            >
-                                планируемый проект операционной системы
-                                на базе Linux, Debian и XFCE.
-                            </span>
-                        </p>
-
-                        <p>
-                            🔒
-                            <span
-                                class="i18n"
-                                data-en="Further technical details are classified."
-                            >
-                                Остальные технические детали засекречены.
-                            </span>
-                        </p>
-
-                    </div>
-                </div>
-
-            </div>
-
-
-            <div
-                class="roza-page"
-                id="roza-architecture"
-            >
-
-                <div class="block card">
-
-                    <h3>
-                        ⚙️
-                        <span
-                            class="i18n"
-                            data-en="Architecture"
-                        >
-                            Архитектура
-                        </span>
-                    </h3>
-
-                    <div class="block-text">
-
-                        <p>
-                            🔒
-                            <strong>Kernel:</strong>
-                            <span
-                                class="i18n"
-                                data-en="classified"
-                            >
-                                засекречено
-                            </span>
-                        </p>
-
-                        <p>
-                            🔒
-                            <strong>System architecture:</strong>
-                            <span
-                                class="i18n"
-                                data-en="classified"
-                            >
-                                засекречено
-                            </span>
-                        </p>
-
-                        <p>
-                            🔒
-                            <strong>Custom components:</strong>
-                            <span
-                                class="i18n"
-                                data-en="classified"
-                            >
-                                засекречено
-                            </span>
-                        </p>
-
-                    </div>
-                </div>
-
-            </div>
-
-
-            <div
-                class="roza-page"
-                id="roza-desktop"
-            >
-
-                <div class="block card">
-
-                    <h3>
-                        🖥️
-                        <span
-                            class="i18n"
-                            data-en="Desktop Environment"
-                        >
-                            Рабочее окружение
-                        </span>
-                    </h3>
-
-                    <div class="block-text">
-
-                        <p>
-                            XFCE —
-                            <span
-                                class="i18n"
-                                data-en="the planned desktop environment for Roza OS."
-                            >
-                                планируемое рабочее окружение Roza OS.
-                            </span>
-                        </p>
-
-                        <p>
-                            🔒
-                            <span
-                                class="i18n"
-                                data-en="Theme, customizations and interface details are classified."
-                            >
-                                Тема, модификации и детали интерфейса засекречены.
-                            </span>
-                        </p>
-
-                    </div>
-                </div>
-
-            </div>
-
-
-            <div
-                class="roza-page"
-                id="roza-packages"
-            >
-
-                <div class="block card">
-
-                    <h3>
-                        📦
-                        <span
-                            class="i18n"
-                            data-en="Packages and Software"
-                        >
-                            Пакеты и программное обеспечение
-                        </span>
-                    </h3>
-
-                    <div class="block-text">
-
-                        <p>
-                            🔒
-                            <span
-                                class="i18n"
-                                data-en="The final package set has not been publicly announced."
-                            >
-                                Финальный набор пакетов пока публично не объявлен.
-                            </span>
-                        </p>
-
-                        <p>
-                            🔒
-                            <span
-                                class="i18n"
-                                data-en="Package selection and custom software details are classified."
-                            >
-                                Выбор пакетов и детали собственного ПО засекречены.
-                            </span>
-                        </p>
-
-                    </div>
-                </div>
-
-            </div>
-
-
-            <div
-                class="roza-page"
-                id="roza-security"
-            >
-
-                <div class="block card">
-
-                    <h3>
-                        🛡️
-                        <span
-                            class="i18n"
-                            data-en="Security"
-                        >
-                            Безопасность
-                        </span>
-                    </h3>
-
-                    <div class="block-text">
-
-                        <p>
-                            🔒
-                            <span
-                                class="i18n"
-                                data-en="Security model and hardening details are currently classified."
-                            >
-                                Модель безопасности и детали защиты пока засекречены.
-                            </span>
-                        </p>
-
-                        <p>
-                            🔐
-                            <span
-                                class="i18n"
-                                data-en="Public security documentation will be added when available."
-                            >
-                                Публичная документация по безопасности появится позже.
-                            </span>
-                        </p>
-
-                    </div>
-                </div>
-
-            </div>
-
-
-            <div
-                class="roza-page"
-                id="roza-development"
-            >
-
-                <div class="block card">
-
-                    <h3>
-                        🛠️
-                        <span
-                            class="i18n"
-                            data-en="Development"
-                        >
-                            Разработка
-                        </span>
-                    </h3>
-
-                    <div class="block-text">
-
-                        <p>
-                            🔵
-                            <strong>
-                                <span
-                                    class="i18n"
-                                    data-en="Status"
-                                >
-                                    Статус
-                                </span>:
-                            </strong>
-
-                            <span
-                                class="i18n"
-                                data-en="Planning / preparation"
-                            >
-                                Планирование / подготовка
-                            </span>
-                        </p>
-
-                        <p>
-                            🔒
-                            <strong>
-                                <span
-                                    class="i18n"
-                                    data-en="Roadmap"
-                                >
-                                    Дорожная карта
-                                </span>:
-                            </strong>
-
-                            <span
-                                class="i18n"
-                                data-en="classified"
-                            >
-                                засекречена
-                            </span>
-                        </p>
-
-                        <p>
-                            🧪
-                            <strong>
-                                <span
-                                    class="i18n"
-                                    data-en="Testing"
-                                >
-                                    Тестирование
-                                </span>:
-                            </strong>
-
-                            <span
-                                class="i18n"
-                                data-en="not publicly available"
-                            >
-                                публично недоступно
-                            </span>
-                        </p>
-
-                    </div>
-                </div>
-
-            </div>
-
-
-            <div
-                class="roza-page"
-                id="roza-releases"
-            >
-
-                <div class="block card">
-
-                    <h3>
-                        🚀
-                        <span
-                            class="i18n"
-                            data-en="Releases"
-                        >
-                            Релизы
-                        </span>
-                    </h3>
-
-                    <div class="block-text">
-
-                        <p>
-                            📦
-                            <strong>
-                                Roza OS — Pre-release
-                            </strong>
-                        </p>
-
-                        <p>
-                            🔒
-                            <span
-                                class="i18n"
-                                data-en="No public image is available yet."
-                            >
-                                Публичный образ пока недоступен.
-                            </span>
-                        </p>
-
-                        <button
-                            class="roza-download"
-                            onclick="event.stopPropagation(); rozaNotReady()"
-                        >
-                            ⛔
-                            <span
-                                class="i18n"
-                                data-en="Download image — not ready"
-                            >
-                                Скачать образ — пока не готово
-                            </span>
-                        </button>
-
-                    </div>
-                </div>
-
-            </div>
-
-
-            <div
-                class="roza-page"
-                id="roza-faq"
-            >
-
-                <div class="block card">
-
-                    <h3>
-                        ❓ FAQ
-                    </h3>
-
-                    <div class="block-text">
-
-                        <p>
-                            <strong>
-                                Когда выйдет Roza OS?
-                            </strong>
-
-                            <br />
-
-                            <span
-                                class="i18n"
-                                data-en="There is currently no public release date."
-                            >
-                                Публичной даты релиза пока нет.
-                            </span>
-                        </p>
-
-                        <p>
-                            <strong>
-                                Где скачать образ?
-                            </strong>
-
-                            <br />
-
-                            <span
-                                class="i18n"
-                                data-en="The image is not ready yet."
-                            >
-                                Образ пока не готов.
-                            </span>
-                        </p>
-
-                        <p>
-                            <strong>
-                                Почему информация закрыта?
-                            </strong>
-
-                            <br />
-
-                            <span
-                                class="i18n"
-                                data-en="Some project details are intentionally kept private until the project is ready for disclosure."
-                            >
-                                Часть информации намеренно остаётся закрытой
-                                до готовности проекта к публикации.
-                            </span>
-                        </p>
-
-                    </div>
-                </div>
-
-            </div>
-
-
-            <div class="block card roza-back-card">
-
-                <button
-                    class="roza-back-button"
-                    onclick="switchTab('wiki')"
-                >
-                    ←
-                    <span
-                        class="i18n"
-                        data-en="Return to Wiki"
-                    >
-                        Вернуться в Вики
-                    </span>
-                </button>
-
-            </div>
-
-        </div>
-    </div>
-
-</section>
-
-
-<!-- ============================================================
-     SOLARIUM UMBRIS / WORLD OF KOSARH
-     ============================================================ -->
-
-<section class="tab" id="tab-project-solarium">
-
-    <a
-        class="back"
-        onclick="switchTab('wiki')"
-    >
-        ←
-        <span
-            class="i18n"
-            data-en="Back to wiki"
-        >
-            Назад к вики
-        </span>
-    </a>
-
-
-    <div class="header-info">
-
-        <div class="ico">☽</div>
-
-        <div>
-
-            <div class="pname">
-                Solarium Umbris
-                <span class="sub">
-                    Mod for Hearts of Iron IV
-                </span>
-            </div>
-
-            <span class="badge frozen">
-                ❄️
-                <span
-                    class="i18n"
-                    data-en="Frozen"
-                >
-                    Заморожен
-                </span>
-            </span>
-
-            <div class="tags">
-                <span class="tag">HOI4</span>
-                <span class="tag">Mod</span>
-                <span class="tag">Alternative history</span>
-                <span class="tag pink">Coalition Iron Will</span>
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="info-grid">
-
-        <div class="info-box card">
-
-            <h4>
-                📋
-                <span
-                    class="i18n"
-                    data-en="Information"
-                >
-                    Информация
-                </span>
-            </h4>
-
-            <div class="body">
-
-                <div>
-                    <span
-                        class="label i18n"
-                        data-en="Status"
-                    >
-                        Статус
-                    </span>
-
-                    <span class="value">
-                        ❄️
-                        <span
-                            class="i18n"
-                            data-en="Frozen"
-                        >
-                            Заморожен
-                        </span>
-                    </span>
-                </div>
-
-                <div>
-                    <span
-                        class="label i18n"
-                        data-en="Game"
-                    >
-                        Игра
-                    </span>
-
-                    <span class="value">
-                        Hearts of Iron IV
-                    </span>
-                </div>
-
-                <div>
-                    <span
-                        class="label i18n"
-                        data-en="Countries"
-                    >
-                        Стран
-                    </span>
-
-                    <span class="value">
-                        7
-                    </span>
-                </div>
-
-                <div>
-                    <span
-                        class="label i18n"
-                        data-en="Ideologies"
-                    >
-                        Идеологий
-                    </span>
-
-                    <span class="value">
-                        10+
-                    </span>
-                </div>
-
-                <div>
-                    <span
-                        class="label i18n"
-                        data-en="Team"
-                    >
-                        Команда
-                    </span>
-
-                    <span class="value">
-                        Coalition Iron Will
-                    </span>
-                </div>
-
-            </div>
-        </div>
-
-
-        <div class="info-box card">
-
-            <h4>
-                📖
-                <span
-                    class="i18n"
-                    data-en="Description"
-                >
-                    Описание
-                </span>
-            </h4>
-
-            <div class="body">
-
-                <p
-                    class="i18n"
-                    data-en="<strong>World of Kosarh</strong> — large-scale mod for Hearts of Iron IV."
-                >
-                    <strong>World of Kosarh</strong> —
-                    масштабный мод для Hearts of Iron IV.
-                </p>
-
-                <p>
-                    <strong
-                        class="i18n"
-                        data-en="What's inside:"
-                    >
-                        Что внутри:
-                    </strong>
-                </p>
-
-                <ul>
-                    <li>
-                        🌍 7
-                        <span
-                            class="i18n"
-                            data-en="unique states"
-                        >
-                            уникальных государств
-                        </span>
-                    </li>
-
-                    <li>
-                        ⚔️ 10+
-                        <span
-                            class="i18n"
-                            data-en="ideologies"
-                        >
-                            идеологий
-                        </span>
-                    </li>
-
-                    <li>
-                        📜
-                        <span
-                            class="i18n"
-                            data-en="Unique focuses and events"
-                        >
-                            Уникальные фокусы и события
-                        </span>
-                    </li>
-
-                    <li>
-                        👤
-                        <span
-                            class="i18n"
-                            data-en="Custom leaders"
-                        >
-                            Кастомные лидеры
-                        </span>
-                    </li>
-                </ul>
-
-                <p>
-                    ❄️
-                    <span
-                        class="i18n"
-                        data-en="Frozen."
-                    >
-                        Заморожен.
-                    </span>
-                </p>
-
-            </div>
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- ============================================================
-     BLACK ORDER
-     ============================================================ -->
-
-<section class="tab" id="tab-project-blackorder">
-
-    <a
-        class="back"
-        onclick="switchTab('wiki')"
-    >
-        ←
-        <span
-            class="i18n"
-            data-en="Back to wiki"
-        >
-            Назад к вики
-        </span>
-    </a>
-
-
-    <div class="header-info">
-
-        <div class="ico">🖤</div>
-
-        <div>
-
-            <div class="pname">
-                Special Army "Black Order"
-                <span class="sub">
-                    RP Faction in BRM 5
-                </span>
-            </div>
-
-            <span class="badge frozen">
-                ❄️
-                <span
-                    class="i18n"
-                    data-en="Frozen"
-                >
-                    Заморожен
-                </span>
-            </span>
-
-            <div class="tags">
-                <span class="tag">BRM 5</span>
-                <span class="tag">RP Faction</span>
-                <span class="tag pink">Coalition Iron Will</span>
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="info-grid">
-
-        <div class="info-box card">
-
-            <h4>
-                📋
-                <span
-                    class="i18n"
-                    data-en="Information"
-                >
-                    Информация
-                </span>
-            </h4>
-
-            <div class="body">
-
-                <div>
-                    <span
-                        class="label i18n"
-                        data-en="Status"
-                    >
-                        Статус
-                    </span>
-
-                    <span class="value">
-                        ❄️
-                        <span
-                            class="i18n"
-                            data-en="Frozen"
-                        >
-                            Заморожен
-                        </span>
-                    </span>
-                </div>
-
-                <div>
-                    <span
-                        class="label i18n"
-                        data-en="Game"
-                    >
-                        Игра
-                    </span>
-
-                    <span class="value">
-                        BRM 5
-                    </span>
-                </div>
-
-                <div>
-                    <span
-                        class="label i18n"
-                        data-en="Type"
-                    >
-                        Тип
-                    </span>
-
-                    <span class="value">
-                        RP Faction
-                    </span>
-                </div>
-
-                <div>
-                    <span
-                        class="label i18n"
-                        data-en="Ideology"
-                    >
-                        Идеология
-                    </span>
-
-                    <span
-                        class="value i18n"
-                        data-en="Discipline, honor, professionalism"
-                    >
-                        Дисциплина, честь, профессионализм
-                    </span>
-                </div>
-
-                <div>
-                    <span
-                        class="label i18n"
-                        data-en="Team"
-                    >
-                        Команда
-                    </span>
-
-                    <span class="value">
-                        Coalition Iron Will
-                    </span>
-                </div>
-
-            </div>
-        </div>
-
-
-        <div class="info-box card">
-
-            <h4>
-                📖
-                <span
-                    class="i18n"
-                    data-en="Description"
-                >
-                    Описание
-                </span>
-            </h4>
-
-            <div class="body">
-
-                <p
-                    class="i18n"
-                    data-en="<strong>Special Army &quot;Black Order&quot;</strong> — elite faction in BRM 5 (Black Rock Multiplayer 5)."
-                >
-                    <strong>
-                        Special Army «Black Order»
-                    </strong>
-                    — элитная фракция в BRM 5
-                    (Black Rock Multiplayer 5).
-                </p>
-
-                <p>
-                    <strong
-                        class="i18n"
-                        data-en="About the faction:"
-                    >
-                        О фракции:
-                    </strong>
-                </p>
-
-                <ul>
-
-                    <li>
-                        🎯
-                        <strong
-                            class="i18n"
-                            data-en="Mission:"
-                        >
-                            Миссия:
-                        </strong>
-
-                        <span
-                            class="i18n"
-                            data-en="Complex tasks, order, protection"
-                        >
-                            Сложные задачи, порядок, защита
-                        </span>
-                    </li>
-
-                    <li>
-                        📜
-                        <strong
-                            class="i18n"
-                            data-en="Ideology:"
-                        >
-                            Идеология:
-                        </strong>
-
-                        <span
-                            class="i18n"
-                            data-en="Discipline, honor, professionalism"
-                        >
-                            Дисциплина, честь, профессионализм
-                        </span>
-                    </li>
-
-                </ul>
-
-                <p>
-                    ❄️
-                    <span
-                        class="i18n"
-                        data-en="Frozen."
-                    >
-                        Заморожен.
-                    </span>
-                </p>
-
-            </div>
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- ============================================================
-     COALITION IRON WILL
-     ============================================================ -->
-
-<section class="tab" id="tab-project-coalition">
-
-    <a
-        class="back"
-        onclick="switchTab('wiki')"
-    >
-        ←
-        <span
-            class="i18n"
-            data-en="Back to wiki"
-        >
-            Назад к вики
-        </span>
-    </a>
-
-
-    <div class="header-info">
-
-        <div class="ico">⚔️</div>
-
-        <div>
-
-            <div class="pname">
-                Coalition Iron Will
-                <span class="sub">
-                    Alliance of close friends and companions
-                </span>
-            </div>
-
-            <span class="badge active">
-                🟢
-                <span
-                    class="i18n"
-                    data-en="Active"
-                >
-                    Активен
-                </span>
-            </span>
-
-            <div class="tags">
-                <span class="tag gold">Alliance</span>
-                <span class="tag pink">Friends</span>
-                <span class="tag pink">Companions</span>
-                <span class="tag green">Coalition Iron Will</span>
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="info-grid">
-
-        <div class="info-box card">
-
-            <h4>
-                📋
-                <span
-                    class="i18n"
-                    data-en="Information"
-                >
-                    Информация
-                </span>
-            </h4>
-
-            <div class="body">
-
-                <div>
-                    <span
-                        class="label i18n"
-                        data-en="Status"
-                    >
-                        Статус
-                    </span>
-
-                    <span class="value">
-                        🟢
-                        <span
-                            class="i18n"
-                            data-en="Active"
-                        >
-                            Активен
-                        </span>
-                    </span>
-                </div>
-
-                <div>
-                    <span
-                        class="label i18n"
-                        data-en="Type"
-                    >
-                        Тип
-                    </span>
-
-                    <span
-                        class="value i18n"
-                        data-en="Alliance / Brotherhood"
-                    >
-                        Альянс / Братство
-                    </span>
-                </div>
-
-                <div>
-                    <span
-                        class="label i18n"
-                        data-en="Founded"
-                    >
-                        Основана
-                    </span>
-
-                    <span class="value">
-                        2024
-                    </span>
-                </div>
-
-                <div>
-                    <span
-                        class="label i18n"
-                        data-en="Values"
-                    >
-                        Ценности
-                    </span>
-
-                    <span
-                        class="value i18n"
-                        data-en="Friendship, solidarity, creativity"
-                    >
-                        Дружба, солидарность, творчество
-                    </span>
-                </div>
-
-            </div>
-        </div>
-
-
-        <div class="info-box card">
-
-            <h4>
-                📖
-                <span
-                    class="i18n"
-                    data-en="Description"
-                >
-                    Описание
-                </span>
-            </h4>
-
-            <div class="body">
-
-                <p
-                    class="i18n"
-                    data-en="<strong>Coalition Iron Will</strong> — is not just a team. It's a brotherhood, a union of like-minded people."
-                >
-                    <strong>Coalition Iron Will</strong> —
-                    это не просто команда. Это братство,
-                    союз единомышленников.
-                </p>
-
-                <p>
-                    <strong
-                        class="i18n"
-                        data-en="Who we are:"
-                    >
-                        Кто мы:
-                    </strong>
-                </p>
-
-                <ul>
-
-                    <li>
-                        🤝
-                        <strong
-                            class="i18n"
-                            data-en="Friends"
-                        >
-                            Друзья
-                        </strong>
-                        —
-                        <span
-                            class="i18n"
-                            data-en="always support each other"
-                        >
-                            всегда поддерживаем друг друга
-                        </span>
-                    </li>
-
-                    <li>
-                        ⚔️
-                        <strong
-                            class="i18n"
-                            data-en="Companions"
-                        >
-                            Подвижники
-                        </strong>
-                        —
-                        <span
-                            class="i18n"
-                            data-en="create projects together"
-                        >
-                            создаём проекты вместе
-                        </span>
-                    </li>
-
-                    <li>
-                        💡
-                        <strong
-                            class="i18n"
-                            data-en="Creators"
-                        >
-                            Творцы
-                        </strong>
-                        —
-                        <span
-                            class="i18n"
-                            data-en="bring ideas to life"
-                        >
-                            воплощаем идеи в жизнь
-                        </span>
-                    </li>
-
-                </ul>
-
-                <p>
-                    🟢
-                    <span
-                        class="i18n"
-                        data-en="Active. The coalition continues to exist and develop."
-                    >
-                        Активен. Коалиция продолжает существовать
-                        и развиваться.
-                    </span>
-                </p>
-
-            </div>
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- ============================================================
-     КОНТАКТЫ
-     ============================================================ -->
-
-<section class="tab" id="tab-contact">
-
-    <div class="hero">
-
-        <h2>
-            ✉️
-            <span
-                class="i18n grad"
-                data-en="Contacts"
-            >
-                Контакты
-            </span>
-        </h2>
-
-        <p
-            class="i18n"
-            data-en="Reach me through any of these platforms"
-        >
-            Свяжись со мной через любую из этих платформ
-        </p>
-
-    </div>
-
-
-    <div class="contact-grid">
-
-        <a
-            class="contact-card card"
-            href="https://t.me/VladislavFoskKosarh"
-            target="_blank"
-            rel="noopener"
-        >
-            <span class="ico">✈️</span>
-
-            <span>
-                <b>Telegram</b>
-                <small>@VladislavFoskKosarh</small>
-            </span>
-        </a>
-
-
-        <a
-            class="contact-card card"
-            href="https://www.youtube.com/@VladislavFoskKosarh"
-            target="_blank"
-            rel="noopener"
-        >
-            <span class="ico">▶️</span>
-
-            <span>
-                <b>YouTube</b>
-                <small>@VladislavFoskKosarh</small>
-            </span>
-        </a>
-
-
-        <a
-            class="contact-card card"
-            href="https://github.com/VladislavFosk"
-            target="_blank"
-            rel="noopener"
-        >
-            <span class="ico">◉</span>
-
-            <span>
-                <b>GitHub</b>
-                <small>github.com/VladislavFosk</small>
-            </span>
-        </a>
-
-
-        <a
-            class="contact-card card"
-            href="https://gamejolt.com/@VladislavFosk"
-            target="_blank"
-            rel="noopener"
-        >
-            <span class="ico">🎮</span>
-
-            <span>
-                <b>GameJolt</b>
-                <small>@VladislavFosk</small>
-            </span>
-        </a>
-
-    </div>
-
-
-    <div
-        class="block card"
-        style="margin-top:20px;border-color:var(--a3);text-align:center"
-    >
-        ⚔️ Made by the
-        <strong class="grad">
-            Coalition Iron Will
-        </strong>
-    </div>
-
-</section>
-
+            <select class="sort-select" id="project-sort" aria-label="Сортировка">
+              <option value="updated">По обновлению</option>
+              <option value="stars">По звёздам</option>
+              <option value="name">По названию</option>
+            </select>
+          </div>
+
+          <div class="repo-status" id="project-count"></div>
+          <div class="repo-grid" id="all-projects">
+            <div class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Загрузка репозиториев...</div>
+          </div>
+          <div class="repo-status" id="repo-status"></div>
+        </section>
+      </div>
+    </section>
+  </div>
 </main>
 
-
-<!-- ============================================================
-     МОБИЛЬНАЯ НАВИГАЦИЯ
-     ============================================================ -->
-
-<nav
-    class="mobile-nav"
-    id="mobileNav"
-    aria-label="Mobile navigation"
->
-
-    <button
-        class="active"
-        data-tab="home"
-    >
-        <span class="mi">🏠</span>
-        <span class="i18n" data-en="Home">
-            Главная
-        </span>
-    </button>
-
-    <button data-tab="wiki">
-        <span class="mi">📚</span>
-        <span class="i18n" data-en="Wiki">
-            Вики
-        </span>
-    </button>
-
-    <button data-tab="contact">
-        <span class="mi">✉️</span>
-        <span class="i18n" data-en="Contact">
-            Контакты
-        </span>
-    </button>
-
-</nav>
-
-
-<!-- ============================================================
-     FOOTER
-     ============================================================ -->
-
 <footer class="footer">
-
-    ☽ Solarium Umbris ·
-    <span
-        class="i18n"
-        data-en="World of Kosarh"
-    >
-        Мир Косарха
-    </span>
-    · 2026
-
-    <span class="dot">·</span>
-
-    <a href="#home">
-        <span
-            class="i18n"
-            data-en="Home"
-        >
-            Главная
-        </span>
-    </a>
-
-    <span class="dot">·</span>
-
-    <a href="#wiki">
-        <span
-            class="i18n"
-            data-en="My Wiki"
-        >
-            Моя Вики
-        </span>
-    </a>
-
-    <span class="dot">·</span>
-
-    <a href="#contact">
-        <span
-            class="i18n"
-            data-en="Contact"
-        >
-            Контакты
-        </span>
-    </a>
-
-    <br />
-
-    <small style="opacity:.6">
-        ⚔️ Made by the
-        <span class="grad">
-            Coalition Iron Will
-        </span>
-    </small>
-
+  <div>© <span id="year"></span> WORLD OF KOSARH</div>
+  <div>BUILT WITH <span>◆</span> IDEAS & IMAGINATION</div>
+  <div>SYSTEM STATUS: <span>ONLINE</span></div>
 </footer>
 
-
-<script src="script.js" defer></script>
+<div class="toast" id="toast" role="status"></div>
 
 <script>
-function showRozaSection(section, button) {
-    document
-        .querySelectorAll('.roza-page')
-        .forEach(el => el.classList.remove('active'));
+"use strict";
 
-    const page = document.getElementById('roza-' + section);
+const GITHUB_USERNAME = "vladislavfosk";
+const GITHUB_API = `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=100`;
 
-    if (page) {
-        page.classList.add('active');
-    }
+let repositories = [];
+let toastTimer;
+let matrixEnabled = false;
+let animationFrame = null;
+let drops = [];
 
-    document
-        .querySelectorAll('.roza-link')
-        .forEach(el => el.classList.remove('active'));
+const $ = selector => document.querySelector(selector);
+const $$ = selector => Array.from(document.querySelectorAll(selector));
 
-    if (button) {
-        button.classList.add('active');
-    }
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, character => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  })[character]);
 }
 
-function rozaNotReady() {
-    alert(
-        'Образ Roza OS пока не готов. Следите за обновлениями проекта.'
+function showToast(message) {
+  const toast = $("#toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 2300);
+}
+
+function switchView(name) {
+  if (!["profile","projects"].includes(name)) return;
+
+  $$(".view-panel").forEach(panel => {
+    panel.classList.toggle("active", panel.id === `view-${name}`);
+  });
+
+  $$(".nav-link, .mobile-link").forEach(button => {
+    button.classList.toggle("active", button.dataset.view === name);
+  });
+
+  $("#mobile-menu").classList.remove("open");
+  $("#mobile-menu-button").innerHTML = '<i class="fa-solid fa-bars"></i>';
+
+  history.replaceState(null, "", `#${name}`);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+$$("[data-view]").forEach(button => {
+  button.addEventListener("click", () => switchView(button.dataset.view));
+});
+
+$("#mobile-menu-button").addEventListener("click", () => {
+  const menu = $("#mobile-menu");
+  const open = menu.classList.toggle("open");
+  $("#mobile-menu-button").innerHTML = open
+    ? '<i class="fa-solid fa-xmark"></i>'
+    : '<i class="fa-solid fa-bars"></i>';
+});
+
+$("#theme-button").addEventListener("click", () => {
+  $("#theme-wrap").classList.toggle("open");
+});
+
+document.addEventListener("click", event => {
+  if (!$("#theme-wrap").contains(event.target)) {
+    $("#theme-wrap").classList.remove("open");
+  }
+});
+
+$$("[data-theme]").forEach(button => {
+  button.addEventListener("click", () => {
+    document.body.classList.remove("theme-synthwave","theme-space");
+
+    if (button.dataset.theme === "synthwave") {
+      document.body.classList.add("theme-synthwave");
+    }
+
+    if (button.dataset.theme === "space") {
+      document.body.classList.add("theme-space");
+    }
+
+    $("#theme-wrap").classList.remove("open");
+    showToast(`THEME: ${button.textContent.trim().toUpperCase()}`);
+  });
+});
+
+$("#copy-profile").addEventListener("click", async () => {
+  const url = `https://github.com/${GITHUB_USERNAME}`;
+
+  try {
+    await navigator.clipboard.writeText(url);
+    showToast("GITHUB LINK COPIED");
+  } catch {
+    window.prompt("Скопируй ссылку на GitHub:", url);
+  }
+});
+
+function updateClock() {
+  $("#liveClock").textContent = new Intl.DateTimeFormat("ru-RU", {
+    hour:"2-digit",
+    minute:"2-digit",
+    second:"2-digit"
+  }).format(new Date());
+}
+
+updateClock();
+setInterval(updateClock,1000);
+$("#year").textContent = new Date().getFullYear();
+
+const avatar = $("#profile-avatar");
+
+avatar.addEventListener("load", () => {
+  avatar.hidden = false;
+  $("#avatar-placeholder").hidden = true;
+});
+
+avatar.addEventListener("error", () => {
+  avatar.hidden = true;
+  $("#avatar-placeholder").hidden = false;
+});
+
+function getLanguageColor(language) {
+  const colors = {
+    JavaScript:"#f1e05a",
+    TypeScript:"#3178c6",
+    HTML:"#e34c26",
+    CSS:"#563d7c",
+    Python:"#3572A5",
+    Rust:"#dea584",
+    Go:"#00ADD8",
+    "C++":"#f34b7d",
+    C:"#555555",
+    Java:"#b07219",
+    Shell:"#89e051",
+    Lua:"#000080",
+    CSharp:"#178600",
+    PHP:"#4F5D95"
+  };
+
+  return colors[language] || "#8b949e";
+}
+
+function createRepoCard(repo) {
+  const name = escapeHTML(repo.name);
+  const description = escapeHTML(repo.description || "Описание репозитория не добавлено.");
+  const language = escapeHTML(repo.language || "Other");
+  const url = escapeHTML(repo.html_url);
+  const stars = Number(repo.stargazers_count) || 0;
+  const forks = Number(repo.forks_count) || 0;
+  const color = getLanguageColor(repo.language);
+
+  return `
+    <a class="cyber-card repo-card" href="${url}" target="_blank" rel="noopener noreferrer">
+      <div>
+        <div class="repo-top">
+          <div class="repo-name">
+            <i class="fa-regular fa-folder-open"></i>
+            <span>${name}</span>
+          </div>
+          ${repo.fork ? '<i class="fa-solid fa-code-fork repo-fork" title="Fork"></i>' : ""}
+        </div>
+        <div class="repo-description">${description}</div>
+      </div>
+      <div class="repo-meta">
+        <span><i class="language-dot" style="background:${color}"></i>${language}</span>
+        <span><i class="fa-regular fa-star"></i>${stars}</span>
+        <span><i class="fa-solid fa-code-fork"></i>${forks}</span>
+      </div>
+    </a>
+  `;
+}
+
+function renderPinnedProjects() {
+  const container = $("#pinned-projects");
+
+  const sorted = [...repositories]
+    .filter(repo => !repo.fork)
+    .sort((a,b) => (b.stargazers_count || 0) - (a.stargazers_count || 0))
+    .slice(0,4);
+
+  if (!sorted.length) {
+    container.innerHTML = `
+      <div class="loading">
+        Публичные репозитории не найдены.
+        <br><br>
+        <a class="neon" href="https://github.com/${encodeURIComponent(GITHUB_USERNAME)}" target="_blank" rel="noopener noreferrer">
+          Открыть GitHub <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = sorted.map(createRepoCard).join("");
+}
+
+function renderAllProjects() {
+  const query = $("#project-search").value.trim().toLowerCase();
+  const sort = $("#project-sort").value;
+
+  let list = repositories.filter(repo => {
+    const text = `${repo.name} ${repo.description || ""} ${repo.language || ""}`.toLowerCase();
+    return text.includes(query);
+  });
+
+  if (sort === "stars") {
+    list.sort((a,b) => (b.stargazers_count || 0) - (a.stargazers_count || 0));
+  } else if (sort === "name") {
+    list.sort((a,b) => a.name.localeCompare(b.name));
+  } else {
+    list.sort((a,b) => new Date(b.updated_at) - new Date(a.updated_at));
+  }
+
+  $("#project-count").textContent = `FOUND: ${list.length} / ${repositories.length} REPOSITORIES`;
+
+  const container = $("#all-projects");
+
+  if (!list.length) {
+    container.innerHTML = '<div class="loading">По твоему запросу ничего не найдено.</div>';
+    return;
+  }
+
+  container.innerHTML = list.map(createRepoCard).join("");
+}
+
+$("#project-search").addEventListener("input", renderAllProjects);
+$("#project-sort").addEventListener("change", renderAllProjects);
+
+async function loadGitHub() {
+  try {
+    const response = await fetch(GITHUB_API, {
+      headers:{"Accept":"application/vnd.github+json"}
+    });
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error("GitHub-пользователь не найден. Проверь GITHUB_USERNAME в index.html.");
+      }
+
+      if (response.status === 403) {
+        throw new Error("GitHub API ограничил запросы. Попробуй обновить страницу позже.");
+      }
+
+      throw new Error(`Ошибка GitHub API: ${response.status}`);
+    }
+
+    repositories = await response.json();
+
+    if (!Array.isArray(repositories)) {
+      throw new Error("GitHub вернул некорректный список репозиториев.");
+    }
+
+    $("#repo-count").textContent = repositories.length;
+
+    $("#star-count").textContent = repositories.reduce(
+      (sum,repo) => sum + (Number(repo.stargazers_count) || 0),0
     );
-}
-</script>
 
+    $("#fork-count").textContent = repositories.reduce(
+      (sum,repo) => sum + (Number(repo.forks_count) || 0),0
+    );
+
+    renderPinnedProjects();
+    renderAllProjects();
+
+    $("#repo-status").textContent =
+      `CONNECTED TO GITHUB // ${repositories.length} PUBLIC REPOSITORIES LOADED`;
+  } catch (error) {
+    const message = escapeHTML(error.message || "Не удалось подключиться к GitHub.");
+
+    $("#pinned-projects").innerHTML =
+      `<div class="loading">${message}</div>`;
+
+    $("#all-projects").innerHTML =
+      `<div class="loading">${message}</div>`;
+
+    $("#repo-status").textContent = "CONNECTION ERROR // GITHUB API";
+  }
+}
+
+$("#heatmap-image").addEventListener("error", () => {
+  $("#heatmap-error").hidden = false;
+});
+
+const canvas = $("#bgCanvas");
+const ctx = canvas.getContext("2d");
+
+function resizeCanvas() {
+  const dpr = Math.min(window.devicePixelRatio || 1,2);
+
+  canvas.width = window.innerWidth * dpr;
+  canvas.height = window.innerHeight * dpr;
+  canvas.style.width = `${window.innerWidth}px`;
+  canvas.style.height = `${window.innerHeight}px`;
+
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+
+  const columns = Math.ceil(window.innerWidth / 20);
+  drops = Array.from({length:columns},() => Math.random() * -50);
+}
+
+function drawBackground() {
+  ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+
+  if (matrixEnabled) {
+    ctx.fillStyle = "rgba(5,7,10,.12)";
+    ctx.fillRect(0,0,window.innerWidth,window.innerHeight);
+
+    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--neon").trim();
+    ctx.font = "13px monospace";
+
+    const characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZアカサタナ";
+
+    drops.forEach((drop,index) => {
+      const character = characters[Math.floor(Math.random() * characters.length)];
+      ctx.fillText(character,index * 20,drop * 20);
+
+      if (drop * 20 > window.innerHeight && Math.random() > .975) {
+        drops[index] = 0;
+      } else {
+        drops[index] += .5;
+      }
+    });
+  } else {
+    ctx.strokeStyle = "rgba(31,41,61,.18)";
+    ctx.lineWidth = 1;
+
+    for (let x=0;x<window.innerWidth;x+=40) {
+      ctx.beginPath();
+      ctx.moveTo(x,0);
+      ctx.lineTo(x,window.innerHeight);
+      ctx.stroke();
+    }
+
+    for (let y=0;y<window.innerHeight;y+=40) {
+      ctx.beginPath();
+      ctx.moveTo(0,y);
+      ctx.lineTo(window.innerWidth,y);
+      ctx.stroke();
+    }
+  }
+
+  animationFrame = requestAnimationFrame(drawBackground);
+}
+
+window.addEventListener("resize",resizeCanvas);
+resizeCanvas();
+drawBackground();
+
+const initialView = location.hash.replace("#","");
+if (["profile","projects"].includes(initialView)) {
+  switchView(initialView);
+}
+
+loadGitHub();
+</script>
 </body>
 </html>
