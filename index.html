@@ -3,14 +3,875 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="World of Kosarh" />
+<meta name="description" content="World of Kosarh — энциклопедия миров, проектов и идей Владислава Фоска-Косарха" />
 <meta name="theme-color" content="#160a17" />
 <title>World of Kosarh — Мир Косарха</title>
 <link rel="icon" href="gim/logo.png" type="image/png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<style>
+
+/* ============================================================
+   БАЗА
+   ============================================================ */
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --bg:#160a17;
+  --bg-alt:#1e0c1c;
+  --bg-card:#26102a;
+  --bg-hover:#341333;
+  --bg-deep:#1f0d20;
+  --border:#4a1e42;
+  --border-soft:rgba(225,29,72,.18);
+  --text:#f0dcec;
+  --text2:#d0a8c8;
+  --muted:#9a6b90;
+  --a1:#a855f7;
+  --a2:#d946ef;
+  --a3:#e11d48;
+  --a4:#9f1239;
+  --gold:#e0b64a;
+  --green:#4ade80;
+  --glow:rgba(225,29,72,.22);
+  --glow-strong:rgba(225,29,72,.42);
+  --r:14px;
+  --r-lg:20px;
+  --t:.3s cubic-bezier(.4,0,.2,1);
+  --t-fast:.18s cubic-bezier(.4,0,.2,1);
+  --card:linear-gradient(145deg,var(--bg-card),var(--bg-alt));
+  --card-glass:linear-gradient(145deg, rgba(38,16,42,.72), rgba(30,12,28,.6));
+  --grad:linear-gradient(135deg,var(--a2),var(--a3),var(--a4));
+  --grad-soft:linear-gradient(135deg, rgba(168,85,247,.18), rgba(225,29,72,.14));
+  --sh:0 12px 36px rgba(120,20,60,.32);
+  --sh-h:0 18px 48px rgba(150,25,70,.42);
+  --sh-deep:0 24px 60px rgba(80,10,40,.55);
+  --ring:0 0 0 2px rgba(225,29,72,.55);
+}
+
+html { scroll-behavior:smooth; }
+
+body {
+  font:16px/1.65 Inter,'Segoe UI',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  background-image:
+    radial-gradient(ellipse at 12% 8%, rgba(168,85,247,.16), transparent 55%),
+    radial-gradient(ellipse at 88% 12%, rgba(225,29,72,.18), transparent 50%),
+    radial-gradient(ellipse at 80% 88%, rgba(159,18,57,.22), transparent 55%),
+    radial-gradient(ellipse at 20% 92%, rgba(127,29,58,.18), transparent 55%),
+    radial-gradient(circle at 50% 50%, rgba(20,8,20,.6), transparent 70%);
+  background-attachment:fixed;
+}
+
+.grad {
+  background:var(--grad);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-size:200% 200%;
+  animation:gradShift 8s ease infinite;
+}
+@keyframes gradShift {
+  0%,100% { background-position:0% 50%; }
+  50%     { background-position:100% 50%; }
+}
+
+/* ============================================================
+   ЗВЁЗДЫ
+   ============================================================ */
+.stars {
+  position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden;
+}
+.star {
+  position:absolute; background:#f5d0e8; border-radius:50%;
+  opacity:.3;
+  box-shadow:0 0 6px rgba(244,114,182,.5), 0 0 12px rgba(244,114,182,.25);
+  animation:twinkle var(--duration) ease-in-out infinite alternate;
+}
+@keyframes twinkle {
+  from { opacity:.15; transform:scale(.8); }
+  to   { opacity:.9;  transform:scale(1.2); }
+}
+
+/* ============================================================
+   АНИМАЦИИ
+   ============================================================ */
+@keyframes fade {
+  from { opacity:0; transform:translateY(12px); }
+}
+@keyframes floatUp {
+  from { opacity:0; transform:translateY(20px) scale(.98); }
+  to   { opacity:1; transform:none; }
+}
+@keyframes pulseGlow {
+  0%,100% { box-shadow:0 0 0 0 var(--glow); }
+  50%     { box-shadow:0 0 22px 4px var(--glow-strong); }
+}
+
+/* ============================================================
+   ШАПКА
+   ============================================================ */
+.header {
+  position:sticky; top:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; gap:12px;
+  padding:12px 30px;
+  background:linear-gradient(180deg, rgba(38,16,42,.92), rgba(31,13,32,.88));
+  backdrop-filter:blur(18px) saturate(140%);
+  -webkit-backdrop-filter:blur(18px) saturate(140%);
+  border-bottom:1px solid var(--border);
+  box-shadow:0 10px 40px rgba(120,20,60,.45), inset 0 -1px 0 rgba(255,255,255,.03);
+}
+.logo { display:flex; align-items:center; gap:12px; }
+.logo .icon {
+  width:42px; height:42px; display:grid; place-items:center; font-size:22px;
+  color:var(--a2);
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:linear-gradient(145deg,#341333,#1f0d20);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 4px 12px rgba(0,0,0,.35);
+  transition:var(--t);
+}
+.logo:hover .icon {
+  color:#fff;
+  border-color:var(--a3);
+  box-shadow:0 0 22px var(--glow-strong);
+  transform:rotate(-6deg) scale(1.05);
+}
+.logo h1 { font-size:20px; font-weight:300; letter-spacing:2px; }
+.logo h1 span { font-weight:600; }
+.subtitle {
+  display:block; font-size:10px; letter-spacing:3px;
+  text-transform:uppercase; font-weight:600;
+}
+
+.right-group, .nav-buttons {
+  display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+}
+.nav-buttons button {
+  padding:6px 16px;
+  border:1px solid transparent;
+  background:none;
+  color:var(--text2);
+  border-radius:20px;
+  font:inherit; font-size:13px;
+  cursor:pointer;
+  transition:var(--t);
+}
+.nav-buttons button:hover {
+  color:var(--text);
+  background:var(--bg-card);
+  border-color:var(--border);
+  transform:translateY(-1px);
+}
+.nav-buttons button.active {
+  color:#fff;
+  background:linear-gradient(135deg,var(--a1),var(--a3));
+  border-color:var(--a3);
+  box-shadow:0 0 20px var(--glow), inset 0 1px 0 rgba(255,255,255,.15);
+}
+.lang-toggle {
+  padding:4px 12px;
+  border:1px solid var(--border);
+  background:var(--bg-card);
+  color:var(--text2);
+  border-radius:20px;
+  font-family:inherit; font-size:12px; font-weight:600; letter-spacing:.5px;
+  cursor:pointer;
+  transition:var(--t);
+}
+.lang-toggle:hover {
+  border-color:var(--a3);
+  color:var(--text);
+  background:var(--bg-hover);
+  box-shadow:0 0 16px var(--glow);
+  transform:translateY(-1px);
+}
+
+/* ============================================================
+   КАРКАС
+   ============================================================ */
+main {
+  flex:1; max-width:1100px; margin:0 auto; width:100%;
+  padding:30px 24px 50px; position:relative; z-index:1;
+}
+.tab { display:none; animation:fade .4s ease; }
+.tab.active { display:block; }
+
+.hero {
+  padding:20px 0 14px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:28px;
+  position:relative;
+}
+.hero::after {
+  content:"";
+  position:absolute; left:0; bottom:-1px;
+  width:80px; height:2px;
+  background:var(--grad);
+  border-radius:2px;
+  box-shadow:0 0 14px var(--glow-strong);
+}
+.hero h2 { font-size:32px; font-weight:300; letter-spacing:2px; }
+.hero p { color:var(--text2); margin-top:4px; }
+
+.stats-bar {
+  display:flex; gap:30px; flex-wrap:wrap; margin-top:14px;
+  font-size:13px; color:var(--text2);
+}
+.stats-bar strong {
+  color:var(--text); font-size:18px;
+  text-shadow:0 0 12px rgba(217,70,239,.25);
+}
+
+/* ============================================================
+   КАРТОЧКИ
+   ============================================================ */
+.card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  box-shadow:var(--sh);
+  transition:var(--t);
+  position:relative;
+  overflow:hidden;
+}
+.card::before {
+  content:"";
+  position:absolute; inset:0;
+  border-radius:inherit;
+  background:linear-gradient(135deg, rgba(217,70,239,.06), transparent 40%, rgba(225,29,72,.06));
+  opacity:0;
+  transition:opacity var(--t);
+  pointer-events:none;
+}
+.card:hover {
+  border-color:var(--a3);
+  box-shadow:var(--sh-h);
+}
+.card:hover::before { opacity:1; }
+
+/* Профиль */
+.profile-hero {
+  display:flex; align-items:center; gap:24px;
+  padding:20px 24px; margin-bottom:18px; flex-wrap:wrap;
+  border-top:2px solid var(--a3);
+}
+.avatar {
+  width:120px; height:120px; border-radius:50%; object-fit:cover;
+  border:2px solid var(--a3);
+  box-shadow:0 0 28px var(--glow), 0 0 0 4px rgba(225,29,72,.08);
+  flex-shrink:0;
+  background:var(--bg);
+  transition:var(--t);
+}
+.avatar:hover {
+  box-shadow:0 0 40px var(--glow-strong), 0 0 0 6px rgba(225,29,72,.12);
+  transform:scale(1.03);
+}
+.name { font-size:28px; font-weight:600; }
+.nick { color:var(--muted); }
+.ptitle { font-size:18px; color:var(--text2); margin:2px 0 8px; }
+
+.tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+.tag {
+  padding:2px 12px; border-radius:12px; font-size:11px;
+  background:var(--bg-deep); border:1px solid var(--border);
+  color:var(--muted);
+  transition:var(--t-fast);
+}
+.tag:hover {
+  color:var(--text);
+  border-color:var(--a2);
+  background:var(--bg-hover);
+}
+.tag.pink  { border-color:var(--a2); color:var(--a2); }
+.tag.gold  { border-color:var(--gold); color:var(--gold); }
+.tag.green { border-color:var(--green); color:var(--green); }
+
+/* Быстрая инфо */
+.quick-info {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+  gap:10px; margin-bottom:20px;
+}
+.quick-item {
+  display:flex; align-items:center; gap:10px; padding:12px 16px;
+  transition:var(--t);
+}
+.quick-item:hover {
+  transform:translateY(-3px);
+  border-color:var(--a2);
+  box-shadow:0 12px 28px rgba(150,25,70,.35);
+}
+.quick-item>span { font-size:18px; }
+.quick-item small {
+  display:block; color:var(--muted); font-size:10px;
+  text-transform:uppercase; letter-spacing:.5px;
+}
+.quick-item strong { font-size:13px; }
+
+/* Блоки контента */
+.block { margin:14px 0; padding:16px 20px; }
+.block h3 {
+  font-size:16px; color:var(--text2); margin-bottom:8px;
+  display:flex; align-items:center; gap:6px;
+}
+.block-text { color:var(--text2); font-size:14px; line-height:1.8; }
+.block-text strong { color:var(--text); }
+.block-text p+p { margin-top:14px; }
+
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:2px 20px; }
+
+/* Друзья */
+.friends {
+  display:flex; gap:20px; flex-wrap:wrap; font-size:24px;
+}
+.friends > * {
+  transition:var(--t);
+  cursor:default;
+}
+.friends > *:hover {
+  transform:translateY(-3px) scale(1.08);
+  text-shadow:0 0 18px var(--glow-strong);
+  color:var(--a2);
+}
+
+/* Ссылка на друга (Femadoria) */
+.friend-link {
+  position:relative;
+  display:inline-block;
+  color:var(--a2);
+  font-weight:600;
+  letter-spacing:.3px;
+  text-decoration:none;
+  padding:0 2px;
+  background-image:linear-gradient(135deg, var(--a2), var(--a3));
+  background-size:0% 2px;
+  background-repeat:no-repeat;
+  background-position:0 100%;
+  transition:
+    color .3s ease,
+    background-size .35s ease,
+    text-shadow .3s ease,
+    transform .3s ease;
+}
+.friend-link:hover {
+  color:#fff;
+  background-size:100% 2px;
+  text-shadow:0 0 12px var(--glow-strong), 0 0 24px var(--a2);
+  transform:translateY(-1px);
+}
+.friend-link::after {
+  content:"↗";
+  display:inline-block;
+  margin-left:3px;
+  font-size:.7em;
+  opacity:.6;
+  transform:translateY(-2px);
+  transition:transform .3s ease, opacity .3s ease, color .3s ease;
+}
+.friend-link:hover::after {
+  opacity:1;
+  color:var(--a3);
+  transform:translate(2px,-4px);
+}
+
+/* Достижения */
+
+/* Достижения */
+.ach {
+  display:flex; gap:14px; padding:12px 0;
+  border-bottom:1px solid rgba(225,29,72,.14);
+  transition:var(--t);
+}
+.ach:last-child { border:0; }
+.ach:hover { padding-left:6px; }
+.ach>span:first-child {
+  font-size:24px; width:36px; text-align:center; flex-shrink:0;
+}
+.ach b { display:block; color:var(--text); font-size:14px; }
+.ach small { display:block; color:var(--text2); font-size:13px; margin-top:2px; }
+
+/* ============================================================
+   ВИКИ
+   ============================================================ */
+.wiki-entry {
+  display:block; padding:16px 20px; margin-bottom:14px;
+  cursor:pointer;
+  position:relative;
+}
+.wiki-entry::after {
+  content:"";
+  position:absolute; left:20px; right:20px; bottom:0;
+  height:1px;
+  background:linear-gradient(90deg, transparent, var(--a3), transparent);
+  opacity:0;
+  transition:opacity var(--t);
+}
+.wiki-entry:hover {
+  transform:translateY(-2px);
+  background:var(--bg-hover);
+  border-color:var(--a3);
+}
+.wiki-entry:hover::after { opacity:.7; }
+.wiki-entry>p { margin-top:8px; color:var(--text2); font-size:13px; }
+
+.top-row { display:flex; align-items:center; gap:14px; }
+.ico {
+  width:48px; height:48px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:30px;
+  background:var(--bg-deep);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  overflow:hidden;
+  flex-shrink:0;
+  transition:var(--t);
+}
+.ico:hover {
+  border-color:var(--a3);
+  box-shadow:0 0 18px var(--glow);
+}
+.ico img { width:100%; height:100%; object-fit:contain; }
+
+.pname { font-size:18px; font-weight:600; }
+.sub { display:block; color:var(--muted); font-size:13px; font-weight:300; }
+
+.badge {
+  margin-left:auto; padding:3px 12px;
+  border-radius:12px; font-size:11px; white-space:nowrap;
+  transition:var(--t-fast);
+  font-weight:600;
+  letter-spacing:.2px;
+}
+.badge.frozen {
+  background:rgba(225,29,72,.2); color:#fda4af;
+  border:1px solid rgba(225,29,72,.42);
+}
+.badge.planned {
+  background:rgba(168,85,247,.2); color:#d8b4fe;
+  border:1px solid rgba(168,85,247,.38);
+}
+.badge.active {
+  background:rgba(74,222,128,.15); color:#86efac;
+  border:1px solid rgba(74,222,128,.25);
+  animation:pulseGlow 2.6s ease-in-out infinite;
+}
+
+/* Страница проекта */
+.back {
+  display:inline-block; color:var(--a2); font-size:13px;
+  cursor:pointer; margin-bottom:16px;
+  transition:var(--t);
+}
+.back:hover {
+  color:var(--a3); text-decoration:underline;
+  transform:translateX(-3px);
+}
+.header-info {
+  display:flex; align-items:center; gap:20px;
+  border-bottom:1px solid var(--border);
+  padding-bottom:16px; margin-bottom:20px;
+}
+.header-info .ico { width:68px; height:68px; font-size:44px; }
+.header-info .pname { font-size:26px; font-weight:400; }
+.header-info .badge { display:inline-block; margin:4px 0 0; }
+
+.info-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.info-box {
+  overflow:hidden; background:var(--bg-deep);
+  transition:var(--t);
+}
+.info-box:hover {
+  transform:translateY(-3px);
+  border-color:var(--a2);
+  box-shadow:0 14px 34px rgba(120,20,60,.4);
+}
+.info-box h4 {
+  padding:9px 14px; font-size:13px; color:var(--text2);
+  background:var(--card);
+  border-bottom:1px solid var(--border);
+  letter-spacing:.3px;
+}
+.info-box .body {
+  padding:14px 16px; color:var(--text2); font-size:13px; line-height:1.8;
+}
+.body ul { padding-left:20px; }
+.body li { margin-bottom:4px; }
+.body p+p, .body ul+p { margin-top:14px; }
+.label { color:var(--muted); }
+.label::after { content:": "; }
+.value { color:var(--text); }
+
+/* ============================================================
+   КОНТАКТЫ
+   ============================================================ */
+.contact-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:12px; margin-top:16px;
+}
+.contact-card {
+  display:flex; align-items:center; gap:12px;
+  padding:14px 16px;
+  color:inherit; text-decoration:none;
+  transition:var(--t);
+}
+.contact-card:hover {
+  transform:translateY(-3px);
+  border-color:var(--a3);
+  box-shadow:0 16px 36px rgba(150,25,70,.38);
+}
+.contact-card .ico { width:40px; height:40px; font-size:22px; }
+.contact-card b { display:block; font-size:14px; }
+.contact-card small { color:var(--muted); font-size:12px; }
+
+/* ============================================================
+   ПОДВАЛ И МОБИЛЬНОЕ МЕНЮ
+   ============================================================ */
+.footer {
+  margin-top:auto; position:relative; z-index:1;
+  border-top:1px solid var(--border);
+  padding:16px 30px; text-align:center;
+  font-size:12px; color:var(--muted);
+  background:linear-gradient(180deg, rgba(31,13,32,.85), rgba(38,16,42,.9));
+  backdrop-filter:blur(10px);
+}
+.footer a { color:var(--a2); text-decoration:none; transition:var(--t-fast); }
+.footer a:hover { color:var(--a3); text-decoration:underline; }
+.footer .dot { margin:0 6px; color:var(--border); }
+
+.mobile-nav {
+  display:none; position:fixed; left:8px; right:8px; bottom:8px;
+  z-index:110; padding:6px;
+  background:rgba(38,16,42,.96);
+  backdrop-filter:blur(18px) saturate(140%);
+  border:1px solid var(--border);
+  border-radius:16px;
+  box-shadow:0 12px 40px rgba(120,20,60,.55);
+}
+.mobile-nav button {
+  flex:1; border:0; background:none; color:var(--text2);
+  padding:7px 4px; border-radius:11px;
+  font:inherit; font-size:11px; cursor:pointer;
+  transition:var(--t-fast);
+}
+.mobile-nav button.active {
+  background:linear-gradient(135deg,var(--a1),var(--a3));
+  color:#fff;
+  box-shadow:0 0 16px var(--glow);
+}
+.mobile-nav .mi { display:block; font-size:17px; }
+
+/* ============================================================
+   ПРОЧЕЕ
+   ============================================================ */
+::selection { background:rgba(225,29,72,.4); color:#fff; }
+button, a { -webkit-tap-highlight-color:transparent; }
+:focus-visible {
+  outline:none;
+  box-shadow:var(--ring);
+  border-radius:8px;
+}
+
+.reveal {
+  opacity:0; transform:translateY(22px);
+  transition:opacity .65s ease, transform .65s ease;
+}
+.reveal.visible { opacity:1; transform:none; }
+
+@media (prefers-reduced-motion:reduce) {
+  *, *::before, *::after {
+    scroll-behavior:auto!important;
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+  }
+}
+
+/* ============================================================
+   GITHUB БЛОК
+   ============================================================ */
+.gh-heatmap {
+  display:grid; grid-auto-flow:column; grid-template-rows:repeat(7,10px);
+  gap:3px; overflow-x:auto; padding:6px 0;
+  scrollbar-width:thin;
+  scrollbar-color:var(--a3) transparent;
+}
+.gh-heatmap::-webkit-scrollbar { height:6px; }
+.gh-heatmap::-webkit-scrollbar-thumb {
+  background:var(--a3); border-radius:3px;
+}
+.gh-heatmap .cell {
+  width:10px; height:10px; border-radius:2px;
+  background:#2a1530;
+  border:1px solid rgba(225,29,72,.08);
+  transition:transform var(--t-fast), box-shadow var(--t-fast);
+}
+.gh-heatmap .cell:hover {
+  transform:scale(1.4);
+  box-shadow:0 0 8px var(--glow-strong);
+  z-index:2;
+}
+.gh-heatmap .cell[data-l="1"] { background:#4a1e42; }
+.gh-heatmap .cell[data-l="2"] { background:#7a2a5e; }
+.gh-heatmap .cell[data-l="3"] { background:#b0306e; }
+.gh-heatmap .cell[data-l="4"] {
+  background:var(--a3);
+  box-shadow:0 0 6px var(--glow);
+}
+
+.gh-heatmap-legend {
+  display:flex; align-items:center; gap:6px;
+  font-size:11px; color:var(--muted); margin-top:6px;
+}
+.gh-heatmap-legend .cell {
+  width:10px; height:10px; border-radius:2px;
+}
+
+.gh-repos {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:10px; margin-top:6px;
+}
+.gh-repo {
+  display:block; padding:12px 14px;
+  border:1px solid var(--border); border-radius:10px;
+  background:var(--bg-deep);
+  text-decoration:none; color:var(--text);
+  transition:var(--t);
+  position:relative;
+  overflow:hidden;
+}
+.gh-repo::before {
+  content:"";
+  position:absolute; inset:0;
+  background:linear-gradient(135deg, rgba(217,70,239,.08), transparent 50%);
+  opacity:0;
+  transition:opacity var(--t);
+  pointer-events:none;
+}
+.gh-repo:hover {
+  border-color:var(--a3);
+  transform:translateY(-2px);
+  box-shadow:var(--sh);
+}
+.gh-repo:hover::before { opacity:1; }
+.gh-repo b {
+  display:block; font-size:14px; color:var(--text);
+  margin-bottom:4px;
+  position:relative;
+}
+.gh-repo small {
+  display:block; font-size:12px; color:var(--muted);
+  line-height:1.5;
+  position:relative;
+}
+.gh-repo .gh-meta {
+  display:flex; gap:12px; margin-top:8px;
+  font-size:11px; color:var(--text2);
+  position:relative;
+}
+.gh-repo .gh-meta span {
+  display:flex; align-items:center; gap:4px;
+}
+
+.gh-search {
+  width:100%; margin-top:6px;
+  padding:9px 14px; border-radius:10px;
+  background:var(--bg-deep);
+  border:1px solid var(--border);
+  color:var(--text);
+  font:inherit; font-size:13px;
+  outline:none;
+  transition:var(--t);
+}
+.gh-search::placeholder { color:var(--muted); }
+.gh-search:focus {
+  border-color:var(--a3);
+  box-shadow:0 0 12px var(--glow), 0 0 0 3px rgba(225,29,72,.1);
+}
+
+.gh-status { margin-top:10px; font-size:12px; color:var(--muted); }
+
+/* ============================================================
+   АДАПТИВ
+   ============================================================ */
+@media (max-width:760px) {
+  .header { padding:10px 14px; flex-wrap:nowrap; }
+  .logo h1 { font-size:16px; letter-spacing:1px; }
+  .subtitle { font-size:8px; letter-spacing:1.5px; }
+  .nav-buttons { display:none; }
+  .right-group { margin-left:auto; }
+  main { padding:18px 12px 100px; }
+  .hero h2 { font-size:23px; line-height:1.3; }
+  .profile-hero { flex-direction:column; text-align:center; padding:18px 14px; }
+  .profile-hero .tags { justify-content:center; }
+  .avatar { width:92px; height:92px; }
+  .name { font-size:23px; }
+  .ptitle { font-size:14px; }
+  .quick-info { grid-template-columns:1fr 1fr; }
+  .grid2, .info-grid { grid-template-columns:1fr; }
+  .header-info { flex-direction:column; text-align:center; }
+  .header-info .pname { font-size:21px; }
+  .footer { padding:14px 12px 92px; }
+  .mobile-nav { display:flex; }
+  .gh-repos { grid-template-columns:1fr; }
+}
+
+@media (max-width:400px) {
+  .quick-info { grid-template-columns:1fr; }
+}
+
+/* Roza OS navigation */
+.roza-layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:18px;align-items:start}
+.roza-sidebar{padding:10px;position:sticky;top:20px}
+.roza-side-title{font-weight:800;padding:12px 10px 14px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.roza-link{display:block;width:100%;text-align:left;background:transparent;color:var(--muted);border:0;border-radius:8px;padding:10px 11px;margin:2px 0;font:inherit;cursor:pointer}
+.roza-link:hover,.roza-link.active{background:rgba(255,255,255,.06);color:var(--text)}
+.roza-content{min-width:0}
+.roza-page{display:none}
+.roza-page.active{display:block}
+.roza-download,.roza-back-button{border:1px solid var(--a3);background:transparent;color:var(--text);padding:10px 16px;border-radius:9px;cursor:pointer;font:inherit;margin-top:8px}
+.roza-download:hover,.roza-back-button:hover{background:rgba(255,255,255,.06)}
+.roza-back-card{text-align:center}
+@media(max-width:760px){.roza-layout{grid-template-columns:1fr}.roza-sidebar{position:static}.roza-link{display:inline-block;width:auto}}
+
+.github-activity{position:relative;overflow:hidden;background:radial-gradient(ellipse at top right,rgba(168,85,247,.12),transparent 55%),linear-gradient(145deg,#1e0c1c,#160a17);border:1px solid rgba(168,85,247,.25);border-radius:18px}
+.github-activity-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
+.github-activity-label{color:#c084fc;font-size:10px;font-weight:800;letter-spacing:2px}
+.github-activity-header h3{margin-top:8px}
+.github-activity-header p{margin-top:6px;color:var(--muted);font-size:13px}
+.github-profile-link{flex-shrink:0;padding:9px 14px;border:1px solid rgba(217,70,239,.35);border-radius:9px;color:#e9b8ff;background:rgba(168,85,247,.09);text-decoration:none;font-size:13px;transition:var(--t)}
+.github-profile-link:hover{border-color:#d946ef;background:rgba(168,85,247,.18);transform:translateY(-2px)}
+.github-activity .gh-heatmap{padding:12px;background:rgba(10,5,13,.32);border:1px solid rgba(168,85,247,.12);border-radius:12px}
+@media(max-width:600px){.github-activity-header{align-items:flex-start}.github-activity-header h3{font-size:18px}.github-profile-link{padding:7px 10px;font-size:12px}}
+
+
+
+/* ============================================================
+   WORLD OF KOSARH — CINEMATIC MOTION & TYPOGRAPHY
+   ============================================================ */
+:root {
+  --font-body: 'Manrope', 'Segoe UI', sans-serif;
+  --font-display: 'Cinzel', Georgia, serif;
+  --motion-smooth: cubic-bezier(.2,.75,.25,1);
+}
+
+body { font-family: var(--font-body); }
+h1, h2, h3, h4, .section-title, .hero h2, .logo h1 {
+  font-family: var(--font-display);
+  text-wrap: balance;
+}
+.logo h1 { letter-spacing: .055em; }
+button, input, textarea, select { font-family: var(--font-body); }
+
+/* Мягкое появление страницы */
+.tab.active { animation: pageArrival .72s var(--motion-smooth) both; }
+@keyframes pageArrival {
+  from { opacity: 0; transform: translateY(12px); filter: blur(4px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+/* Плавные появления блоков при прокрутке */
+.reveal { opacity: 0; transform: translateY(26px) scale(.985); filter: blur(3px); transition: opacity .8s var(--motion-smooth), transform .8s var(--motion-smooth), filter .8s var(--motion-smooth); }
+.reveal.visible { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+
+/* Карточки с объёмом и свечением */
+.card, .wiki-entry, .project-card, .contact-card, .gh-repo, .block {
+  transition: transform .35s var(--motion-smooth), border-color .35s ease, box-shadow .35s ease, background-color .35s ease;
+}
+.card:hover, .wiki-entry:hover, .project-card:hover, .contact-card:hover, .gh-repo:hover {
+  transform: translateY(-5px);
+  border-color: rgba(217,70,239,.55);
+  box-shadow: 0 18px 42px rgba(0,0,0,.28), 0 0 24px rgba(168,85,247,.09);
+}
+
+/* Световой отблеск на основных кнопках */
+.nav-buttons button, .lang-toggle, .roza-link, .roza-download, .roza-back-button, .github-profile-link {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.nav-buttons button::after, .lang-toggle::after, .roza-download::after, .roza-back-button::after, .github-profile-link::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 -130%;
+  width: 75%;
+  transform: skewX(-22deg);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.13), transparent);
+  transition: left .65s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+.nav-buttons button:hover::after, .lang-toggle:hover::after, .roza-download:hover::after, .roza-back-button:hover::after, .github-profile-link:hover::after { left: 150%; }
+
+/* Медленное дыхание фоновых сияний */
+body::before {
+  content: '';
+  position: fixed;
+  inset: -25%;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 20% 30%, rgba(168,85,247,.08), transparent 38%), radial-gradient(ellipse at 78% 65%, rgba(225,29,72,.07), transparent 40%);
+  animation: ambientDrift 24s ease-in-out infinite alternate;
+}
+@keyframes ambientDrift {
+  0% { transform: translate3d(-1.5%, -1%, 0) scale(1); }
+  100% { transform: translate3d(1.5%, 1%, 0) scale(1.06); }
+}
+
+/* Звёзды слегка двигаются и мерцают */
+.star { will-change: opacity, transform; }
+
+/* Подчёркивание ссылок появляется плавно */
+a:not(.card):not(.contact-card):not(.gh-repo) { text-underline-offset: 4px; }
+
+/* График GitHub: ячейки, создаваемые script.js */
+#ghHeatmap {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(7, 10px);
+  grid-auto-columns: 10px;
+  gap: 4px;
+  overflow-x: auto;
+  padding: 14px;
+  border: 1px solid rgba(168,85,247,.15);
+  border-radius: 12px;
+  background: rgba(10,5,13,.4);
+  scrollbar-color: #6d347b #1a0c1d;
+  scrollbar-width: thin;
+}
+#ghHeatmap .cell, #ghHeatmapLegend .cell {
+  display: block;
+  width: 10px;
+  height: 10px;
+  min-width: 10px;
+  border-radius: 3px;
+  background: #2a1630;
+  transition: transform .16s ease, outline-color .16s ease;
+}
+#ghHeatmap .cell:hover { transform: scale(1.35); outline: 1px solid rgba(255,255,255,.55); }
+#ghHeatmap .cell[data-l="1"], #ghHeatmapLegend .cell[data-l="1"] { background: #63317a; }
+#ghHeatmap .cell[data-l="2"], #ghHeatmapLegend .cell[data-l="2"] { background: #913bb2; }
+#ghHeatmap .cell[data-l="3"], #ghHeatmapLegend .cell[data-l="3"] { background: #c044c9; }
+#ghHeatmap .cell[data-l="4"], #ghHeatmapLegend .cell[data-l="4"] { background: #f05b91; }
+#ghHeatmapLegend { display: flex; align-items: center; justify-content: flex-end; gap: 5px; margin-top: 10px; color: var(--muted); font-size: 11px; }
+
+:focus-visible { outline: 2px solid #d946ef; outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+  .reveal { opacity: 1; transform: none; filter: none; }
+}
+
+</style>
 
 </head>
 <body>
@@ -484,7 +1345,288 @@
     <br /><small style="opacity:.6">⚔️ Made by the <span class="grad">Coalition Iron Will</span></small>
 </footer>
 
-<script src="script.js" defer></script>
+<script>
+// НАВИГАЦИЯ
+function switchTab(tabId, push = true) {
+    const validTabs = ['home', 'wiki', 'contact', 'project-roza', 'project-solarium', 'project-blackorder', 'project-coalition'];
+    if (!validTabs.includes(tabId) || !document.getElementById('tab-' + tabId)) tabId = 'home';
+    document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + tabId).classList.add('active');
+    const navId = tabId.startsWith('project-') ? 'wiki' : tabId;
+    document.querySelectorAll('.nav-buttons button, .mobile-nav button').forEach(btn => {
+        const active = btn.dataset.tab === navId;
+        btn.classList.toggle('active', active);
+        if (active) btn.setAttribute('aria-current', 'page');
+        else btn.removeAttribute('aria-current');
+    });
+    if (push && location.hash !== '#' + tabId) history.pushState({ tab: tabId }, '', '#' + tabId);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.querySelectorAll('.nav-buttons button, .mobile-nav button').forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+});
+document.querySelectorAll('.footer a[href^="#"]').forEach(link => {
+    link.addEventListener('click', event => {
+        const tabId = link.getAttribute('href').slice(1);
+        if (document.getElementById('tab-' + tabId)) {
+            event.preventDefault();
+            switchTab(tabId);
+        }
+    });
+});
+window.addEventListener('popstate', () => switchTab(location.hash.slice(1) || 'home', false));
+
+document.querySelectorAll('.wiki-entry, .page-detail .back').forEach(el => {
+    el.setAttribute('role', el.matches('.back') ? 'link' : 'button');
+    el.tabIndex = 0;
+    el.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            el.click();
+        }
+    });
+});
+
+// ROZA OS
+function showRozaSection(section, button) {
+    document.querySelectorAll('.roza-page').forEach(el => el.classList.remove('active'));
+    const page = document.getElementById('roza-' + section);
+    if (page) page.classList.add('active');
+    document.querySelectorAll('.roza-link').forEach(el => el.classList.remove('active'));
+    if (button) button.classList.add('active');
+}
+function rozaNotReady() {
+    alert(currentLang === 'en' ? 'The Roza OS image is not ready yet. Stay tuned for updates.' : 'Образ Roza OS пока не готов. Следите за обновлениями проекта.');
+}
+
+// ЯЗЫК
+const langToggle = document.getElementById('langToggle');
+let currentLang = 'ru';
+document.querySelectorAll('.i18n').forEach(el => {
+    if (!el.hasAttribute('data-ru')) el.dataset.ru = el.innerHTML;
+});
+function applyLang(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    if (langToggle) langToggle.textContent = lang === 'en' ? 'РУС' : 'ENG';
+    document.querySelectorAll('.i18n').forEach(el => {
+        const value = el.getAttribute('data-' + lang);
+        if (value === null || value === '') return;
+        if (value.includes('<')) el.innerHTML = value;
+        else el.textContent = value;
+    });
+    const subtitle = document.querySelector('.header .logo .subtitle');
+    if (subtitle) subtitle.textContent = lang === 'en' ? '✦ World of Kosarh ✦' : '✦ Мир Косарха ✦';
+    const search = document.getElementById('ghSearch');
+    if (search) search.placeholder = lang === 'en' ? 'Search repositories...' : 'Поиск репозиториев...';
+    ghRenderPinned();
+    ghRenderAll();
+    updateGithubStatus();
+}
+function toggleLang() {
+    applyLang(currentLang === 'en' ? 'ru' : 'en');
+    try { localStorage.setItem('solarium-lang', currentLang); } catch (error) {}
+}
+if (langToggle) langToggle.addEventListener('click', toggleLang);
+let savedLanguage = 'ru';
+try {
+    if (localStorage.getItem('solarium-lang') === 'en') savedLanguage = 'en';
+} catch (error) {}
+
+// ЗВЁЗДНЫЙ ФОН И АНИМАЦИИ
+function createStars() {
+    const container = document.getElementById('stars');
+    if (!container) return;
+    const count = window.innerWidth < 760 ? 55 : 120;
+    const fragment = document.createDocumentFragment();
+    for (let i = 0; i < count; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        const size = Math.random() * 3 + 1;
+        star.style.width = size + 'px';
+        star.style.height = size + 'px';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.setProperty('--duration', Math.random() * 3 + 2 + 's');
+        star.style.animationDelay = Math.random() * 5 + 's';
+        fragment.appendChild(star);
+    }
+    container.replaceChildren(fragment);
+}
+createStars();
+if ('IntersectionObserver' in window) {
+    const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+} else {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+}
+
+// МУЗЫКА (если аудио и кнопка добавлены в HTML)
+const music = document.getElementById('background-music');
+const musicToggle = document.getElementById('music-toggle');
+if (music && musicToggle) {
+    music.volume = 0.15;
+    musicToggle.setAttribute('aria-pressed', 'false');
+    musicToggle.addEventListener('click', async () => {
+        if (music.paused) {
+            try {
+                await music.play();
+                musicToggle.textContent = currentLang === 'en' ? '♫ Music: ON' : '♫ Музыка: ВКЛ';
+                musicToggle.setAttribute('aria-label', currentLang === 'en' ? 'Turn music off' : 'Выключить музыку');
+                musicToggle.setAttribute('aria-pressed', 'true');
+            } catch (error) {
+                musicToggle.textContent = currentLang === 'en' ? '♫ Could not play' : '♫ Не удалось включить';
+                musicToggle.setAttribute('aria-pressed', 'false');
+            }
+        } else {
+            music.pause();
+            musicToggle.textContent = currentLang === 'en' ? '♫ Music: OFF' : '♫ Музыка: ВЫКЛ';
+            musicToggle.setAttribute('aria-label', currentLang === 'en' ? 'Turn music on' : 'Включить музыку');
+            musicToggle.setAttribute('aria-pressed', 'false');
+        }
+    });
+}
+
+// GITHUB
+const GH_USER = 'VladislavFosk';
+let ghRepos = [];
+let ghLoadError = false;
+function ghEl(tag, cls, text) {
+    const el = document.createElement(tag);
+    if (cls) el.className = cls;
+    if (text !== undefined && text !== null) el.textContent = text;
+    return el;
+}
+function updateGithubStatus() {
+    const status = document.getElementById('ghStatus');
+    if (!status) return;
+    if (ghLoadError) status.textContent = currentLang === 'en' ? 'Could not load GitHub repositories. Try again later.' : 'Не удалось загрузить репозитории GitHub. Попробуйте позже.';
+    else if (ghRepos.length) status.textContent = currentLang === 'en' ? `GitHub: @${GH_USER} · Repositories loaded: ${ghRepos.length}` : `GitHub: @${GH_USER} · Загружено репозиториев: ${ghRepos.length}`;
+    else status.textContent = currentLang === 'en' ? 'Connecting to GitHub...' : 'Подключение к GitHub...';
+}
+async function ghLoadHeatmap() {
+    const wrap = document.getElementById('ghHeatmap');
+    const legend = document.getElementById('ghHeatmapLegend');
+    if (!wrap) return;
+    try {
+        const response = await fetch(`https://github-contributions-api.jogruber.de/v4/${GH_USER}?y=last`);
+        if (!response.ok) throw new Error(`Heatmap API ${response.status}`);
+        const data = await response.json();
+        const map = {};
+        (data.contributions || []).forEach(day => { map[day.date] = day.count; });
+        wrap.replaceChildren();
+        const end = new Date();
+        const start = new Date(end);
+        start.setDate(end.getDate() - 364);
+        start.setDate(start.getDate() - start.getDay());
+        for (let i = 0; i < 371; i++) {
+            const date = new Date(start);
+            date.setDate(start.getDate() + i);
+            const iso = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+            const count = map[iso] || 0;
+            const level = count >= 10 ? 4 : count >= 6 ? 3 : count >= 3 ? 2 : count > 0 ? 1 : 0;
+            const cell = ghEl('div', 'cell');
+            cell.dataset.l = level;
+            cell.title = currentLang === 'en' ? `${iso}: ${count} contributions` : `${iso}: ${count} вкладов`;
+            cell.setAttribute('aria-label', cell.title);
+            wrap.appendChild(cell);
+        }
+        if (legend) {
+            legend.replaceChildren();
+            legend.appendChild(ghEl('span', '', currentLang === 'en' ? 'Less' : 'Меньше'));
+            for (let level = 0; level <= 4; level++) {
+                const cell = ghEl('span', 'cell');
+                cell.dataset.l = level;
+                legend.appendChild(cell);
+            }
+            legend.appendChild(ghEl('span', '', currentLang === 'en' ? 'More' : 'Больше'));
+        }
+    } catch (error) {
+        console.error('GitHub heatmap error:', error);
+        wrap.replaceChildren(ghEl('span', '', currentLang === 'en' ? 'Could not load GitHub activity.' : 'Не удалось загрузить активность GitHub.'));
+        wrap.style.display = 'block';
+        if (legend) legend.hidden = true;
+    }
+}
+function ghRepoCard(repo) {
+    const card = document.createElement('a');
+    card.className = 'gh-repo';
+    card.href = repo.html_url;
+    card.target = '_blank';
+    card.rel = 'noopener noreferrer';
+    card.appendChild(ghEl('b', '', repo.name));
+    card.appendChild(ghEl('small', '', repo.description || (currentLang === 'en' ? 'No description' : 'Без описания')));
+    const meta = ghEl('div', 'gh-meta');
+    if (repo.language) meta.appendChild(ghEl('span', '', `💻 ${repo.language}`));
+    meta.appendChild(ghEl('span', '', `⭐ ${repo.stargazers_count || 0}`));
+    meta.appendChild(ghEl('span', '', `🍴 ${repo.forks_count || 0}`));
+    card.appendChild(meta);
+    return card;
+}
+function ghRenderPinned() {
+    const box = document.getElementById('ghPinned');
+    if (!box) return;
+    const pinned = [...ghRepos].sort((a, b) => (b.stargazers_count - a.stargazers_count) || (new Date(b.updated_at) - new Date(a.updated_at))).slice(0, 4);
+    box.replaceChildren();
+    if (!pinned.length) {
+        box.appendChild(ghEl('p', '', ghLoadError ? (currentLang === 'en' ? 'Repositories are unavailable.' : 'Репозитории недоступны.') : (currentLang === 'en' ? 'No repositories found.' : 'Нет репозиториев.')));
+        return;
+    }
+    pinned.forEach(repo => box.appendChild(ghRepoCard(repo)));
+}
+function ghRenderAll(filter = '') {
+    const box = document.getElementById('ghAll');
+    if (!box) return;
+    const query = filter.trim().toLowerCase();
+    const list = ghRepos.filter(repo => !query || repo.name.toLowerCase().includes(query) || (repo.description || '').toLowerCase().includes(query) || (repo.language || '').toLowerCase().includes(query));
+    box.replaceChildren();
+    if (!list.length) {
+        box.appendChild(ghEl('p', '', currentLang === 'en' ? (query ? 'Nothing found.' : 'No repositories found.') : (query ? 'Ничего не найдено.' : 'Нет репозиториев.')));
+        return;
+    }
+    list.forEach(repo => box.appendChild(ghRepoCard(repo)));
+}
+function ghFilterRepos() {
+    const input = document.getElementById('ghSearch');
+    ghRenderAll(input ? input.value : '');
+}
+const ghSearchInput = document.getElementById('ghSearch');
+if (ghSearchInput) ghSearchInput.addEventListener('input', ghFilterRepos);
+async function ghLoadRepos() {
+    updateGithubStatus();
+    try {
+        const response = await fetch(`https://api.github.com/users/${GH_USER}/repos?sort=updated&direction=desc&per_page=100&type=owner`, { headers: { Accept: 'application/vnd.github+json' } });
+        if (!response.ok) throw new Error(`GitHub API ${response.status}`);
+        const repos = await response.json();
+        ghRepos = repos.filter(repo => repo.owner && repo.owner.login.toLowerCase() === GH_USER.toLowerCase() && !repo.fork && !repo.archived && typeof repo.html_url === 'string' && repo.html_url.startsWith('https://github.com/'));
+        ghLoadError = false;
+        ghRenderPinned();
+        ghFilterRepos();
+        updateGithubStatus();
+    } catch (error) {
+        console.error('GitHub repositories error:', error);
+        ghLoadError = true;
+        ghRenderPinned();
+        ghFilterRepos();
+        updateGithubStatus();
+    }
+}
+
+// СТАРТОВАЯ ВКЛАДКА И ЗАГРУЗКА GITHUB
+if (savedLanguage === 'en') applyLang('en');
+switchTab(location.hash.slice(1) || 'home', false);
+ghLoadHeatmap();
+ghLoadRepos();
+
+</script>
 </body>
 </html>
 
