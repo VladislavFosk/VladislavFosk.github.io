@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="World of Kosarh" />
+<meta name="description" content="World of Kosarh — энциклопедия миров, проектов и идей Владислава Фоска-Косарха" />
 <meta name="theme-color" content="#10091d" />
-<title>World of Kosarh</title>
+<title>World of Kosarh — Мир Косарха</title>
 <link rel="icon" href="gim/logo.png" type="image/png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Cinzel:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=PT+Serif:wght@400;700&display=swap" rel="stylesheet">
 <style>
 
 /* ============================================================
@@ -760,17 +760,18 @@ button, a { -webkit-tap-highlight-color:transparent; }
    WORLD OF KOSARH — CINEMATIC MOTION & TYPOGRAPHY
    ============================================================ */
 :root {
-  --font-body: 'Manrope', 'Segoe UI', sans-serif;
-  --font-display: 'Cinzel', Georgia, serif;
+  --font-body: 'PT Serif', Georgia, 'Times New Roman', serif;
+  --font-display: 'Cormorant Garamond', 'Times New Roman', serif;
   --motion-smooth: cubic-bezier(.2,.75,.25,1);
 }
 
-body { font-family: var(--font-body); }
+body { font-family: var(--font-body); font-size: 17px; -webkit-text-stroke: .15px rgba(192,132,252,.28); }
 h1, h2, h3, h4, .section-title, .hero h2, .logo h1 {
   font-family: var(--font-display);
   text-wrap: balance;
 }
-.logo h1 { letter-spacing: .055em; }
+.logo h1 { letter-spacing: .045em; font-weight: 600; }
+h1, h2, h3, h4, .section-title, .hero h2, .logo h1 { font-weight: 600; }
 button, input, textarea, select { font-family: var(--font-body); }
 
 /* Мягкое появление страницы */
@@ -957,14 +958,14 @@ a:not(.card):not(.contact-card):not(.gh-repo) { text-underline-offset: 4px; }
 
     <div class="block card">
         <h3>💻 <span class="i18n" data-en="Operating Systems">Операционные системы</span></h3>
-        <div class="block-text">🪟 Windows<br />🐧 GNU/Linux</div>
+        <div class="block-text">🪟 Windows<br />🐧 GNU/Linux (Debian, XFCE)</div>
     </div>
 
     <div class="block card">
         <h3>🧠 <span class="i18n" data-en="Skills">Навыки</span></h3>
         <div class="block-text">
             <strong>💻 <span class="i18n" data-en="Programming">Программирование</span>:</strong> HTML, CSS, JavaScript<br />
-            <strong>🐧 Linux:</strong> NU/Linux <span class="i18n" data-en="System setup">Настройка системы</span><br />
+            <strong>🐧 Linux:</strong> Debian, XFCE, <span class="i18n" data-en="System setup">Настройка системы</span><br />
             <strong>🔧 <span class="i18n" data-en="Hardware">Железо</span>:</strong> PC, <span class="i18n" data-en="Troubleshooting, Maintenance">Диагностика, обслуживание</span><br />
             <strong>🎮 <span class="i18n" data-en="Modding">Моддинг</span>:</strong> HOI4, <span class="i18n" data-en="Game projects, Worldbuilding">Игровые проекты, миростроение</span>
         </div>
@@ -1114,8 +1115,8 @@ a:not(.card):not(.contact-card):not(.gh-repo) { text-underline-offset: 4px; }
                             <div><span class="label i18n" data-en="Status">Статус</span><span class="value">🔒 <span class="i18n" data-en="Classified">Засекречено</span></span></div>
                             <div><span class="label i18n" data-en="Type">Тип</span><span class="value i18n" data-en="Operating System">Операционная система</span></div>
                             <div><span class="label i18n" data-en="Platform">Платформа</span><span class="value">Linux</span></div>
-                            <div><span class="label i18n" data-en="Base">Основа</span><span class="value">Arch Linux</span></div>
-                            <div><span class="label i18n" data-en="Desktop">Окружение</span><span class="value">???</span></div>
+                            <div><span class="label i18n" data-en="Base">Основа</span><span class="value">Debian</span></div>
+                            <div><span class="label i18n" data-en="Desktop">Окружение</span><span class="value">XFCE</span></div>
                             <div><span class="label i18n" data-en="License">Лицензия</span><span class="value">GPL</span></div>
                         </div>
                     </div>
@@ -1131,7 +1132,7 @@ a:not(.card):not(.contact-card):not(.gh-repo) { text-underline-offset: 4px; }
                 <div class="block card">
                     <h3>🖥️ <span class="i18n" data-en="System Overview">Обзор системы</span></h3>
                     <div class="block-text">
-                        <p><strong>Roza OS</strong> — <span class="i18n" data-en="a planned Linux operating system project based on Arch Linux.">планируемый проект операционной системы на базе Linux, Arch Linux.</span></p>
+                        <p><strong>Roza OS</strong> — <span class="i18n" data-en="a planned Linux operating system project based on Debian with XFCE.">планируемый проект операционной системы на базе Linux, Debian и XFCE.</span></p>
                         <p>🔒 <span class="i18n" data-en="Further technical details are classified.">Остальные технические детали засекречены.</span></p>
                     </div>
                 </div>
@@ -1630,3 +1631,4 @@ ghLoadRepos();
 </script>
 </body>
 </html>
+
