@@ -3,11 +3,29 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="Solarium Umbris — энциклопедия миров, проектов и идей Владислава Фоска-Косарха" />
+<meta name="description" content="World of Kosarh — энциклопедия миров, проектов и идей Владислава Фоска-Косарха" />
 <meta name="theme-color" content="#160a17" />
-<title>Solarium Umbris — Мир Косарха</title>
+<title>World of Kosarh — Мир Косарха</title>
 <link rel="icon" href="gim/logo.png" type="image/png" />
 <link rel="stylesheet" href="style.css" />
+<style>
+.roza-layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:18px;align-items:start}
+.roza-sidebar{padding:10px;position:sticky;top:20px}
+.roza-side-title{font-weight:800;padding:12px 10px 14px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.roza-link{display:block;width:100%;text-align:left;background:transparent;color:var(--muted);border:0;border-radius:8px;padding:10px 11px;margin:2px 0;font:inherit;cursor:pointer}
+.roza-link:hover,.roza-link.active{background:rgba(255,255,255,.06);color:var(--text)}
+.roza-content{min-width:0}
+.roza-page{display:none}
+.roza-page.active{display:block}
+.roza-download,.roza-back-button{border:1px solid var(--a3);background:transparent;color:var(--text);padding:10px 16px;border-radius:9px;cursor:pointer;font:inherit;margin-top:8px}
+.roza-download:hover,.roza-back-button:hover{background:rgba(255,255,255,.06)}
+.roza-back-card{text-align:center}
+@media(max-width:760px){
+.roza-layout{grid-template-columns:1fr}
+.roza-sidebar{position:static}
+.roza-link{display:inline-block;width:auto}
+}
+</style>
 </head>
 <body>
 
@@ -163,17 +181,17 @@
     <div class="wiki-entry card reveal" onclick="switchTab('project-roza')">
         <div class="top-row">
             <div class="ico"><img src="gim/rozaos.png" alt="Roza OS" /></div>
-            <div><div class="pname">Roza OS</div><span class="sub">Debian-based Linux distribution</span></div>
-            <span class="badge planned">🔵 <span class="i18n" data-en="Planned">Запланирован</span></span>
+            <div><div class="pname">Roza OS</div><span class="sub">Private Linux OS Project</span></div>
+            <span class="badge" style="border-color:var(--a3);color:var(--a3)">🔒 <span class="i18n" data-en="Classified">Засекречено</span></span>
         </div>
-        <p class="i18n" data-en="Linux distribution based on Debian with XFCE desktop and preinstalled packages.">Linux-дистрибутив на базе Debian с окружением XFCE и предустановленными пакетами.</p>
-        <div class="tags"><span class="tag">Debian</span><span class="tag">XFCE</span><span class="tag">Linux</span><span class="tag pink">Coalition Iron Will</span></div>
+        <p class="i18n" data-en="A private operating system project. Technical information is currently classified.">Закрытый проект операционной системы. Техническая информация пока засекречена.</p>
+        <div class="tags"><span class="tag">Roza OS</span><span class="tag">Linux</span><span class="tag">Private Project</span><span class="tag pink">Coalition Iron Will</span></div>
     </div>
 
     <div class="wiki-entry card" onclick="switchTab('project-solarium')">
         <div class="top-row">
             <div class="ico">☽</div>
-            <div><div class="pname">Solarium Umbris</div><span class="sub">Mod for Hearts of Iron IV</span></div>
+            <div><div class="pname">World of Kosarh</div><span class="sub">Mod for Hearts of Iron IV</span></div>
             <span class="badge frozen">❄️ <span class="i18n" data-en="Frozen">Заморожен</span></span>
         </div>
         <p class="i18n" data-en="Mod for Hearts of Iron IV with unique states and alternative history.">Мод для Hearts of Iron IV с уникальными государствами и альтернативной историей.</p>
@@ -204,36 +222,124 @@
 <!-- Roza OS -->
 <section class="tab" id="tab-project-roza">
     <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki">Назад к вики</span></a>
+
     <div class="header-info">
         <div class="ico"><img src="gim/rozaos.png" alt="Roza OS" /></div>
         <div>
-            <div class="pname">Roza OS <span class="sub">Debian-based Linux distribution</span></div>
-            <span class="badge planned">🔵 <span class="i18n" data-en="Planned">Запланирован</span></span>
-            <div class="tags"><span class="tag">Debian</span><span class="tag">XFCE</span><span class="tag">Linux</span><span class="tag pink">Coalition Iron Will</span></div>
-        </div>
-    </div>
-    <div class="info-grid">
-        <div class="info-box card">
-            <h4>📋 <span class="i18n" data-en="Information">Информация</span></h4>
-            <div class="body">
-                <div><span class="label i18n" data-en="Status">Статус</span><span class="value">🔵 <span class="i18n" data-en="Planned">Запланирован</span></span></div>
-                <div><span class="label i18n" data-en="Base">Основа</span><span class="value">Debian</span></div>
-                <div><span class="label i18n" data-en="Environment">Окружение</span><span class="value">XFCE</span></div>
-                <div><span class="label i18n" data-en="License">Лицензия</span><span class="value">GPL</span></div>
-                <div><span class="label i18n" data-en="Team">Команда</span><span class="value">Coalition Iron Will</span></div>
+            <div class="pname">Roza OS <span class="sub">Private Linux OS Project</span></div>
+            <span class="badge" style="border-color:var(--a3);color:var(--a3)">🔒 <span class="i18n" data-en="Classified">Засекречено</span></span>
+            <div class="tags">
+                <span class="tag">Roza OS</span>
+                <span class="tag">Linux</span>
+                <span class="tag">Private Project</span>
+                <span class="tag pink">Coalition Iron Will</span>
             </div>
         </div>
-        <div class="info-box card">
-            <h4>📖 <span class="i18n" data-en="Description">Описание</span></h4>
-            <div class="body">
-                <p class="i18n" data-en="<strong>Roza OS</strong> — lightweight and fast Linux distribution on stable Debian base."><strong>Roza OS</strong> — лёгкий и быстрый Linux-дистрибутив на стабильной базе Debian.</p>
-                <p><strong class="i18n" data-en="Features:">Особенности:</strong></p>
-                <ul>
-                    <li>🐧 <strong class="i18n" data-en="Base:">Основа:</strong> Debian (stable)</li>
-                    <li>🖥️ <strong class="i18n" data-en="Environment:">Окружение:</strong> XFCE</li>
-                    <li>📦 <strong class="i18n" data-en="Packages:">Пакеты:</strong> Firefox, VLC, LibreOffice, GParted, Remmina</li>
-                </ul>
-                <p>🔵 <span class="i18n" data-en="Planned. Development has not started yet.">Запланирован. Разработка ещё не началась.</span></p>
+    </div>
+
+    <div class="roza-layout">
+        <aside class="roza-sidebar card">
+            <div class="roza-side-title">🌹 Roza OS</div>
+            <button class="roza-link active" onclick="showRozaSection('overview', this)">📋 <span class="i18n" data-en="Overview">Обзор</span></button>
+            <button class="roza-link" onclick="showRozaSection('architecture', this)">⚙️ <span class="i18n" data-en="Architecture">Архитектура</span></button>
+            <button class="roza-link" onclick="showRozaSection('desktop', this)">🖥️ <span class="i18n" data-en="Desktop">Рабочее окружение</span></button>
+            <button class="roza-link" onclick="showRozaSection('packages', this)">📦 <span class="i18n" data-en="Packages">Пакеты</span></button>
+            <button class="roza-link" onclick="showRozaSection('security', this)">🛡️ <span class="i18n" data-en="Security">Безопасность</span></button>
+            <button class="roza-link" onclick="showRozaSection('development', this)">🛠️ <span class="i18n" data-en="Development">Разработка</span></button>
+            <button class="roza-link" onclick="showRozaSection('releases', this)">🚀 <span class="i18n" data-en="Releases">Релизы</span></button>
+            <button class="roza-link" onclick="showRozaSection('faq', this)">❓ FAQ</span></button>
+        </aside>
+
+        <div class="roza-content">
+            <div class="roza-page active" id="roza-overview">
+                <div class="info-grid">
+                    <div class="info-box card">
+                        <h4>📋 <span class="i18n" data-en="General Information">Общая информация</span></h4>
+                        <div class="body">
+                            <div><span class="label i18n" data-en="Status">Статус</span><span class="value">🔒 <span class="i18n" data-en="Classified">Засекречено</span></span></div>
+                            <div><span class="label i18n" data-en="Type">Тип</span><span class="value i18n" data-en="Operating System">Операционная система</span></div>
+                            <div><span class="label i18n" data-en="Platform">Платформа</span><span class="value">Linux</span></div>
+                            <div><span class="label i18n" data-en="Base">Основа</span><span class="value">Debian</span></div>
+                            <div><span class="label i18n" data-en="Desktop">Окружение</span><span class="value">XFCE</span></div>
+                            <div><span class="label i18n" data-en="License">Лицензия</span><span class="value">GPL</span></div>
+                        </div>
+                    </div>
+                    <div class="info-box card">
+                        <h4>🔐 <span class="i18n" data-en="Classified Information">Засекреченная информация</span></h4>
+                        <div class="body">
+                            <p><strong>Roza OS</strong> — <span class="i18n" data-en="a private operating system project.">закрытый проект операционной системы.</span></p>
+                            <p>🔒 <span class="i18n" data-en="Internal architecture, custom components and technical documentation are currently classified.">Внутренняя архитектура, собственные компоненты и техническая документация пока засекречены.</span></p>
+                            <p>📁 <span class="i18n" data-en="More information will be published as the project becomes ready.">Дополнительная информация будет опубликована по мере готовности проекта.</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="block card">
+                    <h3>🖥️ <span class="i18n" data-en="System Overview">Обзор системы</span></h3>
+                    <div class="block-text">
+                        <p><strong>Roza OS</strong> — <span class="i18n" data-en="a planned Linux operating system project based on Debian with XFCE.">планируемый проект операционной системы на базе Linux, Debian и XFCE.</span></p>
+                        <p>🔒 <span class="i18n" data-en="Further technical details are classified.">Остальные технические детали засекречены.</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="roza-page" id="roza-architecture">
+                <div class="block card"><h3>⚙️ <span class="i18n" data-en="Architecture">Архитектура</span></h3><div class="block-text">
+                    <p>🔒 <strong>Kernel:</strong> <span class="i18n" data-en="classified">засекречено</span></p>
+                    <p>🔒 <strong>System architecture:</strong> <span class="i18n" data-en="classified">засекречено</span></p>
+                    <p>🔒 <strong>Custom components:</strong> <span class="i18n" data-en="classified">засекречено</span></p>
+                </div></div>
+            </div>
+
+            <div class="roza-page" id="roza-desktop">
+                <div class="block card"><h3>🖥️ <span class="i18n" data-en="Desktop Environment">Рабочее окружение</span></h3><div class="block-text">
+                    <p>XFCE — <span class="i18n" data-en="the planned desktop environment for Roza OS.">планируемое рабочее окружение Roza OS.</span></p>
+                    <p>🔒 <span class="i18n" data-en="Theme, customizations and interface details are classified.">Тема, модификации и детали интерфейса засекречены.</span></p>
+                </div></div>
+            </div>
+
+            <div class="roza-page" id="roza-packages">
+                <div class="block card"><h3>📦 <span class="i18n" data-en="Packages and Software">Пакеты и программное обеспечение</span></h3><div class="block-text">
+                    <p>🔒 <span class="i18n" data-en="The final package set has not been publicly announced.">Финальный набор пакетов пока публично не объявлен.</span></p>
+                    <p>🔒 <span class="i18n" data-en="Package selection and custom software details are classified.">Выбор пакетов и детали собственного ПО засекречены.</span></p>
+                </div></div>
+            </div>
+
+            <div class="roza-page" id="roza-security">
+                <div class="block card"><h3>🛡️ <span class="i18n" data-en="Security">Безопасность</span></h3><div class="block-text">
+                    <p>🔒 <span class="i18n" data-en="Security model and hardening details are currently classified.">Модель безопасности и детали защиты пока засекречены.</span></p>
+                    <p>🔐 <span class="i18n" data-en="Public security documentation will be added when available.">Публичная документация по безопасности появится позже.</span></p>
+                </div></div>
+            </div>
+
+            <div class="roza-page" id="roza-development">
+                <div class="block card"><h3>🛠️ <span class="i18n" data-en="Development">Разработка</span></h3><div class="block-text">
+                    <p>🔵 <strong><span class="i18n" data-en="Status">Статус</span>:</strong> <span class="i18n" data-en="Planning / preparation">Планирование / подготовка</span></p>
+                    <p>🔒 <strong><span class="i18n" data-en="Roadmap">Дорожная карта</span>:</strong> <span class="i18n" data-en="classified">засекречена</span></p>
+                    <p>🧪 <strong><span class="i18n" data-en="Testing">Тестирование</span>:</strong> <span class="i18n" data-en="not publicly available">публично недоступно</span></p>
+                </div></div>
+            </div>
+
+            <div class="roza-page" id="roza-releases">
+                <div class="block card">
+                    <h3>🚀 <span class="i18n" data-en="Releases">Релизы</span></h3>
+                    <div class="block-text">
+                        <p>📦 <strong>Roza OS — Pre-release</strong></p>
+                        <p>🔒 <span class="i18n" data-en="No public image is available yet.">Публичный образ пока недоступен.</span></p>
+                        <button class="roza-download" onclick="event.stopPropagation(); rozaNotReady()">⛔ <span class="i18n" data-en="Download image — not ready">Скачать образ — пока не готово</span></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="roza-page" id="roza-faq">
+                <div class="block card"><h3>❓ FAQ</h3><div class="block-text">
+                    <p><strong>Когда выйдет Roza OS?</strong><br><span class="i18n" data-en="There is currently no public release date.">Публичной даты релиза пока нет.</span></p>
+                    <p><strong>Где скачать образ?</strong><br><span class="i18n" data-en="The image is not ready yet.">Образ пока не готов.</span></p>
+                    <p><strong>Почему информация закрыта?</strong><br><span class="i18n" data-en="Some project details are intentionally kept private until the project is ready for disclosure.">Часть информации намеренно остаётся закрытой до готовности проекта к публикации.</span></p>
+                </div></div>
+            </div>
+
+            <div class="block card roza-back-card">
+                <button class="roza-back-button" onclick="switchTab('wiki')">← <span class="i18n" data-en="Return to Wiki">Вернуться в Вики</span></button>
             </div>
         </div>
     </div>
@@ -264,7 +370,7 @@
         <div class="info-box card">
             <h4>📖 <span class="i18n" data-en="Description">Описание</span></h4>
             <div class="body">
-                <p class="i18n" data-en="<strong>Solarium Umbris</strong> — large-scale mod for Hearts of Iron IV."><strong>Solarium Umbris</strong> — масштабный мод для Hearts of Iron IV.</p>
+                <p class="i18n" data-en="<strong>World of Kosarh</strong> — large-scale mod for Hearts of Iron IV."><strong>World of Kosarh</strong> — масштабный мод для Hearts of Iron IV.</p>
                 <p><strong class="i18n" data-en="What's inside:">Что внутри:</strong></p>
                 <ul>
                     <li>🌍 7 <span class="i18n" data-en="unique states">уникальных государств</span></li>
@@ -388,6 +494,18 @@
 </footer>
 
 <script src="script.js" defer></script>
+<script>
+function showRozaSection(section, button) {
+    document.querySelectorAll('.roza-page').forEach(el => el.classList.remove('active'));
+    const page = document.getElementById('roza-' + section);
+    if (page) page.classList.add('active');
+    document.querySelectorAll('.roza-link').forEach(el => el.classList.remove('active'));
+    if (button) button.classList.add('active');
+}
+function rozaNotReady() {
+    alert('Образ Roza OS пока не готов. Следите за обновлениями проекта.');
+}
+</script>
 </body>
 </html>
 
