@@ -730,20 +730,6 @@ button, a { -webkit-tap-highlight-color:transparent; }
   .quick-info { grid-template-columns:1fr; }
 }
 
-/* Roza OS navigation */
-.roza-layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:18px;align-items:start}
-.roza-sidebar{padding:10px;position:sticky;top:20px}
-.roza-side-title{font-weight:800;padding:12px 10px 14px;border-bottom:1px solid var(--border);margin-bottom:6px}
-.roza-link{display:block;width:100%;text-align:left;background:transparent;color:var(--muted);border:0;border-radius:8px;padding:10px 11px;margin:2px 0;font:inherit;cursor:pointer}
-.roza-link:hover,.roza-link.active{background:rgba(255,255,255,.06);color:var(--text)}
-.roza-content{min-width:0}
-.roza-page{display:none}
-.roza-page.active{display:block}
-.roza-download,.roza-back-button{border:1px solid var(--a3);background:transparent;color:var(--text);padding:10px 16px;border-radius:9px;cursor:pointer;font:inherit;margin-top:8px}
-.roza-download:hover,.roza-back-button:hover{background:rgba(255,255,255,.06)}
-.roza-back-card{text-align:center}
-@media(max-width:760px){.roza-layout{grid-template-columns:1fr}.roza-sidebar{position:static}.roza-link{display:inline-block;width:auto}}
-
 .github-activity{position:relative;overflow:hidden;background:radial-gradient(ellipse at top right,rgba(168,85,247,.12),transparent 55%),linear-gradient(145deg,#1e0c1c,#160a17);border:1px solid rgba(168,85,247,.25);border-radius:18px}
 .github-activity-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
 .github-activity-label{color:#c084fc;font-size:10px;font-weight:800;letter-spacing:2px}
@@ -871,6 +857,155 @@ a:not(.card):not(.contact-card):not(.gh-repo) { text-underline-offset: 4px; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
   .reveal { opacity: 1; transform: none; filter: none; }
+}
+
+
+/* ============================================================
+   ROZA OS WIKI — в стиле ArchWiki
+   ============================================================ */
+.rz-crumbs{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-bottom:16px}
+.rz-crumbs a{color:var(--a2);text-decoration:none;cursor:pointer;transition:var(--t-fast)}
+.rz-crumbs a:hover{color:#fff;text-decoration:underline}
+
+.roza-layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:22px;align-items:start}
+.roza-content{min-width:0}
+
+/* Боковая панель */
+.roza-sidebar.card{position:sticky;top:86px;padding:14px 12px;max-height:calc(100vh - 110px);overflow:auto;scrollbar-width:thin;scrollbar-color:var(--a3) transparent}
+.roza-sidebar.card:hover{transform:none}
+.roza-side-title{font:600 24px var(--font-display);padding:2px 8px 12px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.rz-search input{width:100%;padding:8px 12px;border-radius:10px;background:var(--bg-deep);border:1px solid var(--border);color:var(--text);font:inherit;font-size:13px;outline:none;transition:var(--t)}
+.rz-search input::placeholder{color:var(--muted)}
+.rz-search input:focus{border-color:var(--a3);box-shadow:0 0 12px var(--glow)}
+.rz-group{margin:16px 8px 4px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--a2);opacity:.85}
+.roza-link{display:flex;align-items:center;gap:9px;width:100%;text-align:left;background:transparent;color:var(--text2);border:0;border-left:2px solid transparent;border-radius:0 8px 8px 0;padding:8px 10px;margin:1px 0;font:inherit;font-size:14px;cursor:pointer;transition:var(--t-fast)}
+.roza-link[hidden]{display:none}
+.roza-link .rz-ic{width:20px;text-align:center;flex-shrink:0}
+.roza-link:hover{background:rgba(168,85,247,.1);color:var(--text)}
+.roza-link.active{background:linear-gradient(90deg,rgba(168,85,247,.24),rgba(168,85,247,.04));border-left-color:var(--a2);color:#fff;font-weight:700}
+.rz-nores{margin:14px 8px 4px;font-size:13px;color:var(--muted)}
+
+/* Статья */
+.roza-page{display:none}
+.roza-page.active{display:block;animation:fade .35s ease}
+.rz-article{display:flow-root;padding:26px 32px 28px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--sh);counter-reset:rzh2;line-height:1.75}
+.rz-title{font:600 36px/1.15 var(--font-display);letter-spacing:.5px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);position:relative}
+.rz-title::after{content:"";position:absolute;left:0;bottom:-1px;width:70px;height:2px;background:var(--grad);border-radius:2px}
+.rz-article p{color:var(--text2);font-size:15px;margin:10px 0}
+.rz-article strong{color:var(--text)}
+.rz-article a{color:var(--a2);text-decoration:none;border-bottom:1px dotted rgba(192,132,252,.5);transition:var(--t-fast)}
+.rz-article a:hover{color:#fff;border-bottom-color:#fff}
+.rz-article h2{font:600 27px/1.25 var(--font-display);margin:30px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border-soft);counter-increment:rzh2;counter-reset:rzh3;scroll-margin-top:92px}
+.rz-article h2::before{content:counter(rzh2) ". ";color:var(--a2)}
+.rz-article h3{font:600 21px/1.3 var(--font-display);margin:20px 0 6px;counter-increment:rzh3;scroll-margin-top:92px}
+.rz-article h3::before{content:counter(rzh2) "." counter(rzh3) " ";color:var(--muted)}
+.rz-article ul,.rz-article .rz-ol{margin:8px 0 8px 22px;color:var(--text2);font-size:15px}
+.rz-article li{margin:4px 0}
+.rz-article code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.88em;padding:1px 6px;border-radius:5px;background:var(--bg-deep);border:1px solid var(--border-soft);color:#e9d5ff}
+
+/* Баннер «черновик» */
+.rz-stub{margin:0 0 16px;padding:9px 14px;font-size:13px;color:var(--text2);background:rgba(224,182,74,.08);border:1px solid rgba(224,182,74,.28);border-left:3px solid var(--gold);border-radius:8px}
+
+/* Инфобокс справа */
+.rz-infobox{float:right;width:270px;margin:4px 0 16px 24px;background:var(--bg-deep);border:1px solid var(--border);border-radius:12px;overflow:hidden;font-size:13px}
+.rz-info-head{padding:9px 14px;text-align:center;font:600 19px var(--font-display);background:var(--grad-soft);border-bottom:1px solid var(--border)}
+.rz-info-img{display:grid;place-items:center;padding:16px;border-bottom:1px solid var(--border-soft)}
+.rz-info-img img{width:96px;height:96px;object-fit:contain;filter:drop-shadow(0 0 14px var(--glow-strong))}
+.rz-infobox dl{display:grid;grid-template-columns:auto 1fr;margin:0}
+.rz-infobox dt,.rz-infobox dd{padding:7px 14px;border-bottom:1px solid var(--border-soft)}
+.rz-infobox dt{color:var(--muted)}
+.rz-infobox dd{color:var(--text);text-align:right}
+.rz-infobox dt:last-of-type,.rz-infobox dd:last-of-type{border-bottom:0}
+
+/* Содержание */
+.rz-toc{display:inline-block;min-width:260px;max-width:100%;margin:12px 0 6px;padding:10px 18px 12px;background:var(--bg-deep);border:1px solid var(--border);border-radius:10px}
+.rz-toc-title{font:600 18px var(--font-display);text-align:center;margin-bottom:6px}
+.rz-toc ol{list-style:none;margin:0;padding:0}
+.rz-toc-list{counter-reset:rzt1}
+.rz-toc-list>li{counter-increment:rzt1;margin:3px 0;font-size:14px}
+.rz-toc-list>li>a::before{content:counter(rzt1) " ";color:var(--muted)}
+.rz-toc-list ol{counter-reset:rzt2;margin-left:20px}
+.rz-toc-list ol>li{counter-increment:rzt2;font-size:13px}
+.rz-toc-list ol>li>a::before{content:counter(rzt1) "." counter(rzt2) " ";color:var(--muted)}
+.rz-toc a{border-bottom:0}
+.rz-toc a:hover{text-decoration:underline}
+
+/* Заметки / предупреждения */
+.rz-box{margin:14px 0;padding:11px 16px;font-size:14px;color:var(--text2);background:rgba(168,85,247,.07);border:1px solid var(--border-soft);border-left:4px solid var(--a2);border-radius:8px}
+.rz-box.warn{background:rgba(251,113,133,.07);border-color:rgba(251,113,133,.25);border-left-color:#fb7185}
+.rz-box.warn strong:first-child{color:#fda4af}
+.rz-box.tip{background:rgba(74,222,128,.06);border-color:rgba(74,222,128,.22);border-left-color:var(--green)}
+.rz-box.tip strong:first-child{color:#86efac}
+.rz-box.note strong:first-child{color:var(--a2)}
+
+/* Таблицы */
+.rz-tablewrap{overflow-x:auto;margin:12px 0}
+.rz-table{width:100%;border-collapse:collapse;font-size:14px}
+.rz-table th{text-align:left;padding:9px 14px;background:var(--grad-soft);border:1px solid var(--border);color:var(--text);font-weight:700}
+.rz-table td{padding:9px 14px;border:1px solid var(--border-soft);color:var(--text2);vertical-align:middle}
+.rz-table tbody tr:hover td{background:rgba(168,85,247,.07)}
+
+/* Чипы статуса */
+.rz-chip{display:inline-block;padding:1px 10px;border-radius:10px;font-size:11px;font-weight:700;letter-spacing:.2px;border:1px solid;white-space:nowrap}
+.rz-chip.ok{color:#86efac;background:rgba(74,222,128,.12);border-color:rgba(74,222,128,.3)}
+.rz-chip.wip{color:#fde68a;background:rgba(224,182,74,.12);border-color:rgba(224,182,74,.3)}
+.rz-chip.lock{color:#d8b4fe;background:rgba(168,85,247,.16);border-color:rgba(168,85,247,.4)}
+.rz-chip.todo{color:var(--muted);background:rgba(168,138,189,.08);border-color:rgba(168,138,189,.28)}
+
+/* Код */
+.rz-code{margin:12px 0;padding:14px 16px;overflow-x:auto;background:#0d0716;border:1px solid var(--border);border-radius:10px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;line-height:1.6;color:#e9d5ff;-webkit-text-stroke:0}
+.rz-code code{padding:0;border:0;background:none;font-size:inherit}
+
+/* Дорожная карта */
+.rz-road{list-style:none;margin:16px 0 8px 8px;padding:0}
+.rz-road li{position:relative;padding:0 0 20px 34px;margin:0}
+.rz-road li::before{content:"";position:absolute;left:5px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--bg-deep);border:2px solid var(--border);z-index:1}
+.rz-road li::after{content:"";position:absolute;left:10px;top:20px;bottom:-4px;width:2px;background:var(--border-soft)}
+.rz-road li:last-child::after{display:none}
+.rz-road b{display:block;color:var(--text);font-size:15px}
+.rz-road span{display:block;color:var(--muted);font-size:13px}
+.rz-road li.done::before{background:var(--green);border-color:var(--green)}
+.rz-road li.now::before{background:var(--a1);border-color:var(--a2);box-shadow:0 0 12px var(--glow-strong)}
+.rz-road li.next b{color:var(--text2)}
+
+/* Ссылки «См. также» */
+.rz-see{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.rz-article .rz-see-link{display:inline-block;padding:6px 14px;border:1px solid var(--border);border-radius:20px;background:var(--bg-deep);color:var(--text2);font-size:13px;cursor:pointer;border-bottom:1px solid var(--border)}
+.rz-article .rz-see-link:hover{color:#fff;border-color:var(--a3);background:var(--bg-hover);transform:translateY(-1px)}
+
+/* FAQ */
+.rz-qa{margin:8px 0;background:var(--bg-deep);border:1px solid var(--border-soft);border-radius:10px;transition:var(--t-fast)}
+.rz-qa[open]{border-color:var(--a3)}
+.rz-qa summary{cursor:pointer;padding:12px 16px;font-weight:700;color:var(--text);list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.rz-qa summary::-webkit-details-marker{display:none}
+.rz-qa summary::after{content:"＋";color:var(--a2);font-weight:400;transition:transform .25s}
+.rz-qa[open] summary::after{content:"－"}
+.rz-qa>div{padding:0 16px 14px;color:var(--text2);font-size:14px}
+
+/* Кнопка загрузки */
+.roza-download{border:1px solid var(--a3);background:transparent;color:var(--text);padding:10px 18px;border-radius:9px;cursor:pointer;font:inherit;font-size:14px;margin:6px 0;opacity:.75;transition:var(--t)}
+.roza-download:hover{background:rgba(255,255,255,.06);opacity:1}
+
+/* Назад / Далее */
+.rz-pager{display:flex;justify-content:space-between;gap:12px;margin-top:30px;padding-top:18px;border-top:1px solid var(--border)}
+.rz-pg{display:flex;flex-direction:column;gap:2px;min-width:0;max-width:48%;padding:10px 16px;background:var(--bg-deep);border:1px solid var(--border);border-radius:10px;color:var(--text);font:inherit;cursor:pointer;transition:var(--t)}
+.rz-pg small{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.rz-pg span{font-size:14px;font-weight:700}
+.rz-pg.prev{text-align:left}
+.rz-pg.next{text-align:right;margin-left:auto}
+.rz-pg:hover{border-color:var(--a3);background:var(--bg-hover);transform:translateY(-2px)}
+
+@media(max-width:860px){
+  .roza-layout{grid-template-columns:1fr}
+  .roza-sidebar.card{position:static;max-height:none;display:flex;flex-wrap:wrap;gap:4px;padding:12px}
+  .roza-side-title,.rz-search,.rz-nores{flex-basis:100%}
+  .rz-group{display:none}
+  .roza-link{width:auto;border-left:0;border-radius:20px;padding:6px 12px;font-size:13px;border:1px solid var(--border-soft)}
+  .roza-link.active{border-color:var(--a3)}
+  .rz-article{padding:20px 16px 22px}
+  .rz-title{font-size:30px}
+  .rz-infobox{float:none;width:100%;margin:0 0 16px}
+  .rz-pg{max-width:49%}
 }
 
 </style>
@@ -1077,7 +1212,9 @@ a:not(.card):not(.contact-card):not(.gh-repo) { text-underline-offset: 4px; }
 
 <!-- Roza OS -->
 <section class="tab" id="tab-project-roza">
-    <a class="back" onclick="switchTab('wiki')">← <span class="i18n" data-en="Back to wiki">Назад к вики</span></a>
+    <nav class="rz-crumbs" aria-label="Breadcrumb">
+        <a href="#wiki" onclick="event.preventDefault(); switchTab('wiki')">📚 <span class="i18n" data-en="My Wiki">Моя Вики</span></a><span>›</span><span>Roza OS</span>
+    </nav>
 
     <div class="header-info">
         <div class="ico"><img src="gim/rozaos.png" alt="Roza OS" /></div>
@@ -1086,7 +1223,7 @@ a:not(.card):not(.contact-card):not(.gh-repo) { text-underline-offset: 4px; }
             <span class="badge" style="border-color:var(--a3);color:var(--a3)">🔒 <span class="i18n" data-en="Classified">Засекречено</span></span>
             <div class="tags">
                 <span class="tag">Roza OS</span>
-                <span class="tag">Linux</span>
+                <span class="tag">Arch Linux</span>
                 <span class="tag">Private Project</span>
                 <span class="tag pink">Coalition Iron Will</span>
             </div>
@@ -1096,107 +1233,29 @@ a:not(.card):not(.contact-card):not(.gh-repo) { text-underline-offset: 4px; }
     <div class="roza-layout">
         <aside class="roza-sidebar card">
             <div class="roza-side-title">🌹 Roza OS</div>
-            <button class="roza-link active" onclick="showRozaSection('overview', this)">📋 <span class="i18n" data-en="Overview">Обзор</span></button>
-            <button class="roza-link" onclick="showRozaSection('architecture', this)">⚙️ <span class="i18n" data-en="Architecture">Архитектура</span></button>
-            <button class="roza-link" onclick="showRozaSection('desktop', this)">🖥️ <span class="i18n" data-en="Desktop">Рабочее окружение</span></button>
-            <button class="roza-link" onclick="showRozaSection('packages', this)">📦 <span class="i18n" data-en="Packages">Пакеты</span></button>
-            <button class="roza-link" onclick="showRozaSection('security', this)">🛡️ <span class="i18n" data-en="Security">Безопасность</span></button>
-            <button class="roza-link" onclick="showRozaSection('development', this)">🛠️ <span class="i18n" data-en="Development">Разработка</span></button>
-            <button class="roza-link" onclick="showRozaSection('releases', this)">🚀 <span class="i18n" data-en="Releases">Релизы</span></button>
-            <button class="roza-link" onclick="showRozaSection('faq', this)">❓ FAQ</span></button>
+            <div class="rz-search"><input id="rozaSearch" type="search" placeholder="Поиск по статьям…" autocomplete="off" oninput="rozaSearch(this.value)" onkeydown="rozaSearchKey(event)" aria-label="Search" /></div>
+            <div class="rz-group"><span class="i18n" data-en="Start">Начало</span></div>
+            <button class="roza-link active" data-section="overview" onclick="showRozaSection('overview')"><span class="rz-ic">📋</span><span class="i18n" data-en="Overview">Обзор</span></button><button class="roza-link" data-section="install" onclick="showRozaSection('install')"><span class="rz-ic">💿</span><span class="i18n" data-en="Installation">Установка</span></button>
+            <div class="rz-group"><span class="i18n" data-en="System">Система</span></div>
+            <button class="roza-link" data-section="architecture" onclick="showRozaSection('architecture')"><span class="rz-ic">⚙️</span><span class="i18n" data-en="Architecture">Архитектура</span></button><button class="roza-link" data-section="desktop" onclick="showRozaSection('desktop')"><span class="rz-ic">🖥️</span><span class="i18n" data-en="Desktop">Рабочее окружение</span></button><button class="roza-link" data-section="packages" onclick="showRozaSection('packages')"><span class="rz-ic">📦</span><span class="i18n" data-en="Packages">Пакеты</span></button><button class="roza-link" data-section="security" onclick="showRozaSection('security')"><span class="rz-ic">🛡️</span><span class="i18n" data-en="Security">Безопасность</span></button>
+            <div class="rz-group"><span class="i18n" data-en="Project">Проект</span></div>
+            <button class="roza-link" data-section="development" onclick="showRozaSection('development')"><span class="rz-ic">🛠️</span><span class="i18n" data-en="Development">Разработка</span></button><button class="roza-link" data-section="releases" onclick="showRozaSection('releases')"><span class="rz-ic">🚀</span><span class="i18n" data-en="Releases">Релизы</span></button><button class="roza-link" data-section="faq" onclick="showRozaSection('faq')"><span class="rz-ic">❓</span><span class="i18n" data-en="FAQ">FAQ</span></button>
+            <p class="rz-nores" id="rozaNoRes" hidden><span class="i18n" data-en="Nothing found">Ничего не найдено</span></p>
         </aside>
 
         <div class="roza-content">
-            <div class="roza-page active" id="roza-overview">
-                <div class="info-grid">
-                    <div class="info-box card">
-                        <h4>📋 <span class="i18n" data-en="General Information">Общая информация</span></h4>
-                        <div class="body">
-                            <div><span class="label i18n" data-en="Status">Статус</span><span class="value">🔒 <span class="i18n" data-en="Classified">Засекречено</span></span></div>
-                            <div><span class="label i18n" data-en="Type">Тип</span><span class="value i18n" data-en="Operating System">Операционная система</span></div>
-                            <div><span class="label i18n" data-en="Platform">Платформа</span><span class="value">Linux</span></div>
-                            <div><span class="label i18n" data-en="Base">Основа</span><span class="value">Arch</span></div>
-                            <div><span class="label i18n" data-en="Desktop">Окружение</span><span class="value">-</span></div>
-                            <div><span class="label i18n" data-en="License">Лицензия</span><span class="value">GPL</span></div>
-                        </div>
-                    </div>
-                    <div class="info-box card">
-                        <h4>🔐 <span class="i18n" data-en="Classified Information">Засекреченная информация</span></h4>
-                        <div class="body">
-                            <p><strong>Roza OS</strong> — <span class="i18n" data-en="a private operating system project.">закрытый проект операционной системы.</span></p>
-                            <p>🔒 <span class="i18n" data-en="Internal architecture, custom components and technical documentation are currently classified.">Внутренняя архитектура, собственные компоненты и техническая документация пока засекречены.</span></p>
-                            <p>📁 <span class="i18n" data-en="More information will be published as the project becomes ready.">Дополнительная информация будет опубликована по мере готовности проекта.</span></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="block card">
-                    <h3>🖥️ <span class="i18n" data-en="System Overview">Обзор системы</span></h3>
-                    <div class="block-text">
-                        <p><strong>Roza OS</strong> — <span class="i18n" data-en="a planned Linux operating system project based on Arch.">планируемый проект операционной системы на базе Linux, Arch.</span></p>
-                        <p>🔒 <span class="i18n" data-en="Further technical details are classified.">Остальные технические детали засекречены.</span></p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="roza-page" id="roza-architecture">
-                <div class="block card"><h3>⚙️ <span class="i18n" data-en="Architecture">Архитектура</span></h3><div class="block-text">
-                    <p>🔒 <strong>Kernel:</strong> <span class="i18n" data-en="classified">засекречено</span></p>
-                    <p>🔒 <strong>System architecture:</strong> <span class="i18n" data-en="classified">засекречено</span></p>
-                    <p>🔒 <strong>Custom components:</strong> <span class="i18n" data-en="classified">засекречено</span></p>
-                </div></div>
-            </div>
-
-            <div class="roza-page" id="roza-desktop">
-                <div class="block card"><h3>🖥️ <span class="i18n" data-en="Desktop Environment">Рабочее окружение</span></h3><div class="block-text">
-                    <p>??? — <span class="i18n" data-en="the planned desktop environment for Roza OS.">планируемое рабочее окружение Roza OS.</span></p>
-                    <p>🔒 <span class="i18n" data-en="Theme, customizations and interface details are classified.">Тема, модификации и детали интерфейса засекречены.</span></p>
-                </div></div>
-            </div>
-
-            <div class="roza-page" id="roza-packages">
-                <div class="block card"><h3>📦 <span class="i18n" data-en="Packages and Software">Пакеты и программное обеспечение</span></h3><div class="block-text">
-                    <p>🔒 <span class="i18n" data-en="The final package set has not been publicly announced.">Финальный набор пакетов пока публично не объявлен.</span></p>
-                    <p>🔒 <span class="i18n" data-en="Package selection and custom software details are classified.">Выбор пакетов и детали собственного ПО засекречены.</span></p>
-                </div></div>
-            </div>
-
-            <div class="roza-page" id="roza-security">
-                <div class="block card"><h3>🛡️ <span class="i18n" data-en="Security">Безопасность</span></h3><div class="block-text">
-                    <p>🔒 <span class="i18n" data-en="Security model and hardening details are currently classified.">Модель безопасности и детали защиты пока засекречены.</span></p>
-                    <p>🔐 <span class="i18n" data-en="Public security documentation will be added when available.">Публичная документация по безопасности появится позже.</span></p>
-                </div></div>
-            </div>
-
-            <div class="roza-page" id="roza-development">
-                <div class="block card"><h3>🛠️ <span class="i18n" data-en="Development">Разработка</span></h3><div class="block-text">
-                    <p>🔵 <strong><span class="i18n" data-en="Status">Статус</span>:</strong> <span class="i18n" data-en="Planning / preparation">Планирование / подготовка</span></p>
-                    <p>🔒 <strong><span class="i18n" data-en="Roadmap">Дорожная карта</span>:</strong> <span class="i18n" data-en="classified">засекречена</span></p>
-                    <p>🧪 <strong><span class="i18n" data-en="Testing">Тестирование</span>:</strong> <span class="i18n" data-en="not publicly available">публично недоступно</span></p>
-                </div></div>
-            </div>
-
-            <div class="roza-page" id="roza-releases">
-                <div class="block card">
-                    <h3>🚀 <span class="i18n" data-en="Releases">Релизы</span></h3>
-                    <div class="block-text">
-                        <p>📦 <strong>Roza OS — Pre-release</strong></p>
-                        <p>🔒 <span class="i18n" data-en="No public image is available yet.">Публичный образ пока недоступен.</span></p>
-                        <button class="roza-download" onclick="event.stopPropagation(); rozaNotReady()">⛔ <span class="i18n" data-en="Download image — not ready">Скачать образ — пока не готово</span></button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="roza-page" id="roza-faq">
-                <div class="block card"><h3>❓ FAQ</h3><div class="block-text">
-                    <p><strong>Когда выйдет Roza OS?</strong><br><span class="i18n" data-en="There is currently no public release date.">Публичной даты релиза пока нет.</span></p>
-                    <p><strong>Где скачать образ?</strong><br><span class="i18n" data-en="The image is not ready yet.">Образ пока не готов.</span></p>
-                    <p><strong>Почему информация закрыта?</strong><br><span class="i18n" data-en="Some project details are intentionally kept private until the project is ready for disclosure.">Часть информации намеренно остаётся закрытой до готовности проекта к публикации.</span></p>
-                </div></div>
-            </div>
-
-            <div class="block card roza-back-card">
-                <button class="roza-back-button" onclick="switchTab('wiki')">← <span class="i18n" data-en="Return to Wiki">Вернуться в Вики</span></button>
-            </div>
+<div class="roza-page active" id="roza-overview"><article class="rz-article"><div class="rz-title"><span class="i18n" data-en="Roza OS">Roza OS</span></div><div class="rz-stub">📝 <span class="i18n" data-en="This article is a draft. The project is private: part of the information is classified, the rest will be added as the project matures.">Эта статья — черновик. Проект закрытый: часть сведений засекречена, остальное будет дополняться по мере готовности.</span></div><aside class="rz-infobox"><div class="rz-info-head">🌹 Roza OS</div><div class="rz-info-img"><img src="gim/rozaos.png" alt="Roza OS" /></div><dl><dt><span class="i18n" data-en="Status">Статус</span></dt><dd>🔒 <span class="i18n" data-en="Classified">Засекречено</span></dd><dt><span class="i18n" data-en="Type">Тип</span></dt><dd><span class="i18n" data-en="Operating system">Операционная система</span></dd><dt><span class="i18n" data-en="Base">Основа</span></dt><dd>Arch Linux</dd><dt><span class="i18n" data-en="Platform">Платформа</span></dt><dd>Linux</dd><dt><span class="i18n" data-en="Desktop">Окружение</span></dt><dd>???</dd><dt><span class="i18n" data-en="License">Лицензия</span></dt><dd>GPL</dd><dt><span class="i18n" data-en="Author">Автор</span></dt><dd>Vladislav Fosk-Kosarh</dd><dt><span class="i18n" data-en="Team">Команда</span></dt><dd>Coalition Iron Will</dd></dl></aside><p><span class="i18n" data-en="<strong>Roza OS</strong> is a planned private operating system project based on <strong>Arch Linux</strong>. Author: Vladislav Fosk-Kosarh; developed within Coalition Iron Will."><strong>Roza OS</strong> — планируемый закрытый проект операционной системы на базе <strong>Arch Linux</strong>. Автор — Vladislav Fosk-Kosarh, проект ведётся в рамках Coalition Iron Will.</span></p><nav class="rz-toc" aria-label="Contents"><div class="rz-toc-title"><span class="i18n" data-en="Contents">Содержание</span></div><ol class="rz-toc-list"></ol></nav><h2><span class="i18n" data-en="About">О проекте</span></h2><p><span class="i18n" data-en="Roza OS is built on Arch — a rolling-release distribution where the user decides what goes into the system. The wiki follows the ArchWiki model: short topical articles, a table of contents, notes and warnings, cross-references.">Roza OS строится на Arch — дистрибутиве с плавающими релизами, где пользователь сам решает, что будет стоять в системе. Это определяет и устройство вики: она организована по образцу ArchWiki — короткие тематические статьи, содержание, заметки и предупреждения, перекрёстные ссылки.</span></p><div class="rz-box note"><strong><span class="i18n" data-en="Note">Заметка</span>:</strong> <span class="i18n" data-en="some technical details are intentionally kept private until the project is ready. Such places are marked with 🔒.">часть технической информации намеренно закрыта до готовности проекта. Такие места помечены значком 🔒.</span></div><h2><span class="i18n" data-en="Guiding principles">Ориентиры</span></h2><ul><li><span class="i18n" data-en="<strong>Simplicity</strong> — nothing unnecessary in the system."><strong>Простота</strong> — в системе нет ничего лишнего.</span></li><li><span class="i18n" data-en="<strong>User control</strong> — the system does not make decisions for the person."><strong>Контроль у пользователя</strong> — система не принимает решений за человека.</span></li><li><span class="i18n" data-en="<strong>Rolling releases</strong> — updates arrive continuously, like in Arch."><strong>Плавающие релизы</strong> — обновления приходят постоянно, как в Arch.</span></li><li><span class="i18n" data-en="<strong>Its own identity</strong> — custom look and components <span class=&quot;rz-chip lock&quot;><span class=&quot;i18n&quot; data-en=&quot;🔒 classified&quot;>🔒 засекречено</span></span>."><strong>Своё лицо</strong> — собственное оформление и компоненты <span class="rz-chip lock"><span class="i18n" data-en="🔒 classified">🔒 засекречено</span></span>.</span></li></ul><div class="rz-box tip"><strong><span class="i18n" data-en="Tip">Совет</span>:</strong> <span class="i18n" data-en="these principles are a draft derived from the Arch approach and may change.">ориентиры — черновые, они вытекают из подхода Arch и могут измениться.</span></div><h2><span class="i18n" data-en="Current state">Что известно сейчас</span></h2><div class="rz-tablewrap"><table class="rz-table"><thead><tr><th><span class="i18n" data-en="Aspect">Аспект</span></th><th><span class="i18n" data-en="Value">Значение</span></th><th><span class="i18n" data-en="Status">Статус</span></th></tr></thead><tbody><tr><td><span class="i18n" data-en="Base">Основа</span></td><td>Arch Linux</td><td><span class="rz-chip ok"><span class="i18n" data-en="decided">определено</span></span></td></tr><tr><td><span class="i18n" data-en="Kernel">Ядро</span></td><td>—</td><td><span class="rz-chip lock"><span class="i18n" data-en="🔒 classified">🔒 засекречено</span></span></td></tr><tr><td><span class="i18n" data-en="Desktop">Рабочее окружение</span></td><td>???</td><td><span class="rz-chip todo"><span class="i18n" data-en="undecided">не определено</span></span></td></tr><tr><td><span class="i18n" data-en="Package manager">Менеджер пакетов</span></td><td>pacman</td><td><span class="rz-chip wip"><span class="i18n" data-en="inherited from Arch">наследуется от Arch</span></span></td></tr><tr><td><span class="i18n" data-en="License">Лицензия</span></td><td>GPL</td><td><span class="rz-chip ok"><span class="i18n" data-en="decided">определено</span></span></td></tr><tr><td><span class="i18n" data-en="Public image">Публичный образ</span></td><td><span class="i18n" data-en="none">нет</span></td><td><span class="rz-chip todo"><span class="i18n" data-en="none">нет</span></span></td></tr></tbody></table></div><h2><span class="i18n" data-en="See also">См. также</span></h2><div class="rz-see"><a class="rz-see-link" onclick="switchTab('project-coalition')" role="link" tabindex="0">⚔️ Coalition Iron Will</a><a class="rz-see-link" href="https://archlinux.org" target="_blank" rel="noopener noreferrer">Arch Linux ↗</a><a class="rz-see-link" href="https://wiki.archlinux.org" target="_blank" rel="noopener noreferrer">ArchWiki ↗</a></div><div class="rz-pager"><span></span><button class="rz-pg next" onclick="showRozaSection('install')"><small><span class="i18n" data-en="Next">Следующая</span></small><span>💿 <span class="i18n" data-en="Installation">Установка</span> →</span></button></div></article></div><div class="roza-page" id="roza-install"><article class="rz-article"><div class="rz-title"><span class="i18n" data-en="Installation">Установка</span></div><div class="rz-stub">📝 <span class="i18n" data-en="This article is a draft. The project is private: part of the information is classified, the rest will be added as the project matures.">Эта статья — черновик. Проект закрытый: часть сведений засекречена, остальное будет дополняться по мере готовности.</span></div><p><span class="i18n" data-en="Installation guide for Roza OS. There is no image yet, so this page only describes the structure of the future guide.">Руководство по установке Roza OS. Образа пока нет, поэтому здесь описана только структура будущей инструкции.</span></p><div class="rz-box warn"><strong><span class="i18n" data-en="Warning">Предупреждение</span>:</strong> <span class="i18n" data-en="no installation image exists yet. Anything claiming to be a “Roza OS image” is not official.">установочного образа пока не существует. Всё, что выдаёт себя за «образ Roza OS», не является официальным.</span></div><nav class="rz-toc" aria-label="Contents"><div class="rz-toc-title"><span class="i18n" data-en="Contents">Содержание</span></div><ol class="rz-toc-list"></ol></nav><h2><span class="i18n" data-en="Requirements">Требования</span></h2><div class="rz-tablewrap"><table class="rz-table"><thead><tr><th><span class="i18n" data-en="Parameter">Параметр</span></th><th><span class="i18n" data-en="Value">Значение</span></th><th><span class="i18n" data-en="Status">Статус</span></th></tr></thead><tbody><tr><td><span class="i18n" data-en="Architecture">Архитектура</span></td><td>x86_64</td><td><span class="rz-chip wip"><span class="i18n" data-en="same as Arch">как у Arch</span></span></td></tr><tr><td><span class="i18n" data-en="Boot mode">Режим загрузки</span></td><td>???</td><td><span class="rz-chip todo"><span class="i18n" data-en="undecided">не определено</span></span></td></tr><tr><td><span class="i18n" data-en="Memory">Оперативная память</span></td><td>???</td><td><span class="rz-chip todo"><span class="i18n" data-en="undecided">не определено</span></span></td></tr><tr><td><span class="i18n" data-en="Disk space">Место на диске</span></td><td>???</td><td><span class="rz-chip todo"><span class="i18n" data-en="undecided">не определено</span></span></td></tr><tr><td><span class="i18n" data-en="Internet during install">Интернет при установке</span></td><td>???</td><td><span class="rz-chip todo"><span class="i18n" data-en="undecided">не определено</span></span></td></tr></tbody></table></div><h2><span class="i18n" data-en="Installation outline">План установки</span></h2><ol class="rz-ol"><li><span class="i18n" data-en="Download the image and verify its checksum.">Скачать образ и сверить контрольную сумму.</span></li><li><span class="i18n" data-en="Write the image to a USB drive.">Записать образ на USB-накопитель.</span></li><li><span class="i18n" data-en="Boot from the drive.">Загрузиться с накопителя.</span></li><li><span class="i18n" data-en="Partition the disk.">Разметить диск.</span></li><li><span class="i18n" data-en="Install the base system.">Установить базовую систему.</span></li><li><span class="i18n" data-en="Set up the bootloader and create a user.">Настроить загрузчик и создать пользователя.</span></li><li><span class="i18n" data-en="Reboot into the installed system.">Перезагрузиться в установленную систему.</span></li></ol><div class="rz-box tip"><strong><span class="i18n" data-en="Tip">Совет</span>:</strong> <span class="i18n" data-en="Roza OS is based on Arch, so the installation logic will most likely be close to the <a href=&quot;https://wiki.archlinux.org/title/Installation_guide&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;>Installation guide ↗</a>. Exact steps will appear with the image.">Roza OS основана на Arch, поэтому логика установки, скорее всего, будет близка к <a href="https://wiki.archlinux.org/title/Installation_guide" target="_blank" rel="noopener noreferrer">Installation guide ↗</a>. Точные шаги появятся вместе с образом.</span></div><h2><span class="i18n" data-en="Post-installation">После установки</span></h2><p><span class="i18n" data-en="First-time setup, recommendations and a list of useful packages — <span class=&quot;rz-chip lock&quot;><span class=&quot;i18n&quot; data-en=&quot;🔒 classified&quot;>🔒 засекречено</span></span>. This section will be filled in by the first image.">Первичная настройка, рекомендации и список полезных пакетов — <span class="rz-chip lock"><span class="i18n" data-en="🔒 classified">🔒 засекречено</span></span>. Раздел будет заполнен к первому образу.</span></p><div class="rz-pager"><button class="rz-pg prev" onclick="showRozaSection('overview')"><small><span class="i18n" data-en="Previous">Предыдущая</span></small><span>← 📋 <span class="i18n" data-en="Overview">Обзор</span></span></button><button class="rz-pg next" onclick="showRozaSection('architecture')"><small><span class="i18n" data-en="Next">Следующая</span></small><span>⚙️ <span class="i18n" data-en="Architecture">Архитектура</span> →</span></button></div></article></div><div class="roza-page" id="roza-architecture"><article class="rz-article"><div class="rz-title"><span class="i18n" data-en="Architecture">Архитектура</span></div><div class="rz-stub">📝 <span class="i18n" data-en="This article is a draft. The project is private: part of the information is classified, the rest will be added as the project matures.">Эта статья — черновик. Проект закрытый: часть сведений засекречена, остальное будет дополняться по мере готовности.</span></div><p><span class="i18n" data-en="System design: what Roza OS consists of and what it stands on.">Устройство системы: из чего состоит Roza OS и на чём она держится.</span></p><nav class="rz-toc" aria-label="Contents"><div class="rz-toc-title"><span class="i18n" data-en="Contents">Содержание</span></div><ol class="rz-toc-list"></ol></nav><h2><span class="i18n" data-en="Base">Основа</span></h2><p><span class="i18n" data-en="The system is built on Arch Linux and inherits its rolling-release model. Custom changes are layered on top of this base.">Система построена на Arch Linux и наследует его модель плавающих релизов. Собственные изменения вносятся поверх этой основы.</span></p><h2><span class="i18n" data-en="Components">Компоненты</span></h2><div class="rz-tablewrap"><table class="rz-table"><thead><tr><th><span class="i18n" data-en="Component">Компонент</span></th><th><span class="i18n" data-en="State">Состояние</span></th><th><span class="i18n" data-en="Status">Статус</span></th></tr></thead><tbody><tr><td><span class="i18n" data-en="Kernel">Ядро</span></td><td>—</td><td><span class="rz-chip lock"><span class="i18n" data-en="🔒 classified">🔒 засекречено</span></span></td></tr><tr><td><span class="i18n" data-en="Init system">Система инициализации</span></td><td><span class="i18n" data-en="Arch default">как в Arch по умолчанию</span></td><td><span class="rz-chip wip"><span class="i18n" data-en="inherited from Arch">наследуется от Arch</span></span></td></tr><tr><td><span class="i18n" data-en="Bootloader">Загрузчик</span></td><td>???</td><td><span class="rz-chip todo"><span class="i18n" data-en="undecided">не определено</span></span></td></tr><tr><td><span class="i18n" data-en="Filesystem">Файловая система</span></td><td>???</td><td><span class="rz-chip todo"><span class="i18n" data-en="undecided">не определено</span></span></td></tr><tr><td><span class="i18n" data-en="Custom components">Собственные компоненты</span></td><td>—</td><td><span class="rz-chip lock"><span class="i18n" data-en="🔒 classified">🔒 засекречено</span></span></td></tr></tbody></table></div><h2><span class="i18n" data-en="System layers">Слои системы</span></h2><pre class="rz-code"><code>┌──────────────────────────────┐
+│   Рабочее окружение    ???   │
+├──────────────────────────────┤
+│   Пакеты и ПО      (pacman)  │
+├──────────────────────────────┤
+│   Системные службы           │
+├──────────────────────────────┤
+│   Ядро Linux            🔒   │
+└──────────────────────────────┘</code></pre><p><span class="i18n" data-en="The diagram is schematic: it shows the order of layers, not a finished implementation.">Схема условная: она показывает порядок слоёв, а не готовую реализацию.</span></p><h2><span class="i18n" data-en="Open questions">Открытые вопросы</span></h2><ul><li><span class="i18n" data-en="Which bootloader will be used?">Какой загрузчик будет использоваться?</span></li><li><span class="i18n" data-en="Which filesystem by default?">Какая файловая система по умолчанию?</span></li><li><span class="i18n" data-en="What exactly will differ from vanilla Arch?">Что именно будет изменено относительно чистого Arch?</span></li></ul><div class="rz-pager"><button class="rz-pg prev" onclick="showRozaSection('install')"><small><span class="i18n" data-en="Previous">Предыдущая</span></small><span>← 💿 <span class="i18n" data-en="Installation">Установка</span></span></button><button class="rz-pg next" onclick="showRozaSection('desktop')"><small><span class="i18n" data-en="Next">Следующая</span></small><span>🖥️ <span class="i18n" data-en="Desktop">Рабочее окружение</span> →</span></button></div></article></div><div class="roza-page" id="roza-desktop"><article class="rz-article"><div class="rz-title"><span class="i18n" data-en="Desktop">Рабочее окружение</span></div><div class="rz-stub">📝 <span class="i18n" data-en="This article is a draft. The project is private: part of the information is classified, the rest will be added as the project matures.">Эта статья — черновик. Проект закрытый: часть сведений засекречена, остальное будет дополняться по мере готовности.</span></div><p><span class="i18n" data-en="Roza OS graphical environment: desktop, appearance and default applications.">Графическая среда Roza OS: окружение, оформление и приложения по умолчанию.</span></p><nav class="rz-toc" aria-label="Contents"><div class="rz-toc-title"><span class="i18n" data-en="Contents">Содержание</span></div><ol class="rz-toc-list"></ol></nav><h2><span class="i18n" data-en="Environment">Окружение</span></h2><p><span class="i18n" data-en="The desktop environment has not been chosen yet: <strong>???</strong>. In Arch the desktop is a separate user choice, and for Roza OS this question is still open.">Рабочее окружение пока не выбрано: <strong>???</strong>. В Arch окружение — отдельный выбор пользователя, и для Roza OS этот вопрос ещё открыт.</span></p><h2><span class="i18n" data-en="To be decided">Что предстоит определить</span></h2><div class="rz-tablewrap"><table class="rz-table"><thead><tr><th><span class="i18n" data-en="Item">Пункт</span></th><th><span class="i18n" data-en="Status">Статус</span></th></tr></thead><tbody><tr><td><span class="i18n" data-en="Desktop environment / compositor">Рабочее окружение / композитор</span></td><td><span class="rz-chip todo"><span class="i18n" data-en="undecided">не определено</span></span></td></tr><tr><td><span class="i18n" data-en="Theme and appearance">Тема и оформление</span></td><td><span class="rz-chip lock"><span class="i18n" data-en="🔒 classified">🔒 засекречено</span></span></td></tr><tr><td><span class="i18n" data-en="Login screen">Экран входа</span></td><td><span class="rz-chip todo"><span class="i18n" data-en="undecided">не определено</span></span></td></tr><tr><td><span class="i18n" data-en="Default applications">Приложения по умолчанию</span></td><td><span class="rz-chip todo"><span class="i18n" data-en="undecided">не определено</span></span></td></tr></tbody></table></div><div class="rz-box note"><strong><span class="i18n" data-en="Note">Заметка</span>:</strong> <span class="i18n" data-en="theme, customizations and interface details are classified.">тема, модификации и детали интерфейса засекречены.</span></div><h2><span class="i18n" data-en="Ideas and suggestions">Идеи и пожелания</span></h2><p><span class="i18n" data-en="Have thoughts on the desktop or appearance? Message the author: <a href=&quot;https://t.me/VladislavFoskKosarh&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;>Telegram ↗</a> or <a href=&quot;https://github.com/VladislavFosk&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;>GitHub ↗</a>.">Есть мысли по окружению или оформлению? Напишите автору: <a href="https://t.me/VladislavFoskKosarh" target="_blank" rel="noopener noreferrer">Telegram ↗</a> или <a href="https://github.com/VladislavFosk" target="_blank" rel="noopener noreferrer">GitHub ↗</a>.</span></p><div class="rz-pager"><button class="rz-pg prev" onclick="showRozaSection('architecture')"><small><span class="i18n" data-en="Previous">Предыдущая</span></small><span>← ⚙️ <span class="i18n" data-en="Architecture">Архитектура</span></span></button><button class="rz-pg next" onclick="showRozaSection('packages')"><small><span class="i18n" data-en="Next">Следующая</span></small><span>📦 <span class="i18n" data-en="Packages">Пакеты</span> →</span></button></div></article></div><div class="roza-page" id="roza-packages"><article class="rz-article"><div class="rz-title"><span class="i18n" data-en="Packages">Пакеты</span></div><div class="rz-stub">📝 <span class="i18n" data-en="This article is a draft. The project is private: part of the information is classified, the rest will be added as the project matures.">Эта статья — черновик. Проект закрытый: часть сведений засекречена, остальное будет дополняться по мере готовности.</span></div><p><span class="i18n" data-en="How package management works in Roza OS and which software the system will include.">Как в Roza OS устроено управление пакетами и какое ПО будет в системе.</span></p><nav class="rz-toc" aria-label="Contents"><div class="rz-toc-title"><span class="i18n" data-en="Contents">Содержание</span></div><ol class="rz-toc-list"></ol></nav><h2><span class="i18n" data-en="Package manager">Менеджер пакетов</span></h2><p><span class="i18n" data-en="As in Arch, <code>pacman</code> is expected. For reference, the usual Arch commands:">Как и в Arch, ожидается <code>pacman</code>. Для справки — привычные команды Arch:</span></p><pre class="rz-code"><code># pacman -Syu          # обновить систему
+# pacman -S пакет      # установить пакет
+# pacman -Rns пакет    # удалить пакет с зависимостями
+$ pacman -Ss запрос    # поиск в репозиториях</code></pre><div class="rz-box warn"><strong><span class="i18n" data-en="Warning">Предупреждение</span>:</strong> <span class="i18n" data-en="these commands apply to regular Arch. The final Roza OS toolset has not been announced yet.">эти команды верны для обычного Arch. Окончательный набор инструментов Roza OS пока не объявлен.</span></div><h2><span class="i18n" data-en="Repositories">Репозитории</span></h2><div class="rz-tablewrap"><table class="rz-table"><thead><tr><th><span class="i18n" data-en="Repository">Репозиторий</span></th><th><span class="i18n" data-en="Status">Статус</span></th></tr></thead><tbody><tr><td><span class="i18n" data-en="Official Arch repositories">Официальные репозитории Arch</span></td><td><span class="rz-chip wip"><span class="i18n" data-en="inherited from Arch">наследуется от Arch</span></span></td></tr><tr><td><span class="i18n" data-en="Roza OS own repository">Собственный репозиторий Roza OS</span></td><td><span class="rz-chip lock"><span class="i18n" data-en="🔒 classified">🔒 засекречено</span></span></td></tr><tr><td><span class="i18n" data-en="AUR compatibility">Совместимость с AUR</span></td><td><span class="rz-chip todo"><span class="i18n" data-en="undecided">не определено</span></span></td></tr></tbody></table></div><h2><span class="i18n" data-en="Default software">Набор ПО по умолчанию</span></h2><p><span class="i18n" data-en="The final package set has not been announced. Package selection and custom software details are <span class=&quot;rz-chip lock&quot;><span class=&quot;i18n&quot; data-en=&quot;🔒 classified&quot;>🔒 засекречено</span></span>.">Финальный набор пакетов публично не объявлен. Выбор пакетов и детали собственного ПО — <span class="rz-chip lock"><span class="i18n" data-en="🔒 classified">🔒 засекречено</span></span>.</span></p><div class="rz-pager"><button class="rz-pg prev" onclick="showRozaSection('desktop')"><small><span class="i18n" data-en="Previous">Предыдущая</span></small><span>← 🖥️ <span class="i18n" data-en="Desktop">Рабочее окружение</span></span></button><button class="rz-pg next" onclick="showRozaSection('security')"><small><span class="i18n" data-en="Next">Следующая</span></small><span>🛡️ <span class="i18n" data-en="Security">Безопасность</span> →</span></button></div></article></div><div class="roza-page" id="roza-security"><article class="rz-article"><div class="rz-title"><span class="i18n" data-en="Security">Безопасность</span></div><div class="rz-stub">📝 <span class="i18n" data-en="This article is a draft. The project is private: part of the information is classified, the rest will be added as the project matures.">Эта статья — черновик. Проект закрытый: часть сведений засекречена, остальное будет дополняться по мере готовности.</span></div><p><span class="i18n" data-en="The Roza OS security model and rules for safely dealing with the project.">Модель безопасности Roza OS и правила безопасного обращения с проектом.</span></p><nav class="rz-toc" aria-label="Contents"><div class="rz-toc-title"><span class="i18n" data-en="Contents">Содержание</span></div><ol class="rz-toc-list"></ol></nav><h2><span class="i18n" data-en="Security model">Модель безопасности</span></h2><p><span class="i18n" data-en="The security model and hardening details are <span class=&quot;rz-chip lock&quot;><span class=&quot;i18n&quot; data-en=&quot;🔒 classified&quot;>🔒 засекречено</span></span>. Public documentation will be added later.">Модель безопасности и детали защиты — <span class="rz-chip lock"><span class="i18n" data-en="🔒 classified">🔒 засекречено</span></span>. Публичная документация появится позже.</span></p><h2><span class="i18n" data-en="Official sources">Официальные источники</span></h2><div class="rz-box warn"><strong><span class="i18n" data-en="Warning">Предупреждение</span>:</strong> <span class="i18n" data-en="there are no public Roza OS images yet. Any file claiming to be Roza OS is not official — do not run it.">публичных образов Roza OS пока нет. Любой файл, выдающий себя за Roza OS, не является официальным — не запускайте его.</span></div><p><span class="i18n" data-en="Up-to-date information is published only on this site and in the author profiles: <a href=&quot;https://github.com/VladislavFosk&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;>GitHub ↗</a>, <a href=&quot;https://t.me/VladislavFoskKosarh&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;>Telegram ↗</a>, <a href=&quot;https://www.youtube.com/@VladislavFoskKosarh&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;>YouTube ↗</a>.">Актуальная информация публикуется только на этом сайте и в профилях автора: <a href="https://github.com/VladislavFosk" target="_blank" rel="noopener noreferrer">GitHub ↗</a>, <a href="https://t.me/VladislavFoskKosarh" target="_blank" rel="noopener noreferrer">Telegram ↗</a>, <a href="https://www.youtube.com/@VladislavFoskKosarh" target="_blank" rel="noopener noreferrer">YouTube ↗</a>.</span></p><h2><span class="i18n" data-en="Reporting an issue">Сообщить о проблеме</span></h2><p><span class="i18n" data-en="Found a mistake on the site or want to report a problem? Write on <a href=&quot;https://t.me/VladislavFoskKosarh&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;>Telegram ↗</a> or open a discussion on <a href=&quot;https://github.com/VladislavFosk&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;>GitHub ↗</a>.">Нашли ошибку на сайте или хотите сообщить о проблеме? Напишите в <a href="https://t.me/VladislavFoskKosarh" target="_blank" rel="noopener noreferrer">Telegram ↗</a> или откройте обсуждение на <a href="https://github.com/VladislavFosk" target="_blank" rel="noopener noreferrer">GitHub ↗</a>.</span></p><div class="rz-pager"><button class="rz-pg prev" onclick="showRozaSection('packages')"><small><span class="i18n" data-en="Previous">Предыдущая</span></small><span>← 📦 <span class="i18n" data-en="Packages">Пакеты</span></span></button><button class="rz-pg next" onclick="showRozaSection('development')"><small><span class="i18n" data-en="Next">Следующая</span></small><span>🛠️ <span class="i18n" data-en="Development">Разработка</span> →</span></button></div></article></div><div class="roza-page" id="roza-development"><article class="rz-article"><div class="rz-title"><span class="i18n" data-en="Development">Разработка</span></div><div class="rz-stub">📝 <span class="i18n" data-en="This article is a draft. The project is private: part of the information is classified, the rest will be added as the project matures.">Эта статья — черновик. Проект закрытый: часть сведений засекречена, остальное будет дополняться по мере готовности.</span></div><p><span class="i18n" data-en="Current development status and the project roadmap.">Текущее состояние разработки и дорожная карта проекта.</span></p><nav class="rz-toc" aria-label="Contents"><div class="rz-toc-title"><span class="i18n" data-en="Contents">Содержание</span></div><ol class="rz-toc-list"></ol></nav><h2><span class="i18n" data-en="Status">Статус</span></h2><p><span class="i18n" data-en="🔵 <strong>Planning / preparation.</strong> There is no public testing yet.">🔵 <strong>Планирование / подготовка.</strong> Публичного тестирования пока нет.</span></p><h2><span class="i18n" data-en="Roadmap">Дорожная карта</span></h2><ol class="rz-road"><li class="done"><b><span class="i18n" data-en="Idea and choice of base">Идея и выбор основы</span></b><span><span class="i18n" data-en="The base is chosen — Arch Linux.">Основа выбрана — Arch Linux.</span></span></li><li class="now"><b><span class="i18n" data-en="Planning and preparation">Планирование и подготовка</span></b><span><span class="i18n" data-en="Now: working out the system composition.">Сейчас: проработка состава системы.</span></span></li><li class="next"><b><span class="i18n" data-en="System prototype">Прототип системы</span></b><span><span class="i18n" data-en="The first working build.">Первая рабочая сборка.</span></span></li><li class="next"><b><span class="i18n" data-en="Closed testing">Закрытое тестирование</span></b><span><span class="i18n" data-en="Checked by a small circle.">Проверка узким кругом.</span></span></li><li class="next"><b><span class="i18n" data-en="Public pre-release">Публичный пре-релиз</span></b><span><span class="i18n" data-en="An image becomes available for download.">Появление образа для скачивания.</span></span></li></ol><div class="rz-box note"><strong><span class="i18n" data-en="Note">Заметка</span>:</strong> <span class="i18n" data-en="there are no deadlines; roadmap details are classified.">сроков нет, подробности дорожной карты засекречены.</span></div><h2><span class="i18n" data-en="Team">Команда</span></h2><p><span class="i18n" data-en="Author and developer — Vladislav Fosk-Kosarh. The project is developed within Coalition Iron Will.">Автор и разработчик — Vladislav Fosk-Kosarh. Проект ведётся в рамках Coalition Iron Will.</span></p><h2><span class="i18n" data-en="Contact">Связь</span></h2><p><span class="i18n" data-en="You can follow news and write to the author here: <a href=&quot;https://t.me/VladislavFoskKosarh&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;>Telegram ↗</a>, <a href=&quot;https://www.youtube.com/@VladislavFoskKosarh&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;>YouTube ↗</a>, <a href=&quot;https://github.com/VladislavFosk&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;>GitHub ↗</a>.">Следить за новостями и писать автору можно здесь: <a href="https://t.me/VladislavFoskKosarh" target="_blank" rel="noopener noreferrer">Telegram ↗</a>, <a href="https://www.youtube.com/@VladislavFoskKosarh" target="_blank" rel="noopener noreferrer">YouTube ↗</a>, <a href="https://github.com/VladislavFosk" target="_blank" rel="noopener noreferrer">GitHub ↗</a>.</span></p><div class="rz-pager"><button class="rz-pg prev" onclick="showRozaSection('security')"><small><span class="i18n" data-en="Previous">Предыдущая</span></small><span>← 🛡️ <span class="i18n" data-en="Security">Безопасность</span></span></button><button class="rz-pg next" onclick="showRozaSection('releases')"><small><span class="i18n" data-en="Next">Следующая</span></small><span>🚀 <span class="i18n" data-en="Releases">Релизы</span> →</span></button></div></article></div><div class="roza-page" id="roza-releases"><article class="rz-article"><div class="rz-title"><span class="i18n" data-en="Releases">Релизы</span></div><div class="rz-stub">📝 <span class="i18n" data-en="This article is a draft. The project is private: part of the information is classified, the rest will be added as the project matures.">Эта статья — черновик. Проект закрытый: часть сведений засекречена, остальное будет дополняться по мере готовности.</span></div><p><span class="i18n" data-en="Roza OS versions and image links.">Версии Roza OS и ссылки на образы.</span></p><nav class="rz-toc" aria-label="Contents"><div class="rz-toc-title"><span class="i18n" data-en="Contents">Содержание</span></div><ol class="rz-toc-list"></ol></nav><h2><span class="i18n" data-en="Release list">Список релизов</span></h2><div class="rz-tablewrap"><table class="rz-table"><thead><tr><th><span class="i18n" data-en="Version">Версия</span></th><th><span class="i18n" data-en="State">Состояние</span></th><th><span class="i18n" data-en="Image">Образ</span></th></tr></thead><tbody><tr><td>Roza OS — Pre-release</td><td><span class="rz-chip todo"><span class="i18n" data-en="not released">не вышел</span></span></td><td><span class="i18n" data-en="unavailable">недоступен</span></td></tr></tbody></table></div><h2><span class="i18n" data-en="Download">Загрузка</span></h2><p><span class="i18n" data-en="No public image is available yet.">Публичный образ пока недоступен.</span></p><button class="roza-download" onclick="event.stopPropagation(); rozaNotReady()">⛔ <span class="i18n" data-en="Download image — not ready">Скачать образ — пока не готово</span></button><h2><span class="i18n" data-en="Checksums">Контрольные суммы</span></h2><p><span class="i18n" data-en="They will appear together with the first image.">Появятся вместе с первым образом.</span></p><h2><span class="i18n" data-en="Changelog">Журнал изменений</span></h2><p><span class="i18n" data-en="Empty for now: there have been no releases yet.">Пока пуст: релизов ещё не было.</span></p><div class="rz-pager"><button class="rz-pg prev" onclick="showRozaSection('development')"><small><span class="i18n" data-en="Previous">Предыдущая</span></small><span>← 🛠️ <span class="i18n" data-en="Development">Разработка</span></span></button><button class="rz-pg next" onclick="showRozaSection('faq')"><small><span class="i18n" data-en="Next">Следующая</span></small><span>❓ <span class="i18n" data-en="FAQ">FAQ</span> →</span></button></div></article></div><div class="roza-page" id="roza-faq"><article class="rz-article"><div class="rz-title"><span class="i18n" data-en="FAQ">FAQ</span></div><p><span class="i18n" data-en="Short answers to frequent questions about Roza OS.">Короткие ответы на частые вопросы о Roza OS.</span></p><details class="rz-qa"><summary><span class="i18n" data-en="What is Roza OS?">Что такое Roza OS?</span></summary><div><span class="i18n" data-en="A private operating system project based on Arch Linux.">Закрытый проект операционной системы на базе Arch Linux.</span></div></details><details class="rz-qa"><summary><span class="i18n" data-en="When will Roza OS be released?">Когда выйдет Roza OS?</span></summary><div><span class="i18n" data-en="There is currently no public release date.">Публичной даты релиза пока нет.</span></div></details><details class="rz-qa"><summary><span class="i18n" data-en="Where can I download the image?">Где скачать образ?</span></summary><div><span class="i18n" data-en="The image is not ready yet. Follow updates on this page.">Образ пока не готов. Следите за обновлениями на этой странице.</span></div></details><details class="rz-qa"><summary><span class="i18n" data-en="Why is the information private?">Почему информация закрыта?</span></summary><div><span class="i18n" data-en="Some project details are intentionally kept private until the project is ready for disclosure.">Часть информации намеренно остаётся закрытой до готовности проекта к публикации.</span></div></details><details class="rz-qa"><summary><span class="i18n" data-en="Will Arch commands work?">Подойдут ли команды из Arch?</span></summary><div><span class="i18n" data-en="Most likely mostly yes, since the system is built on Arch. But the final toolset has not been announced yet.">Скорее всего — в основном да, система строится на Arch. Но окончательный набор инструментов пока не объявлен.</span></div></details><details class="rz-qa"><summary><span class="i18n" data-en="How can I follow the project?">Как следить за проектом?</span></summary><div><span class="i18n" data-en="Via the author’s Telegram, YouTube and GitHub — links are on the Contacts page.">Через Telegram, YouTube и GitHub автора — ссылки на странице «Контакты».</span></div></details><div class="rz-pager"><button class="rz-pg prev" onclick="showRozaSection('releases')"><small><span class="i18n" data-en="Previous">Предыдущая</span></small><span>← 🚀 <span class="i18n" data-en="Releases">Релизы</span></span></button><span></span></div></article></div>
         </div>
     </div>
 </section>
@@ -1390,17 +1449,90 @@ document.querySelectorAll('.wiki-entry, .page-detail .back').forEach(el => {
     });
 });
 
-// ROZA OS
-function showRozaSection(section, button) {
-    document.querySelectorAll('.roza-page').forEach(el => el.classList.remove('active'));
+// ROZA OS — вики в стиле ArchWiki
+function showRozaSection(section) {
     const page = document.getElementById('roza-' + section);
-    if (page) page.classList.add('active');
-    document.querySelectorAll('.roza-link').forEach(el => el.classList.remove('active'));
-    if (button) button.classList.add('active');
+    if (!page) return;
+    document.querySelectorAll('.roza-page').forEach(el => el.classList.remove('active'));
+    page.classList.add('active');
+    document.querySelectorAll('.roza-link').forEach(el => {
+        const on = el.dataset.section === section;
+        el.classList.toggle('active', on);
+        if (on) el.setAttribute('aria-current', 'page'); else el.removeAttribute('aria-current');
+    });
+    const layout = document.querySelector('.roza-layout');
+    if (layout) {
+        const top = layout.getBoundingClientRect().top + window.scrollY - 84;
+        if (window.scrollY > top) window.scrollTo({ top, behavior: 'smooth' });
+    }
 }
 function rozaNotReady() {
     alert(currentLang === 'en' ? 'The Roza OS image is not ready yet. Stay tuned for updates.' : 'Образ Roza OS пока не готов. Следите за обновлениями проекта.');
 }
+// Автоматическое содержание статьи из заголовков h2/h3
+function buildRozaToc() {
+    document.querySelectorAll('.roza-page').forEach(page => {
+        const list = page.querySelector('.rz-toc-list');
+        if (!list) return;
+        list.replaceChildren();
+        let parent = null, sub = null;
+        page.querySelectorAll('.rz-article h2, .rz-article h3').forEach((h, i) => {
+            if (!h.id) h.id = page.id + '-s' + (i + 1);
+            const a = document.createElement('a');
+            a.href = '#' + h.id;
+            a.textContent = h.textContent.trim();
+            a.addEventListener('click', e => {
+                e.preventDefault();
+                h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+            const li = document.createElement('li');
+            li.appendChild(a);
+            if (h.tagName === 'H2' || !parent) {
+                list.appendChild(li);
+                parent = li; sub = null;
+            } else {
+                if (!sub) { sub = document.createElement('ol'); parent.appendChild(sub); }
+                sub.appendChild(li);
+            }
+        });
+    });
+}
+// Поиск по статьям
+function rozaSearch(query) {
+    const q = (query || '').trim().toLowerCase();
+    let found = 0;
+    document.querySelectorAll('.roza-link').forEach(link => {
+        const page = document.getElementById('roza-' + link.dataset.section);
+        const hay = (link.textContent + ' ' + (page ? page.textContent : '')).toLowerCase();
+        const hit = !q || hay.includes(q);
+        link.hidden = !hit;
+        if (hit) found++;
+    });
+    const none = document.getElementById('rozaNoRes');
+    if (none) none.hidden = found > 0;
+}
+function rozaSearchKey(event) {
+    if (event.key === 'Enter') {
+        const first = document.querySelector('.roza-link:not([hidden])');
+        if (first) showRozaSection(first.dataset.section);
+    } else if (event.key === 'Escape') {
+        event.target.value = '';
+        rozaSearch('');
+    }
+}
+function rozaOnLang() {
+    const input = document.getElementById('rozaSearch');
+    if (input) input.placeholder = currentLang === 'en' ? 'Search articles…' : 'Поиск по статьям…';
+    buildRozaToc();
+    const q = input ? input.value : '';
+    if (q) rozaSearch(q);
+}
+// «См. также» — ссылки-кнопки с клавиатуры
+document.querySelectorAll('.rz-see-link[role="link"]').forEach(el => {
+    el.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); el.click(); }
+    });
+});
 
 // ЯЗЫК
 const langToggle = document.getElementById('langToggle');
@@ -1425,6 +1557,7 @@ function applyLang(lang) {
     ghRenderPinned();
     ghRenderAll();
     updateGithubStatus();
+    rozaOnLang();
 }
 function toggleLang() {
     applyLang(currentLang === 'en' ? 'ru' : 'en');
@@ -1623,6 +1756,7 @@ async function ghLoadRepos() {
 }
 
 // СТАРТОВАЯ ВКЛАДКА И ЗАГРУЗКА GITHUB
+buildRozaToc();
 if (savedLanguage === 'en') applyLang('en');
 switchTab(location.hash.slice(1) || 'home', false);
 ghLoadHeatmap();
