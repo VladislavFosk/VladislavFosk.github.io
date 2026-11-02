@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Зомби-ферма — тайкун</title>
+<style>
+:root{--bg:#25242d;--panel:#34333f;--panel2:#3f3e4c;--bone:#efe6d2;--blood:#c8463a;--teal:#7fb7a4;--pus:#d8c35a;--mute:#a9a5b5}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--bone);font-family:Georgia,'Times New Roman',serif}
+body{padding:14px;min-height:100%}
+.wrap{max-width:1000px;margin:0 auto}
+header{margin:4px 0 16px}
+h1{margin:0;font-size:clamp(28px,6vw,46px);color:var(--teal)}
+header p{margin:4px 0 0;color:var(--mute);font-size:clamp(14px,2.4vw,17px)}
+.grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:14px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border-radius:16px;padding:16px}
+.stage{text-align:center}
+.stat{font-size:clamp(34px,8vw,52px);font-weight:700;line-height:1.1}
+.stat small{display:block;font-size:15px;font-weight:400;color:var(--mute)}
+.rank{display:inline-block;margin:8px 0 4px;padding:3px 12px;border-radius:999px;background:var(--panel2);color:var(--pus);font-size:14px}
+#dig{margin:14px auto 6px;width:min(220px,60vw);aspect-ratio:1;border-radius:50%;border:0;cursor:pointer;font-size:clamp(70px,18vw,104px);line-height:1;background:radial-gradient(circle at 50% 35%,#4a6a60,#2f453e);box-shadow:inset 0 -10px 0 rgba(0,0,0,.25),0 8px 0 #1c2a26;transition:transform .06s}
+#dig:active{transform:translateY(5px);box-shadow:inset 0 -10px 0 rgba(0,0,0,.25),0 3px 0 #1c2a26}
+button:focus-visible{outline:3px solid var(--pus);outline-offset:3px}
+.hint{color:var(--mute);font-size:14px;margin:0}
+#msg{min-height:22px;margin:10px 0 0;color:var(--pus);font-size:15px}
+#raid{display:none;margin-top:12px;padding:12px;border-radius:12px;background:#4a2a2b;border:2px solid var(--blood)}
+#raid.on{display:block}
+#raid b{display:block;margin-bottom:8px}
+.bar{height:8px;border-radius:4px;background:#2b1819;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;width:100%;background:var(--blood)}
+#fight{padding:10px 20px;border:0;border-radius:10px;background:var(--blood);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+h2{margin:0 0 10px;font-size:19px;color:var(--bone)}
+.list{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:10px 12px;border:0;border-radius:12px;background:var(--panel2);color:var(--bone);font:inherit;cursor:pointer}
+.item:hover:not(:disabled){background:#4a4959}
+.item:disabled{opacity:.5;cursor:not-allowed}
+.ic{font-size:30px;width:40px;text-align:center}
+.tx{flex:1;min-width:0}
+.tx b{display:block;font-size:16px}
+.tx small{color:var(--mute);font-size:13px;line-height:1.3;display:block}
+.pr{text-align:right;white-space:nowrap}
+.pr i{display:block;font-style:normal;color:var(--pus);font-weight:700}
+.pr em{display:block;font-style:normal;color:var(--mute);font-size:13px}
+.foot{display:flex;justify-content:space-between;gap:10px;margin-top:6px;color:var(--mute);font-size:13px}
+.foot button{background:none;border:0;color:var(--mute);font:inherit;text-decoration:underline;cursor:pointer}
+.float{position:fixed;pointer-events:none;color:var(--bone);font-weight:700;font-size:20px;text-shadow:0 1px 3px #000;animation:fl .8s ease-out forwards;z-index:9}
+@keyframes fl{to{transform:translateY(-50px);opacity:0}}
+@media(prefers-reduced-motion:reduce){.float{animation-duration:.01s}#dig{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Зомби-ферма</h1>
+    <p>Выкапывай мозги, нанимай мертвецов и построй империю нежити.</p>
+  </header>
+  <div class="grid">
+    <section class="card stage">
+      <div class="stat"><span id="brains">0</span><small>мозгов · <span id="cps">0</span> в секунду</small></div>
+      <div class="rank" id="rank">Мелкий могильщик</div>
+      <button id="dig" aria-label="Выкопать мозги">🧟</button>
+      <p class="hint">Нажимай на зомби — каждый клик приносит <b id="pow">1</b></p>
+      <p id="msg" aria-live="polite"></p>
+      <div id="raid">
+        <b>🔦 Охотники у ворот! Отбейся: 10 ударов за 10 секунд</b>
+        <button id="fight">Отбиться (<span id="hits">0</span>/10)</button>
+        <div class="bar"><i id="rbar"></i></div>
+      </div>
+    </section>
+    <section class="card">
+      <h2>Улучшения</h2>
+      <div class="list" id="ups"></div>
+      <h2>Нанять и построить</h2>
+      <div class="list" id="bld"></div>
+      <div class="foot"><span>Прогресс сохраняется автоматически</span><button id="reset">Начать заново</button></div>
+    </section>
+  </div>
+</div>
+<script>
+const BLD=[
+ {n:'Бродячий зомби',e:'🧟',c:15,p:.5,d:'Шатается по кладбищу и находит мозги'},
+ {n:'Раскопанная могила',e:'⚰️',c:100,p:3,d:'Свежие находки каждый день'},
+ {n:'Лаборатория',e:'🧪',c:1100,p:15,d:'Выращивает мозги в пробирках'},
+ {n:'Морг-ресторан',e:'🏚️',c:12000,p:80,d:'Люди сами приходят на ужин'},
+ {n:'Мозговая фабрика',e:'🏭',c:130000,p:450,d:'Конвейер, который не спит'},
+ {n:'Корпорация «Апокалипсис»',e:'🌍',c:1400000,p:2600,d:'Филиалы на всех континентах'}
+];
+const UPS=[
+ {n:'Лопата',e:'⛏️',c:50,t:'click',v:1,d:'+1 мозг за клик'},
+ {n:'Кирка',e:'🪓',c:500,t:'click',v:5,d:'+5 мозгов за клик'},
+ {n:'Фермент гниения',e:'🧬',c:5000,t:'mult',v:2,d:'Вся нежить работает вдвое быстрее'},
+ {n:'Экскаватор',e:'🚜',c:15000,t:'click',v:30,d:'+30 мозгов за клик'},
+ {n:'Вирус-ускоритель',e:'☣️',c:120000,t:'mult',v:2,d:'Вся нежить работает вдвое быстрее'},
+ {n:'Некро-реклама',e:'📣',c:900000,t:'mult',v:2,d:'Вся нежить работает вдвое быстрее'}
+];
+const RANKS=[[0,'Мелкий могильщик'],[500,'Хозяин кладбища'],[10000,'Профессор некрологии'],[200000,'Барон мертвецов'],[5e6,'Император нежити']];
+const KEY='zombie-farm-v1';
+let S={b:0,total:0,own:BLD.map(()=>0),up:UPS.map(()=>false),t:Date.now()};
+try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.own&&r.own.length===BLD.length&&r.up&&r.up.length===UPS.length)S=r}catch(e){}
+const $=id=>document.getElementById(id);
+const R=(a,b)=>a+Math.random()*(b-a);
+function fmt(n){
+  if(n<1000)return String(Math.floor(n));
+  const u=['','тыс','млн','млрд','трлн'];let i=0;
+  while(n>=1000&&i<4){n/=1000;i++}
+  return n.toFixed(n<10?2:n<100?1:0).replace('.',',')+' '+u[i];
+}
+const cost=i=>Math.ceil(BLD[i].c*Math.pow(1.15,S.own[i]));
+const mult=()=>UPS.reduce((m,u,i)=>m*(S.up[i]&&u.t==='mult'?u.v:1),1);
+const cps=()=>BLD.reduce((s,b,i)=>s+b.p*S.own[i],0)*mult();
+const pow=()=>UPS.reduce((s,u,i)=>s+(S.up[i]&&u.t==='click'?u.v:0),1);
+function item(k,i,o){
+  const b=document.createElement('button');b.className='item';b.dataset.k=k;b.dataset.i=i;
+  b.innerHTML='<span class="ic">'+o.e+'</span><span class="tx"><b>'+o.n+'</b><small>'+o.d+'</small></span><span class="pr"><i></i><em></em></span>';
+  return b;
+}
+UPS.forEach((u,i)=>$('ups').appendChild(item('u',i,u)));
+BLD.forEach((b,i)=>$('bld').appendChild(item('b',i,b)));
+function say(t){$('msg').textContent=t}
+function buy(e){
+  const el=e.target.closest('.item');if(!el)return;
+  const i=+el.dataset.i;
+  if(el.dataset.k==='b'){const c=cost(i);if(S.b>=c){S.b-=c;S.own[i]++}}
+  else if(!S.up[i]&&S.b>=UPS[i].c){S.b-=UPS[i].c;S.up[i]=true;say('Куплено: '+UPS[i].n)}
+  render();
+}
+$('ups').addEventListener('click',buy);$('bld').addEventListener('click',buy);
+
+$('dig').addEventListener('click',e=>{
+  const p=pow();S.b+=p;S.total+=p;
+  const r=e.currentTarget.getBoundingClientRect();
+  const x=e.detail?e.clientX:r.left+r.width/2,y=e.detail?e.clientY:r.top+r.height/3;
+  const f=document.createElement('span');f.className='float';f.textContent='+'+fmt(p);
+  f.style.left=(x-10)+'px';f.style.top=(y-20)+'px';document.body.appendChild(f);
+  setTimeout(()=>f.remove(),800);
+});
+
+let raid=null,raidIn=R(70,110);
+$('fight').addEventListener('click',()=>{
+  if(!raid)return;raid.h++;$('hits').textContent=raid.h;
+  if(raid.h>=10){
+    const g=cps()*60+50;S.b+=g;S.total+=g;raid=null;$('raid').classList.remove('on');
+    say('Охотники бежали! Трофеи: +'+fmt(g)+' мозгов');raidIn=R(70,110);
+  }
+});
+function raidTick(dt){
+  if(!raid){
+    raidIn-=dt;
+    if(raidIn<=0&&S.total>=200){raid={h:0,t:10};$('hits').textContent=0;$('raid').classList.add('on')}
+    return;
+  }
+  raid.t-=dt;$('rbar').style.width=Math.max(0,raid.t*10)+'%';
+  if(raid.t<=0){
+    const l=S.b*.15;S.b-=l;raid=null;$('raid').classList.remove('on');
+    say('Охотники разгромили склад: −'+fmt(l)+' мозгов');raidIn=R(70,110);
+  }
+}
+
+function render(){
+  $('brains').textContent=fmt(S.b);
+  const c=cps();$('cps').textContent=c<10?c.toFixed(1).replace('.',','):fmt(c);
+  $('pow').textContent=fmt(pow());
+  let rk=RANKS[0][1];for(const r of RANKS)if(S.total>=r[0])rk=r[1];$('rank').textContent=rk;
+  BLD.forEach((b,i)=>{
+    const el=$('bld').children[i],cc=cost(i);
+    el.disabled=S.b<cc;
+    el.querySelector('i').textContent=fmt(cc);
+    el.querySelector('em').textContent='+'+(b.p*mult()).toString().replace('.',',')+'/с · есть: '+S.own[i];
+  });
+  let shown=0;
+  UPS.forEach((u,i)=>{
+    const el=$('ups').children[i],vis=!S.up[i]&&shown<3;
+    el.style.display=vis?'':'none';if(vis)shown++;
+    el.disabled=S.b<u.c;
+    el.querySelector('i').textContent=fmt(u.c);el.querySelector('em').textContent='';
+  });
+}
+function save(){S.t=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+
+// офлайн-доход: половина скорости, не больше часа
+const away=Math.min((Date.now()-S.t)/1000,3600),off=cps()*away*.5;
+if(off>=1){S.b+=off;S.total+=off;say('Пока тебя не было, нежить накопала '+fmt(off)+' мозгов')}
+else say('Копай первые мозги — нажми на зомби');
+
+let last=performance.now(),acc=0;
+setInterval(()=>{
+  const now=performance.now(),dt=Math.min((now-last)/1000,1);last=now;
+  const g=cps()*dt;S.b+=g;S.total+=g;raidTick(dt);render();
+  acc+=dt;if(acc>=10){acc=0;save()}
+},100);
+addEventListener('beforeunload',save);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)save()});
+$('reset').addEventListener('click',()=>{
+  if(confirm('Сбросить весь прогресс?')){
+    S={b:0,total:0,own:BLD.map(()=>0),up:UPS.map(()=>false),t:Date.now()};raid=null;$('raid').classList.remove('on');save();say('Новая игра. Могилы ждут.');render();
+  }
+});
+render();
+if(window.parent!==window){
+  const post=()=>parent.postMessage({type:'game-height',h:document.body.offsetHeight},'*');
+  new ResizeObserver(post).observe(document.body);post();
+}
+</script>
+</body>
+</html>

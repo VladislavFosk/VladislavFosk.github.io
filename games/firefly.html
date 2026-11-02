@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Светлячок — игра</title>
+<style>
+:root{--bg:#171a3d;--plum:#3a2358;--amber:#ffc857;--coral:#ff6b6b;--mist:#e8e4ff}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--mist);font-family:Georgia,'Times New Roman',serif}
+body{display:flex;align-items:center;justify-content:center;padding:12px}
+.game{position:relative;width:100%;max-width:900px;aspect-ratio:3/2;border-radius:18px;overflow:hidden;box-shadow:0 0 60px rgba(255,200,87,.12)}
+canvas{width:100%;height:100%;display:block;touch-action:none;cursor:none}
+.ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:rgba(23,26,61,.74);backdrop-filter:blur(3px)}
+.ov.hide{display:none}
+h1{font-size:clamp(32px,7vw,64px);margin:0 0 8px;color:var(--amber);text-shadow:0 0 24px rgba(255,200,87,.5)}
+p{max-width:46ch;line-height:1.5;margin:6px 0;font-size:clamp(14px,2.4vw,18px)}
+button{margin-top:18px;font:inherit;font-size:clamp(16px,3vw,20px);font-weight:700;padding:12px 34px;border:0;border-radius:999px;background:var(--amber);color:#2a1a40;cursor:pointer}
+button:hover{background:#ffd777}
+button:focus-visible{outline:3px solid var(--mist);outline-offset:3px}
+.embed body{padding:0}
+.embed .game{max-width:none;border-radius:0;box-shadow:none}
+@media(max-width:600px){.ov{padding:12px}.ov h1{font-size:26px;margin-bottom:4px}.ov p{font-size:12px;line-height:1.35;margin:3px 0}button{margin-top:10px;padding:8px 24px;font-size:15px}}
+</style>
+<script>if(top!==self)document.documentElement.className='embed'</script>
+</head>
+<body>
+<div class="game">
+  <canvas id="c"></canvas>
+  <div class="ov" id="ov">
+    <h1 id="ttl">Светлячок</h1>
+    <p id="txt">Ночь в лугах. Собирай светящуюся пыльцу и уворачивайся от теней — у тебя три жизни. Цепочка сборов без потерь даёт бонусные очки.</p>
+    <p>Мышь или палец — вести светлячка. Клавиши: стрелки или WASD.</p>
+    <button id="btn">Играть</button>
+  </div>
+</div>
+<script>
+const cv=document.getElementById('c'),ctx=cv.getContext('2d');
+const W=900,H=600;cv.width=W;cv.height=H;
+const ov=document.getElementById('ov'),ttl=document.getElementById('ttl'),txt=document.getElementById('txt'),btn=document.getElementById('btn');
+let best=0;try{best=+localStorage.getItem('firefly-best')||0}catch(e){}
+let state='menu',score=0,lives=3,t=0,inv=0,combo=0,orbs=[],foes=[],parts=[],spawnO=0,spawnF=0;
+const R=(a,b)=>a+Math.random()*(b-a);
+const stars=Array.from({length:80},()=>({x:R(0,W),y:R(0,H*.8),r:R(.3,1.6),p:R(0,6)}));
+const P={x:W/2,y:H/2,tx:W/2,ty:H/2};
+const keys={};
+addEventListener('keydown',e=>{
+  keys[e.key.toLowerCase()]=1;
+  if(e.key.startsWith('Arrow')||e.key===' ')e.preventDefault();
+  if(e.key==='Enter'&&state!=='play')start();
+});
+addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=0});
+function setT(e){const r=cv.getBoundingClientRect();P.tx=(e.clientX-r.left)*W/r.width;P.ty=(e.clientY-r.top)*H/r.height}
+cv.addEventListener('pointermove',setT);
+cv.addEventListener('pointerdown',setT);
+btn.addEventListener('click',start);
+
+function start(){
+  score=0;lives=3;t=0;inv=0;combo=0;orbs=[];foes=[];parts=[];spawnO=0;spawnF=2;
+  P.x=P.tx=W/2;P.y=P.ty=H/2;state='play';ov.classList.add('hide');
+}
+function end(){
+  state='over';
+  const isBest=score>best;
+  if(isBest){best=score;try{localStorage.setItem('firefly-best',best)}catch(e){}}
+  ttl.textContent='Огонёк погас';
+  txt.textContent='Твой счёт: '+score+(isBest?' — новый рекорд!':'. Рекорд: '+best+'.');
+  btn.textContent='Ещё раз';
+  ov.classList.remove('hide');btn.focus();
+}
+function burst(x,y,c,n){for(let i=0;i<n;i++){const a=R(0,6.28),s=R(30,150);parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:R(.4,.9),m:.9,c})}}
+
+function update(dt){
+  t+=dt;inv-=dt;
+  const kx=(keys.arrowright||keys.d?1:0)-(keys.arrowleft||keys.a?1:0);
+  const ky=(keys.arrowdown||keys.s?1:0)-(keys.arrowup||keys.w?1:0);
+  if(kx||ky){P.tx=P.x+kx*160;P.ty=P.y+ky*160}
+  const k=Math.min(1,dt*6);
+  P.x+=(P.tx-P.x)*k;P.y+=(P.ty-P.y)*k;
+  P.x=Math.max(16,Math.min(W-16,P.x));P.y=Math.max(16,Math.min(H-16,P.y));
+  if(Math.random()<.7)parts.push({x:P.x,y:P.y,vx:R(-12,12),vy:R(-12,12),l:.6,m:.6,c:'255,200,87'});
+
+  spawnO-=dt;
+  if(spawnO<=0&&orbs.length<5){orbs.push({x:R(50,W-50),y:R(50,H-110),l:7,m:7});spawnO=1.1}
+  spawnF-=dt;
+  if(spawnF<=0&&foes.length<Math.min(2+Math.floor(t/12),8)){
+    const side=Math.floor(R(0,4));
+    const x=side<2?(side?W+30:-30):R(0,W),y=side>=2?(side==2?-30:H+30):R(0,H);
+    foes.push({x,y,ph:R(0,6)});spawnF=4;
+  }
+  const sp=55+Math.min(t*1.2,70);
+  for(const f of foes){
+    const dx=P.x-f.x,dy=P.y-f.y,d=Math.hypot(dx,dy)||1;
+    f.x+=dx/d*sp*dt+Math.sin(t*2+f.ph)*20*dt;
+    f.y+=dy/d*sp*dt+Math.cos(t*2+f.ph)*20*dt;
+    if(inv<=0&&d<30){
+      lives--;inv=1.6;combo=0;burst(P.x,P.y,'255,107,107',24);
+      f.x-=dx/d*90;f.y-=dy/d*90;
+      if(lives<=0){end();return}
+    }
+  }
+  for(let i=orbs.length-1;i>=0;i--){
+    const o=orbs[i];o.l-=dt;
+    if(Math.hypot(P.x-o.x,P.y-o.y)<28){
+      combo++;score+=1+Math.floor(combo/5);burst(o.x,o.y,'184,168,255',16);orbs.splice(i,1);
+    }else if(o.l<=0){combo=0;orbs.splice(i,1)}
+  }
+  for(let i=parts.length-1;i>=0;i--){
+    const p=parts[i];p.l-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;
+    if(p.l<=0)parts.splice(i,1);
+  }
+}
+
+function glow(x,y,r,c,a){
+  const g=ctx.createRadialGradient(x,y,0,x,y,r);
+  g.addColorStop(0,'rgba('+c+','+a+')');g.addColorStop(1,'rgba('+c+',0)');
+  ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,6.283);ctx.fill();
+}
+function draw(){
+  const g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'#171a3d');g.addColorStop(1,'#3a2358');
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  for(const s of stars){
+    ctx.fillStyle='rgba(232,228,255,'+(.4+.4*Math.sin(performance.now()/900+s.p))+')';
+    ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,6.283);ctx.fill();
+  }
+  ctx.fillStyle='#120f2b';ctx.beginPath();ctx.moveTo(0,H);
+  for(let x=0;x<=W;x+=20)ctx.lineTo(x,H-50+Math.sin(x/90)*14+Math.sin(x/37)*6);
+  ctx.lineTo(W,H);ctx.fill();
+
+  for(const p of parts){glow(p.x,p.y,6,p.c,Math.max(0,p.l/p.m)*.8)}
+  for(const o of orbs){
+    const k=o.l/o.m,pulse=1+.15*Math.sin(performance.now()/200+o.x);
+    glow(o.x,o.y,26*pulse,'184,168,255',.55*(k<.3?.4+.6*Math.sin(performance.now()/80):1));
+    ctx.fillStyle='#e8e4ff';ctx.beginPath();ctx.arc(o.x,o.y,5*pulse,0,6.283);ctx.fill();
+  }
+  for(const f of foes){
+    ctx.fillStyle='#0a0818';ctx.strokeStyle='rgba(255,107,107,.35)';ctx.lineWidth=2;
+    ctx.beginPath();ctx.arc(f.x,f.y,22+Math.sin(t*4+f.ph)*2,0,6.283);ctx.fill();ctx.stroke();
+    const ex=Math.sign(P.x-f.x)*3;
+    ctx.fillStyle='#ff6b6b';
+    ctx.beginPath();ctx.arc(f.x-8+ex,f.y-3,3.5,0,6.283);ctx.arc(f.x+8+ex,f.y-3,3.5,0,6.283);ctx.fill();
+  }
+  if(state==='play'&&!(inv>0&&Math.floor(inv*12)%2)){
+    glow(P.x,P.y,46,'255,200,87',.5);
+    ctx.fillStyle='#ffe9a8';ctx.beginPath();ctx.arc(P.x,P.y,7,0,6.283);ctx.fill();
+    ctx.fillStyle='rgba(232,228,255,.55)';
+    const w=Math.sin(performance.now()/40)*4;
+    ctx.beginPath();ctx.ellipse(P.x-7,P.y-6,8,3+Math.abs(w)/2,-.6,0,6.283);
+    ctx.ellipse(P.x+7,P.y-6,8,3+Math.abs(w)/2,.6,0,6.283);ctx.fill();
+  }
+  if(state==='play'){
+    ctx.font='bold 26px Georgia,serif';ctx.textAlign='left';ctx.fillStyle='#e8e4ff';
+    ctx.fillText(score,20,38);
+    ctx.font='14px Georgia,serif';ctx.fillStyle='rgba(232,228,255,.65)';
+    ctx.fillText('рекорд '+best+(combo>1?'   цепочка ×'+combo:''),20,58);
+    for(let i=0;i<3;i++){glow(W-30-i*28,32,i<lives?12:6,i<lives?'255,200,87':'232,228,255',i<lives?.9:.25)}
+  }
+}
+let last=performance.now();
+function loop(now){
+  const dt=Math.min(.05,(now-last)/1000);last=now;
+  if(state==='play')update(dt);
+  draw();requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
