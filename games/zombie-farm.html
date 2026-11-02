@@ -79,6 +79,7 @@ h2{margin:0 0 10px;font-size:19px;color:var(--bone)}
   </div>
 </div>
 <script>
+addEventListener('keydown',e=>{if(e.key==='Escape'&&parent!==window)parent.postMessage({type:'game-escape'},'*')});
 const BLD=[
  {n:'Бродячий зомби',e:'🧟',c:15,p:.5,d:'Шатается по кладбищу и находит мозги'},
  {n:'Раскопанная могила',e:'⚰️',c:100,p:3,d:'Свежие находки каждый день'},

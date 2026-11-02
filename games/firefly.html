@@ -19,7 +19,8 @@ button{margin-top:18px;font:inherit;font-size:clamp(16px,3vw,20px);font-weight:7
 button:hover{background:#ffd777}
 button:focus-visible{outline:3px solid var(--mist);outline-offset:3px}
 .embed body{padding:0}
-.embed .game{max-width:none;border-radius:0;box-shadow:none}
+.embed .game{width:min(100vw,calc(100vh*1.5));max-width:none;border-radius:0;box-shadow:none}
+.embed,.embed body{overflow:hidden}
 @media(max-width:600px){.ov{padding:12px}.ov h1{font-size:26px;margin-bottom:4px}.ov p{font-size:12px;line-height:1.35;margin:3px 0}button{margin-top:10px;padding:8px 24px;font-size:15px}}
 </style>
 <script>if(top!==self)document.documentElement.className='embed'</script>
@@ -35,6 +36,7 @@ button:focus-visible{outline:3px solid var(--mist);outline-offset:3px}
   </div>
 </div>
 <script>
+addEventListener('keydown',e=>{if(e.key==='Escape'&&parent!==window)parent.postMessage({type:'game-escape'},'*')});
 const cv=document.getElementById('c'),ctx=cv.getContext('2d');
 const W=900,H=600;cv.width=W;cv.height=H;
 const ov=document.getElementById('ov'),ttl=document.getElementById('ttl'),txt=document.getElementById('txt'),btn=document.getElementById('btn');
