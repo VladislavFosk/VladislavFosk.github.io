@@ -1008,6 +1008,14 @@ a:not(.card):not(.contact-card):not(.gh-repo) { text-underline-offset: 4px; }
   .rz-pg{max-width:49%}
 }
 
+
+/* ============================================================
+   ИГРЫ
+   ============================================================ */
+.game-frame { display:block; width:100%; margin:18px auto 0; border:1px solid var(--border); border-radius:var(--r-lg); background:var(--bg-deep); box-shadow:var(--sh-deep); }
+#frame-firefly { max-width:900px; height:auto; aspect-ratio:3/2; }
+#frame-zombie { max-width:1000px; height:640px; }
+.game-hint { max-width:900px; margin:12px auto 0; color:var(--text2); font-size:13px; text-align:center; }
 </style>
 
 </head>
@@ -1027,6 +1035,7 @@ a:not(.card):not(.contact-card):not(.gh-repo) { text-underline-offset: 4px; }
         <nav class="nav-buttons" id="tabNav" aria-label="Main navigation">
             <button class="active" data-tab="home">🏠 <span class="i18n" data-en="Home">Главная</span></button>
             <button data-tab="wiki">📚 <span class="i18n" data-en="My Wiki">Моя Вики</span></button>
+            <button data-tab="games">🎮 <span class="i18n" data-en="Games">Игры</span></button>
             <button data-tab="contact">✉️ <span class="i18n" data-en="Contact">Контакты</span></button>
         </nav>
         <button class="lang-toggle" id="langToggle" aria-label="Switch language">ENG</button>
@@ -1373,6 +1382,60 @@ $ pacman -Ss запрос    # поиск в репозиториях</code></pr
     </div>
 </section>
 
+<!-- ИГРЫ -->
+<section class="tab" id="tab-games">
+    <div class="hero">
+        <h2>🎮 <span class="i18n grad" data-en="Games">Игры</span></h2>
+        <p class="i18n" data-en="Small browser games — play right here, nothing to download">Небольшие браузерные игры — играй прямо здесь, ничего скачивать не нужно</p>
+    </div>
+
+    <div class="wiki-entry card" onclick="switchTab('game-firefly')">
+        <div class="top-row">
+            <div class="ico">✨</div>
+            <div><div class="pname"><span class="i18n" data-en="Firefly">Светлячок</span></div><span class="sub">Arcade</span></div>
+            <span class="badge active">🎮 <span class="i18n" data-en="Play">Играть</span></span>
+        </div>
+        <p class="i18n" data-en="A night meadow, a glowing firefly. Collect pollen, dodge the shadows and keep your three lives.">Ночной луг и светящийся светлячок. Собирай пыльцу, уворачивайся от теней и береги три жизни.</p>
+        <div class="tags"><span class="tag">Arcade</span><span class="tag">Mouse / Touch</span><span class="tag pink">Coalition Iron Will</span></div>
+    </div>
+
+    <div class="wiki-entry card" onclick="switchTab('game-zombie')">
+        <div class="top-row">
+            <div class="ico">🧟</div>
+            <div><div class="pname"><span class="i18n" data-en="Zombie Farm">Зомби-ферма</span></div><span class="sub">Tycoon / Idle</span></div>
+            <span class="badge active">🎮 <span class="i18n" data-en="Play">Играть</span></span>
+        </div>
+        <p class="i18n" data-en="Dig up brains, hire the undead, build an empire and fight off hunters. Progress is saved automatically.">Выкапывай мозги, нанимай мертвецов, строй империю и отбивайся от охотников. Прогресс сохраняется автоматически.</p>
+        <div class="tags"><span class="tag">Tycoon</span><span class="tag">Idle</span><span class="tag pink">Coalition Iron Will</span></div>
+    </div>
+</section>
+
+<section class="tab" id="tab-game-firefly">
+    <a class="back" onclick="switchTab('games')">← <span class="i18n" data-en="Back to games">Назад к играм</span></a>
+    <div class="header-info">
+        <div class="ico">✨</div>
+        <div>
+            <div class="pname"><span class="i18n" data-en="Firefly">Светлячок</span> <span class="sub">Arcade</span></div>
+            <div class="tags"><span class="tag">Arcade</span><span class="tag">Mouse / Touch</span><span class="tag pink">Coalition Iron Will</span></div>
+        </div>
+    </div>
+    <iframe class="game-frame" id="frame-firefly" data-src="games/firefly.html" title="Светлячок"></iframe>
+    <p class="game-hint i18n" data-en="Mouse or finger moves the firefly. Keys: arrows or WASD. Your best score is saved in the browser.">Мышь или палец ведут светлячка. Клавиши: стрелки или WASD. Рекорд сохраняется в браузере.</p>
+</section>
+
+<section class="tab" id="tab-game-zombie">
+    <a class="back" onclick="switchTab('games')">← <span class="i18n" data-en="Back to games">Назад к играм</span></a>
+    <div class="header-info">
+        <div class="ico">🧟</div>
+        <div>
+            <div class="pname"><span class="i18n" data-en="Zombie Farm">Зомби-ферма</span> <span class="sub">Tycoon / Idle</span></div>
+            <div class="tags"><span class="tag">Tycoon</span><span class="tag">Idle</span><span class="tag pink">Coalition Iron Will</span></div>
+        </div>
+    </div>
+    <iframe class="game-frame" id="frame-zombie" data-src="games/zombie-farm.html" data-autoheight title="Зомби-ферма"></iframe>
+    <p class="game-hint i18n" data-en="Progress is saved in the browser and the undead keep digging for a while when you are away.">Прогресс сохраняется в браузере, а нежить продолжает копать какое-то время, пока тебя нет.</p>
+</section>
+
 <!-- КОНТАКТЫ -->
 <section class="tab" id="tab-contact">
     <div class="hero">
@@ -1395,6 +1458,7 @@ $ pacman -Ss запрос    # поиск в репозиториях</code></pr
 <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
     <button class="active" data-tab="home"><span class="mi">🏠</span><span class="i18n" data-en="Home">Главная</span></button>
     <button data-tab="wiki"><span class="mi">📚</span><span class="i18n" data-en="Wiki">Вики</span></button>
+    <button data-tab="games"><span class="mi">🎮</span><span class="i18n" data-en="Games">Игры</span></button>
     <button data-tab="contact"><span class="mi">✉️</span><span class="i18n" data-en="Contact">Контакты</span></button>
 </nav>
 
@@ -1402,6 +1466,7 @@ $ pacman -Ss запрос    # поиск в репозиториях</code></pr
     ☽ Solarium Umbris · <span class="i18n" data-en="World of Kosarh">Мир Косарха</span> · 2026
     <span class="dot">·</span><a href="#home"><span class="i18n" data-en="Home">Главная</span></a>
     <span class="dot">·</span><a href="#wiki"><span class="i18n" data-en="My Wiki">Моя Вики</span></a>
+    <span class="dot">·</span><a href="#games"><span class="i18n" data-en="Games">Игры</span></a>
     <span class="dot">·</span><a href="#contact"><span class="i18n" data-en="Contact">Контакты</span></a>
     <br /><small style="opacity:.6">⚔️ Made by the <span class="grad">Coalition Iron Will</span></small>
 </footer>
@@ -1409,11 +1474,16 @@ $ pacman -Ss запрос    # поиск в репозиториях</code></pr
 <script>
 // НАВИГАЦИЯ
 function switchTab(tabId, push = true) {
-    const validTabs = ['home', 'wiki', 'contact', 'project-roza', 'project-solarium', 'project-blackorder', 'project-coalition'];
+    const validTabs = ['home', 'wiki', 'games', 'game-firefly', 'game-zombie', 'contact', 'project-roza', 'project-solarium', 'project-blackorder', 'project-coalition'];
     if (!validTabs.includes(tabId) || !document.getElementById('tab-' + tabId)) tabId = 'home';
     document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
     document.getElementById('tab-' + tabId).classList.add('active');
-    const navId = tabId.startsWith('project-') ? 'wiki' : tabId;
+    // игры подгружаются только при первом открытии
+    document.querySelectorAll('#tab-' + tabId + ' iframe[data-src]').forEach(frame => {
+        frame.src = frame.dataset.src;
+        frame.removeAttribute('data-src');
+    });
+    const navId = tabId.startsWith('project-') ? 'wiki' : tabId.startsWith('game-') ? 'games' : tabId;
     document.querySelectorAll('.nav-buttons button, .mobile-nav button').forEach(btn => {
         const active = btn.dataset.tab === navId;
         btn.classList.toggle('active', active);
@@ -1434,6 +1504,14 @@ document.querySelectorAll('.footer a[href^="#"]').forEach(link => {
             event.preventDefault();
             switchTab(tabId);
         }
+    });
+});
+// высота iframe с игрой подстраивается под её содержимое
+window.addEventListener('message', event => {
+    const data = event.data;
+    if (!data || data.type !== 'game-height' || typeof data.h !== 'number') return;
+    document.querySelectorAll('iframe.game-frame[data-autoheight]').forEach(frame => {
+        if (frame.contentWindow === event.source) frame.style.height = Math.max(520, Math.ceil(data.h)) + 'px';
     });
 });
 window.addEventListener('popstate', () => switchTab(location.hash.slice(1) || 'home', false));
