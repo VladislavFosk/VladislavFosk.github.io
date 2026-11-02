@@ -1015,6 +1015,15 @@ a:not(.card):not(.contact-card):not(.gh-repo) { text-underline-offset: 4px; }
 .game-frame { display:block; width:100%; margin:18px auto 0; border:1px solid var(--border); border-radius:var(--r-lg); background:var(--bg-deep); box-shadow:var(--sh-deep); }
 #frame-firefly { max-width:900px; height:auto; aspect-ratio:3/2; }
 #frame-zombie { max-width:1000px; height:640px; }
+.game-bar { display:flex; justify-content:flex-end; max-width:1000px; margin:16px auto 0; }
+.game-bar + .game-frame { margin-top:10px; }
+.fs-btn { font-size:13px; padding:6px 16px; }
+body.fs-active { overflow:hidden; }
+body.fs-active main { z-index:9000; }
+body.fs-active .tab.active { animation:none !important; transform:none !important; filter:none !important; }
+.game-frame.pseudo-fs { position:fixed !important; inset:0; width:100vw !important; height:100vh !important; height:100dvh !important; max-width:none !important; aspect-ratio:auto !important; margin:0 !important; border:0 !important; border-radius:0 !important; box-shadow:none !important; z-index:9999; }
+.fs-exit { position:fixed; top:10px; left:50%; transform:translateX(-50%); z-index:10000; padding:6px 16px; border:1px solid var(--border); border-radius:20px; background:rgba(26,16,41,.92); color:var(--text); font:inherit; font-size:13px; cursor:pointer; }
+.fs-exit[hidden] { display:none; }
 .game-hint { max-width:900px; margin:12px auto 0; color:var(--text2); font-size:13px; text-align:center; }
 </style>
 
@@ -1408,6 +1417,26 @@ $ pacman -Ss запрос    # поиск в репозиториях</code></pr
         <p class="i18n" data-en="Dig up brains, hire the undead, build an empire and fight off hunters. Progress is saved automatically.">Выкапывай мозги, нанимай мертвецов, строй империю и отбивайся от охотников. Прогресс сохраняется автоматически.</p>
         <div class="tags"><span class="tag">Tycoon</span><span class="tag">Idle</span><span class="tag pink">Coalition Iron Will</span></div>
     </div>
+
+    <div class="wiki-entry card" onclick="switchTab('game-fishing')">
+        <div class="top-row">
+            <div class="ico">🎣</div>
+            <div><div class="pname"><span class="i18n" data-en="Depths">Глубина</span></div><span class="sub">Fishing / Upgrades</span></div>
+            <span class="badge active">🎮 <span class="i18n" data-en="Play">Играть</span></span>
+        </div>
+        <p class="i18n" data-en="Cast the line, earn XP and levels, upgrade your rod and reach the depths where scarier and bigger fish live.">Закидывай удочку, получай опыт и уровни, улучшай снасти и спускайся туда, где живут самые жуткие и огромные рыбы.</p>
+        <div class="tags"><span class="tag">Fishing</span><span class="tag">Levels</span><span class="tag pink">Coalition Iron Will</span></div>
+    </div>
+
+    <div class="wiki-entry card" onclick="switchTab('game-rpg')">
+        <div class="top-row">
+            <div class="ico">🧙</div>
+            <div><div class="pname"><span class="i18n" data-en="Lands of Ember">Земли Эмбера</span></div><span class="sub">Mini RPG</span></div>
+            <span class="badge active">🎮 <span class="i18n" data-en="Play">Играть</span></span>
+        </div>
+        <p class="i18n" data-en="A simple RPG: explore the map, fight monsters in turn-based battles, buy gear in the village and defeat the Dark Lord.">Простое РПГ: исследуй карту, сражайся с монстрами в пошаговых боях, покупай снаряжение в деревне и победи Тёмного лорда.</p>
+        <div class="tags"><span class="tag">RPG</span><span class="tag">Turn-based</span><span class="tag pink">Coalition Iron Will</span></div>
+    </div>
 </section>
 
 <section class="tab" id="tab-game-firefly">
@@ -1419,7 +1448,8 @@ $ pacman -Ss запрос    # поиск в репозиториях</code></pr
             <div class="tags"><span class="tag">Arcade</span><span class="tag">Mouse / Touch</span><span class="tag pink">Coalition Iron Will</span></div>
         </div>
     </div>
-    <iframe class="game-frame" id="frame-firefly" data-src="games/firefly.html" title="Светлячок"></iframe>
+    <div class="game-bar"><button class="lang-toggle fs-btn" onclick="toggleGameFullscreen('frame-firefly')" aria-label="Fullscreen">⛶ <span class="i18n" data-en="Fullscreen">На весь экран</span></button></div>
+    <iframe class="game-frame" id="frame-firefly" allowfullscreen data-src="games/firefly.html" title="Светлячок"></iframe>
     <p class="game-hint i18n" data-en="Mouse or finger moves the firefly. Keys: arrows or WASD. Your best score is saved in the browser.">Мышь или палец ведут светлячка. Клавиши: стрелки или WASD. Рекорд сохраняется в браузере.</p>
 </section>
 
@@ -1432,8 +1462,37 @@ $ pacman -Ss запрос    # поиск в репозиториях</code></pr
             <div class="tags"><span class="tag">Tycoon</span><span class="tag">Idle</span><span class="tag pink">Coalition Iron Will</span></div>
         </div>
     </div>
-    <iframe class="game-frame" id="frame-zombie" data-src="games/zombie-farm.html" data-autoheight title="Зомби-ферма"></iframe>
+    <div class="game-bar"><button class="lang-toggle fs-btn" onclick="toggleGameFullscreen('frame-zombie')" aria-label="Fullscreen">⛶ <span class="i18n" data-en="Fullscreen">На весь экран</span></button></div>
+    <iframe class="game-frame" id="frame-zombie" allowfullscreen data-src="games/zombie-farm.html" data-autoheight title="Зомби-ферма"></iframe>
     <p class="game-hint i18n" data-en="Progress is saved in the browser and the undead keep digging for a while when you are away.">Прогресс сохраняется в браузере, а нежить продолжает копать какое-то время, пока тебя нет.</p>
+</section>
+
+<section class="tab" id="tab-game-fishing">
+    <a class="back" onclick="switchTab('games')">← <span class="i18n" data-en="Back to games">Назад к играм</span></a>
+    <div class="header-info">
+        <div class="ico">🎣</div>
+        <div>
+            <div class="pname"><span class="i18n" data-en="Depths">Глубина</span> <span class="sub">Fishing / Upgrades</span></div>
+            <div class="tags"><span class="tag">Fishing</span><span class="tag">Levels</span><span class="tag pink">Coalition Iron Will</span></div>
+        </div>
+    </div>
+    <div class="game-bar"><button class="lang-toggle fs-btn" onclick="toggleGameFullscreen('frame-fishing')" aria-label="Fullscreen">⛶ <span class="i18n" data-en="Fullscreen">На весь экран</span></button></div>
+    <iframe class="game-frame" id="frame-fishing" allowfullscreen data-src="games/fishing.html" data-autoheight title="Глубина"></iframe>
+    <p class="game-hint i18n" data-en="Hold the mouse or your finger to lower the hook, release to reel in. Every fish gives XP and coins; spend coins on the rod, line, reel and hook.">Зажми мышь или палец — крючок идёт вниз, отпусти — поднимется. Каждая рыба даёт опыт и монеты; на монеты улучшай удочку, леску, катушку и крючок.</p>
+</section>
+
+<section class="tab" id="tab-game-rpg">
+    <a class="back" onclick="switchTab('games')">← <span class="i18n" data-en="Back to games">Назад к играм</span></a>
+    <div class="header-info">
+        <div class="ico">🧙</div>
+        <div>
+            <div class="pname"><span class="i18n" data-en="Lands of Ember">Земли Эмбера</span> <span class="sub">Mini RPG</span></div>
+            <div class="tags"><span class="tag">RPG</span><span class="tag">Turn-based</span><span class="tag pink">Coalition Iron Will</span></div>
+        </div>
+    </div>
+    <div class="game-bar"><button class="lang-toggle fs-btn" onclick="toggleGameFullscreen('frame-rpg')" aria-label="Fullscreen">⛶ <span class="i18n" data-en="Fullscreen">На весь экран</span></button></div>
+    <iframe class="game-frame" id="frame-rpg" allowfullscreen data-src="games/rpg.html" data-autoheight title="Земли Эмбера"></iframe>
+    <p class="game-hint i18n" data-en="Arrows / WASD or tap the map to move. Progress is saved in the browser.">Стрелки / WASD или касание карты — идти. Прогресс сохраняется в браузере.</p>
 </section>
 
 <!-- КОНТАКТЫ -->
@@ -1455,6 +1514,8 @@ $ pacman -Ss запрос    # поиск в репозиториях</code></pr
 
 </main>
 
+<button class="fs-exit" id="fsExit" hidden onclick="exitGameFullscreen()">✕ <span class="i18n" data-en="Exit fullscreen">Выйти из полного экрана</span></button>
+
 <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
     <button class="active" data-tab="home"><span class="mi">🏠</span><span class="i18n" data-en="Home">Главная</span></button>
     <button data-tab="wiki"><span class="mi">📚</span><span class="i18n" data-en="Wiki">Вики</span></button>
@@ -1474,7 +1535,7 @@ $ pacman -Ss запрос    # поиск в репозиториях</code></pr
 <script>
 // НАВИГАЦИЯ
 function switchTab(tabId, push = true) {
-    const validTabs = ['home', 'wiki', 'games', 'game-firefly', 'game-zombie', 'contact', 'project-roza', 'project-solarium', 'project-blackorder', 'project-coalition'];
+    const validTabs = ['home', 'wiki', 'games', 'game-firefly', 'game-zombie', 'game-fishing', 'game-rpg', 'contact', 'project-roza', 'project-solarium', 'project-blackorder', 'project-coalition'];
     if (!validTabs.includes(tabId) || !document.getElementById('tab-' + tabId)) tabId = 'home';
     document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
     document.getElementById('tab-' + tabId).classList.add('active');
@@ -1506,9 +1567,43 @@ document.querySelectorAll('.footer a[href^="#"]').forEach(link => {
         }
     });
 });
+// ПОЛНЫЙ ЭКРАН ДЛЯ ИГР
+function gamePseudoFrame() { return document.querySelector('.game-frame.pseudo-fs'); }
+function enterPseudoFullscreen(frame) {
+    frame.classList.add('pseudo-fs');
+    document.body.classList.add('fs-active');
+    document.getElementById('fsExit').hidden = false;
+    frame.focus();
+}
+function exitGameFullscreen() {
+    const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+    if (fsEl) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); }
+    const frame = gamePseudoFrame();
+    if (frame) frame.classList.remove('pseudo-fs');
+    document.body.classList.remove('fs-active');
+    document.getElementById('fsExit').hidden = true;
+}
+function toggleGameFullscreen(id) {
+    const frame = document.getElementById(id);
+    if (!frame) return;
+    if (frame.classList.contains('pseudo-fs') || document.fullscreenElement === frame || document.webkitFullscreenElement === frame) {
+        exitGameFullscreen();
+        return;
+    }
+    const request = frame.requestFullscreen || frame.webkitRequestFullscreen;
+    if (!request) { enterPseudoFullscreen(frame); return; }
+    try {
+        Promise.resolve(request.call(frame)).then(() => frame.focus()).catch(() => enterPseudoFullscreen(frame));
+    } catch (error) {
+        enterPseudoFullscreen(frame);
+    }
+}
+document.addEventListener('keydown', event => { if (event.key === 'Escape' && gamePseudoFrame()) exitGameFullscreen(); });
+
 // высота iframe с игрой подстраивается под её содержимое
 window.addEventListener('message', event => {
     const data = event.data;
+    if (data && data.type === 'game-escape' && gamePseudoFrame()) { exitGameFullscreen(); return; }
     if (!data || data.type !== 'game-height' || typeof data.h !== 'number') return;
     document.querySelectorAll('iframe.game-frame[data-autoheight]').forEach(frame => {
         if (frame.contentWindow === event.source) frame.style.height = Math.max(520, Math.ceil(data.h)) + 'px';
