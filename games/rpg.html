@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Земли Эмбера — мини-РПГ</title>
+<style>
+:root{--bg:#231c16;--panel:#3a2e23;--panel2:#4b3b2c;--ink:#f1e6d2;--mute:#b4a58c;--gold:#e8c170;--hp:#d9534f;--mp:#4a90d9;--xp:#7bbf6a}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,'Times New Roman',serif}
+body{padding:12px}
+.wrap{max-width:900px;margin:0 auto}
+.hud{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:10px;font-size:14px}
+.hud>div{background:var(--panel);border-radius:10px;padding:6px 10px}
+.bar{height:8px;border-radius:4px;background:#1a140f;margin-top:4px;overflow:hidden}
+.bar i{display:block;height:100%;width:0}
+#hpb{background:var(--hp)}#mpb{background:var(--mp)}#xpb{background:var(--xp)}
+canvas,.panel{display:block;width:100%;border-radius:14px}
+canvas{aspect-ratio:3/2;touch-action:none;cursor:pointer;background:#4f8a4a}
+.panel{display:none;background:var(--panel);padding:18px;min-height:300px}
+.panel h2{margin:0 0 10px;color:var(--gold);font-size:22px}
+.fight{display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:center}
+.big{font-size:clamp(60px,14vw,100px);line-height:1.1}
+.log{min-height:66px;margin:12px 0;padding:8px 12px;border-radius:10px;background:#1a140f;font-size:14px;line-height:1.5}
+.btns{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+button{font:inherit;color:var(--ink);background:var(--panel2);border:0;border-radius:10px;padding:10px 12px;cursor:pointer;text-align:left}
+button:hover:not(:disabled){background:#5d4a37}
+button:disabled{opacity:.45;cursor:not-allowed}
+button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.gold{background:var(--gold);color:#2a1d10;font-weight:700;text-align:center}
+.gold:hover:not(:disabled){background:#f2d08c}
+.row{display:flex;justify-content:space-between;gap:10px}
+.hint{color:var(--mute);font-size:13px;margin:10px 0 0}
+.reset{background:none;color:var(--mute);text-decoration:underline;padding:0;font-size:12px}
+@media(max-width:600px){body{padding:8px}.hud{font-size:12px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hud">
+    <div>Ур. <b id="lv"></b><div class="bar"><i id="xpb"></i></div></div>
+    <div>❤️ <span id="hp"></span><div class="bar"><i id="hpb"></i></div></div>
+    <div>🔷 <span id="mp"></span><div class="bar"><i id="mpb"></i></div></div>
+    <div>⚔️ <b id="atk"></b> · 🛡️ <b id="def"></b></div>
+    <div>💰 <b id="gold"></b> · 🧪 <b id="pot"></b></div>
+  </div>
+  <canvas id="c" aria-label="Карта"></canvas>
+  <div class="panel" id="battle">
+    <div class="fight">
+      <div><div class="big" id="bm"></div><b id="bn"></b><div class="bar"><i id="ehp" style="background:var(--hp)"></i></div><small id="ehpt"></small></div>
+      <div><div class="big">🧙</div><b>Герой</b><div class="bar"><i id="hhp" style="background:var(--hp)"></i></div><small id="hhpt"></small></div>
+    </div>
+    <div class="log" id="log"></div>
+    <div class="btns" id="bbtn">
+      <button data-a="atk">⚔️ Удар</button>
+      <button data-a="fire">🔥 Огненный шар <small>(6 МП)</small></button>
+      <button data-a="pot">🧪 Зелье <small>(+35)</small></button>
+      <button data-a="run">🏃 Бежать</button>
+    </div>
+  </div>
+  <div class="panel" id="shop">
+    <h2>🏠 Деревня</h2>
+    <div class="btns" id="items"></div>
+    <p class="hint" id="shopmsg"></p>
+    <div class="btns" style="margin-top:10px"><button class="gold" id="leave">Выйти в поле</button></div>
+  </div>
+  <p class="hint">Стрелки / WASD или касание карты — идти. В траве, лесу и болоте встречаются монстры. Деревня 🏠 — лавка и отдых. Победи 😈 в замке 🏰 на дальнем краю болота.
+    <button class="reset" id="reset">Начать заново</button></p>
+</div>
+<script>
+addEventListener('keydown',e=>{if(e.key==='Escape'&&parent!==window)parent.postMessage({type:'game-escape'},'*')});
+const TS=60,COLS=15,ROWS=10,KEY='mini-rpg-v1';
+const MAP=['TTTTTTTTTTTTTTT','T.H...T..SSSSBT','T.....T..SSSSST','T..TT.....TTSST','T..TT..FF.....T','T.....FFFF.WW.T','T..W..FFFF.WW.T','TWWW...FF.....T','T.P.....T..FF.T','TTTTTTTTTTTTTTT'];
+const ZONE={'.':{p:.10,m:[
+  {n:'Слизень',e:'🟢',hp:14,atk:4,xp:7,g:5},{n:'Волк',e:'🐺',hp:24,atk:7,xp:13,g:9},{n:'Кабан',e:'🐗',hp:30,atk:8,xp:16,g:11}]},
+ F:{p:.16,m:[{n:'Гоблин',e:'👺',hp:45,atk:10,xp:28,g:20},{n:'Скелет',e:'💀',hp:55,atk:12,xp:35,g:25},{n:'Паук',e:'🕷️',hp:48,atk:13,xp:32,g:22}]},
+ S:{p:.22,m:[{n:'Огр',e:'👹',hp:95,atk:17,xp:75,g:55},{n:'Дракончик',e:'🐉',hp:120,atk:20,xp:100,g:80},{n:'Призрак',e:'👻',hp:85,atk:21,xp:90,g:70}]}};
+const BOSS={n:'Тёмный лорд',e:'😈',hp:300,atk:27,xp:500,g:500,boss:1};
+const S0={hp:40,mhp:40,mp:10,mmp:10,atk:6,def:1,lvl:1,xp:0,gold:20,pot:2,x:2,y:8,sw:0,ar:0,won:0};
+let S=JSON.parse(JSON.stringify(S0));
+try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.mhp)S=r}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const $=id=>document.getElementById(id),ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const cv=$('c'),ctx=cv.getContext('2d');cv.width=COLS*TS;cv.height=ROWS*TS;
+const need=l=>20*l+10*l*l;
+const EMO='"Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif';
+
+// карта в буфер
+const bg=document.createElement('canvas');bg.width=cv.width;bg.height=cv.height;
+(function(){
+  const g=bg.getContext('2d');g.textAlign='center';g.textBaseline='middle';g.font='40px '+EMO;
+  const col={'.':'#5a9a50',T:'#5a9a50',F:'#2f5a3a',S:'#5b5b3a',W:'#2f6f9f',H:'#5a9a50',B:'#3a2f3f',P:'#5a9a50'};
+  MAP.forEach((row,y)=>[...row].forEach((c,x)=>{
+    g.fillStyle=col[c];g.fillRect(x*TS,y*TS,TS,TS);
+    g.fillStyle='rgba(0,0,0,.07)';if((x+y)%2)g.fillRect(x*TS,y*TS,TS,TS);
+    const e={T:'🌲',H:'🏠',B:'🏰'}[c];
+    if(e)g.fillText(e,x*TS+TS/2,y*TS+TS/2+3);
+    if(c==='F'&&(x*7+y*3)%4===0)g.fillText('🌳',x*TS+TS/2,y*TS+TS/2+3);
+    if(c==='S'&&(x*5+y)%3===0)g.fillText('🌿',x*TS+TS/2,y*TS+TS/2+3);
+  }));
+})();
+let mode='map',t=0;
+function draw(){
+  t+=.03;ctx.drawImage(bg,0,0);
+  ctx.fillStyle='rgba(255,255,255,.13)';
+  MAP.forEach((row,y)=>[...row].forEach((c,x)=>{if(c==='W'){const w=Math.sin(t*3+x+y)*6;ctx.fillRect(x*TS+10+w,y*TS+TS/2,TS-30,3)}}));
+  ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='42px '+EMO;
+  ctx.fillText('🧙',S.x*TS+TS/2,S.y*TS+TS/2+Math.sin(t*4)*2);
+  if(mode==='map')requestAnimationFrame(draw);
+}
+function show(m){
+  const was=mode;mode=m;cv.style.display=m==='map'?'block':'none';
+  $('battle').style.display=m==='battle'?'block':'none';
+  $('shop').style.display=m==='shop'?'block':'none';
+  if(m==='map'&&was!=='map')requestAnimationFrame(draw);
+  hud();
+}
+function hud(){
+  $('lv').textContent=S.lvl;$('hp').textContent=S.hp+'/'+S.mhp;$('mp').textContent=S.mp+'/'+S.mmp;
+  $('atk').textContent=S.atk;$('def').textContent=S.def;$('gold').textContent=S.gold;$('pot').textContent=S.pot;
+  $('hpb').style.width=S.hp/S.mhp*100+'%';$('mpb').style.width=S.mp/S.mmp*100+'%';$('xpb').style.width=S.xp/need(S.lvl)*100+'%';
+}
+
+// движение
+let lastMove=0;
+function move(dx,dy){
+  if(mode!=='map')return;
+  const nx=S.x+dx,ny=S.y+dy;
+  if(nx<0||ny<0||nx>=COLS||ny>=ROWS)return;
+  const c=MAP[ny][nx];if(c==='T'||c==='W')return;
+  S.x=nx;S.y=ny;save();
+  if(c==='H'){openShop();return}
+  if(c==='B'){startBattle(BOSS);return}
+  const z=ZONE[c==='P'?'.':c];
+  if(z&&Math.random()<z.p)startBattle(z.m[ri(0,z.m.length-1)]);
+}
+addEventListener('keydown',e=>{
+  const k=e.key.toLowerCase(),d={arrowleft:[-1,0],a:[-1,0],arrowright:[1,0],d:[1,0],arrowup:[0,-1],w:[0,-1],arrowdown:[0,1],s:[0,1]}[k];
+  if(!d)return;e.preventDefault();
+  const n=performance.now();if(n-lastMove<110)return;lastMove=n;move(d[0],d[1]);
+});
+cv.addEventListener('pointerdown',e=>{
+  const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*COLS-(S.x+.5),y=(e.clientY-r.top)/r.height*ROWS-(S.y+.5);
+  if(Math.abs(x)>Math.abs(y))move(Math.sign(x),0);else move(0,Math.sign(y));
+});
+
+// бой
+let E=null,busy=false,lines=[];
+function say(s){lines.push(s);lines=lines.slice(-3);$('log').innerHTML=lines.join('<br>')}
+function bupd(){
+  $('ehp').style.width=Math.max(0,E.hp/E.mhp*100)+'%';$('ehpt').textContent=Math.max(0,E.hp)+'/'+E.mhp;
+  $('hhp').style.width=Math.max(0,S.hp/S.mhp*100)+'%';$('hhpt').textContent=Math.max(0,S.hp)+'/'+S.mhp;
+  $('bbtn').children[1].disabled=busy||S.mp<6;$('bbtn').children[2].disabled=busy||S.pot<1||S.hp>=S.mhp;
+  $('bbtn').children[0].disabled=busy;$('bbtn').children[3].disabled=busy;hud();
+}
+function startBattle(m){
+  E=Object.assign({},m,{mhp:m.hp});busy=false;lines=[];
+  $('bm').textContent=E.e;$('bn').textContent=E.n;say('Появился '+E.n+'!');show('battle');bupd();
+}
+function act(a){
+  if(busy)return;
+  if(a==='atk'){const d=Math.max(1,S.atk+ri(-2,2));E.hp-=d;say('Ты бьёшь: −'+d)}
+  else if(a==='fire'){if(S.mp<6)return;S.mp-=6;const d=S.atk*2+ri(0,4);E.hp-=d;say('🔥 Огненный шар: −'+d)}
+  else if(a==='pot'){if(S.pot<1)return;S.pot--;const h=Math.min(35,S.mhp-S.hp);S.hp+=h;say('Зелье: +'+h+' здоровья')}
+  else if(a==='run'){
+    if(E.boss){say('Из замка не убежать!')}
+    else if(Math.random()<.55){say('Ты убежал.');busy=true;bupd();setTimeout(()=>{save();show('map')},500);return}
+    else say('Не удалось убежать!');
+  }
+  busy=true;bupd();
+  if(E.hp<=0){setTimeout(win,450);return}
+  setTimeout(enemyTurn,550);
+}
+function enemyTurn(){
+  const d=Math.max(1,E.atk+ri(-2,2)-S.def);S.hp-=d;say(E.n+' бьёт: −'+d);
+  if(S.hp<=0){S.hp=0;bupd();setTimeout(die,500);return}
+  busy=false;bupd();
+}
+function win(){
+  S.xp+=E.xp;S.gold+=E.g;let s='Победа! +'+E.xp+' опыта, +'+E.g+' золота.';
+  if(Math.random()<.2){S.pot++;s+=' Нашёл зелье!'}
+  say(s);
+  while(S.xp>=need(S.lvl)){
+    S.xp-=need(S.lvl);S.lvl++;S.mhp+=10;S.mmp+=3;S.atk+=2;if(S.lvl%2===0)S.def++;S.hp=S.mhp;S.mp=S.mmp;
+    say('⭐ Уровень '+S.lvl+'! Здоровье и мана восстановлены.');
+  }
+  if(E.boss){S.won=1;say('👑 Тёмный лорд повержен! Земли Эмбера спасены.')}
+  save();hud();
+  const b=$('bbtn');b.innerHTML='<button class="gold" id="ok" style="grid-column:1/-1">Продолжить</button>';
+  $('ok').onclick=()=>{b.innerHTML=BTN;bindBtns();show('map')};
+}
+function die(){
+  const lost=Math.floor(S.gold/2);S.gold-=lost;S.hp=S.mhp;S.mp=S.mmp;S.x=2;S.y=2;
+  say('Ты пал в бою… Очнулся в деревне, потеряв '+lost+' золота.');save();
+  const b=$('bbtn');b.innerHTML='<button class="gold" id="ok" style="grid-column:1/-1">Очнуться</button>';
+  $('ok').onclick=()=>{b.innerHTML=BTN;bindBtns();show('map')};
+}
+const BTN=$('bbtn').innerHTML;
+function bindBtns(){[...$('bbtn').children].forEach(b=>b.onclick=()=>act(b.dataset.a))}
+bindBtns();
+
+// деревня
+function openShop(){show('shop');items()}
+function items(msg){
+  const sc=Math.round(50*Math.pow(S.sw+1,1.3)),ac=Math.round(45*Math.pow(S.ar+1,1.3));
+  const L=[
+    ['🧪 Зелье лечения',15,()=>{S.pot++}],
+    ['🛌 Отдых (всё здоровье и мана)',8,()=>{S.hp=S.mhp;S.mp=S.mmp}],
+    S.sw<6?['⚔️ Лучший меч (+3 АТК)',sc,()=>{S.sw++;S.atk+=3}]:null,
+    S.ar<6?['🛡️ Лучшая броня (+2 ЗАЩ)',ac,()=>{S.ar++;S.def+=2}]:null
+  ].filter(Boolean);
+  $('items').innerHTML='';
+  L.forEach(it=>{
+    const b=document.createElement('button');b.className='row';b.innerHTML='<span>'+it[0]+'</span><b>💰 '+it[1]+'</b>';
+    b.disabled=S.gold<it[1];
+    b.onclick=()=>{S.gold-=it[1];it[2]();save();items('Куплено!')};
+    $('items').appendChild(b);
+  });
+  $('shopmsg').textContent=msg||'Купи снаряжение, пока не пошёл дальше в лес.';hud();
+}
+$('leave').onclick=()=>{save();show('map')};
+$('reset').onclick=()=>{if(confirm('Начать игру заново?')){S=JSON.parse(JSON.stringify(S0));save();show('map')}};
+show('map');requestAnimationFrame(draw);
+if(window.parent!==window){
+  const post=()=>parent.postMessage({type:'game-height',h:document.body.offsetHeight},'*');
+  new ResizeObserver(post).observe(document.body);post();
+}
+</script>
+</body>
+</html>

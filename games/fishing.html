@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Глубина — рыбалка</title>
+<style>
+:root{--bg:#0b1d30;--panel:#143049;--panel2:#1c4062;--ink:#e6f2f7;--mute:#8fb0c4;--amber:#ffb454}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,'Times New Roman',serif}
+body{padding:12px}
+.wrap{max-width:900px;margin:0 auto}
+.top{display:flex;gap:14px;align-items:center;margin-bottom:8px;font-size:15px;flex-wrap:wrap}
+.top b{color:var(--amber)}
+.xp{flex:1;min-width:140px;height:10px;border-radius:5px;background:#0a1826;overflow:hidden}
+.xp i{display:block;height:100%;width:0;background:var(--amber)}
+canvas{display:block;width:100%;aspect-ratio:3/2;border-radius:14px;touch-action:none;cursor:pointer;background:#123}
+.shop{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-top:10px}
+.up{display:block;width:100%;text-align:left;padding:10px 12px;border:0;border-radius:12px;background:var(--panel);color:var(--ink);font:inherit;cursor:pointer}
+.up:hover:not(:disabled){background:var(--panel2)}
+.up:disabled{opacity:.55;cursor:not-allowed}
+.up b{display:block;font-size:15px}
+.up small{display:block;color:var(--mute);font-size:12px;margin:2px 0 4px}
+.up span{color:var(--amber);font-weight:700}
+.dex{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;font-size:13px}
+.chip{padding:4px 10px;border-radius:999px;background:var(--panel)}
+.chip.no{color:var(--mute);background:#0f2438}
+.hint{color:var(--mute);font-size:13px;margin:10px 0 0}
+button:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+@media(max-width:600px){body{padding:8px}.top{font-size:13px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <span>Ур. <b id="lv">1</b></span>
+    <div class="xp" title="Опыт"><i id="xp"></i></div>
+    <span>💰 <b id="coins">0</b></span>
+    <span id="bonus" style="color:var(--mute);font-size:13px"></span>
+  </div>
+  <canvas id="c" aria-label="Игровое поле"></canvas>
+  <div class="shop" id="shop"></div>
+  <div class="dex" id="dex"></div>
+  <p class="hint">Зажми мышь или палец — крючок идёт вниз, отпусти — поднимется. Веди лодку вбок. Space тоже работает.</p>
+</div>
+<script>
+addEventListener('keydown',e=>{if(e.key==='Escape'&&parent!==window)parent.postMessage({type:'game-escape'},'*')});
+const W=900,H=600,WORLD=2400,KEY='fishing-v1';
+const $=id=>document.getElementById(id),R=(a,b)=>a+Math.random()*(b-a);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const cv=$('c'),ctx=cv.getContext('2d');cv.width=W;cv.height=H;
+const TYPES=[
+ {n:'Плотва',t:0,y:[80,300],s:22,xp:5,c:3,col:'#9fd1c7'},
+ {n:'Окунь',t:0,y:[120,420],s:26,xp:8,c:5,col:'#c9a24a'},
+ {n:'Щука',t:1,y:[300,720],s:40,xp:20,c:15,col:'#6f9b5a'},
+ {n:'Сом',t:2,y:[600,1100],s:58,xp:45,c:40,col:'#7a7890'},
+ {n:'Удильщик',t:3,y:[1000,1500],s:56,xp:90,c:90,col:'#4a3a63',lure:1},
+ {n:'Глубинный угорь',t:4,y:[1400,1900],s:84,xp:180,c:200,col:'#5c8f7a',eel:1},
+ {n:'Зубастый хищник',t:5,y:[1800,2300],s:104,xp:400,c:450,col:'#8a2f3f',teeth:1},
+ {n:'Левиафан',t:6,y:[2100,2380],s:150,xp:1000,c:1200,col:'#33245a',teeth:1,eyes:1}
+];
+const ROD=['Бамбуковая','Стеклопластиковая','Карбоновая','Стальная','Титановая','Глубинная','Легендарная'];
+const UP=[
+ {k:'rod',n:'Удочка',max:6,base:90,now:l=>ROD[l],next:l=>'откроет: '+TYPES.find(t=>t.t===l+1).n},
+ {k:'line',n:'Леска',max:8,base:60,now:l=>'глубина до '+(30+25*l)+' м',next:l=>'до '+(30+25*(l+1))+' м'},
+ {k:'reel',n:'Катушка',max:5,base:50,now:l=>'скорость ×'+(1+l*.4).toFixed(1),next:l=>'×'+(1+(l+1)*.4).toFixed(1)},
+ {k:'hook',n:'Крючок',max:4,base:120,now:l=>'рыб за заброс: '+(l+1),next:l=>'рыб за заброс: '+(l+2)}
+];
+let S={coins:0,xp:0,lvl:1,rod:0,line:0,reel:0,hook:0,caught:{}};
+try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.caught)S=r}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const need=l=>Math.round(25*Math.pow(l,1.7));
+const cost=u=>Math.round(u.base*Math.pow(1.75,S[u.k]));
+
+// shop DOM
+UP.forEach(u=>{const b=document.createElement('button');b.className='up';b.dataset.k=u.k;$('shop').appendChild(b)});
+$('shop').addEventListener('click',e=>{
+  const b=e.target.closest('.up');if(!b)return;
+  const u=UP.find(x=>x.k===b.dataset.k);
+  if(S[u.k]<u.max&&S.coins>=cost(u)){S.coins-=cost(u);S[u.k]++;say(u.n+' улучшена!');save();ui()}
+});
+function ui(){
+  $('lv').textContent=S.lvl;$('coins').textContent=S.coins;
+  $('xp').style.width=Math.min(100,S.xp/need(S.lvl)*100)+'%';
+  $('bonus').textContent='бонус к монетам +'+(S.lvl*5-5)+'%';
+  UP.forEach((u,i)=>{
+    const b=$('shop').children[i],max=S[u.k]>=u.max;
+    b.disabled=max||S.coins<cost(u);
+    b.innerHTML='<b>'+u.n+' · '+u.now(S[u.k])+'</b><small>'+(max?'Максимальный уровень':'Дальше: '+u.next(S[u.k]))+'</small>'+(max?'':'<span>💰 '+cost(u)+'</span>');
+  });
+  $('dex').innerHTML=TYPES.map(t=>S.caught[t.n]?'<span class="chip">'+t.n+' ×'+S.caught[t.n]+'</span>':'<span class="chip no">❔ от '+t.y[0]/10+' м</span>').join('');
+}
+
+// мир
+let fishes=[],bubbles=[],floats=[],msg='',msgT=0,t=0;
+function spawn(){
+  const y=R(80,2380),c=TYPES.filter(a=>y>=a.y[0]&&y<=a.y[1]),T=c[Math.floor(R(0,c.length))];
+  return {T,x:R(0,W),y,by:y,dir:Math.random()<.5?-1:1,sp:R(30,80),ph:R(0,6),flee:0,hooked:false};
+}
+for(let i=0;i<48;i++)fishes.push(spawn());
+for(let i=0;i<30;i++)bubbles.push({x:R(0,W),y:R(0,WORLD),r:R(1.5,4),v:R(15,40)});
+const boat={x:W/2},hook={x:W/2+34,y:0,st:'idle',fish:[],lock:false};
+let px=W/2,down=false;
+function say(s){msg=s;msgT=3}
+function mapX(e){const r=cv.getBoundingClientRect();px=(e.clientX-r.left)*W/r.width}
+cv.addEventListener('pointerdown',e=>{mapX(e);down=true;cv.setPointerCapture(e.pointerId)});
+cv.addEventListener('pointermove',mapX);
+addEventListener('pointerup',()=>{down=false});
+addEventListener('pointercancel',()=>{down=false});
+addEventListener('keydown',e=>{if(e.key===' '){down=true;e.preventDefault()}});
+addEventListener('keyup',e=>{if(e.key===' ')down=false});
+
+function collect(){
+  let gold=0,xp=0;
+  for(const f of hook.fish){
+    const c=Math.round(f.T.c*(1+.05*(S.lvl-1)));
+    gold+=c;xp+=f.T.xp;S.caught[f.T.n]=(S.caught[f.T.n]||0)+1;
+    floats.push({x:hook.x,y:-30-floats.length*18,l:1.4,txt:f.T.n+' +'+c+'💰 +'+f.T.xp+' оп.'});
+    fishes[fishes.indexOf(f)]=spawn();
+  }
+  if(hook.fish.length){
+    S.coins+=gold;S.xp+=xp;
+    while(S.xp>=need(S.lvl)){S.xp-=need(S.lvl);S.lvl++;say('Новый уровень: '+S.lvl+'! Монет больше на 5%')}
+    save();ui();
+  }
+  hook.fish=[];hook.st='idle';hook.y=0;hook.lock=true;
+}
+function update(dt){
+  t+=dt;if(msgT>0)msgT-=dt;
+  boat.x+=(px-boat.x)*Math.min(1,dt*5);
+  const cap=1+S.hook,maxD=300+250*S.line,rs=(220+90*S.reel),hr=9+S.hook*2;
+  if(!down)hook.lock=false;
+  if(hook.st==='idle'){hook.x=boat.x+34;hook.y=0;if(down&&!hook.lock)hook.st='drop'}
+  else{
+    hook.x+=clamp(px+34-hook.x,-250*dt,250*dt);
+    if(hook.st==='drop'){
+      if(down&&hook.y<maxD&&hook.fish.length<cap)hook.y+=190*dt;else hook.st='reel';
+    }else{hook.y-=rs*dt;if(hook.y<=0)collect()}
+    for(const f of fishes){
+      if(f.hooked||f.flee>0||hook.fish.length>=cap)continue;
+      if(Math.hypot(f.x-hook.x,f.y-hook.y)<f.T.s*.55+hr){
+        if(f.T.t<=S.rod){f.hooked=true;hook.fish.push(f)}
+        else{f.flee=1.5;f.dir=f.x<hook.x?-1:1;if(msgT<=0)say(f.T.n+' слишком сильная — нужна удочка покрепче')}
+      }
+    }
+  }
+  for(const f of fishes){
+    if(f.hooked)continue;
+    if(f.flee>0)f.flee-=dt;
+    f.x+=f.dir*f.sp*(f.flee>0?4:1)*dt;
+    f.y=f.by+Math.sin(t*1.5+f.ph)*8;
+    if(f.x>W+160)f.x=-160;if(f.x<-160)f.x=W+160;
+  }
+  for(const b of bubbles){b.y-=b.v*dt;if(b.y<0){b.y=WORLD;b.x=R(0,W)}}
+  for(let i=floats.length-1;i>=0;i--){floats[i].l-=dt;if(floats[i].l<=0)floats.splice(i,1)}
+}
+
+const STOPS=[[0,[46,139,154]],[600,[27,95,127]],[1200,[18,58,99]],[1800,[11,29,64]],[2400,[5,6,15]]];
+function water(y){
+  y=clamp(y,0,WORLD);
+  for(let i=1;i<STOPS.length;i++)if(y<=STOPS[i][0]){
+    const a=STOPS[i-1],b=STOPS[i],k=(y-a[0])/(b[0]-a[0]);
+    return 'rgb('+a[1].map((v,j)=>Math.round(v+(b[1][j]-v)*k)).join(',')+')';
+  }
+}
+function drawFish(T,x,y,dir,sc,rot,tt,glowEye){
+  const s=T.s,ry=T.eel?s*.16:s*.42,w=Math.sin(tt*6)*ry*.5;
+  ctx.save();ctx.translate(x,y);if(rot)ctx.rotate(-Math.PI/2);ctx.scale(dir*sc,sc);
+  ctx.fillStyle=T.col;
+  ctx.beginPath();ctx.ellipse(0,0,s,ry,0,0,6.283);ctx.fill();
+  ctx.beginPath();ctx.moveTo(-s*.85,0);ctx.lineTo(-s*1.3,-ry*1.1+w);ctx.lineTo(-s*1.3,ry*1.1+w);ctx.fill();
+  ctx.beginPath();ctx.moveTo(-s*.1,-ry*.9);ctx.lineTo(-s*.4,-ry*1.7);ctx.lineTo(-s*.6,-ry*.8);ctx.fill();
+  if(T.lure){
+    ctx.strokeStyle=T.col;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(s*.5,-ry*.9);ctx.quadraticCurveTo(s*.9,-ry*2.6,s*1.2,-ry*1.6);ctx.stroke();
+    const g=ctx.createRadialGradient(s*1.2,-ry*1.6,0,s*1.2,-ry*1.6,16);g.addColorStop(0,'rgba(255,220,120,1)');g.addColorStop(1,'rgba(255,180,84,0)');
+    ctx.fillStyle=g;ctx.beginPath();ctx.arc(s*1.2,-ry*1.6,16,0,6.283);ctx.fill();
+  }
+  const er=Math.max(2.5,s*.07);
+  ctx.fillStyle=T.t>=4?'#ff4a4a':'#fff';
+  if(T.t>=4){ctx.shadowColor='#ff4a4a';ctx.shadowBlur=10}
+  ctx.beginPath();ctx.arc(s*.55,-ry*.25,er,0,6.283);ctx.fill();
+  if(T.eyes)for(const p of [[.3,-.55],[.08,-.5],[.42,.35]]){ctx.beginPath();ctx.arc(s*p[0],ry*p[1],er*.7,0,6.283);ctx.fill()}
+  ctx.shadowBlur=0;
+  if(T.t<4){ctx.fillStyle='#111';ctx.beginPath();ctx.arc(s*.58,-ry*.25,er*.5,0,6.283);ctx.fill()}
+  if(T.teeth){ctx.fillStyle='#f4efe4';for(let i=0;i<5;i++){const x0=s*(.5+.09*i);ctx.beginPath();ctx.moveTo(x0,ry*.1);ctx.lineTo(x0+s*.045,ry*.1+s*.11);ctx.lineTo(x0+s*.09,ry*.1);ctx.fill()}}
+  ctx.restore();
+}
+function draw(){
+  const camY=Math.max(-150,Math.min(hook.y-280,WORLD-H+60));
+  for(let sy=0;sy<H;sy+=10){
+    const wy=sy+camY;
+    ctx.fillStyle=wy<0?'#f2c48d':water(wy);ctx.fillRect(0,sy,W,11);
+  }
+  if(camY<0){
+    const sy0=-camY;
+    ctx.fillStyle='#fbe6c2';ctx.fillRect(0,0,W,Math.max(0,sy0-60));
+    ctx.fillStyle='rgba(255,255,255,.12)';ctx.fillRect(0,sy0,W,3);
+  }
+  ctx.fillStyle='rgba(230,242,247,.25)';
+  for(const b of bubbles){const sy=b.y-camY;if(sy>-10&&sy<H+10){ctx.beginPath();ctx.arc(b.x+Math.sin(t+b.y)*4,sy,b.r,0,6.283);ctx.fill()}}
+  for(const f of fishes){
+    if(f.hooked)continue;
+    const sy=f.y-camY;if(sy<-200||sy>H+200)continue;
+    drawFish(f.T,f.x,sy,f.dir,1,false,t+f.ph,false);
+  }
+  // лодка и леска
+  const bx=boat.x,by=-18-camY,tipX=bx+34,tipY=-48-camY;
+  if(by>-80&&by<H+80){
+    ctx.fillStyle='#7a4a2a';ctx.beginPath();ctx.moveTo(bx-46,by);ctx.lineTo(bx+46,by);ctx.lineTo(bx+32,by+20);ctx.lineTo(bx-32,by+20);ctx.fill();
+    ctx.fillStyle='#d9b38c';ctx.beginPath();ctx.arc(bx-8,by-14,9,0,6.283);ctx.fill();
+    ctx.fillStyle='#3e6b8a';ctx.fillRect(bx-17,by-6,18,8);
+    ctx.strokeStyle='#4b3220';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(bx,by-4);ctx.lineTo(tipX,tipY);ctx.stroke();
+  }
+  const hy=hook.y-camY;
+  ctx.strokeStyle='rgba(255,255,255,.7)';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(tipX,tipY);ctx.lineTo(hook.x,hy);ctx.stroke();
+  ctx.strokeStyle='#ffb454';ctx.lineWidth=3;ctx.beginPath();ctx.arc(hook.x,hy+8,7+S.hook,Math.PI*1.1,Math.PI*2.4);ctx.stroke();
+  let off=hy+10;
+  hook.fish.forEach((f,i)=>{
+    const sc=.5,len=f.T.s*sc*1.1;
+    drawFish(f.T,hook.x+Math.sin(t*6+i)*3,off+len,1,sc,true,t*2,false);off+=len*2.1;
+  });
+  // интерфейс
+  ctx.fillStyle='rgba(8,20,32,.55)';ctx.fillRect(10,10,200,30);
+  ctx.fillStyle='#e6f2f7';ctx.font='15px Georgia,serif';ctx.textAlign='left';
+  ctx.fillText('Глубина '+Math.round(Math.max(0,hook.y)/10)+' м · улов '+hook.fish.length+'/'+(1+S.hook),18,30);
+  if(hook.st==='idle'&&!down){ctx.textAlign='center';ctx.fillStyle='rgba(60,40,20,.8)';ctx.font='16px Georgia,serif';ctx.fillText('Зажми, чтобы опустить крючок',W/2,70);}
+  if(msgT>0){ctx.textAlign='center';ctx.font='bold 18px Georgia,serif';ctx.fillStyle='rgba(8,20,32,.75)';const mw=ctx.measureText(msg).width+30;ctx.fillRect(W/2-mw/2,H-56,mw,34);ctx.fillStyle='#ffb454';ctx.fillText(msg,W/2,H-33)}
+  ctx.textAlign='center';ctx.font='bold 16px Georgia,serif';
+  for(const f of floats){ctx.fillStyle='rgba(255,230,160,'+Math.min(1,f.l)+')';ctx.fillText(f.txt,f.x,-30-camY-(1.4-f.l)*40+f.y+30)}
+}
+let last=performance.now();
+function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;update(dt);draw();requestAnimationFrame(loop)}
+ui();requestAnimationFrame(loop);
+setInterval(save,10000);
+if(window.parent!==window){
+  const post=()=>parent.postMessage({type:'game-height',h:document.body.offsetHeight},'*');
+  new ResizeObserver(post).observe(document.body);post();
+}
+</script>
+</body>
+</html>
