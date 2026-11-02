@@ -7,6 +7,10 @@
 <style>
 :root{--bg:#25242d;--panel:#34333f;--panel2:#3f3e4c;--bone:#efe6d2;--blood:#c8463a;--teal:#7fb7a4;--pus:#d8c35a;--mute:#a9a5b5}
 *{box-sizing:border-box}
+html,body,canvas,button{-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
+#fsx{position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:99999;padding:6px 14px;border:0;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;font:13px Georgia,serif;cursor:pointer}
+#fsx:hover{background:rgba(0,0,0,.8)}#fsx[hidden]{display:none}
+
 html,body{margin:0;background:var(--bg);color:var(--bone);font-family:Georgia,'Times New Roman',serif}
 body{padding:14px;min-height:100%}
 .wrap{max-width:1000px;margin:0 auto}
@@ -20,7 +24,8 @@ header p{margin:4px 0 0;color:var(--mute);font-size:clamp(14px,2.4vw,17px)}
 .stat{font-size:clamp(34px,8vw,52px);font-weight:700;line-height:1.1}
 .stat small{display:block;font-size:15px;font-weight:400;color:var(--mute)}
 .rank{display:inline-block;margin:8px 0 4px;padding:3px 12px;border-radius:999px;background:var(--panel2);color:var(--pus);font-size:14px}
-#dig{margin:14px auto 6px;width:min(220px,60vw);aspect-ratio:1;border-radius:50%;border:0;cursor:pointer;font-size:clamp(70px,18vw,104px);line-height:1;background:radial-gradient(circle at 50% 35%,#4a6a60,#2f453e);box-shadow:inset 0 -10px 0 rgba(0,0,0,.25),0 8px 0 #1c2a26;transition:transform .06s}
+#dig{display:flex;align-items:center;justify-content:center;padding:0;margin:14px auto 6px;width:min(220px,60vw);aspect-ratio:1;border-radius:50%;border:0;cursor:pointer;font-size:clamp(70px,18vw,104px);line-height:1;background:radial-gradient(circle at 50% 35%,#4a6a60,#2f453e);box-shadow:inset 0 -10px 0 rgba(0,0,0,.25),0 8px 0 #1c2a26;transition:transform .06s}
+#dig svg{width:72%;height:72%}
 #dig:active{transform:translateY(5px);box-shadow:inset 0 -10px 0 rgba(0,0,0,.25),0 3px 0 #1c2a26}
 button:focus-visible{outline:3px solid var(--pus);outline-offset:3px}
 .hint{color:var(--mute);font-size:14px;margin:0}
@@ -36,7 +41,7 @@ h2{margin:0 0 10px;font-size:19px;color:var(--bone)}
 .item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:10px 12px;border:0;border-radius:12px;background:var(--panel2);color:var(--bone);font:inherit;cursor:pointer}
 .item:hover:not(:disabled){background:#4a4959}
 .item:disabled{opacity:.5;cursor:not-allowed}
-.ic{font-size:30px;width:40px;text-align:center}
+.ic{width:40px;height:34px;display:flex;align-items:center;justify-content:center}.ic svg{width:32px;height:32px}
 .tx{flex:1;min-width:0}
 .tx b{display:block;font-size:16px}
 .tx small{color:var(--mute);font-size:13px;line-height:1.3;display:block}
@@ -60,11 +65,11 @@ h2{margin:0 0 10px;font-size:19px;color:var(--bone)}
     <section class="card stage">
       <div class="stat"><span id="brains">0</span><small>мозгов · <span id="cps">0</span> в секунду</small></div>
       <div class="rank" id="rank">Мелкий могильщик</div>
-      <button id="dig" aria-label="Выкопать мозги">🧟</button>
+      <button id="dig" aria-label="Выкопать мозги"></button>
       <p class="hint">Нажимай на зомби — каждый клик приносит <b id="pow">1</b></p>
       <p id="msg" aria-live="polite"></p>
       <div id="raid">
-        <b>🔦 Охотники у ворот! Отбейся: 10 ударов за 10 секунд</b>
+        <b>Охотники у ворот! Отбейся: 10 ударов за 10 секунд</b>
         <button id="fight">Отбиться (<span id="hits">0</span>/10)</button>
         <div class="bar"><i id="rbar"></i></div>
       </div>
@@ -80,21 +85,36 @@ h2{margin:0 0 10px;font-size:19px;color:var(--bone)}
 </div>
 <script>
 addEventListener('keydown',e=>{if(e.key==='Escape'&&parent!==window)parent.postMessage({type:'game-escape'},'*')});
+const IC={
+zombie:`<circle cx="16" cy="17" r="11" fill="#8fbf8a"/><path d="M6.5 13C8 4 24 4 25.5 13c-3-3-16-3-19 0z" fill="#3b4a3a"/><circle cx="12" cy="15.5" r="3" fill="#fff"/><circle cx="21" cy="15.5" r="2.4" fill="#fff"/><circle cx="12.6" cy="15.9" r="1.2" fill="#222"/><circle cx="21.4" cy="15.7" r="1" fill="#222"/><path d="M10 22.5h12" stroke="#2b3a2b" stroke-width="2"/><path d="M13 20.5v4M16 20.5v4M19 20.5v4" stroke="#2b3a2b" stroke-width="1.2"/>`,
+grave:`<path d="M8 28V13a8 8 0 0116 0v15z" fill="#9aa0a6"/><path d="M16 12v9M12 15h8" stroke="#555" stroke-width="2"/><path d="M4 28h24" stroke="#5a4a3a" stroke-width="3"/>`,
+flask:`<path d="M12 4h8v7l6 13a3 3 0 01-3 4H9a3 3 0 01-3-4l6-13z" fill="#7fb7a4"/><path d="M11 4h10" stroke="#ddd" stroke-width="2"/><circle cx="14" cy="22" r="2" fill="#e8f5ef"/>`,
+morgue:`<path d="M4 15L16 5l12 10v13H4z" fill="#8a7f94"/><rect x="13" y="19" width="6" height="9" fill="#2b2433"/><path d="M16 8v5M13.5 10.5h5" stroke="#fff" stroke-width="1.6"/>`,
+factory:`<path d="M3 28V14l8 5v-5l8 5v-5l8 5v9z" fill="#7d7a86"/><rect x="21" y="6" width="4" height="11" fill="#5c5a66"/><circle cx="23" cy="4" r="2.5" fill="#bbb"/>`,
+globe:`<circle cx="16" cy="16" r="12" fill="#4a8fbf"/><path d="M8 12c4-2 6 1 5 4s-3 2-3 5M18 7c2 3 7 3 8 6M17 20c3-1 6 1 6 4" fill="none" stroke="#7cc07a" stroke-width="3"/>`,
+shovel:`<path d="M6 27L20 13" stroke="#a0703e" stroke-width="3" stroke-linecap="round"/><path d="M18 9l6-5 5 5-5 7z" fill="#b8bcc4"/>`,
+pick:`<path d="M8 28L22 10" stroke="#a0703e" stroke-width="3" stroke-linecap="round"/><path d="M5 13C11 4 23 4 29 13c-6-3-18-3-24 0z" fill="#b8bcc4"/>`,
+dna:`<path d="M10 4c0 8 12 8 12 16s-12 8-12 8M22 4c0 8-12 8-12 16" fill="none" stroke="#7fb7a4" stroke-width="3"/><path d="M11 8h10M11 16h10M11 24h10" stroke="#d8c35a" stroke-width="2"/>`,
+dig:`<rect x="3" y="18" width="17" height="8" rx="2" fill="#d8c35a"/><path d="M13 18l8-11 6 3-3 7" fill="none" stroke="#d8c35a" stroke-width="3"/><path d="M24 16l6 3-3 5z" fill="#999"/><circle cx="8" cy="27" r="2.5" fill="#333"/><circle cx="16" cy="27" r="2.5" fill="#333"/>`,
+virus:`<circle cx="16" cy="16" r="7" fill="#a6c94a"/><path d="M16 3v5M16 24v5M3 16h5M24 16h5M7 7l3.5 3.5M21.5 21.5L25 25M25 7l-3.5 3.5M10.5 21.5L7 25" stroke="#a6c94a" stroke-width="3" stroke-linecap="round"/><circle cx="14" cy="15" r="1.5" fill="#333"/><circle cx="19" cy="17" r="1.5" fill="#333"/>`,
+mega:`<path d="M5 13h6l11-6v18l-11-6H5z" fill="#d86a4a"/><path d="M8 19l2 7h3l-1.5-6" fill="#a8452c"/><path d="M25 12c2 2 2 6 0 8" stroke="#d86a4a" stroke-width="2" fill="none"/>`
+};
+const SV=k=>'<svg viewBox="0 0 32 32" aria-hidden="true">'+IC[k]+'</svg>';
 const BLD=[
- {n:'Бродячий зомби',e:'🧟',c:15,p:.5,d:'Шатается по кладбищу и находит мозги'},
- {n:'Раскопанная могила',e:'⚰️',c:100,p:3,d:'Свежие находки каждый день'},
- {n:'Лаборатория',e:'🧪',c:1100,p:15,d:'Выращивает мозги в пробирках'},
- {n:'Морг-ресторан',e:'🏚️',c:12000,p:80,d:'Люди сами приходят на ужин'},
- {n:'Мозговая фабрика',e:'🏭',c:130000,p:450,d:'Конвейер, который не спит'},
- {n:'Корпорация «Апокалипсис»',e:'🌍',c:1400000,p:2600,d:'Филиалы на всех континентах'}
+ {n:'Бродячий зомби',e:'zombie',c:15,p:.5,d:'Шатается по кладбищу и находит мозги'},
+ {n:'Раскопанная могила',e:'grave',c:100,p:3,d:'Свежие находки каждый день'},
+ {n:'Лаборатория',e:'flask',c:1100,p:15,d:'Выращивает мозги в пробирках'},
+ {n:'Морг-ресторан',e:'morgue',c:12000,p:80,d:'Люди сами приходят на ужин'},
+ {n:'Мозговая фабрика',e:'factory',c:130000,p:450,d:'Конвейер, который не спит'},
+ {n:'Корпорация «Апокалипсис»',e:'globe',c:1400000,p:2600,d:'Филиалы на всех континентах'}
 ];
 const UPS=[
- {n:'Лопата',e:'⛏️',c:50,t:'click',v:1,d:'+1 мозг за клик'},
- {n:'Кирка',e:'🪓',c:500,t:'click',v:5,d:'+5 мозгов за клик'},
- {n:'Фермент гниения',e:'🧬',c:5000,t:'mult',v:2,d:'Вся нежить работает вдвое быстрее'},
- {n:'Экскаватор',e:'🚜',c:15000,t:'click',v:30,d:'+30 мозгов за клик'},
- {n:'Вирус-ускоритель',e:'☣️',c:120000,t:'mult',v:2,d:'Вся нежить работает вдвое быстрее'},
- {n:'Некро-реклама',e:'📣',c:900000,t:'mult',v:2,d:'Вся нежить работает вдвое быстрее'}
+ {n:'Лопата',e:'shovel',c:50,t:'click',v:1,d:'+1 мозг за клик'},
+ {n:'Кирка',e:'pick',c:500,t:'click',v:5,d:'+5 мозгов за клик'},
+ {n:'Фермент гниения',e:'dna',c:5000,t:'mult',v:2,d:'Вся нежить работает вдвое быстрее'},
+ {n:'Экскаватор',e:'dig',c:15000,t:'click',v:30,d:'+30 мозгов за клик'},
+ {n:'Вирус-ускоритель',e:'virus',c:120000,t:'mult',v:2,d:'Вся нежить работает вдвое быстрее'},
+ {n:'Некро-реклама',e:'mega',c:900000,t:'mult',v:2,d:'Вся нежить работает вдвое быстрее'}
 ];
 const RANKS=[[0,'Мелкий могильщик'],[500,'Хозяин кладбища'],[10000,'Профессор некрологии'],[200000,'Барон мертвецов'],[5e6,'Император нежити']];
 const KEY='zombie-farm-v1';
@@ -114,7 +134,7 @@ const cps=()=>BLD.reduce((s,b,i)=>s+b.p*S.own[i],0)*mult();
 const pow=()=>UPS.reduce((s,u,i)=>s+(S.up[i]&&u.t==='click'?u.v:0),1);
 function item(k,i,o){
   const b=document.createElement('button');b.className='item';b.dataset.k=k;b.dataset.i=i;
-  b.innerHTML='<span class="ic">'+o.e+'</span><span class="tx"><b>'+o.n+'</b><small>'+o.d+'</small></span><span class="pr"><i></i><em></em></span>';
+  b.innerHTML='<span class="ic">'+SV(o.e)+'</span><span class="tx"><b>'+o.n+'</b><small>'+o.d+'</small></span><span class="pr"><i></i><em></em></span>';
   return b;
 }
 UPS.forEach((u,i)=>$('ups').appendChild(item('u',i,u)));
@@ -198,11 +218,18 @@ $('reset').addEventListener('click',()=>{
     S={b:0,total:0,own:BLD.map(()=>0),up:UPS.map(()=>false),t:Date.now()};raid=null;$('raid').classList.remove('on');save();say('Новая игра. Могилы ждут.');render();
   }
 });
+$('dig').innerHTML=SV('zombie');
 render();
 if(window.parent!==window){
   const post=()=>parent.postMessage({type:'game-height',h:document.body.offsetHeight},'*');
   new ResizeObserver(post).observe(document.body);post();
 }
+</script>
+<button id="fsx" hidden>× Выйти из полного экрана</button>
+<script>
+(function(){const b=document.getElementById('fsx');
+addEventListener('message',e=>{if(e.data&&e.data.type==='game-fs')b.hidden=!e.data.on});
+b.onclick=()=>parent.postMessage({type:'game-escape'},'*');})();
 </script>
 </body>
 </html>

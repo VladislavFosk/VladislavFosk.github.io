@@ -7,6 +7,10 @@
 <style>
 :root{--bg:#0b1d30;--panel:#143049;--panel2:#1c4062;--ink:#e6f2f7;--mute:#8fb0c4;--amber:#ffb454}
 *{box-sizing:border-box}
+html,body,canvas,button{-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
+#fsx{position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:99999;padding:6px 14px;border:0;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;font:13px Georgia,serif;cursor:pointer}
+#fsx:hover{background:rgba(0,0,0,.8)}#fsx[hidden]{display:none}
+
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,'Times New Roman',serif}
 body{padding:12px}
 .wrap{max-width:900px;margin:0 auto}
@@ -24,6 +28,7 @@ canvas{display:block;width:100%;aspect-ratio:3/2;border-radius:14px;touch-action
 .up span{color:var(--amber);font-weight:700}
 .dex{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;font-size:13px}
 .chip{padding:4px 10px;border-radius:999px;background:var(--panel)}
+.top svg,.up span svg{vertical-align:-3px}
 .chip.no{color:var(--mute);background:#0f2438}
 .hint{color:var(--mute);font-size:13px;margin:10px 0 0}
 button:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
@@ -35,7 +40,7 @@ button:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
   <div class="top">
     <span>Ур. <b id="lv">1</b></span>
     <div class="xp" title="Опыт"><i id="xp"></i></div>
-    <span>💰 <b id="coins">0</b></span>
+    <span><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="#ffb454"/><circle cx="8" cy="8" r="4.5" fill="none" stroke="#b9792a" stroke-width="1.5"/></svg> <b id="coins">0</b></span>
     <span id="bonus" style="color:var(--mute);font-size:13px"></span>
   </div>
   <canvas id="c" aria-label="Игровое поле"></canvas>
@@ -69,6 +74,7 @@ const UP=[
 let S={coins:0,xp:0,lvl:1,rod:0,line:0,reel:0,hook:0,caught:{}};
 try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.caught)S=r}catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const COIN='<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="#ffb454"/><circle cx="8" cy="8" r="4.5" fill="none" stroke="#b9792a" stroke-width="1.5"/></svg>';
 const need=l=>Math.round(25*Math.pow(l,1.7));
 const cost=u=>Math.round(u.base*Math.pow(1.75,S[u.k]));
 
@@ -86,18 +92,23 @@ function ui(){
   UP.forEach((u,i)=>{
     const b=$('shop').children[i],max=S[u.k]>=u.max;
     b.disabled=max||S.coins<cost(u);
-    b.innerHTML='<b>'+u.n+' · '+u.now(S[u.k])+'</b><small>'+(max?'Максимальный уровень':'Дальше: '+u.next(S[u.k]))+'</small>'+(max?'':'<span>💰 '+cost(u)+'</span>');
+    b.innerHTML='<b>'+u.n+' · '+u.now(S[u.k])+'</b><small>'+(max?'Максимальный уровень':'Дальше: '+u.next(S[u.k]))+'</small>'+(max?'':'<span>'+COIN+' '+cost(u)+'</span>');
   });
-  $('dex').innerHTML=TYPES.map(t=>S.caught[t.n]?'<span class="chip">'+t.n+' ×'+S.caught[t.n]+'</span>':'<span class="chip no">❔ от '+t.y[0]/10+' м</span>').join('');
+  $('dex').innerHTML=TYPES.map(t=>S.caught[t.n]?'<span class="chip">'+t.n+' ×'+S.caught[t.n]+'</span>':'<span class="chip no">? от '+t.y[0]/10+' м</span>').join('');
 }
 
 // мир
 let fishes=[],bubbles=[],floats=[],msg='',msgT=0,t=0;
 function spawn(){
-  const y=R(80,2380),c=TYPES.filter(a=>y>=a.y[0]&&y<=a.y[1]),T=c[Math.floor(R(0,c.length))];
+  const y=R(80,Math.min(2380,300+250*S.line+120));
+  let c=TYPES.filter(a=>y>=a.y[0]&&y<=a.y[1]);
+  const ok=c.filter(a=>a.t<=S.rod);
+  if(ok.length&&Math.random()<.8)c=ok;
+  const T=c[Math.floor(R(0,c.length))];
   return {T,x:R(0,W),y,by:y,dir:Math.random()<.5?-1:1,sp:R(30,80),ph:R(0,6),flee:0,hooked:false};
 }
-for(let i=0;i<48;i++)fishes.push(spawn());
+const target=()=>60+14*S.line;
+while(fishes.length<target())fishes.push(spawn());
 for(let i=0;i<30;i++)bubbles.push({x:R(0,W),y:R(0,WORLD),r:R(1.5,4),v:R(15,40)});
 const boat={x:W/2},hook={x:W/2+34,y:0,st:'idle',fish:[],lock:false};
 let px=W/2,down=false;
@@ -115,7 +126,7 @@ function collect(){
   for(const f of hook.fish){
     const c=Math.round(f.T.c*(1+.05*(S.lvl-1)));
     gold+=c;xp+=f.T.xp;S.caught[f.T.n]=(S.caught[f.T.n]||0)+1;
-    floats.push({x:hook.x,y:-30-floats.length*18,l:1.4,txt:f.T.n+' +'+c+'💰 +'+f.T.xp+' оп.'});
+    floats.push({x:hook.x,y:-30-floats.length*18,l:1.4,txt:f.T.n+' +'+c+' мон. +'+f.T.xp+' оп.'});
     fishes[fishes.indexOf(f)]=spawn();
   }
   if(hook.fish.length){
@@ -127,6 +138,7 @@ function collect(){
 }
 function update(dt){
   t+=dt;if(msgT>0)msgT-=dt;
+  while(fishes.length<target())fishes.push(spawn());
   boat.x+=(px-boat.x)*Math.min(1,dt*5);
   const cap=1+S.hook,maxD=300+250*S.line,rs=(220+90*S.reel),hr=9+S.hook*2;
   if(!down)hook.lock=false;
@@ -236,6 +248,12 @@ if(window.parent!==window){
   const post=()=>parent.postMessage({type:'game-height',h:document.body.offsetHeight},'*');
   new ResizeObserver(post).observe(document.body);post();
 }
+</script>
+<button id="fsx" hidden>× Выйти из полного экрана</button>
+<script>
+(function(){const b=document.getElementById('fsx');
+addEventListener('message',e=>{if(e.data&&e.data.type==='game-fs')b.hidden=!e.data.on});
+b.onclick=()=>parent.postMessage({type:'game-escape'},'*');})();
 </script>
 </body>
 </html>
