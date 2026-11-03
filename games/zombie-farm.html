@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>Зомби-ферма — тайкун</title>
 <style>
 :root{--bg:#25242d;--panel:#34333f;--panel2:#3f3e4c;--bone:#efe6d2;--blood:#c8463a;--teal:#7fb7a4;--pus:#d8c35a;--mute:#a9a5b5}
@@ -33,6 +33,29 @@ html.fs .labc{aspect-ratio:auto}
 html.fs .shopc{overflow-y:auto}
 html.fs #dig{width:min(120px,17vh);margin:4px auto}
 html.fs .stage .hint{display:none}
+.sbtn,.sclose{display:none}
+button{touch-action:manipulation}
+@keyframes pg{50%{box-shadow:0 0 0 6px rgba(127,183,164,.35)}}
+/* телефон: сцена и кнопка «копать» всегда на экране, магазин выдвигается */
+html.nr body{padding:8px}
+html.nr header{margin:0 0 8px}
+html.nr header p{display:none}
+html.nr .grid,html.nr.fs .grid{grid-template-columns:1fr;grid-template-areas:"lab" "stage";gap:8px;grid-template-rows:auto}
+html.nr.fs .grid{grid-template-rows:minmax(0,1fr) auto;gap:0}
+html.nr .labc{aspect-ratio:16/10}
+html.nr.fs .labc{aspect-ratio:auto}
+html.nr .stage{display:grid;grid-template-columns:1fr auto;grid-template-areas:"a c" "b c" "d c" "e e" "f f";align-items:center;text-align:left;padding:10px}
+html.nr .stage .stat{grid-area:a;font-size:30px}
+html.nr .stage .rank{grid-area:b;justify-self:start;margin:4px 0}
+html.nr #dig{grid-area:c;width:min(130px,34vw,22vh);margin:0}
+html.nr .stage .hint{display:none}
+html.nr #msg{grid-area:d;margin:4px 0 0;min-height:18px}
+html.nr #raid{grid-area:e}
+html.nr .sbtn{display:block;grid-area:f;margin-top:8px;width:100%;padding:12px;border:0;border-radius:12px;background:var(--teal);color:#12231d;font:inherit;font-weight:700;font-size:16px;cursor:pointer}
+html.nr .sbtn.ping{animation:pg 1.4s infinite}
+html.nr .shopc{position:fixed;top:0;right:0;bottom:0;width:min(90vw,380px);z-index:50;border-radius:14px 0 0 14px;overflow-y:auto;transform:translateX(105%);transition:transform .25s;box-shadow:-8px 0 30px rgba(0,0,0,.5)}
+html.nr .shopc.open{transform:none}
+html.nr .sclose{display:block;float:right;width:36px;height:36px;border:0;border-radius:8px;background:var(--panel2);color:var(--bone);font-size:20px;cursor:pointer}
 .card{background:var(--panel);border-radius:16px;padding:16px}
 .stage{text-align:center}
 .stat{font-size:clamp(34px,8vw,52px);font-weight:700;line-height:1.1}
@@ -83,13 +106,14 @@ h2{margin:0 0 10px;font-size:19px;color:var(--bone)}
       <button id="dig" aria-label="Выкопать мозги"></button>
       <p class="hint">Нажимай на зомби — каждый клик приносит <b id="pow">1</b></p>
       <p id="msg" aria-live="polite"></p>
+      <button class="sbtn" id="sbtn">Магазин и улучшения</button>
       <div id="raid">
         <b>Охотники у ворот! Отбейся: 10 ударов за 10 секунд</b>
         <button id="fight">Отбиться (<span id="hits">0</span>/10)</button>
         <div class="bar"><i id="rbar"></i></div>
       </div>
     </section>
-    <section class="card shopc">
+    <section class="card shopc" id="shopc"><button class="sclose" id="sclose" aria-label="Закрыть">×</button>
       <h2>Улучшения</h2>
       <div class="list" id="ups"></div>
       <h2>Нанять и построить</h2>
@@ -236,10 +260,12 @@ $('reset').addEventListener('click',()=>{
 // ===== ЛАБОРАТОРИЯ: всё, что ты купил, появляется на этой сцене =====
 const lab=$('lab'),lx=lab.getContext('2d');
 let LW=900,LH=360,U=.86,lt=0,llast=performance.now();
+let lk=1;
 function labFit(){
-  const cw=lab.clientWidth||900,ch=lab.clientHeight||360,k=Math.min(1,1280/cw);
-  LW=Math.max(320,Math.round(cw*k));LH=Math.max(200,Math.round(ch*k));lab.width=LW;lab.height=LH;
-  U=Math.max(.45,Math.min(LW/900,LH/420));
+  const cw=lab.clientWidth||900,ch=lab.clientHeight||360;
+  lk=Math.min(2,typeof devicePixelRatio==='number'?devicePixelRatio:1,1280/cw);
+  LW=cw;LH=ch;lab.width=Math.round(cw*lk);lab.height=Math.round(ch*lk);
+  U=Math.max(.3,Math.min(LW/900,LH/420));
 }
 labFit();new ResizeObserver(labFit).observe(lab.parentNode);
 const hash=i=>Math.abs(Math.sin(i*12.9898)*43758.5453)%1;
@@ -259,7 +285,7 @@ function glow(x,y,r,rgb,a){const g=lx.createRadialGradient(x,y,0,x,y,r);g.addCol
 function rr(x,y,w,h,r){lx.beginPath();lx.moveTo(x+r,y);lx.arcTo(x+w,y,x+w,y+h,r);lx.arcTo(x+w,y+h,x,y+h,r);lx.arcTo(x,y+h,x,y,r);lx.arcTo(x,y,x+w,y,r);lx.closePath()}
 function plot(x,base,w,h,name){
   lx.save();lx.setLineDash([6*U,6*U]);lx.strokeStyle='rgba(200,190,220,.35)';lx.lineWidth=1.5;lx.strokeRect(x-w/2,base-h,w,h);lx.setLineDash([]);
-  lx.fillStyle='rgba(200,190,220,.45)';lx.font=(11*U)+'px Georgia,serif';lx.textAlign='center';lx.fillText(name,x,base-h/2);lx.restore();
+  lx.fillStyle='rgba(200,190,220,.45)';lx.font=Math.max(10,11*U)+'px Georgia,serif';lx.textAlign='center';lx.fillText(name,x,base-h/2);lx.restore();
 }
 // анимация появления: здание «вырастает» из земли
 function sc(key,x,y,fn){
@@ -277,7 +303,7 @@ function morgue(x,base,n,t){
   }
   lx.fillStyle='#1b1620';lx.fillRect(x-12*U,base-30*U,24*U,30*U);
   glow(x,base-h-14*U,26*U,'200,70,58',.35);
-  lx.fillStyle='#e0594c';lx.font='bold '+(11*U)+'px Georgia,serif';lx.textAlign='center';lx.fillText('МОРГ',x,base-h-10*U);
+  lx.fillStyle='#e0594c';lx.font='bold '+Math.max(10,11*U)+'px Georgia,serif';lx.textAlign='center';lx.fillText('МОРГ',x,base-h-10*U);
 }
 function tank(x,base,t,i){
   const w=18*U,h=52*U;
@@ -380,7 +406,7 @@ function propVirus(x,y,t){
 function propSign(x,base,t){
   lx.fillStyle='#3a2f2a';lx.fillRect(x-2*U,base-70*U,4*U,70*U);
   lx.fillStyle='#d86a4a';rr(x-34*U,base-100*U,68*U,36*U,5*U);lx.fill();
-  lx.fillStyle='#fff';lx.font='bold '+(13*U)+'px Georgia,serif';lx.textAlign='center';lx.fillText('МОЗГИ!',x,base-77*U);
+  lx.fillStyle='#fff';lx.font='bold '+Math.max(10,13*U)+'px Georgia,serif';lx.textAlign='center';lx.fillText('МОЗГИ!',x,base-77*U);
   lx.strokeStyle='rgba(255,220,200,'+(.4+.4*Math.sin(t*5))+')';lx.lineWidth=2*U;lx.beginPath();lx.arc(x+38*U,base-82*U,8*U,-1,1);lx.stroke();
 }
 function hunters(t){
@@ -397,6 +423,7 @@ function hunters(t){
   }
 }
 function labDraw(t){
+  lx.setTransform(lk,0,0,lk,0,0);
   const gy=LH*.66;
   const sky=lx.createLinearGradient(0,0,0,gy);sky.addColorStop(0,'#14122b');sky.addColorStop(.6,'#3a2350');sky.addColorStop(1,'#6b3a58');
   lx.fillStyle=sky;lx.fillRect(0,0,LW,LH);
@@ -414,13 +441,13 @@ function labDraw(t){
   const B=[[3,.17,130,100,'Морг',morgue],[2,.34,110,80,'Лаборатория',labB],[4,.62,170,82,'Фабрика',factory],[5,.88,64,100,'Корпорация',corp]];
   for(const b of B){
     const x=b[1]*LW,n=own[b[0]];
-    if(n>0){sc('b'+b[0],x,base,()=>b[5](0,0,n,t));lx.fillStyle='rgba(232,228,255,.8)';lx.font=(12*U)+'px Georgia,serif';lx.textAlign='center';lx.fillText('×'+n,x,base+14*U)}
+    if(n>0){sc('b'+b[0],x,base,()=>b[5](0,0,n,t));lx.fillStyle='rgba(232,228,255,.8)';lx.font=Math.max(10,12*U)+'px Georgia,serif';lx.textAlign='center';lx.fillText('×'+n,x,base+14*U)}
     else plot(x,base,b[2]*U,b[3]*U,b[4]);
   }
   if(S.up[5])sc('u5',.045*LW,base,()=>propSign(0,0,t));
   const ng=Math.min(14,own[1]);
   for(let i=0;i<ng;i++)grave((.05+Math.floor(i/2)*.075)*LW,LH*(i%2?.85:.76),i%3,t,i);
-  if(own[1]>14){lx.fillStyle='rgba(232,228,255,.7)';lx.font=(12*U)+'px Georgia,serif';lx.textAlign='left';lx.fillText('могил: '+own[1],.05*LW,LH*.93)}
+  if(own[1]>14){lx.fillStyle='rgba(232,228,255,.7)';lx.font=Math.max(10,12*U)+'px Georgia,serif';lx.textAlign='left';lx.fillText('могил: '+own[1],.05*LW,LH*.93)}
   if(S.up[0])sc('u0',.035*LW,.9*LH,()=>propShovel(0,0));
   if(S.up[1])sc('u1',.075*LW,.9*LH,()=>propPick(0,0));
   if(S.up[2])sc('u2',.6*LW,.88*LH,()=>propVat(0,0,t));
@@ -428,7 +455,7 @@ function labDraw(t){
   if(S.up[4])sc('u4',.84*LW,.9*LH,()=>propVirus(0,0,t));
   const nw=Math.min(16,own[0]);
   for(let i=0;i<nw;i++){const w=WKS[i];walker(w.bx*LW+Math.sin(t*.5+w.ph)*50*U,w.by*LH,w.col,w.ph,t,Math.cos(t*.5+w.ph)>=0?1:-1)}
-  if(own[0]>16){lx.fillStyle='rgba(232,228,255,.7)';lx.font=(12*U)+'px Georgia,serif';lx.textAlign='right';lx.fillText('зомби: '+own[0],.97*LW,LH*.97)}
+  if(own[0]>16){lx.fillStyle='rgba(232,228,255,.7)';lx.font=Math.max(10,12*U)+'px Georgia,serif';lx.textAlign='right';lx.fillText('зомби: '+own[0],.97*LW,LH*.97)}
   hunters(t);
   for(let i=0;i<3;i++){
     const bx=((t*35*(1+i*.3)+i*300)%(LW+120))-60,by=LH*(.12+.06*i)+Math.sin(t*2+i)*14*U,fl=Math.sin(t*14+i)*8*U;
@@ -439,7 +466,7 @@ function labDraw(t){
   for(let i=0;i<3;i++){lx.beginPath();lx.ellipse(((t*8*(i+1)+i*250)%(LW+400))-200,gy+10*U*i,220*U,22*U,0,0,6.283);lx.fill()}
   const vg=lx.createRadialGradient(LW/2,LH/2,LH*.3,LW/2,LH/2,LW*.7);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.45)');lx.fillStyle=vg;lx.fillRect(0,0,LW,LH);
   for(const p of lp){lx.fillStyle='rgba('+p.c+','+Math.max(0,p.l/p.m)+')';lx.beginPath();lx.arc(p.x,p.y,2.6*U,0,6.283);lx.fill()}
-  lx.textAlign='center';lx.font='bold '+(15*U)+'px Georgia,serif';
+  lx.textAlign='center';lx.font='bold '+Math.max(10,15*U)+'px Georgia,serif';
   for(const f of lf){lx.fillStyle='rgba(255,236,170,'+Math.min(1,f.l)+')';lx.fillText(f.t,f.x,f.y-(1.6-f.l)*30)}
 }
 function labLoop(now){
@@ -450,6 +477,11 @@ function labLoop(now){
 }
 requestAnimationFrame(labLoop);
 
+function nrCheck(){const r=document.documentElement.classList;r.toggle('nr',innerWidth<=760||(r.contains('fs')&&innerHeight<=520))}
+addEventListener('resize',nrCheck);nrCheck();
+$('sbtn').onclick=()=>$('shopc').classList.add('open');
+$('sclose').onclick=()=>$('shopc').classList.remove('open');
+const render0=render;render=function(){render0();$('sbtn').classList.toggle('ping',BLD.some((b,i)=>S.b>=cost(i)))};
 $('dig').innerHTML=SV('zombie');
 render();
 if(window.parent!==window){
@@ -460,7 +492,7 @@ if(window.parent!==window){
 <button id="fsx" hidden>× Выйти из полного экрана</button>
 <script>
 (function(){const b=document.getElementById('fsx');
-addEventListener('message',e=>{if(e.data&&e.data.type==='game-fs'){document.documentElement.classList.toggle('fs',!!e.data.on);b.hidden=!e.data.on||!!e.data.pseudo}});
+addEventListener('message',e=>{if(e.data&&e.data.type==='game-fs'){document.documentElement.classList.toggle('fs',!!e.data.on);if(window.nrCheck)nrCheck();b.hidden=!e.data.on||!!e.data.pseudo}});
 b.onclick=()=>parent.postMessage({type:'game-escape'},'*');})();
 </script>
 </body>

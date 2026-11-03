@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>Глубина — рыбалка</title>
 <style>
 :root{--bg:#0b1d30;--panel:#143049;--panel2:#1c4062;--ink:#e6f2f7;--mute:#8fb0c4;--amber:#ffb454}
@@ -48,6 +48,16 @@ html.fs .stage{flex:1;width:auto;aspect-ratio:auto;min-width:0}
 html.fs canvas{border-radius:0}
 html.fs .side{width:clamp(260px,27vw,400px);border-radius:0;overflow-y:auto}
 html.fs .hint{display:none}
+.layout{position:relative}
+.dbtn,.x{display:none}
+button{touch-action:manipulation}
+html.dm:not(.fs) .stage{aspect-ratio:4/5}
+html.dm .side{position:absolute;top:0;right:0;bottom:0;width:min(88%,350px);z-index:5;transform:translateX(105%);transition:transform .25s;overflow-y:auto;border-radius:14px 0 0 14px;box-shadow:-8px 0 30px rgba(0,0,0,.5)}
+html.dm .side.open{transform:none}
+html.dm .dbtn{display:flex;align-items:center;gap:6px;position:absolute;top:8px;right:8px;z-index:4;padding:8px 12px;border:0;border-radius:999px;background:rgba(8,20,32,.75);color:#fff;font:13px Georgia,serif;cursor:pointer}
+html.dm .x{display:inline-block;margin-left:auto}
+html.dm .hint{display:none}
+html.dm .o{min-height:36px}
 @media(max-width:600px){body{padding:8px}.top{font-size:13px}}
 </style>
 </head>
@@ -62,13 +72,17 @@ html.fs .hint{display:none}
   <div class="layout">
     <div class="stage" id="stage"><canvas id="c" aria-label="Игровое поле"></canvas></div>
     <div class="side" id="side"></div>
+    <button class="dbtn" id="dbtn" aria-label="Сумка и магазин"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l1.5 12h-15z" fill="#ffb454"/><path d="M9 8V6a3 3 0 016 0v2" fill="none" stroke="#ffb454" stroke-width="2"/></svg>Сумка и магазин <b id="dcnt"></b></button>
   </div>
   <p class="hint">Зажми мышь или палец — крючок идёт вниз, отпусти — поднимется. Лодка следует за курсором, также работают стрелки и Space. Сутки длятся 20 минут: ночью темно, зато клюют другие рыбы. Улов лежит в сумке — продавай его в магазинах.</p>
 </div>
 <script>
 addEventListener('keydown',e=>{if(e.key==='Escape'&&parent!==window)parent.postMessage({type:'game-escape'},'*')});
 const WORLD=2400,KEY='fishing-v3';
-let W=900,H=600;
+let W=900,H=600,PW=900,PH=600,K=1,Z=1,ZM=1;
+const dm=()=>document.documentElement.classList.contains('dm');
+function dmCheck(){const r=document.documentElement.classList;r.toggle('dm',innerWidth<760||(r.contains('fs')&&innerHeight<=520))}
+addEventListener('resize',dmCheck);dmCheck();
 const $=id=>document.getElementById(id),R=(a,b)=>a+Math.random()*(b-a);
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const cv=$('c'),ctx=cv.getContext('2d');
@@ -178,8 +192,10 @@ function spawn(init){
   return {T,m,x:init?R(-m,W+m):(dir>0?-m:W+m),y,by:y,dir,sp:R(28,70)*(T.v||1),ph:R(0,6),flee:0,hooked:false};
 }
 function fit(){
-  const st=$('stage'),cw=st.clientWidth||900,ch=st.clientHeight||600,k=Math.min(1,1280/cw);
-  W=Math.max(320,Math.round(cw*k));H=Math.max(220,Math.round(ch*k));cv.width=W;cv.height=H;
+  const st=$('stage'),cw=st.clientWidth||900,ch=st.clientHeight||600;
+  K=Math.min(2,typeof devicePixelRatio==='number'?devicePixelRatio:1,1280/cw);
+  PW=Math.round(cw*K);PH=Math.round(ch*K);cv.width=PW;cv.height=PH;
+  ZM=clamp(cw/620,.55,1);Z=K*ZM;W=PW/Z;H=PH/Z;   // на телефоне мир чуть мельче, чтобы поместился
   boat.x=clamp(boat.x,40,W-40);px=clamp(px,20,W-20);
 }
 fit();new ResizeObserver(fit).observe($('stage'));
@@ -187,7 +203,8 @@ while(fishes.length<target())fishes.push(spawn(true));
 for(let i=0;i<30;i++)bubbles.push({x:R(0,W),y:R(0,WORLD),r:R(1.5,4),v:R(15,40)});
 for(let i=0;i<70;i++)snow.push({x:R(0,W),y:R(0,WORLD),v:R(6,16),r:R(.6,1.6)});
 function mapX(e){const r=cv.getBoundingClientRect();px=(e.clientX-r.left)*W/r.width}
-cv.addEventListener('pointerdown',e=>{mapX(e);down=true;cv.setPointerCapture(e.pointerId)});
+cv.addEventListener('pointerdown',e=>{if(dm()&&$('side').classList.contains('open')){$('side').classList.remove('open');return}mapX(e);down=true;cv.setPointerCapture(e.pointerId)});
+cv.addEventListener('contextmenu',e=>e.preventDefault());
 cv.addEventListener('pointermove',mapX);
 addEventListener('pointerup',()=>{down=false});
 addEventListener('pointercancel',()=>{down=false});
@@ -337,11 +354,14 @@ function refresh(){
   $('lv').textContent=S.lvl;$('coins').textContent=S.coins;
   $('xp').style.width=Math.min(100,S.xp/need(S.lvl)*100)+'%';
   $('bonus').textContent='цены +'+(S.lvl*5-5)+'%';
-  let h='<div class="tabs">'+[['inv','Инвентарь'],['shop','Магазины'],['dex','Рыбы']].map(x=>'<button class="o'+(ui.tab===x[0]?' on':'')+'" data-a="tab" data-v="'+x[0]+'">'+x[1]+'</button>').join('')+'</div>';
+  $('dcnt').textContent=S.fish.length+'/'+BAG[S.bag].cap;
+  let h='<div class="tabs">'+[['inv','Инвентарь'],['shop','Магазины'],['dex','Рыбы']].map(x=>'<button class="o'+(ui.tab===x[0]?' on':'')+'" data-a="tab" data-v="'+x[0]+'">'+x[1]+'</button>').join('')+'<button class="o x" data-a="close">×</button></div>';
   $('side').innerHTML=h+(ui.tab==='inv'?invHTML():ui.tab==='shop'?shopHTML():dexHTML());
 }
+$('dbtn').onclick=()=>$('side').classList.toggle('open');
 $('side').addEventListener('click',e=>{
   const b=e.target.closest('[data-a]');if(!b||b.disabled)return;
+  if(b.dataset.a==='close'){$('side').classList.remove('open');return}
   const d=b.dataset,a=d.a,ITEMS={rod:ROD,line:LINE,reel:REEL,hook:HOOK};
   if(a==='tab')ui.tab=d.v;
   else if(a==='shop')ui.shop=+d.v;
@@ -456,10 +476,32 @@ const STOPS=[[0,[46,139,154]],[.25,[27,95,127]],[.5,[18,58,99]],[.75,[11,29,64]]
 const SKYN=[[10,16,48],[27,34,80]],SKYD=[[111,183,224],[253,233,201]];
 const lerpC=(a,b,k)=>a.map((v,i)=>v+(b[i]-v)*k);
 const css=(c,a)=>'rgba('+c.map(Math.round).join(',')+','+(a==null?1:a)+')';
+function parrot(x,y,t,flap){
+  const bob=Math.sin(t*3)*.8;
+  ctx.save();ctx.translate(x,y+bob);
+  ctx.fillStyle='#d9342b';ctx.beginPath();ctx.moveTo(-6,-6);ctx.quadraticCurveTo(-22,2,-28,14+Math.sin(t*2)*1.5);ctx.lineTo(-20,10);ctx.quadraticCurveTo(-14,2,-4,-2);ctx.fill();
+  ctx.fillStyle='#2f6fd6';ctx.beginPath();ctx.moveTo(-6,-4);ctx.quadraticCurveTo(-20,6,-22,18);ctx.lineTo(-15,12);ctx.quadraticCurveTo(-11,4,-4,-2);ctx.fill();
+  ctx.fillStyle='#e8462f';ctx.beginPath();ctx.ellipse(0,-14,8,13,.1,0,6.283);ctx.fill();
+  ctx.fillStyle='#ff7a4d';ctx.beginPath();ctx.ellipse(2,-11,4.5,8,.1,0,6.283);ctx.fill();
+  ctx.save();ctx.translate(-2,-17);ctx.rotate(-.2+Math.sin(t*14)*.35*flap);
+  ctx.fillStyle='#2f6fd6';ctx.beginPath();ctx.ellipse(-3,6,5,11,.2,0,6.283);ctx.fill();
+  ctx.fillStyle='#ffd24a';ctx.beginPath();ctx.ellipse(-2,3,3,5,.2,0,6.283);ctx.fill();ctx.restore();
+  ctx.fillStyle='#ffd24a';
+  for(let i=0;i<3;i++){ctx.beginPath();ctx.moveTo(-1+i*2,-35);ctx.lineTo(-4+i*3,-44+i);ctx.lineTo(2+i*2,-36);ctx.fill()}
+  ctx.fillStyle='#e8462f';ctx.beginPath();ctx.arc(3,-29,7.5,0,6.283);ctx.fill();
+  ctx.fillStyle='#fff';ctx.beginPath();ctx.ellipse(6,-29,4.5,4,0,0,6.283);ctx.fill();
+  ctx.fillStyle='#111';ctx.beginPath();ctx.arc(6.5,-30,1.7,0,6.283);ctx.fill();
+  ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(7,-30.5,.6,0,6.283);ctx.fill();
+  ctx.fillStyle='#f4efe0';ctx.beginPath();ctx.moveTo(8,-32);ctx.quadraticCurveTo(16,-33,14,-24);ctx.quadraticCurveTo(12,-27,8,-26);ctx.fill();
+  ctx.fillStyle='#2b2b2b';ctx.beginPath();ctx.moveTo(8,-26);ctx.quadraticCurveTo(12,-27,14,-24);ctx.quadraticCurveTo(11,-23,8,-24);ctx.fill();
+  ctx.strokeStyle='#d9a441';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-2,-2);ctx.lineTo(-2,2);ctx.moveTo(3,-2);ctx.lineTo(3,2);ctx.stroke();
+  ctx.restore();
+}
 function draw(){
   const h=hourNow(),sun=Math.sin((h-6)/24*6.2832),d=clamp(sun*1.6+.25,0,1),tw=clamp(1-Math.abs(sun)*4,0,1);
   const SKY=Math.round(H*.25),camY=Math.max(-SKY,Math.min(hook.y-H*.46,WORLD-H+60)),sy0=-camY;
   const F=fx(hook.bait),r=ROD[S.eq.rod];
+  ctx.setTransform(Z,0,0,Z,0,0);
   // вода: цвет зависит от времени суток
   const wg=ctx.createLinearGradient(0,sy0,0,WORLD-camY);
   STOPS.forEach(s=>{const f=1-(1-(.28+.72*d))*(1-s[0]*.8);wg.addColorStop(s[0],css(s[1].map(v=>v*f)))});
@@ -508,9 +550,7 @@ function draw(){
     const hg=ctx.createLinearGradient(0,by,0,by+22);hg.addColorStop(0,'#9a6238');hg.addColorStop(1,'#573219');
     ctx.fillStyle=hg;ctx.beginPath();ctx.moveTo(bx-52,by-2);ctx.lineTo(bx+52,by-2);ctx.quadraticCurveTo(bx+44,by+22,bx+26,by+22);ctx.lineTo(bx-26,by+22);ctx.quadraticCurveTo(bx-44,by+22,bx-52,by-2);ctx.fill();
     ctx.strokeStyle='rgba(0,0,0,.3)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(bx-46,by+6);ctx.lineTo(bx+46,by+6);ctx.stroke();
-    ctx.fillStyle='#3e6b8a';ctx.fillRect(bx-20,by-14,18,14);
-    ctx.fillStyle='#d9b38c';ctx.beginPath();ctx.arc(bx-11,by-21,7,0,6.283);ctx.fill();
-    ctx.fillStyle='#e8c14a';ctx.beginPath();ctx.ellipse(bx-11,by-26,11,3.2,0,0,6.283);ctx.fill();ctx.fillRect(bx-17,by-33,12,7);
+    parrot(bx-12,by-2,t,hook.st==='reel'?1:hook.st==='drop'?.35:0);
     ctx.restore();
     ctx.strokeStyle=r.col;ctx.lineWidth=3.5;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(bx+2,by-8);ctx.quadraticCurveTo(bx+28,by-36,tipX,tipY);ctx.stroke();
     ctx.fillStyle='#444';ctx.beginPath();ctx.arc(bx+10,by-12,3.5,0,6.283);ctx.fill();
@@ -533,24 +573,26 @@ function draw(){
     g.addColorStop(0,'rgba(2,4,12,0)');g.addColorStop(1,'rgba(2,4,12,'+dark+')');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
   }
   glowPass(camY);
-  // интерфейс
-  ctx.fillStyle='rgba(8,20,32,.6)';ctx.fillRect(10,10,236,52);
+  // интерфейс (в обычных пикселях, без масштаба мира)
+  ctx.setTransform(K,0,0,K,0,0);
+  const HW=PW/K,HH=PH/K,bw=HW<500?206:236;
+  ctx.fillStyle='rgba(8,20,32,.6)';ctx.fillRect(10,10,bw,52);
   ctx.fillStyle='#e6f2f7';ctx.font='14px Georgia,serif';ctx.textAlign='left';
   ctx.fillText('Глубина '+Math.round(Math.max(0,hook.y)/10)+' м · улов '+hook.fish.length+'/'+hk.cap,18,28);
   ctx.fillText('День '+S.days+' · '+fmtH(h),34,50);
-  ctx.textAlign='right';ctx.fillText('сумка '+S.fish.length+'/'+BAG[S.bag].cap,238,50);
+  ctx.textAlign='right';ctx.fillText('сумка '+S.fish.length+'/'+BAG[S.bag].cap,bw+2,50);
   ctx.fillStyle=h>=6&&h<19?'#ffd36b':'#e8ecff';ctx.beginPath();ctx.arc(22,46,6,0,6.283);ctx.fill();
-  ctx.fillStyle='rgba(8,20,32,.5)';ctx.fillRect(W-16,70,6,H-140);
-  ctx.fillStyle='#ffb454';ctx.fillRect(W-18,70+(H-140)*clamp(hook.y/maxDepth(),0,1)-3,10,6);
+  ctx.fillStyle='rgba(8,20,32,.5)';ctx.fillRect(HW-16,70,6,HH-140);
+  ctx.fillStyle='#ffb454';ctx.fillRect(HW-18,70+(HH-140)*clamp(hook.y/maxDepth(),0,1)-3,10,6);
   ctx.textAlign='center';
-  if(hook.st==='idle'&&!down){ctx.fillStyle=d>.5?'rgba(60,40,20,.85)':'rgba(255,255,255,.85)';ctx.font='16px Georgia,serif';ctx.fillText('Зажми, чтобы опустить крючок',W/2,Math.max(30,sy0-SKY*.3))}
-  if(msgT>0){ctx.font='bold 18px Georgia,serif';ctx.fillStyle='rgba(8,20,32,.75)';const mw=ctx.measureText(msg).width+30;ctx.fillRect(W/2-mw/2,H-56,mw,34);ctx.fillStyle='#ffb454';ctx.fillText(msg,W/2,H-33)}
-  ctx.font='bold 16px Georgia,serif';
-  for(const f of floats){ctx.fillStyle='rgba(255,230,160,'+Math.min(1,f.l)+')';ctx.fillText(f.txt,f.x,f.y-camY-(1.4-f.l)*40)}
+  if(hook.st==='idle'&&!down){ctx.fillStyle=d>.5?'rgba(60,40,20,.85)':'rgba(255,255,255,.85)';ctx.font='16px Georgia,serif';ctx.fillText('Зажми, чтобы опустить крючок',HW/2,Math.max(30,(sy0-SKY*.3)*ZM))}
+  if(msgT>0){ctx.font='bold 17px Georgia,serif';ctx.fillStyle='rgba(8,20,32,.75)';const mw=Math.min(HW-20,ctx.measureText(msg).width+30);ctx.fillRect(HW/2-mw/2,HH-56,mw,34);ctx.fillStyle='#ffb454';ctx.fillText(msg,HW/2,HH-33)}
+  ctx.font='bold 15px Georgia,serif';
+  for(const f of floats){ctx.fillStyle='rgba(255,230,160,'+Math.min(1,f.l)+')';ctx.fillText(f.txt,f.x*ZM,(f.y-camY-(1.4-f.l)*40)*ZM)}
 }
 let last=performance.now(),lastPane=0,lastKey=openKey();
 function loop(now){
-  const dt=Math.min(.05,(now-last)/1000);last=now;update(dt);draw();
+  const dt=Math.min(.05,(now-last)/1000);last=now;if(!(dm()&&$('side').classList.contains('open')))update(dt);draw();
   const k=openKey();if(k!==lastKey){lastKey=k;needPane=true}
   if(needPane&&now-lastPane>250){lastPane=now;needPane=false;refresh()}
   requestAnimationFrame(loop);
@@ -566,7 +608,7 @@ if(window.parent!==window){
 <button id="fsx" hidden>× Выйти из полного экрана</button>
 <script>
 (function(){const b=document.getElementById('fsx');
-addEventListener('message',e=>{if(e.data&&e.data.type==='game-fs'){document.documentElement.classList.toggle('fs',!!e.data.on);b.hidden=!e.data.on||!!e.data.pseudo}});
+addEventListener('message',e=>{if(e.data&&e.data.type==='game-fs'){document.documentElement.classList.toggle('fs',!!e.data.on);if(window.dmCheck)dmCheck();b.hidden=!e.data.on||!!e.data.pseudo}});
 b.onclick=()=>parent.postMessage({type:'game-escape'},'*');})();
 </script>
 </body>
