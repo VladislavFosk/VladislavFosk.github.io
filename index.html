@@ -3,29 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<!-- === DESCRIPTION === -->
-<meta name="description" content="World of Kosarh — a personal encyclopedia of worlds, projects and ideas: Roza OS (Arch-based Linux), HOI4 mods, and free browser games by Coalition Iron Will." />
-<meta name="keywords" content="Kosarh, Roza OS, Solarium Umbris, HOI4 mod, Arch Linux, browser games, Coalition Iron Will, Fosk" />
-<meta name="author" content="Vladislav Fosk-Kosarh" />
-<meta name="robots" content="index, follow" />
-<link rel="canonical" href="https://vladislavfosk.github.io/" />
-
-<!-- === OPEN GRAPH (Telegram, VK, Discord, Facebook) === -->
-<meta property="og:type" content="website" />
-<meta property="og:site_name" content="Solarium Umbris" />
-<meta property="og:title" content="World of Kosarh — Solarium Umbris" />
-<meta property="og:description" content="Encyclopedia of worlds, projects and ideas: Roza OS, HOI4 mods and free browser games by Coalition Iron Will." />
-<meta property="og:image" content="https://vladislavfosk.github.io/gim/logo.png" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:url" content="https://vladislavfosk.github.io/" />
-<meta property="og:locale" content="en_US" />
-
-<!-- === TWITTER / X === -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="World of Kosarh — Solarium Umbris" />
-<meta name="twitter:description" content="Encyclopedia of worlds, projects and ideas: Roza OS, HOI4 mods and free browser games by Coalition Iron Will." />
-<meta name="twitter:image" content="https://vladislavfosk.github.io/gim/logo.png" />
+<meta name="description" content="World of Kosarh" />
 <meta name="theme-color" content="#10091d" />
 <title>World of Kosarh</title>
 <link rel="icon" href="gim/logo.png" type="image/png" />
@@ -1457,8 +1435,8 @@ $ pacman -Ss запрос    # поиск в репозиториях</code></pr
             <div><div class="pname"><span class="i18n" data-en="Depths">Глубина</span></div><span class="sub">Fishing / Upgrades</span></div>
             <span class="badge active"><svg class="ic" aria-hidden="true"><use href="#i-pad"/></svg> <span class="i18n" data-en="Play">Играть</span></span>
         </div>
-        <p class="i18n" data-en="Cast the line, earn XP and levels, upgrade your rod and reach the depths where scarier and bigger fish live.">Закидывай удочку, получай опыт и уровни, улучшай снасти и спускайся туда, где живут самые жуткие и огромные рыбы.</p>
-        <div class="tags"><span class="tag">Fishing</span><span class="tag">Levels</span><span class="tag pink">Coalition Iron Will</span></div>
+        <p class="i18n" data-en="A day lasts 20 minutes. Catch fish, sell them in shops, buy rods, lines and bait and dive for the scariest fish at night.">Сутки длятся 20 минут. Лови рыбу, продавай её в магазинах, покупай удочки, лески и наживку и опускайся за самыми жуткими рыбами ночью.</p>
+        <div class="tags"><span class="tag">Fishing</span><span class="tag">Inventory</span><span class="tag">Day / Night</span><span class="tag pink">Coalition Iron Will</span></div>
     </div>
 
 </section>
@@ -1497,12 +1475,12 @@ $ pacman -Ss запрос    # поиск в репозиториях</code></pr
         <div class="ico"><svg class="ic" aria-hidden="true"><use href="#i-fish"/></svg></div>
         <div>
             <div class="pname"><span class="i18n" data-en="Depths">Глубина</span> <span class="sub">Fishing / Upgrades</span></div>
-            <div class="tags"><span class="tag">Fishing</span><span class="tag">Levels</span><span class="tag pink">Coalition Iron Will</span></div>
+            <div class="tags"><span class="tag">Fishing</span><span class="tag">Inventory</span><span class="tag">Day / Night</span><span class="tag pink">Coalition Iron Will</span></div>
         </div>
     </div>
     <div class="game-bar"><button class="lang-toggle fs-btn" onclick="toggleGameFullscreen('frame-fishing')" aria-label="Fullscreen"><svg class="ic" aria-hidden="true"><use href="#i-expand"/></svg> <span class="i18n" data-en="Fullscreen">На весь экран</span></button></div>
     <iframe class="game-frame" id="frame-fishing" allowfullscreen data-src="games/fishing.html" data-autoheight title="Глубина"></iframe>
-    <p class="game-hint i18n" data-en="Hold the mouse or your finger to lower the hook, release to reel in. Every fish gives XP and coins; spend coins on the rod, line, reel and hook.">Зажми мышь или палец — крючок идёт вниз, отпусти — поднимется. Каждая рыба даёт опыт и монеты; на монеты улучшай удочку, леску, катушку и крючок.</p>
+    <p class="game-hint i18n" data-en="Hold to lower the hook, release to reel in. Catch goes to your bag: sell it in the shops (some open only at certain hours) and buy better tackle. Fullscreen puts the inventory on the side.">Зажми, чтобы опустить крючок, отпусти — поднимется. Улов попадает в сумку: продавай его в магазинах (у некоторых есть часы работы) и покупай снасти получше. В полном экране инвентарь уходит вправо.</p>
 </section>
 
 <!-- КОНТАКТЫ -->
@@ -1582,6 +1560,7 @@ function gamePseudoFrame() { return document.querySelector('.game-frame.pseudo-f
 function enterPseudoFullscreen(frame) {
     frame.classList.add('pseudo-fs');
     document.body.classList.add('fs-active');
+    if (frame.contentWindow) frame.contentWindow.postMessage({ type: 'game-fs', on: true, pseudo: true }, '*');
     document.getElementById('fsExit').hidden = false;
     frame.focus();
 }
@@ -1589,7 +1568,10 @@ function exitGameFullscreen() {
     const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
     if (fsEl) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); }
     const frame = gamePseudoFrame();
-    if (frame) frame.classList.remove('pseudo-fs');
+    if (frame) {
+        frame.classList.remove('pseudo-fs');
+        if (frame.contentWindow) frame.contentWindow.postMessage({ type: 'game-fs', on: false, pseudo: true }, '*');
+    }
     document.body.classList.remove('fs-active');
     document.getElementById('fsExit').hidden = true;
 }
