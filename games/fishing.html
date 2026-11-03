@@ -15,25 +15,39 @@ body{padding:12px}
 .wrap{max-width:900px;margin:0 auto}
 .top{display:flex;gap:14px;align-items:center;margin-bottom:8px;font-size:15px;flex-wrap:wrap}
 .top b{color:var(--amber)}
-.top svg,.up span svg{vertical-align:-3px}
+.top svg{vertical-align:-3px}
 .xp{flex:1;min-width:140px;height:10px;border-radius:5px;background:#0a1826;overflow:hidden}
 .xp i{display:block;height:100%;width:0;background:var(--amber)}
-canvas{display:block;width:100%;aspect-ratio:3/2;border-radius:14px;touch-action:none;cursor:pointer;background:#123}
-.hd{margin:14px 0 6px;font-size:13px;font-weight:400;color:var(--mute)}
-.shop{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
-.up{display:block;width:100%;text-align:left;padding:10px 12px;border:0;border-radius:12px;background:var(--panel);color:var(--ink);font:inherit;cursor:pointer}
-.up:hover:not(:disabled){background:var(--panel2)}
-.up:disabled{opacity:.55;cursor:not-allowed}
-.up b{display:block;font-size:15px}
-.up small{display:block;color:var(--mute);font-size:12px;margin:3px 0}
-.up small em{color:var(--ink);font-style:normal}
-.up span{color:var(--amber);font-weight:700}
-#rod .up{border-left:4px solid var(--amber)}
-.dex{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px;font-size:12px}
-.chip{padding:3px 9px;border-radius:999px;background:var(--panel)}
+.layout{display:flex;flex-direction:column;gap:10px}
+.stage{position:relative;width:100%;aspect-ratio:3/2}
+canvas{position:absolute;inset:0;width:100%;height:100%;border-radius:14px;touch-action:none;cursor:pointer;background:#123}
+.side{background:var(--panel);border-radius:14px;padding:10px;font-size:14px}
+.tabs{display:flex;gap:6px;margin-bottom:8px}
+.o{font:inherit;font-size:13px;padding:6px 10px;border:0;border-radius:8px;background:var(--panel2);color:var(--ink);cursor:pointer}
+.o:hover:not(:disabled){background:#27557f}
+.o.on{background:var(--amber);color:#2a1a08;font-weight:700}
+.o:disabled{opacity:.45;cursor:not-allowed}
+.opts{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 8px}
+.sec{margin:10px 0 4px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;background:#0f2438;margin-bottom:4px;font-size:13px}
+.row b{display:block;font-size:14px}
+.row small,.mut,.eqs small,.sec small{color:var(--mute);font-size:12px}
+.mut{margin:4px 0}
+.dex{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0;font-size:12px}
+.chip{padding:3px 9px;border-radius:999px;background:var(--panel2)}
 .chip.no{color:var(--mute);background:#0f2438}
 .hint{color:var(--mute);font-size:13px;margin:10px 0 0}
 button:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+/* полный экран: игра занимает всё место, панель уходит вправо */
+html.fs,html.fs body{height:100%}
+html.fs body{padding:0;overflow:hidden}
+html.fs .wrap{max-width:none;height:100%;display:flex;flex-direction:column}
+html.fs .top{margin:0;padding:6px 12px}
+html.fs .layout{flex:1;min-height:0;flex-direction:row;gap:0}
+html.fs .stage{flex:1;width:auto;aspect-ratio:auto;min-width:0}
+html.fs canvas{border-radius:0}
+html.fs .side{width:clamp(260px,27vw,400px);border-radius:0;overflow-y:auto}
+html.fs .hint{display:none}
 @media(max-width:600px){body{padding:8px}.top{font-size:13px}}
 </style>
 </head>
@@ -45,160 +59,199 @@ button:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
     <span id="coinbox"></span>
     <span id="bonus" style="color:var(--mute);font-size:13px"></span>
   </div>
-  <canvas id="c" aria-label="Игровое поле"></canvas>
-  <h3 class="hd">Удочка: определяет, какую рыбу можно поймать, и даёт особый эффект</h3>
-  <div id="rod"></div>
-  <h3 class="hd">Снасти: глубина, скорость и количество рыб за заброс</h3>
-  <div class="shop" id="shop"></div>
-  <div class="dex" id="dex"></div>
-  <p class="hint">Зажми мышь или палец — крючок идёт вниз, отпусти — поднимется. Веди лодку вбок. Space тоже работает. Чем глубже, тем темнее: свет даёт удочка.</p>
+  <div class="layout">
+    <div class="stage" id="stage"><canvas id="c" aria-label="Игровое поле"></canvas></div>
+    <div class="side" id="side"></div>
+  </div>
+  <p class="hint">Зажми мышь или палец — крючок идёт вниз, отпусти — поднимется. Лодка следует за курсором, также работают стрелки и Space. Сутки длятся 20 минут: ночью темно, зато клюют другие рыбы. Улов лежит в сумке — продавай его в магазинах.</p>
 </div>
 <script>
 addEventListener('keydown',e=>{if(e.key==='Escape'&&parent!==window)parent.postMessage({type:'game-escape'},'*')});
-const W=900,H=600,WORLD=2400,KEY='fishing-v1';
+const WORLD=2400,KEY='fishing-v3';
+let W=900,H=600;
 const $=id=>document.getElementById(id),R=(a,b)=>a+Math.random()*(b-a);
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
-const cv=$('c'),ctx=cv.getContext('2d');cv.width=W;cv.height=H;
+const cv=$('c'),ctx=cv.getContext('2d');
 const hex=h=>[1,3,5].map(i=>parseInt(h.substr(i,2),16));
 const mix=(a,b,k)=>{const A=hex(a),B=hex(b);return 'rgb('+A.map((v,i)=>Math.round(v+(B[i]-v)*k)).join(',')+')'};
 const COIN='<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="#ffb454"/><circle cx="8" cy="8" r="4.5" fill="none" stroke="#b9792a" stroke-width="1.5"/></svg>';
 $('coinbox').innerHTML=COIN+' <b id="coins">0</b>';
 
-// ---------- рыбы: t = нужный уровень удочки, y = глубина обитания, s = размер ----------
+// ---------- рыбы: t = нужный уровень удочки, y = глубина, s = размер, w: 1 днём / 2 ночью ----------
 const TYPES=[
  {n:'Плотва',t:0,y:[80,300],s:22,xp:5,c:3,col:'#9fd1c7'},
- {n:'Карась',t:0,y:[100,380],s:25,xp:6,c:4,col:'#d9a441'},
- {n:'Окунь',t:0,y:[120,420],s:26,xp:8,c:5,col:'#8fae52',stripes:1},
+ {n:'Карась',w:1,t:0,y:[100,380],s:25,xp:6,c:4,col:'#d9a441'},
+ {n:'Окунь',w:1,t:0,y:[120,420],s:26,xp:8,c:5,col:'#8fae52',stripes:1},
  {n:'Щука',t:1,y:[300,720],s:42,xp:20,c:15,col:'#6f9b5a',ry:.28,teeth:1},
  {n:'Камбала',t:1,y:[400,800],s:36,xp:18,c:14,col:'#b59a74',sh:'ray',spots:1,ex:.6,ey:-.12},
- {n:'Рыба-шар',t:1,y:[350,760],s:30,xp:16,c:13,col:'#d6b862',sh:'puffer',ex:.4,ey:-.15},
+ {n:'Рыба-шар',w:1,t:1,y:[350,760],s:30,xp:16,c:13,col:'#d6b862',sh:'puffer',ex:.4,ey:-.15},
  {n:'Сом',t:2,y:[600,1100],s:58,xp:45,c:40,col:'#7a7890',whisk:1},
  {n:'Скат',t:2,y:[700,1200],s:60,xp:50,c:45,col:'#5f7f9a',sh:'ray',ex:.6,ey:-.12},
- {n:'Медуза',t:2,y:[650,1250],s:34,xp:40,c:35,col:'#e58ac6',sh:'jelly',v:.5},
- {n:'Тунец',t:3,y:[900,1350],s:64,xp:70,c:60,col:'#3d6fa8',ry:.3,v:1.7},
- {n:'Удильщик',t:3,y:[1000,1500],s:56,xp:90,c:90,col:'#4a3a63',lure:1},
- {n:'Кальмар',t:3,y:[1050,1550],s:60,xp:95,c:95,col:'#b25f7d',sh:'squid',ex:.18,ey:-.1},
+ {n:'Медуза',w:2,t:2,y:[650,1250],s:34,xp:40,c:35,col:'#e58ac6',sh:'jelly',v:.5},
+ {n:'Тунец',w:1,t:3,y:[900,1350],s:64,xp:70,c:60,col:'#3d6fa8',ry:.3,v:1.7},
+ {n:'Удильщик',w:2,t:3,y:[1000,1500],s:56,xp:90,c:90,col:'#4a3a63',lure:1},
+ {n:'Кальмар',w:2,t:3,y:[1050,1550],s:60,xp:95,c:95,col:'#b25f7d',sh:'squid',ex:.18,ey:-.1},
  {n:'Акула',t:4,y:[1300,1800],s:100,xp:160,c:170,col:'#7a8a9a',ry:.27,shark:1,v:1.3},
- {n:'Глубинный угорь',t:4,y:[1400,1900],s:84,xp:180,c:200,col:'#5c8f7a',sh:'eel',ex:.88,ey:-.06},
- {n:'Гигантский кальмар',t:5,y:[1700,2200],s:130,xp:420,c:470,col:'#8f2f4f',sh:'squid',ex:.18,ey:-.1,v:.8},
+ {n:'Глубинный угорь',w:2,t:4,y:[1400,1900],s:84,xp:180,c:200,col:'#5c8f7a',sh:'eel',ex:.88,ey:-.06},
+ {n:'Гигантский кальмар',w:2,t:5,y:[1700,2200],s:130,xp:420,c:470,col:'#8f2f4f',sh:'squid',ex:.18,ey:-.1,v:.8},
  {n:'Зубастый хищник',t:5,y:[1800,2300],s:104,xp:400,c:450,col:'#8a2f3f',teeth:1},
  {n:'Левиафан',t:6,y:[2100,2380],s:150,xp:1000,c:1200,col:'#33245a',teeth:1,eyes:1,v:.7},
- {n:'Тень бездны',t:6,y:[2000,2380],s:120,xp:1200,c:1400,col:'#1d1530',eyes:1,halo:'rgba(120,60,200,.55)',ry:.36,v:.6}
+ {n:'Тень бездны',w:2,t:6,y:[2000,2380],s:120,xp:1200,c:1400,col:'#1d1530',eyes:1,halo:'rgba(120,60,200,.55)',ry:.36,v:.6}
 ];
 TYPES.forEach(T=>{T.dk=mix(T.col,'#000000',.35);T.lt=mix(T.col,'#ffffff',.38)});
+
+const TY={};TYPES.forEach(T=>TY[T.n]=T);
+
+// ---------- снасти ----------
 const ROD=[
- {n:'Бамбуковая',col:'#b98b4e',p:'без особых эффектов'},
- {n:'Стеклопластиковая',col:'#6fd0e0',p:'+10% монет',coin:1.1},
- {n:'Карбоновая',col:'#454c5c',p:'шире зона клёва (+35%)',bite:1.35},
- {n:'Стальная',col:'#b9c0ca',p:'+15% опыта',xp:1.15},
- {n:'Титановая',col:'#e0e6ff',p:'подъём на 30% быстрее',reel:1.3},
- {n:'Глубинная',col:'#8a6cff',p:'лампа у крючка и притяжение рыбы',light:110,magnet:1},
- {n:'Легендарная',col:'#ffb454',p:'+25% монет и опыта, мощная лампа',coin:1.25,xp:1.25,light:200,magnet:1}
-];
-const GEAR=[
- {k:'line',n:'Леска',max:8,base:60,now:l=>'глубина до '+(30+25*l)+' м',next:l=>'до '+(30+25*(l+1))+' м'},
- {k:'reel',n:'Катушка',max:5,base:50,now:l=>'скорость ×'+(1+l*.4).toFixed(1),next:l=>'×'+(1+(l+1)*.4).toFixed(1)},
- {k:'hook',n:'Крючок',max:4,base:120,now:l=>'рыб за заброс: '+(l+1),next:l=>'рыб за заброс: '+(l+2)}
-];
-let S={coins:0,xp:0,lvl:1,rod:0,line:0,reel:0,hook:0,caught:{}};
-try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.caught)S=r}catch(e){}
+ {n:'Бамбуковая',col:'#b98b4e',p:'без особых эффектов',price:0},
+ {n:'Стеклопластиковая',col:'#6fd0e0',p:'+10% к цене рыбы',coin:1.1,price:90},
+ {n:'Карбоновая',col:'#454c5c',p:'шире зона клёва (+35%)',bite:1.35,price:220},
+ {n:'Стальная',col:'#b9c0ca',p:'+15% опыта',xp:1.15,price:520},
+ {n:'Титановая',col:'#e0e6ff',p:'подъём на 30% быстрее',reel:1.3,price:1100},
+ {n:'Глубинная',col:'#8a6cff',p:'лампа у крючка и притяжение рыбы',light:110,magnet:1,price:2400},
+ {n:'Легендарная',col:'#ffb454',p:'+25% к цене и опыту, мощная лампа',coin:1.25,xp:1.25,light:200,magnet:1,price:5200}];
+const LINE=[{n:'Нить',d:300,price:0},{n:'Нейлон',d:550,price:60},{n:'Плетёнка',d:800,price:150},{n:'Флюорокарбон',d:1100,price:340},{n:'Стальной трос',d:1500,price:700},{n:'Кевлар',d:1900,price:1400},{n:'Глубинный канат',d:2300,price:2800}];
+const REEL=[{n:'Простая',v:1,price:0},{n:'Спиннинговая',v:1.4,price:50},{n:'Мультипликатор',v:1.8,price:160},{n:'Электрическая',v:2.3,price:420},{n:'Турбо',v:2.9,price:1000}];
+const HOOK=[{n:'Одинарный',cap:1,r:9,price:0},{n:'Двойной',cap:2,r:11,price:120},{n:'Тройник',cap:3,r:13,price:360},{n:'Якорный',cap:4,r:16,price:900},{n:'Сетевой',cap:5,r:19,price:2000}];
+const BAIT={
+ worm:{n:'Червь',p:'зона клёва +30%',bite:1.3,price:40,pack:10},
+ spin:{n:'Блесна',p:'крючок опускается на 50% быстрее',drop:1.5,price:50,pack:10},
+ glow:{n:'Светящаяся приманка',p:'свет +90 и притягивает ночных рыб',light:90,mNight:1,price:80,pack:8},
+ elite:{n:'Деликатес',p:'рыба дороже и даёт опыта на 50% больше',q:1.5,xp:1.5,price:120,pack:6},
+ deep:{n:'Глубинная наживка',p:'притягивает редкую рыбу (ур. 4+)',mRare:1,price:200,pack:6}};
+const BAG=[{cap:15,price:0},{cap:25,price:80},{cap:38,price:250},{cap:55,price:700},{cap:80,price:1800}];
+const LABEL={rod:['Удочка',ROD],line:['Леска',LINE],reel:['Катушка',REEL],hook:['Крючок',HOOK]};
+const desc=(k,i)=>k==='rod'?'ловит рыбу ур. 0–'+i+'; '+ROD[i].p:k==='line'?'глубина до '+LINE[i].d/10+' м':k==='reel'?'скорость ×'+REEL[i].v:'рыб за заброс: '+HOOK[i].cap;
+// ---------- магазины ----------
+const SHOPS=[
+ {n:'Рыбный рынок',open:[0,24],mul:1,only:()=>true,d:'Берёт любую рыбу по обычной цене. Открыт всегда.'},
+ {n:'Ресторан',open:[12,24],mul:1.35,only:t=>t.t<=3,d:'Платит на 35% больше за обычную рыбу (ур. 0–3). Работает с 12:00 до 24:00.'},
+ {n:'Скупщик',open:[20,5],mul:1.8,only:t=>t.t>=4,d:'Ночью, с 20:00 до 05:00, платит ×1.8 за редкую рыбу (ур. 4+).'},
+ {n:'Лавка снастей',open:[0,24],tackle:1,d:'Удочки, лески, катушки, крючки, наживка и садок. Открыта всегда.'}];
+const isOpen=(s,h)=>s.open[0]<s.open[1]?h>=s.open[0]&&h<s.open[1]:h>=s.open[0]||h<s.open[1];
+
+// ---------- сохранение ----------
+const def=()=>({coins:0,xp:0,lvl:1,day:0,days:1,caught:{},big:{},fish:[],own:{rod:[0],line:[0],reel:[0],hook:[0]},eq:{rod:0,line:0,reel:0,hook:0},bait:{},baitEq:null,bag:0});
+let S=def();
+try{
+  const r=JSON.parse(localStorage.getItem(KEY));
+  if(r&&r.own)S=Object.assign(def(),r);
+  else{
+    const o=JSON.parse(localStorage.getItem('fishing-v1'));
+    if(o&&o.caught){
+      S.coins=o.coins||0;S.xp=o.xp||0;S.lvl=o.lvl||1;S.caught=o.caught;
+      [['rod',6],['line',6],['reel',4],['hook',4]].forEach(a=>{const l=Math.min(o[a[0]]||0,a[1]);S.own[a[0]]=Array.from({length:l+1},(_,i)=>i);S.eq[a[0]]=l});
+    }
+  }
+}catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 const need=l=>Math.round(25*Math.pow(l,1.7));
-const cost=u=>Math.round(u.base*Math.pow(1.75,S[u.k]));
-const rodCost=()=>Math.round(90*Math.pow(1.75,S.rod));
-const rod=()=>ROD[S.rod];
-
-GEAR.forEach(u=>{const b=document.createElement('button');b.className='up';b.dataset.k=u.k;$('shop').appendChild(b)});
-$('shop').addEventListener('click',e=>{
-  const b=e.target.closest('.up');if(!b)return;
-  const u=GEAR.find(x=>x.k===b.dataset.k);
-  if(S[u.k]<u.max&&S.coins>=cost(u)){S.coins-=cost(u);S[u.k]++;say(u.n+' улучшена!');save();ui()}
-});
-const rodBtn=document.createElement('button');rodBtn.className='up';$('rod').appendChild(rodBtn);
-rodBtn.onclick=()=>{if(S.rod<6&&S.coins>=rodCost()){S.coins-=rodCost();S.rod++;say('Новая удочка: '+rod().n);save();ui()}};
-function ui(){
-  $('lv').textContent=S.lvl;$('coins').textContent=S.coins;
-  $('xp').style.width=Math.min(100,S.xp/need(S.lvl)*100)+'%';
-  $('bonus').textContent='бонус уровня: монеты +'+(S.lvl*5-5)+'%';
-  const r=rod(),nx=ROD[S.rod+1];
-  let h='<b>Удочка: '+r.n+'</b><small>Эффект: <em>'+r.p+'</em></small>';
-  if(nx)h+='<small>Дальше: '+nx.n+' — <em>'+nx.p+'</em><br>Откроет: '+TYPES.filter(t=>t.t===S.rod+1).map(t=>t.n).join(', ')+'</small><span>'+COIN+' '+rodCost()+'</span>';
-  else h+='<small>Лучшая удочка в игре</small>';
-  rodBtn.innerHTML=h;rodBtn.disabled=!nx||S.coins<rodCost();
-  GEAR.forEach((u,i)=>{
-    const b=$('shop').children[i],max=S[u.k]>=u.max;
-    b.disabled=max||S.coins<cost(u);
-    b.innerHTML='<b>'+u.n+' · '+u.now(S[u.k])+'</b><small>'+(max?'Максимальный уровень':'Дальше: '+u.next(S[u.k]))+'</small>'+(max?'':'<span>'+COIN+' '+cost(u)+'</span>');
-  });
-  $('dex').innerHTML=TYPES.map(t=>S.caught[t.n]?'<span class="chip">'+t.n+' ×'+S.caught[t.n]+'</span>':'<span class="chip no">? от '+t.y[0]/10+' м</span>').join('');
+const hourNow=()=>(S.day*24+6)%24;
+const isDay=()=>{const h=hourNow();return h>=6&&h<19};
+const fmtH=h=>String(Math.floor(h)%24).padStart(2,'0')+':'+String(Math.floor(h%1*60)).padStart(2,'0');
+const baitNow=()=>S.baitEq&&S.bait[S.baitEq]>0?BAIT[S.baitEq]:null;
+function fx(b){
+  const r=ROD[S.eq.rod];
+  return {bite:(r.bite||1)*(b&&b.bite||1),drop:b&&b.drop||1,light:(r.light||0)+(b&&b.light||0),magnet:!!r.magnet,mNight:!!(b&&b.mNight),mRare:!!(b&&b.mRare),q:b&&b.q||1,xp:(r.xp||1)*(b&&b.xp||1)};
 }
 
 // ---------- мир ----------
-let fishes=[],bubbles=[],snow=[],parts=[],floats=[],msg='',msgT=0,t=0;
-const maxDepth=()=>300+250*S.line;
+let fishes=[],bubbles=[],snow=[],parts=[],floats=[],msg='',msgT=0,t=0,needPane=true;
+const stars=Array.from({length:70},()=>({fx:Math.random(),fy:Math.random(),p:R(0,6)}));
+const ground=Array.from({length:31},(_,i)=>R(10,46)+(i%5===0?20:0));
+const kelp=Array.from({length:9},(_,i)=>({fx:(i+.5)/9+R(-.03,.03),h:R(90,190),ph:R(0,6)}));
+const boat={x:450},hook={x:484,y:0,st:'idle',fish:[],lock:false,bait:null};
+let px=450,down=false,kl=0,kr=0;
+const maxDepth=()=>LINE[S.eq.line].d;
 const zoneBottom=()=>Math.min(2380,maxDepth()+120);
-const target=()=>Math.round((zoneBottom()-80)*.03)+6;
+const target=()=>Math.round((zoneBottom()-80)*.03*(W/900))+6;
+function say(s){msg=s;msgT=3}
 // рыба появляется за краем экрана и уплывает за другой край — игрок этого не видит
 function spawn(init){
-  const y=R(80,zoneBottom());
-  let c=TYPES.filter(a=>y>=a.y[0]&&y<=a.y[1]);
-  const ok=c.filter(a=>a.t<=S.rod);
-  if(ok.length&&Math.random()<.8)c=ok;
+  const y=R(80,zoneBottom()),day=isDay();
+  const inY=TYPES.filter(a=>y>=a.y[0]&&y<=a.y[1]);
+  let c=inY.filter(a=>!a.w||(a.w===1)===day);
+  if(!c.length)c=inY;
+  const ok=c.filter(a=>a.t<=S.eq.rod);if(ok.length&&Math.random()<.8)c=ok;
   const T=c[Math.floor(R(0,c.length))],dir=Math.random()<.5?-1:1,m=T.s*1.8+70;
   return {T,m,x:init?R(-m,W+m):(dir>0?-m:W+m),y,by:y,dir,sp:R(28,70)*(T.v||1),ph:R(0,6),flee:0,hooked:false};
 }
+function fit(){
+  const st=$('stage'),cw=st.clientWidth||900,ch=st.clientHeight||600,k=Math.min(1,1280/cw);
+  W=Math.max(320,Math.round(cw*k));H=Math.max(220,Math.round(ch*k));cv.width=W;cv.height=H;
+  boat.x=clamp(boat.x,40,W-40);px=clamp(px,20,W-20);
+}
+fit();new ResizeObserver(fit).observe($('stage'));
 while(fishes.length<target())fishes.push(spawn(true));
 for(let i=0;i<30;i++)bubbles.push({x:R(0,W),y:R(0,WORLD),r:R(1.5,4),v:R(15,40)});
 for(let i=0;i<70;i++)snow.push({x:R(0,W),y:R(0,WORLD),v:R(6,16),r:R(.6,1.6)});
-const ground=Array.from({length:31},(_,i)=>R(10,46)+(i%5===0?20:0));
-const kelp=Array.from({length:9},(_,i)=>({x:40+i*105+R(-20,20),h:R(90,190),ph:R(0,6)}));
-const boat={x:W/2},hook={x:W/2+34,y:0,st:'idle',fish:[],lock:false};
-let px=W/2,down=false;
-function say(s){msg=s;msgT=3}
 function mapX(e){const r=cv.getBoundingClientRect();px=(e.clientX-r.left)*W/r.width}
 cv.addEventListener('pointerdown',e=>{mapX(e);down=true;cv.setPointerCapture(e.pointerId)});
 cv.addEventListener('pointermove',mapX);
 addEventListener('pointerup',()=>{down=false});
 addEventListener('pointercancel',()=>{down=false});
-addEventListener('keydown',e=>{if(e.key===' '){down=true;e.preventDefault()}});
-addEventListener('keyup',e=>{if(e.key===' ')down=false});
+addEventListener('keydown',e=>{
+  if(e.key===' '){down=true;e.preventDefault()}
+  if(e.key==='ArrowLeft'||e.key==='a'){kl=1;e.preventDefault()}
+  if(e.key==='ArrowRight'||e.key==='d'){kr=1;e.preventDefault()}
+});
+addEventListener('keyup',e=>{
+  if(e.key===' '){down=false;e.preventDefault()}
+  if(e.key==='ArrowLeft'||e.key==='a')kl=0;
+  if(e.key==='ArrowRight'||e.key==='d')kr=0;
+});
 function burst(x,y,n,col,grav,sp){for(let i=0;i<n;i++){const a=R(0,6.283),v=R(20,sp);parts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-(grav?sp*.6:0),l:R(.4,.9),m:.9,col,g:grav})}}
 
 function collect(){
-  let gold=0,xp=0;const r=rod();
+  const F=fx(hook.bait);let xp=0,lost=0,got=0;
   for(const f of hook.fish){
-    const c=Math.round(f.T.c*(1+.05*(S.lvl-1))*(r.coin||1)),x=Math.round(f.T.xp*(r.xp||1));
-    gold+=c;xp+=x;S.caught[f.T.n]=(S.caught[f.T.n]||0)+1;
-    floats.push({x:hook.x,y:-40-floats.length*18,l:1.4,txt:f.T.n+' +'+c+' мон. +'+x+' оп.'});
+    const T=f.T,w=Math.random()<.04?R(1.6,2):R(.75,1.3),gain=Math.round(T.xp*w*F.xp),k=Math.pow(T.s,1.8)/300*w;
+    xp+=gain;S.caught[T.n]=(S.caught[T.n]||0)+1;if(k>(S.big[T.n]||0))S.big[T.n]=+k.toFixed(1);
+    if(S.fish.length<BAG[S.bag].cap){
+      S.fish.push({n:T.n,w:+w.toFixed(2),q:F.q});got++;
+      floats.push({x:hook.x,y:-40-floats.length*18,l:1.4,txt:T.n+' '+k.toFixed(1)+' кг'+(w>1.5?' — ТРОФЕЙ!':'')+' +'+gain+' оп.'});
+    }else lost++;
     fishes[fishes.indexOf(f)]=spawn(false);
   }
   if(hook.fish.length){
-    burst(hook.x,-10,10+6*hook.fish.length,'255,210,110',false,120);
-    S.coins+=gold;S.xp+=xp;
-    while(S.xp>=need(S.lvl)){S.xp-=need(S.lvl);S.lvl++;say('Новый уровень: '+S.lvl+'! Монет больше на 5%')}
-    save();ui();
+    burst(hook.x,-10,10+6*got,'255,210,110',false,120);
+    S.xp+=xp;while(S.xp>=need(S.lvl)){S.xp-=need(S.lvl);S.lvl++;say('Новый уровень: '+S.lvl+'!')}
+    if(lost)say('Сумка полна — часть рыбы отпущена. Продай улов!');
+    save();needPane=true;
   }
-  hook.fish=[];hook.st='idle';hook.y=0;hook.lock=true;
+  hook.fish=[];hook.st='idle';hook.y=0;hook.lock=true;hook.bait=null;
 }
 function update(dt){
   t+=dt;if(msgT>0)msgT-=dt;
+  const d0=S.day;S.day=(S.day+dt/1200)%1;   // 1200 с = 20 минут = сутки
+  if(S.day<d0){S.days++;say('Наступил день '+S.days);needPane=true}
   while(fishes.length<target())fishes.push(spawn(false));
-  const r=rod(),cap=1+S.hook,maxD=maxDepth(),rs=(220+90*S.reel)*(r.reel||1),hr=(9+S.hook*2);
+  const F=fx(hook.bait),maxD=maxDepth(),HK=HOOK[S.eq.hook],cap=HK.cap,hr=HK.r,ri=S.eq.rod;
+  const rs=220*REEL[S.eq.reel].v*(ROD[ri].reel||1);
+  if(kl||kr)px=clamp(px+(kr-kl)*420*dt,20,W-20);
   boat.x+=(px-boat.x)*Math.min(1,dt*5);
   if(!down)hook.lock=false;
-  if(hook.st==='idle'){hook.x=boat.x+34;hook.y=0;if(down&&!hook.lock){hook.st='drop';burst(hook.x,0,12,'200,235,255',true,160)}}
-  else{
-    hook.x+=clamp(px+34-hook.x,-250*dt,250*dt);
+  if(hook.st==='idle'){
+    hook.x=boat.x+34;hook.y=0;
+    if(down&&!hook.lock){
+      hook.st='drop';const b=baitNow();hook.bait=b;
+      if(b){S.bait[S.baitEq]--;if(S.bait[S.baitEq]<=0)S.baitEq=null;needPane=true}
+      burst(hook.x,0,12,'200,235,255',true,160);
+    }
+  }else{
+    hook.x=clamp(hook.x+clamp(px+34-hook.x,-250*dt,250*dt),10,W-10);
     if(hook.st==='drop'){
-      if(down&&hook.y<maxD&&hook.fish.length<cap)hook.y+=190*dt;else hook.st='reel';
+      if(down&&hook.y<maxD&&hook.fish.length<cap)hook.y+=190*F.drop*dt;else hook.st='reel';
     }else{hook.y-=rs*dt;if(hook.y<=0)collect()}
     for(const f of fishes){
       if(f.hooked||f.flee>0)continue;
       const d=Math.hypot(f.x-hook.x,f.y-hook.y);
-      if(r.magnet&&f.T.t<=S.rod&&d<170&&hook.fish.length<cap){f.x+=(hook.x-f.x)*dt*.8;f.by+=(hook.y-f.by)*dt*.8}
+      const mg=F.magnet||(F.mNight&&f.T.w===2)||(F.mRare&&f.T.t>=4);
+      if(mg&&f.T.t<=ri&&d<170&&hook.fish.length<cap){f.x+=(hook.x-f.x)*dt*.8;f.by+=(hook.y-f.by)*dt*.8}
       if(hook.fish.length>=cap)continue;
-      if(d<(f.T.s*.55+hr)*(r.bite||1)){
-        if(f.T.t<=S.rod){f.hooked=true;hook.fish.push(f);burst(f.x,f.y,8,'255,255,255',false,80)}
+      if(d<(f.T.s*.55+hr)*F.bite){
+        if(f.T.t<=ri){f.hooked=true;hook.fish.push(f);burst(f.x,f.y,8,'255,255,255',false,80)}
         else{f.flee=1.5;f.dir=f.x<hook.x?-1:1;if(msgT<=0)say(f.T.n+': нужна удочка «'+ROD[f.T.t].n+'»')}
       }
     }
@@ -208,13 +261,101 @@ function update(dt){
     if(f.flee>0)f.flee-=dt;
     f.x+=f.dir*f.sp*(f.flee>0?4:1)*dt;
     f.y=f.by+Math.sin(t*(f.T.sh==='jelly'?1:1.5)+f.ph)*(f.T.sh==='jelly'?22:8);
-    if((f.dir>0&&f.x>W+f.m)||(f.dir<0&&f.x<-f.m))fishes[i]=spawn(false);
+    if((f.dir>0&&f.x>W+f.m)||(f.dir<0&&f.x<-f.m)){if(fishes.length>target()){fishes.splice(i,1);i--}else fishes[i]=spawn(false)}
   }
   for(const b of bubbles){b.y-=b.v*dt;if(b.y<0){b.y=WORLD;b.x=R(0,W)}}
   for(const n of snow){n.y+=n.v*dt;n.x+=Math.sin(t+n.y*.01)*6*dt;if(n.y>WORLD)n.y=0}
   for(let i=floats.length-1;i>=0;i--){floats[i].l-=dt;if(floats[i].l<=0)floats.splice(i,1)}
   for(let i=parts.length-1;i>=0;i--){const p=parts[i];p.l-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;if(p.g)p.vy+=420*dt;if(p.l<=0)parts.splice(i,1)}
 }
+
+// ---------- инвентарь, магазины, рыбы ----------
+const ui={tab:'inv',shop:0,cat:'rod'};
+const wt=f=>Math.pow(TY[f.n].s,1.8)/300*f.w;
+const price=(f,sh)=>Math.round(TY[f.n].c*f.w*(f.q||1)*sh.mul*(1+.05*(S.lvl-1))*(ROD[S.eq.rod].coin||1));
+function grp(filter){
+  const m={};
+  S.fish.forEach(f=>{const T=TY[f.n];if(filter&&!filter(T))return;(m[f.n]=m[f.n]||{n:f.n,c:0,list:[]}).c++;m[f.n].list.push(f)});
+  return TYPES.filter(T=>m[T.n]).map(T=>m[T.n]);
+}
+function sell(sh,name,one){
+  let g=0,n=0;
+  S.fish=S.fish.filter(f=>{
+    if((name&&f.n!==name)||!sh.only(TY[f.n])||(one&&n>=1))return true;
+    g+=price(f,sh);n++;return false;
+  });
+  if(n){S.coins+=g;say('Продано '+n+' шт.: +'+g+' мон.')}
+}
+function invHTML(){
+  const cap=BAG[S.bag].cap,g=grp();
+  let h='<div class="sec"><b>Сумка</b> '+S.fish.length+'/'+cap+' <small>продавай рыбу в магазинах</small></div>';
+  h+=g.length?g.map(x=>'<div class="row"><span>'+x.n+' ×'+x.c+'</span><small>'+x.list.reduce((a,f)=>a+wt(f),0).toFixed(1)+' кг</small></div>').join(''):'<p class="mut">Пусто. Лови рыбу!</p>';
+  h+='<div class="sec"><b>Снаряжение</b></div>';
+  for(const k in LABEL){
+    h+='<div class="eqs"><small>'+LABEL[k][0]+'</small><div class="opts">'+S.own[k].map(i=>'<button class="o'+(S.eq[k]===i?' on':'')+'" data-a="eq" data-c="'+k+'" data-i="'+i+'">'+LABEL[k][1][i].n+'</button>').join('')+'</div><small>'+desc(k,S.eq[k])+'</small></div>';
+  }
+  h+='<div class="sec"><b>Наживка</b> <small>тратится на каждый заброс</small></div>';
+  const ids=Object.keys(BAIT).filter(id=>S.bait[id]>0);
+  h+=ids.length?'<div class="opts">'+ids.map(id=>'<button class="o'+(S.baitEq===id?' on':'')+'" data-a="bait" data-v="'+id+'">'+BAIT[id].n+' ×'+S.bait[id]+'</button>').join('')+'</div><p class="mut">'+(S.baitEq?BAIT[S.baitEq].p:'Нажми на наживку, чтобы использовать')+'</p>':'<p class="mut">Нет наживки. Её продаёт Лавка снастей.</p>';
+  return h;
+}
+function sellHTML(sh){
+  const g=grp(sh.only);
+  if(!g.length)return '<p class="mut">Для этого магазина у тебя нет подходящей рыбы.</p>';
+  let all=0,h='';
+  g.forEach(x=>{
+    const sum=x.list.reduce((a,f)=>a+price(f,sh),0);all+=sum;
+    h+='<div class="row"><span><b>'+x.n+' ×'+x.c+'</b><small>около '+Math.round(sum/x.c)+' мон. за шт.</small></span><span><button class="o" data-a="sell" data-n="'+x.n+'" data-one="1">1 шт.</button> <button class="o" data-a="sell" data-n="'+x.n+'">Все: '+sum+'</button></span></div>';
+  });
+  return h+'<div class="opts"><button class="o on" data-a="sellall">Продать всё: '+all+' мон.</button></div>';
+}
+function tackleHTML(){
+  const cats=[['rod','Удочки'],['line','Лески'],['reel','Катушки'],['hook','Крючки'],['bait','Наживка'],['bag','Садок']],c=ui.cat;
+  let h='<div class="opts">'+cats.map(x=>'<button class="o'+(c===x[0]?' on':'')+'" data-a="cat" data-v="'+x[0]+'">'+x[1]+'</button>').join('')+'</div>';
+  if(LABEL[c]){
+    LABEL[c][1].forEach((it,i)=>{
+      const own=S.own[c].includes(i),eq=S.eq[c]===i;
+      h+='<div class="row"><span><b>'+it.n+'</b><small>'+desc(c,i)+'</small></span>'+(own?'<button class="o'+(eq?' on':'')+'" data-a="eq" data-c="'+c+'" data-i="'+i+'">'+(eq?'Надето':'Надеть')+'</button>':'<button class="o" data-a="buy" data-c="'+c+'" data-i="'+i+'"'+(S.coins<it.price?' disabled':'')+'>'+it.price+' мон.</button>')+'</div>';
+    });
+  }else if(c==='bait'){
+    for(const id in BAIT){const b=BAIT[id];h+='<div class="row"><span><b>'+b.n+'</b><small>'+b.p+' · есть: '+(S.bait[id]||0)+'</small></span><button class="o" data-a="buybait" data-v="'+id+'"'+(S.coins<b.price?' disabled':'')+'>×'+b.pack+' · '+b.price+'</button></div>'}
+  }else{
+    BAG.forEach((b,i)=>{h+='<div class="row"><span><b>Садок '+(i+1)+'</b><small>вмещает '+b.cap+' рыб</small></span>'+(i<=S.bag?'<small>'+(i===S.bag?'сейчас':'куплен')+'</small>':i===S.bag+1?'<button class="o" data-a="bag"'+(S.coins<b.price?' disabled':'')+'>'+b.price+' мон.</button>':'<small>позже</small>')+'</div>'});
+  }
+  return h;
+}
+function shopHTML(){
+  const hr=hourNow(),sh=SHOPS[ui.shop];
+  let h='<div class="opts">'+SHOPS.map((s,i)=>'<button class="o'+(ui.shop===i?' on':'')+'" data-a="shop" data-v="'+i+'">'+s.n+(isOpen(s,hr)?'':' (закрыто)')+'</button>').join('')+'</div><p class="mut">'+sh.d+'</p>';
+  if(sh.tackle)return h+tackleHTML();
+  return h+(isOpen(sh,hr)?sellHTML(sh):'<p class="mut">Сейчас закрыто. Откроется в '+fmtH(sh.open[0])+'. Сейчас '+fmtH(hr)+'.</p>');
+}
+function dexHTML(){
+  return '<div class="dex">'+TYPES.map(T=>S.caught[T.n]?'<span class="chip">'+T.n+' ×'+S.caught[T.n]+(S.big[T.n]?' · рек. '+S.big[T.n]+' кг':'')+'</span>':'<span class="chip no">? от '+T.y[0]/10+' м'+(T.w===2?' · ночью':T.w===1?' · днём':'')+'</span>').join('')+'</div><p class="mut">Ночные виды клюют только ночью, дневные — днём.</p>';
+}
+function refresh(){
+  $('lv').textContent=S.lvl;$('coins').textContent=S.coins;
+  $('xp').style.width=Math.min(100,S.xp/need(S.lvl)*100)+'%';
+  $('bonus').textContent='цены +'+(S.lvl*5-5)+'%';
+  let h='<div class="tabs">'+[['inv','Инвентарь'],['shop','Магазины'],['dex','Рыбы']].map(x=>'<button class="o'+(ui.tab===x[0]?' on':'')+'" data-a="tab" data-v="'+x[0]+'">'+x[1]+'</button>').join('')+'</div>';
+  $('side').innerHTML=h+(ui.tab==='inv'?invHTML():ui.tab==='shop'?shopHTML():dexHTML());
+}
+$('side').addEventListener('click',e=>{
+  const b=e.target.closest('[data-a]');if(!b||b.disabled)return;
+  const d=b.dataset,a=d.a,ITEMS={rod:ROD,line:LINE,reel:REEL,hook:HOOK};
+  if(a==='tab')ui.tab=d.v;
+  else if(a==='shop')ui.shop=+d.v;
+  else if(a==='cat')ui.cat=d.v;
+  else if(a==='eq')S.eq[d.c]=+d.i;
+  else if(a==='bait')S.baitEq=S.baitEq===d.v?null:d.v;
+  else if(a==='buy'){const c=d.c,i=+d.i,it=ITEMS[c][i];if(S.coins>=it.price&&!S.own[c].includes(i)){S.coins-=it.price;S.own[c].push(i);S.eq[c]=i;say('Куплено и надето: '+it.n)}}
+  else if(a==='buybait'){const bt=BAIT[d.v];if(S.coins>=bt.price){S.coins-=bt.price;S.bait[d.v]=(S.bait[d.v]||0)+bt.pack;if(!S.baitEq)S.baitEq=d.v;say('Куплено: '+bt.n+' ×'+bt.pack)}}
+  else if(a==='bag'){const nx=BAG[S.bag+1];if(nx&&S.coins>=nx.price){S.coins-=nx.price;S.bag++;say('Садок увеличен: '+nx.cap+' рыб')}}
+  else if(a==='sell')sell(SHOPS[ui.shop],d.n,d.one==='1');
+  else if(a==='sellall')sell(SHOPS[ui.shop]);
+  save();refresh();
+});
+const openKey=()=>SHOPS.map(s=>isOpen(s,hourNow())?1:0).join('');
 
 // ---------- рисование рыб ----------
 function eye(T,s,x,y){
@@ -309,50 +450,59 @@ function glowPass(camY){
   ctx.globalCompositeOperation='source-over';
 }
 
-// ---------- сцена ----------
-const STOPS=[[0,'#2e8b9a'],[.25,'#1b5f7f'],[.5,'#123a63'],[.75,'#0b1d40'],[1,'#05060f']];
+
+// ---------- сцена: время суток, вода, лодка ----------
+const STOPS=[[0,[46,139,154]],[.25,[27,95,127]],[.5,[18,58,99]],[.75,[11,29,64]],[1,[5,6,15]]];
+const SKYN=[[10,16,48],[27,34,80]],SKYD=[[111,183,224],[253,233,201]];
+const lerpC=(a,b,k)=>a.map((v,i)=>v+(b[i]-v)*k);
+const css=(c,a)=>'rgba('+c.map(Math.round).join(',')+','+(a==null?1:a)+')';
 function draw(){
-  const camY=Math.max(-150,Math.min(hook.y-280,WORLD-H+60)),sy0=-camY,r=rod();
-  // вода
-  const wg=ctx.createLinearGradient(0,sy0,0,WORLD-camY);STOPS.forEach(s=>wg.addColorStop(s[0],s[1]));
+  const h=hourNow(),sun=Math.sin((h-6)/24*6.2832),d=clamp(sun*1.6+.25,0,1),tw=clamp(1-Math.abs(sun)*4,0,1);
+  const SKY=Math.round(H*.25),camY=Math.max(-SKY,Math.min(hook.y-H*.46,WORLD-H+60)),sy0=-camY;
+  const F=fx(hook.bait),r=ROD[S.eq.rod];
+  // вода: цвет зависит от времени суток
+  const wg=ctx.createLinearGradient(0,sy0,0,WORLD-camY);
+  STOPS.forEach(s=>{const f=1-(1-(.28+.72*d))*(1-s[0]*.8);wg.addColorStop(s[0],css(s[1].map(v=>v*f)))});
   ctx.fillStyle=wg;ctx.fillRect(0,0,W,H);
-  // лучи света
-  if(sy0>-700){
-    const lg=ctx.createLinearGradient(0,sy0,0,sy0+560);lg.addColorStop(0,'rgba(255,255,255,.16)');lg.addColorStop(1,'rgba(255,255,255,0)');
+  if(d>.15&&sy0>-700){
+    const lg=ctx.createLinearGradient(0,sy0,0,sy0+560);lg.addColorStop(0,'rgba(255,255,255,'+(.16*d)+')');lg.addColorStop(1,'rgba(255,255,255,0)');
     ctx.fillStyle=lg;
-    for(let i=0;i<6;i++){const x0=40+i*150+Math.sin(t*.5+i)*25;ctx.beginPath();ctx.moveTo(x0,sy0);ctx.lineTo(x0+50,sy0);ctx.lineTo(x0+190,sy0+560);ctx.lineTo(x0+90,sy0+560);ctx.fill()}
+    for(let i=0;i<6;i++){const x0=W*(.05+i*.17)+Math.sin(t*.5+i)*25;ctx.beginPath();ctx.moveTo(x0,sy0);ctx.lineTo(x0+50,sy0);ctx.lineTo(x0+190,sy0+560);ctx.lineTo(x0+90,sy0+560);ctx.fill()}
   }
   // дно и водоросли
   const gy=WORLD-camY;
   if(gy<H+80){
     ctx.strokeStyle='#1f4d3a';ctx.lineWidth=6;ctx.lineCap='round';
-    for(const k of kelp){ctx.beginPath();ctx.moveTo(k.x,gy);for(let j=1;j<=6;j++)ctx.lineTo(k.x+Math.sin(t*1.4+k.ph+j*.6)*10*j/3,gy-k.h*j/6);ctx.stroke()}
+    for(const k of kelp){const kx=k.fx*W;ctx.beginPath();ctx.moveTo(kx,gy);for(let j=1;j<=6;j++)ctx.lineTo(kx+Math.sin(t*1.4+k.ph+j*.6)*10*j/3,gy-k.h*j/6);ctx.stroke()}
     ctx.fillStyle='#0b0a12';ctx.beginPath();ctx.moveTo(0,H+100);ctx.lineTo(0,gy);
-    ground.forEach((g,i)=>ctx.lineTo(i*30,gy-g+30));ctx.lineTo(W,H+100);ctx.fill();
+    ground.forEach((g,i)=>ctx.lineTo(i*W/30,gy-g+30));ctx.lineTo(W,H+100);ctx.fill();
   }
-  // пузыри и «морской снег»
   ctx.strokeStyle='rgba(230,242,247,.35)';ctx.lineWidth=1;
   for(const b of bubbles){const sy=b.y-camY;if(sy>-10&&sy<H+10){ctx.beginPath();ctx.arc(b.x+Math.sin(t+b.y)*4,sy,b.r,0,6.283);ctx.stroke()}}
   ctx.fillStyle='rgba(220,235,245,.35)';
   for(const n of snow){const sy=n.y-camY;if(sy>0&&sy<H&&n.y>300){ctx.beginPath();ctx.arc(n.x,sy,n.r,0,6.283);ctx.fill()}}
-  // рыбы
   for(const f of fishes){
     if(f.hooked)continue;
     const sy=f.y-camY;if(sy<-220||sy>H+220||f.x<-260||f.x>W+260)continue;
     drawFish(f.T,f.x,sy,f.dir,1,false,t+f.ph);
   }
-  // небо с волной
+  // небо: цвет, звёзды, солнце или луна, облака
   const wave=x=>sy0+Math.sin(x*.03+t*2)*3;
   if(sy0>-10){
-    const sg=ctx.createLinearGradient(0,0,0,sy0);sg.addColorStop(0,'#6fb7e0');sg.addColorStop(1,'#fde9c9');
+    const sg=ctx.createLinearGradient(0,sy0-SKY,0,sy0);
+    const top=lerpC(SKYN[0],SKYD[0],d);let bot=lerpC(SKYN[1],SKYD[1],d);bot=lerpC(bot,[255,140,90],tw*.65);
+    sg.addColorStop(0,css(top));sg.addColorStop(1,css(bot));
     ctx.fillStyle=sg;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(W,0);for(let x=W;x>=0;x-=10)ctx.lineTo(x,wave(x));ctx.fill();
-    glowAt(W*.78,sy0-110,90,'255,240,190',.55);ctx.fillStyle='#fff6d0';ctx.beginPath();ctx.arc(W*.78,sy0-110,30,0,6.283);ctx.fill();
-    ctx.fillStyle='rgba(255,255,255,.8)';
-    for(let i=0;i<3;i++){const cx=((t*9+i*340)%(W+300))-150,cy=sy0-130-i*14;for(const o of [[0,0,40,14],[28,-8,30,13],[-28,-4,28,11]]){ctx.beginPath();ctx.ellipse(cx+o[0],cy+o[1],o[2],o[3],0,0,6.283);ctx.fill()}}
-    ctx.strokeStyle='rgba(255,255,255,.55)';ctx.lineWidth=2;ctx.beginPath();for(let x=0;x<=W;x+=10)x?ctx.lineTo(x,wave(x)):ctx.moveTo(x,wave(x));ctx.stroke();
+    if(d<.5)for(const s of stars){const y=sy0-8-s.fy*(SKY-10);if(y>0){ctx.fillStyle='rgba(255,255,255,'+(1-d*2)*(.6+.4*Math.sin(t*2+s.p))+')';ctx.fillRect(s.fx*W,y,1.6,1.6)}}
+    const dayT=h>=6&&h<18,p=dayT?(h-6)/12:((h+6)%24)/12,bx=W*(.08+.84*p),by=sy0-SKY*.1-Math.sin(p*Math.PI)*SKY*.7;
+    if(dayT){const c=lerpC([255,246,208],[255,150,70],tw);glowAt(bx,by,90,c.map(Math.round).join(','),.5);ctx.fillStyle=css(c);ctx.beginPath();ctx.arc(bx,by,28,0,6.283);ctx.fill()}
+    else{glowAt(bx,by,70,'180,200,255',.3);ctx.fillStyle='#e8ecff';ctx.beginPath();ctx.arc(bx,by,20,0,6.283);ctx.fill();ctx.fillStyle='rgba(150,160,200,.5)';ctx.beginPath();ctx.arc(bx-6,by-4,4,0,6.283);ctx.arc(bx+7,by+5,3,0,6.283);ctx.fill()}
+    ctx.fillStyle='rgba(255,255,255,'+.8*(.25+.75*d)+')';
+    for(let i=0;i<3;i++){const cx=((t*9+i*W*.38)%(W+300))-150,cy=sy0-SKY*.8-i*12;for(const o of [[0,0,40,14],[28,-8,30,13],[-28,-4,28,11]]){ctx.beginPath();ctx.ellipse(cx+o[0],cy+o[1],o[2],o[3],0,0,6.283);ctx.fill()}}
+    ctx.strokeStyle='rgba(255,255,255,.5)';ctx.lineWidth=2;ctx.beginPath();for(let x=0;x<=W;x+=10)x?ctx.lineTo(x,wave(x)):ctx.moveTo(x,wave(x));ctx.stroke();
   }
   // лодка
-  const bx=boat.x,by=-camY-14+Math.sin(t*2+bx*.02)*2.5,tipX=bx+42,tipY=by-44;
+  const bx=boat.x,by=-camY-14+Math.sin(t*2+boat.x*.02)*2.5,tipX=bx+42,tipY=by-44;
   if(by>-90&&by<H+90){
     ctx.save();ctx.translate(bx,by);ctx.rotate(Math.sin(t*2+bx*.02)*.03);ctx.translate(-bx,-by);
     const hg=ctx.createLinearGradient(0,by,0,by+22);hg.addColorStop(0,'#9a6238');hg.addColorStop(1,'#573219');
@@ -364,48 +514,60 @@ function draw(){
     ctx.restore();
     ctx.strokeStyle=r.col;ctx.lineWidth=3.5;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(bx+2,by-8);ctx.quadraticCurveTo(bx+28,by-36,tipX,tipY);ctx.stroke();
     ctx.fillStyle='#444';ctx.beginPath();ctx.arc(bx+10,by-12,3.5,0,6.283);ctx.fill();
-    if(r.light)glowAt(tipX,tipY,18+r.light*.12,'255,240,180',.9);
+    if(d<.6)glowAt(bx-30,by-14,80,'255,200,110',(1-d)*.55);
+    if(F.light)glowAt(tipX,tipY,18+F.light*.12,'255,240,180',.9);
   }
   const hy=hook.y-camY,sag=Math.sin(t*2)*Math.min(8,hook.y*.02);
   ctx.strokeStyle='rgba(255,255,255,.7)';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(tipX,tipY);ctx.quadraticCurveTo((tipX+hook.x)/2+sag,(tipY+hy)/2,hook.x,hy);ctx.stroke();
-  ctx.strokeStyle='#ffb454';ctx.lineWidth=3;ctx.beginPath();ctx.arc(hook.x,hy+8,7+S.hook,Math.PI*1.1,Math.PI*2.4);ctx.stroke();
-  if(r.magnet){ctx.strokeStyle='rgba(180,150,255,'+(.3+.2*Math.sin(t*4))+')';ctx.lineWidth=2;ctx.beginPath();ctx.arc(hook.x,hy+6,22+Math.sin(t*4)*3,0,6.283);ctx.stroke()}
+  const hk=HOOK[S.eq.hook];
+  ctx.strokeStyle='#ffb454';ctx.lineWidth=3;ctx.beginPath();ctx.arc(hook.x,hy+hk.r,hk.r-2,Math.PI*1.1,Math.PI*2.4);ctx.stroke();
+  if(F.magnet){ctx.strokeStyle='rgba(180,150,255,'+(.3+.2*Math.sin(t*4))+')';ctx.lineWidth=2;ctx.beginPath();ctx.arc(hook.x,hy+6,22+Math.sin(t*4)*3,0,6.283);ctx.stroke()}
   let off=hy+10;
   hook.fish.forEach((f,i)=>{const sc=.5,len=f.T.s*sc*1.1;drawFish(f.T,hook.x+Math.sin(t*6+i)*3,off+len,1,sc,true,t*2);off+=len*2.1});
-  // частицы
   for(const p of parts){ctx.fillStyle='rgba('+p.col+','+Math.max(0,p.l/p.m)+')';ctx.beginPath();ctx.arc(p.x,p.y-camY,2.4,0,6.283);ctx.fill()}
-  // темнота глубины: видно только вокруг крючка
-  const dark=clamp((camY+H/2-250)/2000,0,.8);
-  if(dark>0){
-    const L=150+(r.light||0),g=ctx.createRadialGradient(hook.x,hy,L*.25,hook.x,hy,L*1.6);
+  // темнота: глубина и ночь; видно только вокруг крючка
+  const depthDark=clamp((camY+H/2-250)/2000,0,.8),nightDark=(1-d)*.55*(1-clamp((camY+H/2)/1200,0,1));
+  const dark=Math.min(.9,depthDark+nightDark);
+  if(dark>.02){
+    const L=150+F.light,g=ctx.createRadialGradient(hook.x,hy,L*.25,hook.x,hy,L*1.6);
     g.addColorStop(0,'rgba(2,4,12,0)');g.addColorStop(1,'rgba(2,4,12,'+dark+')');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
   }
   glowPass(camY);
   // интерфейс
-  ctx.fillStyle='rgba(8,20,32,.55)';ctx.fillRect(10,10,200,30);
-  ctx.fillStyle='#e6f2f7';ctx.font='15px Georgia,serif';ctx.textAlign='left';
-  ctx.fillText('Глубина '+Math.round(Math.max(0,hook.y)/10)+' м · улов '+hook.fish.length+'/'+(1+S.hook),18,30);
-  const mx=maxDepth();ctx.fillStyle='rgba(8,20,32,.5)';ctx.fillRect(W-16,60,6,H-120);
-  ctx.fillStyle='#ffb454';ctx.fillRect(W-18,60+(H-120)*clamp(hook.y/mx,0,1)-3,10,6);
-  if(hook.st==='idle'&&!down){ctx.textAlign='center';ctx.fillStyle='rgba(60,40,20,.8)';ctx.font='16px Georgia,serif';ctx.fillText('Зажми, чтобы опустить крючок',W/2,70)}
-  if(msgT>0){ctx.textAlign='center';ctx.font='bold 18px Georgia,serif';ctx.fillStyle='rgba(8,20,32,.75)';const mw=ctx.measureText(msg).width+30;ctx.fillRect(W/2-mw/2,H-56,mw,34);ctx.fillStyle='#ffb454';ctx.fillText(msg,W/2,H-33)}
-  ctx.textAlign='center';ctx.font='bold 16px Georgia,serif';
+  ctx.fillStyle='rgba(8,20,32,.6)';ctx.fillRect(10,10,236,52);
+  ctx.fillStyle='#e6f2f7';ctx.font='14px Georgia,serif';ctx.textAlign='left';
+  ctx.fillText('Глубина '+Math.round(Math.max(0,hook.y)/10)+' м · улов '+hook.fish.length+'/'+hk.cap,18,28);
+  ctx.fillText('День '+S.days+' · '+fmtH(h),34,50);
+  ctx.textAlign='right';ctx.fillText('сумка '+S.fish.length+'/'+BAG[S.bag].cap,238,50);
+  ctx.fillStyle=h>=6&&h<19?'#ffd36b':'#e8ecff';ctx.beginPath();ctx.arc(22,46,6,0,6.283);ctx.fill();
+  ctx.fillStyle='rgba(8,20,32,.5)';ctx.fillRect(W-16,70,6,H-140);
+  ctx.fillStyle='#ffb454';ctx.fillRect(W-18,70+(H-140)*clamp(hook.y/maxDepth(),0,1)-3,10,6);
+  ctx.textAlign='center';
+  if(hook.st==='idle'&&!down){ctx.fillStyle=d>.5?'rgba(60,40,20,.85)':'rgba(255,255,255,.85)';ctx.font='16px Georgia,serif';ctx.fillText('Зажми, чтобы опустить крючок',W/2,Math.max(30,sy0-SKY*.3))}
+  if(msgT>0){ctx.font='bold 18px Georgia,serif';ctx.fillStyle='rgba(8,20,32,.75)';const mw=ctx.measureText(msg).width+30;ctx.fillRect(W/2-mw/2,H-56,mw,34);ctx.fillStyle='#ffb454';ctx.fillText(msg,W/2,H-33)}
+  ctx.font='bold 16px Georgia,serif';
   for(const f of floats){ctx.fillStyle='rgba(255,230,160,'+Math.min(1,f.l)+')';ctx.fillText(f.txt,f.x,f.y-camY-(1.4-f.l)*40)}
 }
-let last=performance.now();
-function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;update(dt);draw();requestAnimationFrame(loop)}
-ui();requestAnimationFrame(loop);
+let last=performance.now(),lastPane=0,lastKey=openKey();
+function loop(now){
+  const dt=Math.min(.05,(now-last)/1000);last=now;update(dt);draw();
+  const k=openKey();if(k!==lastKey){lastKey=k;needPane=true}
+  if(needPane&&now-lastPane>250){lastPane=now;needPane=false;refresh()}
+  requestAnimationFrame(loop);
+}
+refresh();requestAnimationFrame(loop);
 setInterval(save,10000);
+addEventListener('beforeunload',save);
 if(window.parent!==window){
-  const post=()=>parent.postMessage({type:'game-height',h:document.body.offsetHeight},'*');
+  const post=()=>{if(!document.documentElement.classList.contains('fs'))parent.postMessage({type:'game-height',h:document.body.offsetHeight},'*')};
   new ResizeObserver(post).observe(document.body);post();
 }
 </script>
 <button id="fsx" hidden>× Выйти из полного экрана</button>
 <script>
 (function(){const b=document.getElementById('fsx');
-addEventListener('message',e=>{if(e.data&&e.data.type==='game-fs')b.hidden=!e.data.on});
+addEventListener('message',e=>{if(e.data&&e.data.type==='game-fs'){document.documentElement.classList.toggle('fs',!!e.data.on);b.hidden=!e.data.on||!!e.data.pseudo}});
 b.onclick=()=>parent.postMessage({type:'game-escape'},'*');})();
 </script>
 </body>
-      </html>
+</html>
