@@ -1022,7 +1022,7 @@ body.fs-active { overflow:hidden; }
 body.fs-active main { z-index:9000; }
 body.fs-active .tab.active { animation:none !important; transform:none !important; filter:none !important; }
 .game-frame.pseudo-fs { position:fixed !important; inset:0; width:100vw !important; height:100vh !important; height:100dvh !important; max-width:none !important; aspect-ratio:auto !important; margin:0 !important; border:0 !important; border-radius:0 !important; box-shadow:none !important; z-index:9999; }
-.fs-exit { position:fixed; top:10px; left:50%; transform:translateX(-50%); z-index:10000; padding:6px 16px; border:1px solid var(--border); border-radius:20px; background:rgba(26,16,41,.92); color:var(--text); font:inherit; font-size:13px; cursor:pointer; }
+.fs-exit { position:fixed; left:10px; bottom:calc(10px + env(safe-area-inset-bottom,0px)); z-index:10000; width:36px; height:36px; padding:0; border:1px solid var(--border); border-radius:50%; background:rgba(26,16,41,.85); color:var(--text); font:22px/34px Georgia,serif; text-align:center; cursor:pointer; }
 .fs-exit[hidden] { display:none; }
 .game-frame { outline:none; -webkit-tap-highlight-color:transparent; }
 .tab[id^="tab-game-"] { -webkit-user-select:none; user-select:none; }
@@ -1503,7 +1503,7 @@ $ pacman -Ss запрос    # поиск в репозиториях</code></pr
 
 </main>
 
-<button class="fs-exit" id="fsExit" hidden onclick="exitGameFullscreen()">× <span class="i18n" data-en="Exit fullscreen">Выйти из полного экрана</span></button>
+<button class="fs-exit" id="fsExit" hidden title="Выйти из полного экрана" aria-label="Выйти из полного экрана" onclick="exitGameFullscreen()">×</button>
 
 <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
     <button class="active" data-tab="home"><span class="mi">🏠</span><span class="i18n" data-en="Home">Главная</span></button>
