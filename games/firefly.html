@@ -8,8 +8,8 @@
 :root{--bg:#171a3d;--amber:#ffc857;--mist:#e8e4ff}
 *{box-sizing:border-box}
 html,body,canvas,button{-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
-#fsx{position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:99999;padding:6px 14px;border:0;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;font:13px Georgia,serif;cursor:pointer}
-#fsx:hover{background:rgba(0,0,0,.8)}#fsx[hidden]{display:none}
+#fsx{position:fixed;left:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:99999;width:34px;height:34px;margin:0;padding:0;border:0;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;font:22px/34px Georgia,serif;text-align:center;cursor:pointer;opacity:.8}
+#fsx:hover{background:rgba(0,0,0,.8);opacity:1}#fsx[hidden]{display:none}
 html,body{margin:0;background:var(--bg);color:var(--mist);font-family:Georgia,'Times New Roman',serif}
 body{display:flex;align-items:center;justify-content:center;padding:12px}
 .game{position:relative;width:100%;max-width:900px;aspect-ratio:3/2;border-radius:18px;overflow:hidden;box-shadow:0 0 60px rgba(255,200,87,.12)}
@@ -208,7 +208,7 @@ function loop(now){
 }
 requestAnimationFrame(loop);
 </script>
-<button id="fsx" hidden>× Выйти из полного экрана</button>
+<button id="fsx" hidden title="Выйти из полного экрана" aria-label="Выйти из полного экрана">×</button>
 <script>
 (function(){const b=document.getElementById('fsx');
 addEventListener('message',e=>{if(e.data&&e.data.type==='game-fs')b.hidden=!e.data.on||!!e.data.pseudo});

@@ -8,8 +8,8 @@
 :root{--bg:#25242d;--panel:#34333f;--panel2:#3f3e4c;--bone:#efe6d2;--blood:#c8463a;--teal:#7fb7a4;--pus:#d8c35a;--mute:#a9a5b5}
 *{box-sizing:border-box}
 html,body,canvas,button{-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
-#fsx{position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:99999;padding:6px 14px;border:0;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;font:13px Georgia,serif;cursor:pointer}
-#fsx:hover{background:rgba(0,0,0,.8)}#fsx[hidden]{display:none}
+#fsx{position:fixed;left:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:99999;width:34px;height:34px;margin:0;padding:0;border:0;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;font:22px/34px Georgia,serif;text-align:center;cursor:pointer;opacity:.8}
+#fsx:hover{background:rgba(0,0,0,.8);opacity:1}#fsx[hidden]{display:none}
 
 html,body{margin:0;background:var(--bg);color:var(--bone);font-family:Georgia,'Times New Roman',serif}
 body{padding:14px;min-height:100%}
@@ -489,7 +489,7 @@ if(window.parent!==window){
   new ResizeObserver(post).observe(document.body);post();
 }
 </script>
-<button id="fsx" hidden>× Выйти из полного экрана</button>
+<button id="fsx" hidden title="Выйти из полного экрана" aria-label="Выйти из полного экрана">×</button>
 <script>
 (function(){const b=document.getElementById('fsx');
 addEventListener('message',e=>{if(e.data&&e.data.type==='game-fs'){document.documentElement.classList.toggle('fs',!!e.data.on);if(window.nrCheck)nrCheck();b.hidden=!e.data.on||!!e.data.pseudo}});
