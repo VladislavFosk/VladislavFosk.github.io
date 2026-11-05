@@ -1029,6 +1029,7 @@ body.fs-active .tab.active { animation:none !important; transform:none !importan
 .ic { width:1.15em; height:1.15em; vertical-align:-.2em; fill:currentColor; display:inline-block; }
 .ico .ic { width:1em; height:1em; vertical-align:0; }
 @media (max-width:600px) { #frame-firefly { aspect-ratio:4/5; } }
+.new-tag { font-size:11px; font-weight:700; letter-spacing:.5px; padding:2px 8px; border-radius:999px; background:linear-gradient(90deg,#ff7ab8,#ffb454); color:#2a1030; margin-left:8px; vertical-align:middle; }
 .game-hint { max-width:900px; margin:12px auto 0; color:var(--text2); font-size:13px; text-align:center; }
 </style>
 
@@ -1410,7 +1411,7 @@ $ pacman -Ss запрос    # поиск в репозиториях</code></pr
         <p class="i18n" data-en="Small browser games — play right here, nothing to download">Небольшие браузерные игры — играй прямо здесь, ничего скачивать не нужно</p>
     </div>
 
-    <div class="wiki-entry card" onclick="switchTab('game-firefly')">
+    <div class="wiki-entry card" data-game="firefly" onclick="switchTab('game-firefly')">
         <div class="top-row">
             <div class="ico"><svg class="ic" aria-hidden="true"><use href="#i-firefly"/></svg></div>
             <div><div class="pname"><span class="i18n" data-en="Firefly">Светлячок</span></div><span class="sub">Arcade</span></div>
@@ -1420,7 +1421,7 @@ $ pacman -Ss запрос    # поиск в репозиториях</code></pr
         <div class="tags"><span class="tag">Arcade</span><span class="tag">Mouse / Touch</span><span class="tag pink">Coalition Iron Will</span></div>
     </div>
 
-    <div class="wiki-entry card" onclick="switchTab('game-zombie')">
+    <div class="wiki-entry card" data-game="zombie" onclick="switchTab('game-zombie')">
         <div class="top-row">
             <div class="ico"><svg class="ic" aria-hidden="true"><use href="#i-zombie"/></svg></div>
             <div><div class="pname"><span class="i18n" data-en="Zombie Farm">Зомби-ферма</span></div><span class="sub">Tycoon / Idle</span></div>
@@ -1430,7 +1431,7 @@ $ pacman -Ss запрос    # поиск в репозиториях</code></pr
         <div class="tags"><span class="tag">Tycoon</span><span class="tag">Idle</span><span class="tag pink">Coalition Iron Will</span></div>
     </div>
 
-    <div class="wiki-entry card" onclick="switchTab('game-fishing')">
+    <div class="wiki-entry card" data-game="fishing" onclick="switchTab('game-fishing')">
         <div class="top-row">
             <div class="ico"><svg class="ic" aria-hidden="true"><use href="#i-fish"/></svg></div>
             <div><div class="pname"><span class="i18n" data-en="Depths">Глубина</span></div><span class="sub">Fishing / Upgrades</span></div>
@@ -1533,6 +1534,8 @@ function switchTab(tabId, push = true) {
         frame.src = frame.dataset.src;
         frame.removeAttribute('data-src');
     });
+    if (tabId.startsWith('game-')) recordGame(tabId.slice(5));
+    if (tabId === 'games') markGames();
     const navId = tabId.startsWith('project-') ? 'wiki' : tabId.startsWith('game-') ? 'games' : tabId;
     document.querySelectorAll('.nav-buttons button, .mobile-nav button').forEach(btn => {
         const active = btn.dataset.tab === navId;
@@ -1556,6 +1559,21 @@ document.querySelectorAll('.footer a[href^="#"]').forEach(link => {
         }
     });
 });
+// метки «NEW» и порядок игр по последнему запуску
+function gamesSeen() { try { return JSON.parse(localStorage.getItem('games-seen')) || {}; } catch (e) { return {}; } }
+function recordGame(id) { const s = gamesSeen(); s[id] = Date.now(); try { localStorage.setItem('games-seen', JSON.stringify(s)); } catch (e) {} }
+function markGames() {
+    const box = document.getElementById('tab-games'); if (!box) return;
+    const seen = gamesSeen(), cards = [...box.querySelectorAll('.wiki-entry[data-game]')];
+    cards.sort((a, b) => (seen[b.dataset.game] || 0) - (seen[a.dataset.game] || 0));
+    cards.forEach(c => {
+        c.querySelectorAll('.new-tag').forEach(n => n.remove());
+        if (!seen[c.dataset.game]) { const n = document.createElement('span'); n.className = 'new-tag'; n.textContent = 'NEW'; c.querySelector('.pname').appendChild(n); }
+        box.appendChild(c);
+    });
+}
+markGames();
+
 // ПОЛНЫЙ ЭКРАН ДЛЯ ИГР
 function gamePseudoFrame() { return document.querySelector('.game-frame.pseudo-fs'); }
 function enterPseudoFullscreen(frame) {
