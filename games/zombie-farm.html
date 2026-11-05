@@ -90,6 +90,10 @@ h2{margin:0 0 10px;font-size:19px;color:var(--bone)}
 .float{position:fixed;pointer-events:none;color:var(--bone);font-weight:700;font-size:20px;text-shadow:0 1px 3px #000;animation:fl .8s ease-out forwards;z-index:9}
 @keyframes fl{to{transform:translateY(-50px);opacity:0}}
 @media(prefers-reduced-motion:reduce){.float{animation-duration:.01s}#dig{transition:none}}
+.gc{position:fixed;right:8px;bottom:8px;display:flex;gap:6px;z-index:9999}
+.gc button,.gc button:hover{width:30px;height:30px;margin:0;padding:0;border:0;border-radius:50%;background:rgba(0,0,0,.5);color:#fff;font:700 11px/30px Georgia,serif;text-align:center;cursor:pointer;opacity:.75}
+.gc button:hover{opacity:1}
+.rbtn{margin-top:4px}
 </style>
 </head>
 <body>
@@ -116,6 +120,8 @@ h2{margin:0 0 10px;font-size:19px;color:var(--bone)}
     <section class="card shopc" id="shopc"><button class="sclose" id="sclose" aria-label="Закрыть">×</button>
       <h2>Улучшения</h2>
       <div class="list" id="ups"></div>
+      <h2>Перерождение</h2>
+      <div class="list"><button class="item" id="rebirth"><span class="tx"><b>Переродиться</b><small id="rbs"></small></span></button></div>
       <h2>Нанять и построить</h2>
       <div class="list" id="bld"></div>
       <div class="foot"><span>Прогресс сохраняется автоматически</span><button id="reset">Начать заново</button></div>
@@ -139,6 +145,28 @@ virus:`<circle cx="16" cy="16" r="7" fill="#a6c94a"/><path d="M16 3v5M16 24v5M3 
 mega:`<path d="M5 13h6l11-6v18l-11-6H5z" fill="#d86a4a"/><path d="M8 19l2 7h3l-1.5-6" fill="#a8452c"/><path d="M25 12c2 2 2 6 0 8" stroke="#d86a4a" stroke-width="2" fill="none"/>`
 };
 const SV=k=>'<svg viewBox="0 0 32 32" aria-hidden="true">'+IC[k]+'</svg>';
+// ===== общее: звук, вибрация, качество графики =====
+const AC=(()=>{try{return new (window.AudioContext||window.webkitAudioContext)()}catch(e){return null}})();
+let MUTE=false,LQ=false;
+try{MUTE=localStorage.getItem('g-mute')==='1';LQ=localStorage.getItem('g-lq')==='1'}catch(e){}
+function tone(f,d,type,vol,slide){
+  if(MUTE||!AC)return;if(AC.state==='suspended')AC.resume();
+  const o=AC.createOscillator(),g=AC.createGain(),n=AC.currentTime;
+  o.type=type||'sine';o.frequency.setValueAtTime(f,n);if(slide)o.frequency.exponentialRampToValueAtTime(Math.max(30,f*slide),n+d);
+  g.gain.setValueAtTime(vol||.07,n);g.gain.exponentialRampToValueAtTime(.0001,n+d);o.connect(g);g.connect(AC.destination);o.start();o.stop(n+d);
+}
+function noise(d,vol,fc){
+  if(MUTE||!AC)return;if(AC.state==='suspended')AC.resume();
+  const len=Math.floor(AC.sampleRate*d),b=AC.createBuffer(1,len,AC.sampleRate),a=b.getChannelData(0);
+  for(let i=0;i<len;i++)a[i]=(Math.random()*2-1)*(1-i/len);
+  const s=AC.createBufferSource(),f=AC.createBiquadFilter(),g=AC.createGain();
+  s.buffer=b;f.type='lowpass';f.frequency.value=fc||800;g.gain.value=vol||.1;s.connect(f);f.connect(g);g.connect(AC.destination);s.start();
+}
+const vib=ms=>{try{if(!MUTE&&navigator.vibrate)navigator.vibrate(ms)}catch(e){}};
+const seq=(fs,d,type,vol,gap)=>fs.forEach((f,i)=>setTimeout(()=>tone(f,d,type,vol),i*(gap||90)));
+const sfx=(n)=>{try{SFX[n]&&SFX[n]()}catch(e){}};
+const SFX={pop:()=>tone(260,.06,'square',.04,.6),coin:()=>{tone(880,.08,'square',.04);setTimeout(()=>tone(1320,.14,'square',.04),70)},alert:()=>{tone(150,.5,'sawtooth',.07,1.6);vib(100)},win:()=>seq([523,659,880],.16,'triangle',.07),fail:()=>tone(240,.4,'sawtooth',.06,.4),howl:()=>tone(300,1.2,'sine',.08,2.2),boom:()=>{noise(.8,.3,400);tone(90,.8,'sawtooth',.1,.3)}};
+let moonLeft=0,moonT=150+Math.random()*100;
 const BLD=[
  {n:'Бродячий зомби',e:'zombie',c:15,p:.5,d:'Шатается по кладбищу и находит мозги'},
  {n:'Раскопанная могила',e:'grave',c:100,p:3,d:'Свежие находки каждый день'},
@@ -159,6 +187,7 @@ const RANKS=[[0,'Мелкий могильщик'],[500,'Хозяин кладб
 const KEY='zombie-farm-v1';
 let S={b:0,total:0,own:BLD.map(()=>0),up:UPS.map(()=>false),t:Date.now()};
 try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.own&&r.own.length===BLD.length&&r.up&&r.up.length===UPS.length)S=r}catch(e){}
+S.dark=S.dark||0;S.reb=S.reb||0;
 const $=id=>document.getElementById(id);
 const R=(a,b)=>a+Math.random()*(b-a);
 function fmt(n){
@@ -168,9 +197,9 @@ function fmt(n){
   return n.toFixed(n<10?2:n<100?1:0).replace('.',',')+' '+u[i];
 }
 const cost=i=>Math.ceil(BLD[i].c*Math.pow(1.15,S.own[i]));
-const mult=()=>UPS.reduce((m,u,i)=>m*(S.up[i]&&u.t==='mult'?u.v:1),1);
+const mult=()=>UPS.reduce((m,u,i)=>m*(S.up[i]&&u.t==='mult'?u.v:1),1)*(1+.1*S.dark)*(moonLeft>0?2:1);
 const cps=()=>BLD.reduce((s,b,i)=>s+b.p*S.own[i],0)*mult();
-const pow=()=>UPS.reduce((s,u,i)=>s+(S.up[i]&&u.t==='click'?u.v:0),1);
+const pow=()=>UPS.reduce((s,u,i)=>s+(S.up[i]&&u.t==='click'?u.v:0),1)*(1+.1*S.dark);
 function item(k,i,o){
   const b=document.createElement('button');b.className='item';b.dataset.k=k;b.dataset.i=i;
   b.innerHTML='<span class="ic">'+SV(o.e)+'</span><span class="tx"><b>'+o.n+'</b><small>'+o.d+'</small></span><span class="pr"><i></i><em></em></span>';
@@ -182,13 +211,13 @@ function say(t){$('msg').textContent=t}
 function buy(e){
   const el=e.target.closest('.item');if(!el)return;
   const i=+el.dataset.i;
-  if(el.dataset.k==='b'){const c=cost(i);if(S.b>=c){S.b-=c;S.own[i]++;labPop('b',i)}}
-  else if(!S.up[i]&&S.b>=UPS[i].c){S.b-=UPS[i].c;S.up[i]=true;say('Куплено: '+UPS[i].n);labPop('u',i)}
+  if(el.dataset.k==='b'){const c=cost(i);if(S.b>=c){S.b-=c;S.own[i]++;labPop('b',i);sfx('coin')}}
+  else if(!S.up[i]&&S.b>=UPS[i].c){S.b-=UPS[i].c;S.up[i]=true;say('Куплено: '+UPS[i].n);labPop('u',i);sfx('coin')}
   render();
 }
 $('ups').addEventListener('click',buy);$('bld').addEventListener('click',buy);
 
-$('dig').addEventListener('click',e=>{
+$('dig').addEventListener('click',e=>{sfx('pop');
   const p=pow();S.b+=p;S.total+=p;
   const r=e.currentTarget.getBoundingClientRect();
   const x=e.detail?e.clientX:r.left+r.width/2,y=e.detail?e.clientY:r.top+r.height/3;
@@ -202,19 +231,19 @@ $('fight').addEventListener('click',()=>{
   if(!raid)return;raid.h++;$('hits').textContent=raid.h;
   if(raid.h>=10){
     const g=cps()*60+50;S.b+=g;S.total+=g;raid=null;$('raid').classList.remove('on');
-    say('Охотники бежали! Трофеи: +'+fmt(g)+' мозгов');raidIn=R(70,110);
+    say('Охотники бежали! Трофеи: +'+fmt(g)+' мозгов');sfx('win');raidIn=R(70,110);
   }
 });
 function raidTick(dt){
   if(!raid){
     raidIn-=dt;
-    if(raidIn<=0&&S.total>=200){raid={h:0,t:10};$('hits').textContent=0;$('raid').classList.add('on')}
+    if(raidIn<=0&&S.total>=200){raid={h:0,t:10};sfx('alert');$('hits').textContent=0;$('raid').classList.add('on')}
     return;
   }
   raid.t-=dt;$('rbar').style.width=Math.max(0,raid.t*10)+'%';
   if(raid.t<=0){
     const l=S.b*.15;S.b-=l;raid=null;$('raid').classList.remove('on');
-    say('Охотники разгромили склад: −'+fmt(l)+' мозгов');raidIn=R(70,110);
+    say('Охотники разгромили склад: −'+fmt(l)+' мозгов');sfx('fail');vib(150);raidIn=R(70,110);
   }
 }
 
@@ -247,14 +276,14 @@ else say('Копай первые мозги — нажми на зомби');
 let last=performance.now(),acc=0;
 setInterval(()=>{
   const now=performance.now(),dt=Math.min((now-last)/1000,1);last=now;
-  const g=cps()*dt;S.b+=g;S.total+=g;raidTick(dt);render();
+  const g=cps()*dt;S.b+=g;S.total+=g;raidTick(dt);moonTick(dt);render();
   acc+=dt;if(acc>=10){acc=0;save()}
 },100);
 addEventListener('beforeunload',save);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)save()});
 $('reset').addEventListener('click',()=>{
   if(confirm('Сбросить весь прогресс?')){
-    S={b:0,total:0,own:BLD.map(()=>0),up:UPS.map(()=>false),t:Date.now()};raid=null;$('raid').classList.remove('on');save();say('Новая игра. Могилы ждут.');render();
+    S={b:0,total:0,own:BLD.map(()=>0),up:UPS.map(()=>false),t:Date.now(),dark:0,reb:0};raid=null;$('raid').classList.remove('on');save();say('Новая игра. Могилы ждут.');render();
   }
 });
 // ===== ЛАБОРАТОРИЯ: всё, что ты купил, появляется на этой сцене =====
@@ -263,7 +292,7 @@ let LW=900,LH=360,U=.86,lt=0,llast=performance.now();
 let lk=1;
 function labFit(){
   const cw=lab.clientWidth||900,ch=lab.clientHeight||360;
-  lk=Math.min(2,typeof devicePixelRatio==='number'?devicePixelRatio:1,1280/cw);
+  lk=Math.min(LQ?1:2,typeof devicePixelRatio==='number'?devicePixelRatio:1,1280/cw);
   LW=cw;LH=ch;lab.width=Math.round(cw*lk);lab.height=Math.round(ch*lk);
   U=Math.max(.3,Math.min(LW/900,LH/420));
 }
@@ -428,7 +457,7 @@ function labDraw(t){
   const sky=lx.createLinearGradient(0,0,0,gy);sky.addColorStop(0,'#14122b');sky.addColorStop(.6,'#3a2350');sky.addColorStop(1,'#6b3a58');
   lx.fillStyle=sky;lx.fillRect(0,0,LW,LH);
   for(const s of lst){lx.fillStyle='rgba(255,255,255,'+(.35+.4*Math.sin(t*2+s.p))+')';lx.fillRect(s.x*LW,s.y*LH,1.6,1.6)}
-  glow(LW*.9,LH*.16,70*U,'255,240,200',.4);lx.fillStyle='#fff2cf';lx.beginPath();lx.arc(LW*.9,LH*.16,22*U,0,6.283);lx.fill();
+  const mo=moonLeft>0;glow(LW*.9,LH*.16,(mo?110:70)*U,mo?'255,90,70':'255,240,200',mo?.7:.4);lx.fillStyle=mo?'#ffb09a':'#fff2cf';lx.beginPath();lx.arc(LW*.9,LH*.16,(mo?30:22)*U,0,6.283);lx.fill();
   lx.fillStyle='rgba(200,180,150,.45)';lx.beginPath();lx.arc(LW*.9-6*U,LH*.16-4*U,4*U,0,6.283);lx.arc(LW*.9+7*U,LH*.16+5*U,3*U,0,6.283);lx.fill();
   for(const L of [[.58,'#1f1a3a',50,.012,1],[.64,'#17122c',34,.02,3]]){
     lx.fillStyle=L[1];lx.beginPath();lx.moveTo(0,LH);
@@ -463,8 +492,8 @@ function labDraw(t){
     lx.beginPath();lx.moveTo(bx,by);lx.quadraticCurveTo(bx-8*U,by-8*U-fl,bx-16*U,by-fl*.5);lx.quadraticCurveTo(bx-8*U,by+2*U,bx,by);lx.moveTo(bx,by);lx.quadraticCurveTo(bx+8*U,by-8*U-fl,bx+16*U,by-fl*.5);lx.quadraticCurveTo(bx+8*U,by+2*U,bx,by);lx.fill();
   }
   lx.fillStyle='rgba(190,180,215,.07)';
-  for(let i=0;i<3;i++){lx.beginPath();lx.ellipse(((t*8*(i+1)+i*250)%(LW+400))-200,gy+10*U*i,220*U,22*U,0,0,6.283);lx.fill()}
-  const vg=lx.createRadialGradient(LW/2,LH/2,LH*.3,LW/2,LH/2,LW*.7);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.45)');lx.fillStyle=vg;lx.fillRect(0,0,LW,LH);
+  if(!LQ)for(let i=0;i<3;i++){lx.beginPath();lx.ellipse(((t*8*(i+1)+i*250)%(LW+400))-200,gy+10*U*i,220*U,22*U,0,0,6.283);lx.fill()}
+  if(!LQ){const vg=lx.createRadialGradient(LW/2,LH/2,LH*.3,LW/2,LH/2,LW*.7);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.45)');lx.fillStyle=vg;lx.fillRect(0,0,LW,LH)}
   for(const p of lp){lx.fillStyle='rgba('+p.c+','+Math.max(0,p.l/p.m)+')';lx.beginPath();lx.arc(p.x,p.y,2.6*U,0,6.283);lx.fill()}
   lx.textAlign='center';lx.font='bold '+Math.max(10,15*U)+'px Georgia,serif';
   for(const f of lf){lx.fillStyle='rgba(255,236,170,'+Math.min(1,f.l)+')';lx.fillText(f.t,f.x,f.y-(1.6-f.l)*30)}
@@ -481,14 +510,31 @@ function nrCheck(){const r=document.documentElement.classList;r.toggle('nr',inne
 addEventListener('resize',nrCheck);nrCheck();
 $('sbtn').onclick=()=>$('shopc').classList.add('open');
 $('sclose').onclick=()=>$('shopc').classList.remove('open');
-const render0=render;render=function(){render0();$('sbtn').classList.toggle('ping',BLD.some((b,i)=>S.b>=cost(i)))};
+function moonTick(dt){moonT-=dt;if(moonT<=0&&moonLeft<=0){moonLeft=60;moonT=240+Math.random()*120;say('Полнолуние! Доход ×2 на минуту');sfx('howl')}if(moonLeft>0)moonLeft-=dt}
+const rebGain=()=>Math.floor(Math.sqrt(S.total/1e5));
+function updReb(){const g=rebGain();$('rebirth').disabled=g<1;$('rbs').textContent='Тёмная энергия: '+S.dark+' (+10% к доходу за каждую). Сейчас дадут: +'+g+(g<1?' (нужно набрать 100 тыс. мозгов за забег)':'')}
+$('rebirth').onclick=()=>{
+  const g=rebGain();if(g<1)return;
+  if(!confirm('Переродиться? Прогресс забега сбросится, но ты получишь +'+g+' тёмной энергии (+'+g*10+'% к доходу навсегда).'))return;
+  S.dark+=g;S.reb++;S.b=0;S.total=0;S.own=BLD.map(()=>0);S.up=UPS.map(()=>false);raid=null;$('raid').classList.remove('on');
+  sfx('boom');say('Перерождение! Тёмная энергия: '+S.dark);save();render();
+};
+const render0=render;render=function(){render0();updReb();if(S.dark)$('rank').textContent+=' · ТЭ '+S.dark;$('sbtn').classList.toggle('ping',BLD.some((b,i)=>S.b>=cost(i)))};
 $('dig').innerHTML=SV('zombie');
 render();
+(function(){
+  const gm=document.getElementById('gm'),gq=document.getElementById('gq');
+  const ic=()=>{gm.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#fff"/>'+(MUTE?'<path d="M16 9l5 6M21 9l-5 6" stroke="#fff" stroke-width="2"/>':'<path d="M16 8c2 2 2 6 0 8M19 5c4 4 4 10 0 14" fill="none" stroke="#fff" stroke-width="2"/>')+'</svg>';gq.textContent=LQ?'LD':'HD';gm.title=MUTE?'Включить звук':'Выключить звук';gq.title=LQ?'Качество: низкое':'Качество: высокое'};
+  gm.onclick=()=>{MUTE=!MUTE;try{localStorage.setItem('g-mute',MUTE?'1':'0')}catch(e){}ic();if(!MUTE)tone(660,.1,'triangle',.06)};
+  gq.onclick=()=>{LQ=!LQ;try{localStorage.setItem('g-lq',LQ?'1':'0')}catch(e){}ic();if(typeof fit==='function')fit();if(typeof labFit==='function')labFit()};
+  ic();
+})();
 if(window.parent!==window){
   const post=()=>{if(!document.documentElement.classList.contains('fs'))parent.postMessage({type:'game-height',h:document.body.offsetHeight},'*')};
   new ResizeObserver(post).observe(document.body);post();
 }
 </script>
+<div class="gc"><button id="gm" aria-label="Звук"></button><button id="gq" aria-label="Качество"></button></div>
 <button id="fsx" hidden title="Выйти из полного экрана" aria-label="Выйти из полного экрана">×</button>
 <script>
 (function(){const b=document.getElementById('fsx');
