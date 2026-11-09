@@ -701,6 +701,63 @@ button, a { -webkit-tap-highlight-color:transparent; }
 
 .gh-status { margin-top:10px; font-size:12px; color:var(--muted); }
 
+/* Статистика, языки, коммиты */
+.gh-sub {
+  margin:20px 0 8px; font-size:14px; color:var(--text2);
+}
+.gh-stats {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr));
+  gap:10px; margin-top:16px;
+}
+.gh-stat {
+  padding:12px 14px; text-align:center;
+  border:1px solid var(--border); border-radius:10px;
+  background:var(--bg-deep);
+  transition:var(--t);
+}
+.gh-stat:hover {
+  border-color:var(--a3); transform:translateY(-2px); box-shadow:var(--sh);
+}
+.gh-stat b { display:block; font-size:22px; color:var(--text); }
+.gh-stat small {
+  display:block; margin-top:2px; font-size:10px;
+  text-transform:uppercase; letter-spacing:.5px; color:var(--muted);
+}
+
+.gh-langbar {
+  display:flex; height:12px; border-radius:6px; overflow:hidden;
+  background:var(--bg-deep); border:1px solid var(--border);
+}
+.gh-langbar span { display:block; height:100%; }
+.gh-langlist {
+  display:flex; flex-wrap:wrap; gap:6px 16px; margin-top:10px;
+  font-size:12px; color:var(--text2);
+}
+.gh-langlist span { display:flex; align-items:center; gap:6px; }
+.gh-langlist i {
+  display:inline-block; width:10px; height:10px; border-radius:50%;
+}
+
+.gh-commits { display:flex; flex-direction:column; gap:8px; }
+.gh-commit {
+  display:block; padding:10px 14px;
+  border:1px solid var(--border); border-radius:10px;
+  background:var(--bg-deep);
+  text-decoration:none; color:var(--text);
+  transition:var(--t);
+}
+.gh-commit:hover {
+  border-color:var(--a3); transform:translateX(3px); box-shadow:var(--sh);
+}
+.gh-commit b {
+  display:block; font-size:13px; font-weight:600;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.gh-commit small {
+  display:block; margin-top:3px; font-size:11px; color:var(--muted);
+}
+.gh-empty { font-size:13px; color:var(--muted); }
+
 /* ============================================================
    АДАПТИВ
    ============================================================ */
@@ -1151,6 +1208,21 @@ body.fs-active .tab.active { animation:none !important; transform:none !importan
         <!-- Heatmap -->
         <div id="ghHeatmap" class="gh-heatmap" aria-label="GitHub contributions heatmap"></div>
         <div id="ghHeatmapLegend" class="gh-heatmap-legend"></div>
+
+        <!-- Статистика -->
+        <div id="ghStats" class="gh-stats"></div>
+
+        <!-- Языки -->
+        <h4 class="gh-sub">
+            💻 <span class="i18n" data-en="Languages I use">Языки, которые я использую</span>
+        </h4>
+        <div id="ghLangs"></div>
+
+        <!-- Последние коммиты -->
+        <h4 class="gh-sub">
+            📝 <span class="i18n" data-en="Latest commits">Последние коммиты</span>
+        </h4>
+        <div id="ghCommits" class="gh-commits"></div>
 
         <!-- Избранные репозитории -->
         <h4 style="margin:18px 0 8px;font-size:14px;color:var(--text2)">
@@ -1750,6 +1822,9 @@ function applyLang(lang) {
     ghRenderPinned();
     ghRenderAll();
     updateGithubStatus();
+    ghRenderStats();
+    ghRenderLangs();
+    ghRenderCommits();
     rozaOnLang();
 }
 function toggleLang() {
@@ -1827,6 +1902,33 @@ if (music && musicToggle) {
 const GH_USER = 'VladislavFosk';
 let ghRepos = [];
 let ghLoadError = false;
+let ghProfile = null;
+let ghContribTotal = null;
+let ghLangBytes = null;
+let ghCommits = null;
+const GH_LANG_COLORS = {
+    'Python':'#3572A5', 'C++':'#f34b7d', 'C':'#9a9a9a', 'HTML':'#e34c26', 'CSS':'#563d7c',
+    'JavaScript':'#f1e05a', 'TypeScript':'#3178c6', 'Shell':'#89e051', 'Lua':'#4a4aa8',
+    'Java':'#b07219', 'C#':'#178600', 'Go':'#00ADD8', 'Rust':'#dea584', 'PHP':'#4F5D95'
+};
+const GH_LANG_FALLBACK = ['#a855f7', '#c084fc', '#e0b64a', '#4ade80', '#6d28d9', '#f472b6'];
+
+// Запрос к GitHub API с кэшем на 15 минут (лимит без токена — 60 запросов в час на IP)
+async function ghFetchJson(url) {
+    const key = 'gh-cache:' + url;
+    try {
+        const raw = localStorage.getItem(key);
+        if (raw) {
+            const cached = JSON.parse(raw);
+            if (Date.now() - cached.t < 15 * 60 * 1000) return cached.d;
+        }
+    } catch (error) {}
+    const response = await fetch(url, { headers: { Accept: 'application/vnd.github+json' } });
+    if (!response.ok) throw new Error(`GitHub API ${response.status}`);
+    const data = await response.json();
+    try { localStorage.setItem(key, JSON.stringify({ t: Date.now(), d: data })); } catch (error) {}
+    return data;
+}
 function ghEl(tag, cls, text) {
     const el = document.createElement(tag);
     if (cls) el.className = cls;
@@ -1850,6 +1952,8 @@ async function ghLoadHeatmap() {
         const data = await response.json();
         const map = {};
         (data.contributions || []).forEach(day => { map[day.date] = day.count; });
+        ghContribTotal = (data.contributions || []).reduce((sum, day) => sum + (day.count || 0), 0);
+        ghRenderStats();
         wrap.replaceChildren();
         const end = new Date();
         const start = new Date(end);
@@ -1939,6 +2043,9 @@ async function ghLoadRepos() {
         ghRenderPinned();
         ghFilterRepos();
         updateGithubStatus();
+        ghRenderStats();
+        ghLoadLangs();
+        ghLoadCommits();
     } catch (error) {
         console.error('GitHub repositories error:', error);
         ghLoadError = true;
@@ -1948,14 +2055,146 @@ async function ghLoadRepos() {
     }
 }
 
+// ----- Статистика -----
+function ghRenderStats() {
+    const box = document.getElementById('ghStats');
+    if (!box) return;
+    const en = currentLang === 'en';
+    const stars = ghRepos.reduce((sum, repo) => sum + (repo.stargazers_count || 0), 0);
+    const items = [
+        [ghRepos.length || (ghProfile ? ghProfile.public_repos : '—'), en ? 'Repositories' : 'Репозитории'],
+        [ghContribTotal === null ? '—' : ghContribTotal, en ? 'Contributions / year' : 'Вкладов за год'],
+        [ghRepos.length ? stars : '—', en ? 'Stars' : 'Звёзды'],
+        [ghProfile ? ghProfile.followers : '—', en ? 'Followers' : 'Подписчики']
+    ];
+    box.replaceChildren();
+    items.forEach(([value, label]) => {
+        const tile = ghEl('div', 'gh-stat');
+        tile.appendChild(ghEl('b', '', String(value)));
+        tile.appendChild(ghEl('small', '', label));
+        box.appendChild(tile);
+    });
+}
+async function ghLoadProfile() {
+    try {
+        ghProfile = await ghFetchJson(`https://api.github.com/users/${GH_USER}`);
+        ghRenderStats();
+    } catch (error) {
+        console.error('GitHub profile error:', error);
+    }
+}
+
+// ----- Языки -----
+async function ghLoadLangs() {
+    const own = ghRepos.filter(repo => !repo.fork).slice(0, 10);
+    const results = await Promise.allSettled(own.map(repo => ghFetchJson(`https://api.github.com/repos/${GH_USER}/${encodeURIComponent(repo.name)}/languages`)));
+    const bytes = {};
+    results.forEach(result => {
+        if (result.status !== 'fulfilled' || !result.value) return;
+        Object.entries(result.value).forEach(([lang, size]) => { bytes[lang] = (bytes[lang] || 0) + size; });
+    });
+    if (!Object.keys(bytes).length) {
+        // запасной вариант: считаем по основному языку репозитория
+        own.forEach(repo => { if (repo.language) bytes[repo.language] = (bytes[repo.language] || 0) + 1; });
+    }
+    ghLangBytes = bytes;
+    ghRenderLangs();
+}
+function ghRenderLangs() {
+    const box = document.getElementById('ghLangs');
+    if (!box) return;
+    const en = currentLang === 'en';
+    box.replaceChildren();
+    const entries = Object.entries(ghLangBytes || {}).sort((a, b) => b[1] - a[1]);
+    if (!entries.length) {
+        const text = ghLangBytes === null
+            ? (en ? 'Loading...' : 'Загрузка...')
+            : (en ? 'No data yet: languages will appear once your repositories contain code.' : 'Пока нет данных: языки появятся, когда в репозиториях будет код.');
+        box.appendChild(ghEl('p', 'gh-empty', text));
+        return;
+    }
+    const total = entries.reduce((sum, entry) => sum + entry[1], 0);
+    const top = entries.slice(0, 6);
+    const rest = entries.slice(6).reduce((sum, entry) => sum + entry[1], 0);
+    if (rest > 0) top.push([en ? 'Other' : 'Другое', rest]);
+    const bar = ghEl('div', 'gh-langbar');
+    const list = ghEl('div', 'gh-langlist');
+    top.forEach(([lang, size], index) => {
+        const percent = (size / total) * 100;
+        const color = GH_LANG_COLORS[lang] || GH_LANG_FALLBACK[index % GH_LANG_FALLBACK.length];
+        const segment = ghEl('span');
+        segment.style.width = percent + '%';
+        segment.style.background = color;
+        segment.title = `${lang}: ${percent.toFixed(1)}%`;
+        bar.appendChild(segment);
+        const item = ghEl('span');
+        const dot = ghEl('i');
+        dot.style.background = color;
+        item.appendChild(dot);
+        item.appendChild(document.createTextNode(`${lang} ${percent.toFixed(1)}%`));
+        list.appendChild(item);
+    });
+    box.appendChild(bar);
+    box.appendChild(list);
+}
+
+// ----- Последние коммиты -----
+async function ghLoadCommits() {
+    const repos = ghRepos.slice(0, 5);
+    const results = await Promise.allSettled(repos.map(repo => ghFetchJson(`https://api.github.com/repos/${GH_USER}/${encodeURIComponent(repo.name)}/commits?per_page=5&author=${GH_USER}`)));
+    const commits = [];
+    results.forEach((result, index) => {
+        if (result.status !== 'fulfilled' || !Array.isArray(result.value)) return;
+        result.value.forEach(item => {
+            if (!item.commit || typeof item.html_url !== 'string' || !item.html_url.startsWith('https://github.com/')) return;
+            commits.push({
+                message: String(item.commit.message || '').split('\n')[0],
+                date: item.commit.author && item.commit.author.date,
+                url: item.html_url,
+                repo: repos[index].name
+            });
+        });
+    });
+    commits.sort((a, b) => new Date(b.date) - new Date(a.date));
+    ghCommits = commits.slice(0, 8);
+    ghRenderCommits();
+}
+function ghRenderCommits() {
+    const box = document.getElementById('ghCommits');
+    if (!box) return;
+    const en = currentLang === 'en';
+    box.replaceChildren();
+    if (!ghCommits || !ghCommits.length) {
+        const text = ghCommits === null
+            ? (en ? 'Loading...' : 'Загрузка...')
+            : (en ? 'No commits found yet.' : 'Коммитов пока не найдено.');
+        box.appendChild(ghEl('p', 'gh-empty', text));
+        return;
+    }
+    ghCommits.forEach(commit => {
+        const link = document.createElement('a');
+        link.className = 'gh-commit';
+        link.href = commit.url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.appendChild(ghEl('b', '', commit.message || (en ? '(no message)' : '(без описания)')));
+        const date = commit.date ? new Date(commit.date).toLocaleDateString(en ? 'en-GB' : 'ru-RU') : '';
+        link.appendChild(ghEl('small', '', `${commit.repo} · ${date}`));
+        box.appendChild(link);
+    });
+}
+
 // СТАРТОВАЯ ВКЛАДКА И ЗАГРУЗКА GITHUB
 buildRozaToc();
 if (savedLanguage === 'en') applyLang('en');
 switchTab(location.hash.slice(1) || 'home', false);
+ghRenderStats();
+ghRenderLangs();
+ghRenderCommits();
 ghLoadHeatmap();
+ghLoadProfile();
 ghLoadRepos();
 
 </script>
 </body>
 </html>
-
